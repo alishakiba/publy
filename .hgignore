@@ -1,0 +1,5 @@
+syntax: glob
+nbproject/build-impl.xml
+desktop.ini
+nbproject/genfiles.properties
+nbproject/private/
