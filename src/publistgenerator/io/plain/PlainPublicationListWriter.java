@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.OutputCategory;
 import publistgenerator.io.PublicationListWriter;
@@ -27,7 +26,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
     }
 
     @Override
-    protected void writePublicationList(List<BibItem> items, Map<String, String> categoryNotes, BufferedWriter out) throws IOException {
+    protected void writePublicationList(List<BibItem> items, BufferedWriter out) throws IOException {
         itemWriter = new PlainBibItemWriter(out);
         
         // Write the body

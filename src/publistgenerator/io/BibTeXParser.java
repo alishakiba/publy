@@ -22,23 +22,17 @@ public class BibTeXParser {
     private HashMap<String, String> abbreviations;
     private HashMap<String, Venue> venues;
     private HashMap<String, Author> authors;
-    private HashMap<String, String> categoryNotes;
 
     public List<BibItem> parseFile(File file) {
         abbreviations = new HashMap<>();
         venues = new HashMap<>();
         authors = new HashMap<>();
-        categoryNotes = new HashMap<>();
 
         parsePreliminaries(file);
         List<BibItem> items = parseItems(file);
         replaceAuthorsAndAbbreviations(items);
 
         return items;
-    }
-
-    public Map<String, String> getCategoryNotes() {
-        return categoryNotes;
     }
 
     private List<BibItem> parseItems(File file) {
@@ -203,8 +197,6 @@ public class BibTeXParser {
                     parseVenue(line, true);
                 } else if (line.startsWith("<journal")) {
                     parseVenue(line, false);
-                } else if (line.startsWith("<note")) {
-                    parseCategoryNote(line);
                 }
             }
         } catch (IOException ex) {
@@ -315,56 +307,6 @@ public class BibTeXParser {
             venues.put(shortName, new Venue(conference, abbreviation, fullName, shortName));
         } else {
             System.err.println((conference ? "Conference" : "Journal") + " tag detected, but no full information found: " + line);
-        }
-    }
-
-    private void parseCategoryNote(String line) {
-        String category = null, latexText = null, htmlText = null, plainText = null;
-
-        Matcher matcher = categoryPattern.matcher(line);
-
-        if (matcher.find()) {
-            category = matcher.group(1);
-        }
-
-        matcher = textPattern.matcher(line);
-
-        if (matcher.find()) {
-            latexText = matcher.group(1).replaceAll("\\\\\"", "\"");
-            htmlText = matcher.group(1).replaceAll("\\\\\"", "\"");
-            plainText = matcher.group(1).replaceAll("\\\\\"", "\"");
-        }
-
-        matcher = htmltextPattern.matcher(line);
-
-        if (matcher.find()) {
-            htmlText = matcher.group(1).replaceAll("\\\\\"", "\"");
-        }
-
-        matcher = latextextPattern.matcher(line);
-
-        if (matcher.find()) {
-            latexText = matcher.group(1).replaceAll("\\\\\"", "\"");
-        }
-
-        matcher = plaintextPattern.matcher(line);
-
-        if (matcher.find()) {
-            plainText = matcher.group(1).replaceAll("\\\\\"", "\"");
-        }
-
-        if (category != null && (htmlText != null || latexText != null || plainText != null)) {
-            if (htmlText != null) {
-                categoryNotes.put(category + "html", htmlText);
-            }
-            if (latexText != null) {
-                categoryNotes.put(category + "latex", latexText);
-            }
-            if (plainText != null) {
-                categoryNotes.put(category + "plain", plainText);
-            }
-        } else {
-            System.err.println("Note tag detected, but not enough information found: " + line);
         }
     }
 

@@ -7,7 +7,6 @@ package publistgenerator.io.tex;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.OutputCategory;
 import publistgenerator.category.SubmittedCategory;
@@ -28,7 +27,7 @@ public class TeXPublicationListWriter extends PublicationListWriter {
     }
 
     @Override
-    protected void writePublicationList(List<BibItem> items, Map<String, String> categoryNotes, BufferedWriter out) throws IOException {
+    protected void writePublicationList(List<BibItem> items, BufferedWriter out) throws IOException {
         itemWriter = new TeXBibItemWriter(out);
         
         int submittedIndex = -1, talksIndex = -1;

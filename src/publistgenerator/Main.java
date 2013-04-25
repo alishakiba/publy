@@ -40,10 +40,10 @@ public class Main {
         List<BibItem> items = parser.parseFile(settings.getPublications());
 
         HTMLPublicationListWriter writer = new HTMLPublicationListWriter(new File(webDir, "publications/PublicationsHeader.html"), new File(webDir, "publications/PublicationsFooter.html"));
-        writer.writePublicationList(items, parser.getCategoryNotes(), new File(webDir, "publications.html"));
+        writer.writePublicationList(items, new File(webDir, "publications.html"));
 
         PlainPublicationListWriter plainWriter = new PlainPublicationListWriter();
-        plainWriter.writePublicationList(items, parser.getCategoryNotes(), new File(webDir, "publications.txt"));
+        plainWriter.writePublicationList(items, new File(webDir, "publications.txt"));
 
         // Produce a sitemap, if one is specified
         File baseSites = new File(webDir, "sitemap.txt");
@@ -51,11 +51,11 @@ public class Main {
             SitemapWriter.writeSiteMap(items, baseSites, new File(webDir, "sitemap.xml"), webDir);
         }
 
-        // Write my CV in TeX format, if the specification exists
+        // Write my publications in TeX format, if the specification exists
         File cvDir = new File(webDir, "cv/");
         if (cvDir.exists() && cvDir.isDirectory()) {
             TeXPublicationListWriter texWriter = new TeXPublicationListWriter();
-            texWriter.writePublicationList(items, parser.getCategoryNotes(), new File(cvDir, "publications.tex"));
+            texWriter.writePublicationList(items, new File(cvDir, "publications.tex"));
         }
     }
 }

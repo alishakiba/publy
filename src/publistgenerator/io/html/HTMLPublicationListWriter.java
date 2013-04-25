@@ -8,7 +8,6 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.OutputCategory;
 import publistgenerator.io.PublicationListWriter;
@@ -30,7 +29,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     @Override
-    protected void writePublicationList(List<BibItem> items, Map<String, String> categoryNotes, BufferedWriter out) throws IOException {
+    protected void writePublicationList(List<BibItem> items, BufferedWriter out) throws IOException {
         itemWriter = new HTMLBibItemWriter(out);
         
         // Copy the header from the header file

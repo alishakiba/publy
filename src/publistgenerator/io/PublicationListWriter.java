@@ -32,19 +32,19 @@ public abstract class PublicationListWriter {
         return format;
     }
     
-    public void writePublicationList(List<BibItem> items, Map<String, String> categoryNotes, File outputFile) {
+    public void writePublicationList(List<BibItem> items, File outputFile) {
         categorizePapers(items);
-        setNotes(categoryNotes);
+        //setNotes(categoryNotes); TODO: pull from settings
         
         try (BufferedWriter out = new BufferedWriter(new FileWriter(outputFile))) {
-            writePublicationList(items, categoryNotes, out);
+            writePublicationList(items, out);
         } catch (IOException ioe) {
             System.err.println("Exception occurred.");
             ioe.printStackTrace();
         }
     }
     
-    protected abstract void writePublicationList(List<BibItem> items, Map<String, String> categoryNotes, BufferedWriter out) throws IOException;
+    protected abstract void writePublicationList(List<BibItem> items, BufferedWriter out) throws IOException;
 
     protected void categorizePapers(List<BibItem> items) {
         categories = new ArrayList<>();
