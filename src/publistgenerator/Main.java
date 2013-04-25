@@ -11,7 +11,7 @@ import publistgenerator.bibitem.BibItem;
 import publistgenerator.io.BibTeXParser;
 import publistgenerator.io.html.HTMLPublicationListWriter;
 import publistgenerator.io.plain.PlainPublicationListWriter;
-import publistgenerator.io.tex.TeXCVWriter;
+import publistgenerator.io.tex.TeXPublicationListWriter;
 
 /**
  *
@@ -26,26 +26,29 @@ public class Main {
         generatePublications();
     }
 
+    private static File webDir = new File("../../../My Dropbox/Website/");
+    
     private static void generatePublications() {
         BibTeXParser parser = new BibTeXParser();
-        List<BibItem> items = parser.parseFile(new File("../../Website/publications/publications.bib"));
+        List<BibItem> items = parser.parseFile(new File(webDir, "publications/publications.bib"));
 
-        HTMLPublicationListWriter writer = new HTMLPublicationListWriter(new File("../../Website/publications/PublicationsHeader.html"), new File("../../Website/publications/PublicationsFooter.html"));
-        writer.writePublicationList(items, parser.getCategoryNotes(), new File("../../Website/publications.html"));
+        HTMLPublicationListWriter writer = new HTMLPublicationListWriter(new File(webDir, "publications/PublicationsHeader.html"), new File(webDir, "publications/PublicationsFooter.html"));
+        writer.writePublicationList(items, parser.getCategoryNotes(), new File(webDir, "publications.html"));
 
         PlainPublicationListWriter plainWriter = new PlainPublicationListWriter();
-        plainWriter.writePublicationList(items, parser.getCategoryNotes(), new File("../../Website/publications.txt"));
+        plainWriter.writePublicationList(items, parser.getCategoryNotes(), new File(webDir, "publications.txt"));
 
         // Produce a sitemap, if one is specified
-        File baseSites = new File("../../Website/sitemap.txt");
+        File baseSites = new File(webDir, "sitemap.txt");
         if (baseSites.exists()) {
-            SitemapWriter.writeSiteMap(items, baseSites, new File("../../Website/sitemap.xml"), new File("../../Website/"));
+            SitemapWriter.writeSiteMap(items, baseSites, new File(webDir, "sitemap.xml"), webDir);
         }
 
         // Write my CV in TeX format, if the specification exists
-        File cvContent = new File("../../Website/cv/cv.xml");
-        if (cvContent.exists()) {
-            TeXCVWriter.writeCV(cvContent, new File("../../Website/cv/cv.tex"), items, parser.getCategoryNotes(), parser.getRefereeList());
+        File cvDir = new File(webDir, "cv/");
+        if (cvDir.exists() && cvDir.isDirectory()) {
+            TeXPublicationListWriter texWriter = new TeXPublicationListWriter();
+            texWriter.writePublicationList(items, parser.getCategoryNotes(), new File(cvDir, "publications.tex"));
         }
     }
 }

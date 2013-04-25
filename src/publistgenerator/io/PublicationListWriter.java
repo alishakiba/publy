@@ -22,12 +22,16 @@ import publistgenerator.category.*;
  */
 public abstract class PublicationListWriter {
     protected List<OutputCategory> categories;
-    protected String type;
+    private String format;
 
-    public PublicationListWriter(String type) {
-        this.type = type;
+    public PublicationListWriter(String format) {
+        this.format = format;
     }
 
+    public String getFormat() {
+        return format;
+    }
+    
     public void writePublicationList(List<BibItem> items, Map<String, String> categoryNotes, File outputFile) {
         categorizePapers(items);
         setNotes(categoryNotes);
@@ -40,7 +44,7 @@ public abstract class PublicationListWriter {
         }
     }
     
-    public abstract void writePublicationList(List<BibItem> items, Map<String, String> categoryNotes, BufferedWriter out) throws IOException;
+    protected abstract void writePublicationList(List<BibItem> items, Map<String, String> categoryNotes, BufferedWriter out) throws IOException;
 
     protected void categorizePapers(List<BibItem> items) {
         categories = new ArrayList<>();
@@ -73,8 +77,8 @@ public abstract class PublicationListWriter {
     
     protected void setNotes(Map<String, String> categoryNotes) {
         for (OutputCategory c : categories) {
-            if (categoryNotes.containsKey(c.getShortName() + type)) {
-                c.setNote(categoryNotes.get(c.getShortName() + type));
+            if (categoryNotes.containsKey(c.getShortName() + format)) {
+                c.setNote(categoryNotes.get(c.getShortName() + format));
             }
         }
     }

@@ -30,7 +30,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     @Override
-    public void writePublicationList(List<BibItem> items, Map<String, String> categoryNotes, BufferedWriter out) throws IOException {
+    protected void writePublicationList(List<BibItem> items, Map<String, String> categoryNotes, BufferedWriter out) throws IOException {
         itemWriter = new HTMLBibItemWriter(out);
         
         // Copy the header from the header file

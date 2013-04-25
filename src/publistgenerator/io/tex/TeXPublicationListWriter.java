@@ -6,12 +6,9 @@ package publistgenerator.io.tex;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import publistgenerator.bibitem.BibItem;
-import publistgenerator.bibitem.Venue;
 import publistgenerator.category.OutputCategory;
 import publistgenerator.category.SubmittedCategory;
 import publistgenerator.category.TalksCategory;
@@ -31,11 +28,8 @@ public class TeXPublicationListWriter extends PublicationListWriter {
     }
 
     @Override
-    public void writePublicationList(List<BibItem> items, Map<String, String> categoryNotes, BufferedWriter out) throws IOException {
+    protected void writePublicationList(List<BibItem> items, Map<String, String> categoryNotes, BufferedWriter out) throws IOException {
         itemWriter = new TeXBibItemWriter(out);
-        
-        categorizePapers(items);
-        setNotes(categoryNotes);
         
         int submittedIndex = -1, talksIndex = -1;
 
@@ -87,39 +81,5 @@ public class TeXPublicationListWriter extends PublicationListWriter {
         }
 
         out.newLine();
-    }
-
-    public void writeRefereeList(List<Venue> refereeList, BufferedWriter out) throws IOException {
-        // Sort the conferences and journals by their full name
-        Collections.sort(refereeList, new Comparator<Venue>() {
-
-            @Override
-            public int compare(Venue v1, Venue v2) {
-                return v1.getFullName().compareTo(v2.getFullName());
-            }
-        });
-        
-        // Write the header
-        out.write("\\noindent {\\large \\textbf{Refereed for}}\\\\[0.4\\baselineskip]");
-        
-        // Write all journals
-        for (Venue v : refereeList) {
-            if (v.isJournal()) {
-                out.newLine();
-                out.write("\\indent " + v.getFullName() + " (" + v.getAbbreviation() + ")\\\\");
-            }
-        }
-        
-        // Short spacing between journals and conferences
-        out.write("[0.4\\baselineskip]");
-        out.newLine();
-        
-        // Write all conferences
-        for (Venue v : refereeList) {
-            if (v.isConference()) {
-                out.write("\\indent " + v.getFullName() + " (" + v.getAbbreviation() + ")\\\\");
-                out.newLine();
-            }
-        }
     }
 }
