@@ -12,6 +12,7 @@ import publistgenerator.io.BibTeXParser;
 import publistgenerator.io.html.HTMLPublicationListWriter;
 import publistgenerator.io.plain.PlainPublicationListWriter;
 import publistgenerator.io.tex.TeXPublicationListWriter;
+import publistgenerator.settings.Settings;
 import publistgenerator.settings.SettingsReader;
 
 /**
@@ -33,10 +34,10 @@ public class Main {
     
     private static void generatePublications() {
         // Read settings
-        SettingsReader.parseSettings(DEFAULT_SETTINGS_LOCATION);
+        Settings settings = SettingsReader.parseSettings(DEFAULT_SETTINGS_LOCATION);
         
         BibTeXParser parser = new BibTeXParser();
-        List<BibItem> items = parser.parseFile(new File(webDir, "publications/publications.bib"));
+        List<BibItem> items = parser.parseFile(settings.getPublications());
 
         HTMLPublicationListWriter writer = new HTMLPublicationListWriter(new File(webDir, "publications/PublicationsHeader.html"), new File(webDir, "publications/PublicationsFooter.html"));
         writer.writePublicationList(items, parser.getCategoryNotes(), new File(webDir, "publications.html"));
