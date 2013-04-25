@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package publistgenerator.io;
+package publistgenerator.io.plain;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.OutputCategory;
+import publistgenerator.io.PublicationListWriter;
 
 /**
  *

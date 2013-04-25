@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package publistgenerator.io;
+package publistgenerator.io.html;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.OutputCategory;
+import publistgenerator.io.PublicationListWriter;
 
 /**
  *

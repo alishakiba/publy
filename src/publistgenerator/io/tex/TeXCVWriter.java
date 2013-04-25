@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package publistgenerator.io;
+package publistgenerator.io.tex;
 
+import publistgenerator.io.tex.TeXPublicationListWriter;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

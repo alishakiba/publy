@@ -4,14 +4,14 @@
  */
 package publistgenerator;
 
-import publistgenerator.io.SitemapWriter;
+import publistgenerator.io.html.SitemapWriter;
 import java.io.File;
 import java.util.List;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.io.BibTeXParser;
-import publistgenerator.io.HTMLPublicationListWriter;
-import publistgenerator.io.PlainPublicationListWriter;
-import publistgenerator.io.TeXCVWriter;
+import publistgenerator.io.html.HTMLPublicationListWriter;
+import publistgenerator.io.plain.PlainPublicationListWriter;
+import publistgenerator.io.tex.TeXCVWriter;
 
 /**
  *

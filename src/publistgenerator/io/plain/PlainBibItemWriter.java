@@ -2,21 +2,20 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package publistgenerator.io;
+package publistgenerator.io.plain;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import publistgenerator.bibitem.*;
+import publistgenerator.io.BibItemWriter;
 
 /**
  *
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
-public class TeXBibItemWriter extends BibItemWriter {
+public class PlainBibItemWriter extends BibItemWriter {
 
-    public TeXBibItemWriter(BufferedWriter out) {
+    public PlainBibItemWriter(BufferedWriter out) {
         super(out);
     }
 
@@ -28,7 +27,7 @@ public class TeXBibItemWriter extends BibItemWriter {
         if (item.anyNonEmpty("status")) {
             writeStatus(item, item.get("journal"));
         } else {
-            out.write(latexify(item.get("journal")));
+            out.write(item.get("journal"));
             out.write(", ");
 
             output(item.get("volume"));
@@ -42,27 +41,19 @@ public class TeXBibItemWriter extends BibItemWriter {
             if (item.anyNonEmpty("pages")) {
                 if (item.anyNonEmpty("volume", "number")) {
                     out.write(":");
-                    out.write(item.get("pages"));
+                    out.write(item.get("pages").replaceAll("-+", "-"));
                     out.write(", ");
                 } else {
-                    output(formatPages(item), ", ");
+                    output(formatPages(item).replaceAll("-+", "-"), ", ");
                 }
             }
 
             out.write(item.get("year"));
             out.write(".");
-            
-            if (item.anyNonEmpty("note")) {
-                out.write("\\\\");
-            }
-
             out.newLine();
         }
 
-        if (item.anyNonEmpty("note")) {
-            out.write(" & ");
-            output(latexify(item.get("note")), ".", true);
-        }
+        output(item.get("note"), ".", true);
     }
 
     @Override
@@ -82,26 +73,18 @@ public class TeXBibItemWriter extends BibItemWriter {
             writeStatus(item, item.get("booktitle"));
         } else {
             out.write("In ");
-            out.write(latexify(item.get("booktitle")));
+            out.write(item.get("booktitle"));
             out.write(", ");
-
+            
             writeVolume(item, ", ");
-            output(formatPages(item), ", ");
-
+            output(formatPages(item).replaceAll("-+", "-"), ", ");
+            
             out.write(item.get("year"));
             out.write(".");
-
-            if (item.anyNonEmpty("note")) {
-                out.write("\\\\");
-            }
-
             out.newLine();
         }
 
-        if (item.anyNonEmpty("note")) {
-            out.write(" & ");
-            output(latexify(item.get("note")), ".", true);
-        }
+        output(item.get("note"), ".", true);
     }
 
     @Override
@@ -109,19 +92,13 @@ public class TeXBibItemWriter extends BibItemWriter {
         writeTitleAndAuthors(item);
 
         out.write("Master's thesis, ");
-        out.write(latexify(item.get("school")));
+        out.write(item.get("school"));
         out.write(", ");
         out.write(item.get("year"));
         out.write(".");
+        out.newLine();
 
-        if (item.anyNonEmpty("note")) {
-            out.write("\\\\");
-            out.newLine();
-            out.write(" & ");
-            output(latexify(item.get("note")), ".", true);
-        } else {
-            out.newLine();
-        }
+        output(item.get("note"), ".", true);
     }
 
     @Override
@@ -129,91 +106,51 @@ public class TeXBibItemWriter extends BibItemWriter {
         writeTitleAndAuthors(item);
 
         out.write("PhD thesis, ");
-        out.write(latexify(item.get("school")));
+        out.write(item.get("school"));
         out.write(", ");
         out.write(item.get("year"));
         out.write(".");
+        out.newLine();
 
-        if (item.anyNonEmpty("note")) {
-            out.write("\\\\");
-            out.newLine();
-            out.write(" & ");
-            output(latexify(item.get("note")), ".", true);
-        } else {
-            out.newLine();
-        }
+        output(item.get("note"), ".", true);
     }
 
     @Override
     public void write(InvitedTalk item) throws IOException {
-        out.write("& \\textbf{");
-        out.write(latexify(formatTitle(item)));
-        out.write("}.\\\\");
+        out.write(formatTitle(item));
+        out.write(".");
         out.newLine();
 
-        out.write(" & ");
         output(item.get("address"), ", ");
+        output(formatDate(item), ".", true);
 
-        if (item.anyNonEmpty("note")) {
-            output(formatDate(item), ".\\\\", true);
-            out.write(" & ");
-            output(latexify(item.get("note")), ".", true);
-        } else {
-            output(formatDate(item), ".", true);
-        }
+        output(item.get("note"), ".", true);
     }
     
     @Override
     public void write(Unpublished item) throws IOException {
         writeTitleAndAuthors(item);
-        
-        if (item.anyNonEmpty("note")) {
-            output(latexify(item.get("note")), ".", true);
-        } else {
-            out.write("\\\\");
-            out.newLine();
-        }
+
+        output(item.get("note"), ".", true);
     }
 
     private void writeTitleAndAuthors(BibItem item) throws IOException {
-        out.write("& \\textbf{");
-        out.write(latexify(formatTitle(item)));
-        out.write("}.\\\\");
-        out.newLine();
+        out.write(formatTitle(item));
+        out.write(".");
 
-        out.write(" & ");
-        out.write(latexify(formatAuthors(item)));
-        out.write(".\\\\");
-        out.newLine();
-
-        out.write(" & ");
-    }
-
-    @Override
-    protected String formatAuthors(BibItem item) {
-        String author = item.get("author");
-
-        if (author == null) {
-            return "";
-        } else {
-            List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
-
-            for (Author a : item.getAuthors()) {
-                if (a.isMe() && "yes".equals(item.get("presented"))) {
-                    // Underline my name
-                    authorLinks.add("\\underline{" + a.getLatexName() + "}");
-                } else {
-                    authorLinks.add(a.getLatexName());
-                }
-            }
-
-            return formatNames(authorLinks);
+        if ("yes".equals(item.get("presented"))) {
+            out.write(" (*)");
         }
+
+        out.newLine();
+        out.write(formatAuthors(item));
+        out.write(".");
+        out.newLine();
     }
 
     private void writeVolume(BibItem item, String connective) throws IOException {
         String volume = item.get("volume");
-        String series = latexify(item.get("series"));
+        String series = item.get("series");
         String number = item.get("number");
 
         if (volume != null && !volume.isEmpty()) {
@@ -243,43 +180,31 @@ public class TeXBibItemWriter extends BibItemWriter {
     }
 
     private void writeStatus(BibItem item, String booktitle) throws IOException {
-        String title;
-
         if (booktitle.startsWith("Proceedings of ")) {
-            title = latexify(booktitle.substring("Proceedings of ".length()));
-        } else {
-            title = latexify(booktitle);
+            booktitle = booktitle.substring("Proceedings of ".length());
         }
 
         switch (item.get("status")) {
             case "submitted":
                 out.write("Submitted to ");
-                out.write(title);
-                out.write(".\\\\");
+                out.write(booktitle);
+                out.write(".");
                 out.newLine();
                 break;
             case "accepted":
                 out.write("Accepted to ");
-                out.write(title);
-                out.write(".\\\\");
+                out.write(booktitle);
+                out.write(".");
                 out.newLine();
                 break;
             case "acceptedrev":
                 out.write("Accepted, pending minor revisions, to ");
-                out.write(title);
-                out.write(".\\\\");
+                out.write(booktitle);
+                out.write(".");
                 out.newLine();
                 break;
             default:
                 throw new InternalError("Unrecognized status: \"" + item.get("status") + "\"");
-        }
-    }
-
-    private String latexify(String s) {
-        if (s == null) {
-            return "";
-        } else {
-            return s.replaceAll("&", "\\\\&");
         }
     }
 }

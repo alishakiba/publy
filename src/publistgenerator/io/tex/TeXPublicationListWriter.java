@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package publistgenerator.io;
+package publistgenerator.io.tex;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -15,6 +15,7 @@ import publistgenerator.bibitem.Venue;
 import publistgenerator.category.OutputCategory;
 import publistgenerator.category.SubmittedCategory;
 import publistgenerator.category.TalksCategory;
+import publistgenerator.io.PublicationListWriter;
 
 /**
  *
