@@ -12,15 +12,12 @@ import publistgenerator.io.BibTeXParser;
 import publistgenerator.io.html.HTMLPublicationListWriter;
 import publistgenerator.io.plain.PlainPublicationListWriter;
 import publistgenerator.io.tex.TeXPublicationListWriter;
-import publistgenerator.settings.SettingsReader;
 
 /**
  *
  * @author Sander
  */
 public class Main {
-
-    private static final String DEFAULT_SETTINGS_LOCATION = "./PubListGenerator.config";
     
     /**
      * @param args the command line arguments
@@ -32,9 +29,6 @@ public class Main {
     private static File webDir = new File("../../../My Dropbox/Website/");
     
     private static void generatePublications() {
-        // Read settings
-        SettingsReader.parseSettings(DEFAULT_SETTINGS_LOCATION);
-        
         BibTeXParser parser = new BibTeXParser();
         List<BibItem> items = parser.parseFile(new File(webDir, "publications/publications.bib"));
 
