@@ -12,7 +12,6 @@ import publistgenerator.io.BibTeXParser;
 import publistgenerator.io.html.HTMLPublicationListWriter;
 import publistgenerator.io.plain.PlainPublicationListWriter;
 import publistgenerator.io.tex.TeXPublicationListWriter;
-import publistgenerator.settings.SettingsReader;
 
 /**
  *
@@ -20,8 +19,6 @@ import publistgenerator.settings.SettingsReader;
  */
 public class Main {
 
-    private static final String DEFAULT_SETTINGS_LOCATION = "./PubListGenerator.config";
-    
     /**
      * @param args the command line arguments
      */
@@ -29,32 +26,35 @@ public class Main {
         generatePublications();
     }
 
-    private static File webDir = new File("../../../My Dropbox/Website/");
-    
     private static void generatePublications() {
-        // Read settings
-        SettingsReader.parseSettings(DEFAULT_SETTINGS_LOCATION);
-        
-        BibTeXParser parser = new BibTeXParser();
-        List<BibItem> items = parser.parseFile(new File(webDir, "publications/publications.bib"));
+        File webDir = askWebDir();
 
-        HTMLPublicationListWriter writer = new HTMLPublicationListWriter(new File(webDir, "publications/PublicationsHeader.html"), new File(webDir, "publications/PublicationsFooter.html"));
-        writer.writePublicationList(items, parser.getCategoryNotes(), new File(webDir, "publications.html"));
+        if (webDir != null && webDir.isDirectory()) {
+            BibTeXParser parser = new BibTeXParser();
+            List<BibItem> items = parser.parseFile(new File(webDir, "publications/publications.bib"));
 
-        PlainPublicationListWriter plainWriter = new PlainPublicationListWriter();
-        plainWriter.writePublicationList(items, parser.getCategoryNotes(), new File(webDir, "publications.txt"));
+            HTMLPublicationListWriter writer = new HTMLPublicationListWriter(new File(webDir, "publications/PublicationsHeader.html"), new File(webDir, "publications/PublicationsFooter.html"));
+            writer.writePublicationList(items, parser.getCategoryNotes(), new File(webDir, "publications.html"));
 
-        // Produce a sitemap, if one is specified
-        File baseSites = new File(webDir, "sitemap.txt");
-        if (baseSites.exists()) {
-            SitemapWriter.writeSiteMap(items, baseSites, new File(webDir, "sitemap.xml"), webDir);
+            PlainPublicationListWriter plainWriter = new PlainPublicationListWriter();
+            plainWriter.writePublicationList(items, parser.getCategoryNotes(), new File(webDir, "publications.txt"));
+
+            // Produce a sitemap, if one is specified
+            File baseSites = new File(webDir, "sitemap.txt");
+            if (baseSites.exists()) {
+                SitemapWriter.writeSiteMap(items, baseSites, new File(webDir, "sitemap.xml"), webDir);
+            }
+
+            // Write my CV in TeX format, if the specification exists
+            File cvDir = new File(webDir, "cv/");
+            if (cvDir.exists() && cvDir.isDirectory()) {
+                TeXPublicationListWriter texWriter = new TeXPublicationListWriter();
+                texWriter.writePublicationList(items, parser.getCategoryNotes(), new File(cvDir, "publications.tex"));
+            }
         }
+    }
 
-        // Write my CV in TeX format, if the specification exists
-        File cvDir = new File(webDir, "cv/");
-        if (cvDir.exists() && cvDir.isDirectory()) {
-            TeXPublicationListWriter texWriter = new TeXPublicationListWriter();
-            texWriter.writePublicationList(items, parser.getCategoryNotes(), new File(cvDir, "publications.tex"));
-        }
+    private static File askWebDir() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
