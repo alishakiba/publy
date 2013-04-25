@@ -23,14 +23,12 @@ public class BibTeXParser {
     private HashMap<String, Venue> venues;
     private HashMap<String, Author> authors;
     private HashMap<String, String> categoryNotes;
-    private List<Venue> refereeList;
 
     public List<BibItem> parseFile(File file) {
         abbreviations = new HashMap<>();
         venues = new HashMap<>();
         authors = new HashMap<>();
         categoryNotes = new HashMap<>();
-        refereeList = new ArrayList<>();
 
         parsePreliminaries(file);
         List<BibItem> items = parseItems(file);
@@ -41,10 +39,6 @@ public class BibTeXParser {
 
     public Map<String, String> getCategoryNotes() {
         return categoryNotes;
-    }
-
-    public List<Venue> getRefereeList() {
-        return refereeList;
     }
 
     private List<BibItem> parseItems(File file) {
@@ -78,8 +72,6 @@ public class BibTeXParser {
                         item = new Unpublished();
                     } else if (line.startsWith("@talk")) {
                         item = new InvitedTalk();
-                    } else if (line.startsWith("<referee")) {
-                        parseRefereeList(line);
                     }
 
                     if (item != null) {
@@ -458,42 +450,6 @@ public class BibTeXParser {
                 if (venues.containsKey(abbr)) {
                     item.setVenue(venues.get(abbr));
                     break;
-                }
-            }
-        }
-    }
-    private static final Pattern journalsPattern = Pattern.compile("journals=\"([^\"]*)\"");
-    private static final Pattern conferencesPattern = Pattern.compile("conferences=\"([^\"]*)\"");
-
-    private void parseRefereeList(String line) {
-        String refereed = null;
-
-        Matcher matcher = journalsPattern.matcher(line);
-
-        if (matcher.find()) {
-            refereed = matcher.group(1);
-        }
-
-        matcher = conferencesPattern.matcher(line);
-
-        if (matcher.find()) {
-            if (refereed == null || refereed.isEmpty()) {
-                refereed = matcher.group(1);
-            } else {
-                refereed = refereed + "," + matcher.group(1);
-            }
-        }
-
-        if (refereed != null && !refereed.isEmpty()) {
-            String[] parts = refereed.split(",");
-
-            for (String s : parts) {
-                String v = s.trim();
-
-                if (venues.containsKey(v)) {
-                    refereeList.add(venues.get(v));
-                } else {
-                    System.err.println("Venue not found: " + v);
                 }
             }
         }
