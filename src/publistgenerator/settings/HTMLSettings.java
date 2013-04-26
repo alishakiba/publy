@@ -10,6 +10,14 @@ package publistgenerator.settings;
  */
 public class HTMLSettings extends FormatSettings {
 
+    public enum Mode {
+        SINGLE_PAGE, TABS, MULTIPLE_PAGES;
+    }
+    
+    private Mode mode;
+    private boolean includeAbstracts;
+    private boolean includeBibtext; // TODO: more specific
+    
     public HTMLSettings() {
         super("html");
     }
