@@ -19,7 +19,7 @@ import publistgenerator.settings.SettingsReader;
  *
  * @author Sander
  */
-public class Main {
+public class GeneratorMain {
 
     private static final String DEFAULT_SETTINGS_LOCATION = "./PubListGenerator.config";
     
