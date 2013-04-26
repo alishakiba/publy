@@ -19,23 +19,27 @@ import publistgenerator.bibitem.*;
  */
 public class BibTeXParser {
 
-    private HashMap<String, String> abbreviations;
-    private HashMap<String, Venue> venues;
-    private HashMap<String, Author> authors;
+    private BibTeXParser() {
+    }
 
-    public List<BibItem> parseFile(File file) {
-        abbreviations = new HashMap<>();
-        venues = new HashMap<>();
-        authors = new HashMap<>();
+    public static List<BibItem> parseFile(File file) {
+        HashMap<String, String> abbreviations = new HashMap<>();
+        HashMap<String, Venue> venues = new HashMap<>();
+        HashMap<String, Author> authors = new HashMap<>();
 
-        parsePreliminaries(file);
+        parsePreliminaries(file, abbreviations, venues, authors);
         List<BibItem> items = parseItems(file);
-        replaceAuthorsAndAbbreviations(items);
+        
+        for (BibItem item : items) {
+            setVenue(item, venues);
+            expandAbbreviations(item, abbreviations, venues);
+            replaceAuthors(item, authors);
+        }
 
         return items;
     }
 
-    private List<BibItem> parseItems(File file) {
+    private static List<BibItem> parseItems(File file) {
         HashSet<String> ids = new HashSet<>();
         ArrayList<BibItem> items = new ArrayList<>();
 
@@ -99,7 +103,7 @@ public class BibTeXParser {
         return items;
     }
 
-    private void parseItem(BibItem item, String line, BufferedReader in) throws IOException {
+    private static void parseItem(BibItem item, String line, BufferedReader in) throws IOException {
         // First grab all contents of this bibitem into one long string to deal with different styles
         // Assumption: no two bibitems on any line
         StringBuilder content = new StringBuilder(line);
@@ -164,7 +168,7 @@ public class BibTeXParser {
         }
     }
 
-    private int levelChange(String line) {
+    private static int levelChange(String line) {
         char[] chars = line.toCharArray();
 
         int change = 0;
@@ -183,20 +187,20 @@ public class BibTeXParser {
         return change;
     }
 
-    private void parsePreliminaries(File file) {
+    private static void parsePreliminaries(File file, Map<String, String> abbreviations, Map<String, Venue> venues, Map<String, Author> authors) {
         try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-            for (String line=in.readLine(); line!=null;line=in.readLine()) {
+            for (String line = in.readLine(); line != null; line = in.readLine()) {
                 // Process this line
                 line = line.trim();
 
                 if (line.startsWith("<author")) {
-                    parseAuthor(line);
+                    parseAuthor(line, authors);
                 } else if (line.startsWith("<abbr")) {
-                    parseAbbreviation(line);
+                    parseAbbreviation(line, abbreviations);
                 } else if (line.startsWith("<conf")) {
-                    parseVenue(line, true);
+                    parseVenue(line, true, venues);
                 } else if (line.startsWith("<journal")) {
-                    parseVenue(line, false);
+                    parseVenue(line, false, venues);
                 }
             }
         } catch (IOException ex) {
@@ -218,7 +222,7 @@ public class BibTeXParser {
     private static final Pattern plaintextPattern = Pattern.compile("plaintext=\"(.*?[^\\\\])\"");
     private static final Pattern latextextPattern = Pattern.compile("latextext=\"(.*?[^\\\\])\"");
 
-    private void parseAuthor(String line) {
+    private static void parseAuthor(String line, Map<String, Author> authors) {
         String shortName = null, latexName = null, htmlName = null, url = null;
 
         Matcher matcher = shortPattern.matcher(line);
@@ -262,7 +266,7 @@ public class BibTeXParser {
         }
     }
 
-    private void parseAbbreviation(String line) {
+    private static void parseAbbreviation(String line, Map<String, String> abbreviations) {
         String abbr = null, full = null;
         Matcher matcher = shortPattern.matcher(line);
 
@@ -283,7 +287,7 @@ public class BibTeXParser {
         }
     }
 
-    private void parseVenue(String line, boolean conference) {
+    private static void parseVenue(String line, boolean conference, Map<String, Venue> venues) {
         String shortName = null, fullName = null, abbreviation = null;
         Matcher matcher = shortPattern.matcher(line);
 
@@ -310,17 +314,10 @@ public class BibTeXParser {
         }
     }
 
-    private void replaceAuthorsAndAbbreviations(List<BibItem> items) {
-        for (BibItem item : items) {
-            setVenue(item);
-            expandAbbreviations(item);
-            replaceAuthors(item);
-        }
-    }
     // Pattern for detecting an author link
     private static final Pattern authorPattern = Pattern.compile("<([^<>]*)>");
 
-    private void replaceAuthors(BibItem item) {
+    private static void replaceAuthors(BibItem item, Map<String, Author> authors) {
         // Replace authors
         String author = item.get("author");
 
@@ -340,7 +337,7 @@ public class BibTeXParser {
     }
     private static final Pattern abbrPattern = Pattern.compile("<<([^>]*)>>");
 
-    private void expandAbbreviations(BibItem item) {
+    private static void expandAbbreviations(BibItem item, Map<String, String> abbreviations, Map<String, Venue> venues) {
         for (String field : item.getFields()) {
             String val = item.get(field);
 
@@ -374,7 +371,7 @@ public class BibTeXParser {
         }
     }
 
-    private void setVenue(BibItem item) {
+    private static void setVenue(BibItem item, Map<String, Venue> venues) {
         String venue = null;
 
         if (item.anyNonEmpty("booktitle")) {

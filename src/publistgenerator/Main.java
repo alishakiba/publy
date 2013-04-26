@@ -36,8 +36,7 @@ public class Main {
         // Read settings
         Settings settings = SettingsReader.parseSettings(DEFAULT_SETTINGS_LOCATION);
         
-        BibTeXParser parser = new BibTeXParser();
-        List<BibItem> items = parser.parseFile(settings.getPublications());
+        List<BibItem> items = BibTeXParser.parseFile(settings.getPublications());
 
         HTMLPublicationListWriter writer = new HTMLPublicationListWriter(new File(webDir, "publications/PublicationsHeader.html"), new File(webDir, "publications/PublicationsFooter.html"));
         writer.writePublicationList(items, new File(webDir, "publications.html"));
