@@ -12,6 +12,7 @@ import publistgenerator.io.BibTeXParser;
 import publistgenerator.io.html.HTMLPublicationListWriter;
 import publistgenerator.io.plain.PlainPublicationListWriter;
 import publistgenerator.io.tex.TeXPublicationListWriter;
+import publistgenerator.settings.HTMLSettings;
 import publistgenerator.settings.Settings;
 import publistgenerator.settings.SettingsReader;
 
@@ -40,10 +41,10 @@ public class GeneratorMain {
         List<BibItem> items = BibTeXParser.parseFile(settings.getPublications());
 
         HTMLPublicationListWriter writer = new HTMLPublicationListWriter(new File(webDir, "publications/PublicationsHeader.html"), new File(webDir, "publications/PublicationsFooter.html"));
-        writer.writePublicationList(items, new File(webDir, "publications.html"));
+        writer.writePublicationList(items, (HTMLSettings) settings.getSettings("html"));
 
         PlainPublicationListWriter plainWriter = new PlainPublicationListWriter();
-        plainWriter.writePublicationList(items, new File(webDir, "publications.txt"));
+        plainWriter.writePublicationList(items, settings.getSettings("plain"));
 
         // Produce a sitemap, if one is specified
         File baseSites = new File(webDir, "sitemap.txt");
@@ -55,7 +56,7 @@ public class GeneratorMain {
         File cvDir = new File(webDir, "cv/");
         if (cvDir.exists() && cvDir.isDirectory()) {
             TeXPublicationListWriter texWriter = new TeXPublicationListWriter();
-            texWriter.writePublicationList(items, new File(cvDir, "publications.tex"));
+            texWriter.writePublicationList(items, settings.getSettings("tex"));
         }
     }
 }

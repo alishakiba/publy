@@ -12,6 +12,7 @@ import publistgenerator.category.OutputCategory;
 import publistgenerator.category.SubmittedCategory;
 import publistgenerator.category.TalksCategory;
 import publistgenerator.io.PublicationListWriter;
+import publistgenerator.settings.FormatSettings;
 
 /**
  *
@@ -27,7 +28,7 @@ public class TeXPublicationListWriter extends PublicationListWriter {
     }
 
     @Override
-    protected void writePublicationList(List<BibItem> items, BufferedWriter out) throws IOException {
+    protected void writePublicationList(List<BibItem> items, BufferedWriter out, FormatSettings settings) throws IOException {
         itemWriter = new TeXBibItemWriter(out);
         
         int submittedIndex = -1, talksIndex = -1;

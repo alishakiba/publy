@@ -11,6 +11,7 @@ import java.util.List;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.OutputCategory;
 import publistgenerator.io.PublicationListWriter;
+import publistgenerator.settings.FormatSettings;
 
 /**
  *
@@ -29,7 +30,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     @Override
-    protected void writePublicationList(List<BibItem> items, BufferedWriter out) throws IOException {
+    protected void writePublicationList(List<BibItem> items, BufferedWriter out, FormatSettings settings) throws IOException {
         itemWriter = new HTMLBibItemWriter(out);
         
         // Copy the header from the header file

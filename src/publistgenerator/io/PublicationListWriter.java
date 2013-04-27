@@ -2,25 +2,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package publistgenerator.io;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.*;
+import publistgenerator.settings.FormatSettings;
 
 /**
  *
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
 public abstract class PublicationListWriter {
+
     protected List<OutputCategory> categories;
     private String format;
 
@@ -31,20 +30,20 @@ public abstract class PublicationListWriter {
     public String getFormat() {
         return format;
     }
-    
-    public void writePublicationList(List<BibItem> items, File outputFile) {
+
+    public void writePublicationList(List<BibItem> items, FormatSettings settings) {
         categorizePapers(items);
-        //setNotes(categoryNotes); TODO: pull from settings
-        
-        try (BufferedWriter out = new BufferedWriter(new FileWriter(outputFile))) {
-            writePublicationList(items, out);
+        setNotes(settings);
+
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(settings.getTarget()))) {
+            writePublicationList(items, out, settings);
         } catch (IOException ioe) {
             System.err.println("Exception occurred.");
             ioe.printStackTrace();
         }
     }
-    
-    protected abstract void writePublicationList(List<BibItem> items, BufferedWriter out) throws IOException;
+
+    protected abstract void writePublicationList(List<BibItem> items, BufferedWriter out, FormatSettings settings) throws IOException;
 
     protected void categorizePapers(List<BibItem> items) {
         categories = new ArrayList<>();
@@ -74,11 +73,11 @@ public abstract class PublicationListWriter {
             }
         }
     }
-    
-    protected void setNotes(Map<String, String> categoryNotes) {
+
+    protected void setNotes(FormatSettings settings) {
         for (OutputCategory c : categories) {
-            if (categoryNotes.containsKey(c.getShortName() + format)) {
-                c.setNote(categoryNotes.get(c.getShortName() + format));
+            if (settings.getCategoryNotes().containsKey(c)) {
+                c.setNote(settings.getCategoryNotes().get(c));
             }
         }
     }
