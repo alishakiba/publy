@@ -6,6 +6,7 @@ package publistgenerator;
 
 import java.io.File;
 import java.util.List;
+import javax.swing.JOptionPane;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.io.BibTeXParser;
 import publistgenerator.io.html.HTMLPublicationListWriter;
@@ -31,9 +32,10 @@ public class GeneratorMain {
 
         if (settings == null) {
             // Notify the user
+            JOptionPane.showMessageDialog(null, "No configuration information was found. Please create a configuration in the Settings window.", "Publication List Generator - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
             
             // Launch the GUI
-            
+            // TODO
         } else {
             // Parse all publications
             List<BibItem> items = BibTeXParser.parseFile(settings.getPublications());
