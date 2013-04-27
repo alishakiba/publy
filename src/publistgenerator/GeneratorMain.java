@@ -4,7 +4,6 @@
  */
 package publistgenerator;
 
-import publistgenerator.io.html.SitemapWriter;
 import java.io.File;
 import java.util.List;
 import publistgenerator.bibitem.BibItem;
@@ -45,12 +44,6 @@ public class GeneratorMain {
 
         PlainPublicationListWriter plainWriter = new PlainPublicationListWriter();
         plainWriter.writePublicationList(items, settings.getSettings("plain"));
-
-        // Produce a sitemap, if one is specified
-        File baseSites = new File(webDir, "sitemap.txt");
-        if (baseSites.exists()) {
-            SitemapWriter.writeSiteMap(items, baseSites, new File(webDir, "sitemap.xml"), webDir);
-        }
 
         // Write my publications in TeX format, if the specification exists
         File cvDir = new File(webDir, "cv/");
