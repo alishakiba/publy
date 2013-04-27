@@ -10,7 +10,6 @@ import publistgenerator.bibitem.BibItem;
 import publistgenerator.io.BibTeXParser;
 import publistgenerator.io.html.HTMLPublicationListWriter;
 import publistgenerator.io.plain.PlainPublicationListWriter;
-import publistgenerator.io.tex.TeXPublicationListWriter;
 import publistgenerator.settings.HTMLSettings;
 import publistgenerator.settings.Settings;
 import publistgenerator.settings.SettingsReader;
@@ -44,12 +43,5 @@ public class GeneratorMain {
 
         PlainPublicationListWriter plainWriter = new PlainPublicationListWriter();
         plainWriter.writePublicationList(items, settings.getSettings("plain"));
-
-        // Write my publications in TeX format, if the specification exists
-        File cvDir = new File(webDir, "cv/");
-        if (cvDir.exists() && cvDir.isDirectory()) {
-            TeXPublicationListWriter texWriter = new TeXPublicationListWriter();
-            texWriter.writePublicationList(items, settings.getSettings("tex"));
-        }
     }
 }
