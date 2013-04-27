@@ -19,24 +19,20 @@ public class SettingsReader {
 
     public static Settings parseSettings(String file) {
         File settingsFile = new File(file);
-        Settings settings = new Settings();
+        Settings settings = null;
 
         if (settingsFile.exists()) {
             try (BufferedReader in = new BufferedReader(new FileReader(settingsFile))) {
                 parseSettings(settings, in);
             } catch (IOException ex) {
                 Logger.getLogger(SettingsReader.class.getName()).log(Level.SEVERE, null, ex);
-                settings.resetToDefault();
             }
-        } else {
-            // Return default settings
-            settings.resetToDefault();
         }
 
         return settings;
     }
 
     private static void parseSettings(Settings settings, BufferedReader in) throws IOException {
-        
+        // TODO
     }
 }

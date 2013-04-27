@@ -14,8 +14,8 @@ import publistgenerator.category.OutputCategory;
  * @author Sander
  */
 public class FormatSettings {
+
     // General
-    private final String format;
     private File target;
     // Author info
     private boolean listAllAuthors = false;
@@ -29,14 +29,6 @@ public class FormatSettings {
     // Categories
     private List<OutputCategory> categories;
     private Map<OutputCategory, String> categoryNotes;
-
-    public FormatSettings(String format) {
-        this.format = format;
-    }
-
-    public String getFormat() {
-        return format;
-    }
 
     public File getTarget() {
         return target;

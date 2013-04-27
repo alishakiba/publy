@@ -5,8 +5,6 @@
 package publistgenerator.settings;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -15,10 +13,17 @@ import java.util.Map;
 public class Settings {
 
     private File publications;
-    private Map<String, FormatSettings> formatSettings;
+    private HTMLSettings htmlSettings;
+    private FormatSettings plainSettings;
 
+    /**
+     * Creates a new Settings object with default html and plain settings.
+     * @param publications 
+     */
     public Settings() {
-        formatSettings = new HashMap<>();
+        publications = null;
+        htmlSettings = new HTMLSettings();
+        plainSettings = new FormatSettings();
     }
 
     public File getPublications() {
@@ -29,23 +34,19 @@ public class Settings {
         this.publications = publications;
     }
 
-    public FormatSettings getSettings(String format) {
-        return formatSettings.get(format);
+    public HTMLSettings getHtmlSettings() {
+        return htmlSettings;
     }
 
-    public void addFormat(String format, FormatSettings settings) {
-        formatSettings.put(format, settings);
+    public FormatSettings getPlainSettings() {
+        return plainSettings;
     }
 
     /**
-     * Populates this object with the default values.
+     * Populates this object with the default values. The publications file remains the same.
      */
     public void resetToDefault() {
-        publications = null;
-        formatSettings.clear();
-        
-        // Default HTML settings
-        HTMLSettings html = new HTMLSettings();
-        formatSettings.put(html.getFormat(), html);
+        htmlSettings = new HTMLSettings();
+        plainSettings = new FormatSettings();
     }
 }

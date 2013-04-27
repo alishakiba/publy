@@ -17,9 +17,4 @@ public class HTMLSettings extends FormatSettings {
     private Mode mode;
     private boolean includeAbstracts;
     private boolean includeBibtext; // TODO: more specific
-    
-    public HTMLSettings() {
-        super("html");
-    }
-    
 }
