@@ -20,9 +20,11 @@ import publistgenerator.settings.FormatSettings;
 public class PlainPublicationListWriter extends PublicationListWriter {
 
     private PlainBibItemWriter itemWriter;
+    private FormatSettings settings;
 
     @Override
     protected void writePublicationList(BufferedWriter out, FormatSettings settings) throws IOException {
+        this.settings = settings;
         itemWriter = new PlainBibItemWriter(out);
         
         // Write the body
@@ -41,8 +43,10 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         out.newLine();
         out.newLine();
 
-        if (c.getNote() != null && !c.getNote().isEmpty()) {
-            out.write(c.getNote());
+        String note = settings.getCategoryNotes().get(c);
+
+        if (note != null && !note.isEmpty()) {
+            out.write(note);
             out.newLine();
             out.newLine();
         }

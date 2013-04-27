@@ -21,13 +21,15 @@ import publistgenerator.settings.HTMLSettings;
 public class HTMLPublicationListWriter extends PublicationListWriter {
 
     private HTMLBibItemWriter itemWriter;
+    private HTMLSettings settings;
 
     @Override
     protected void writePublicationList(BufferedWriter out, FormatSettings settings) throws IOException {
-        writePublicationList(out, (HTMLSettings) settings);
+        this.settings = (HTMLSettings) settings;
+        writePublicationList(out);
     }
     
-    private void writePublicationList(BufferedWriter out, HTMLSettings settings) throws IOException {
+    private void writePublicationList(BufferedWriter out) throws IOException {
         itemWriter = new HTMLBibItemWriter(out);
         
         // Copy the header from the header file
@@ -62,9 +64,13 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.newLine();
         out.newLine();
         writeNavigation(c, out);
+        
+        String note = settings.getCategoryNotes().get(c);
 
-        if (c.getNote() != null && !c.getNote().isEmpty()) {
-            out.write(" <p class=\"indent\">" + c.getNote() + "</p>");
+        if (note != null && !note.isEmpty()) {
+            out.write(" <p class=\"indent\">");
+            out.write(note);
+            out.write("</p>");
             out.newLine();
             out.newLine();
         }
