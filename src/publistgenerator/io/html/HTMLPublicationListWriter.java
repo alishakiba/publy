@@ -12,6 +12,7 @@ import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.OutputCategory;
 import publistgenerator.io.PublicationListWriter;
 import publistgenerator.settings.FormatSettings;
+import publistgenerator.settings.HTMLSettings;
 
 /**
  *
@@ -20,21 +21,17 @@ import publistgenerator.settings.FormatSettings;
 public class HTMLPublicationListWriter extends PublicationListWriter {
 
     private HTMLBibItemWriter itemWriter;
-    private File header;
-    private File footer;
-
-    public HTMLPublicationListWriter(File header, File footer) {
-        super("html");
-        this.header = header;
-        this.footer = footer;
-    }
 
     @Override
-    protected void writePublicationList(List<BibItem> items, BufferedWriter out, FormatSettings settings) throws IOException {
+    protected void writePublicationList(BufferedWriter out, FormatSettings settings) throws IOException {
+        writePublicationList(out, (HTMLSettings) settings);
+    }
+    
+    private void writePublicationList(BufferedWriter out, HTMLSettings settings) throws IOException {
         itemWriter = new HTMLBibItemWriter(out);
         
         // Copy the header from the header file
-        copyFile(header, out);
+        copyFile(settings.getHeader(), out);
 
         // Write the body
         out.write(" <p>My publications as of " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ". Also available as <a href=\"publications.txt\" rel=\"alternate\">plain text</a>.</p>");
@@ -45,7 +42,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
         
         // Copy the footer from the footer file
-        copyFile(footer, out);
+        copyFile(settings.getFooter(), out);
     }
     
     private void copyFile(File inputFile, BufferedWriter out) throws IOException {

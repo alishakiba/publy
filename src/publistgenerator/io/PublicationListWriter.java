@@ -21,31 +21,22 @@ import publistgenerator.settings.FormatSettings;
 public abstract class PublicationListWriter {
 
     protected List<OutputCategory> categories;
-    private String format;
-
-    public PublicationListWriter(String format) {
-        this.format = format;
-    }
-
-    public String getFormat() {
-        return format;
-    }
 
     public void writePublicationList(List<BibItem> items, FormatSettings settings) {
         categorizePapers(items);
-        setNotes(settings);
 
         try (BufferedWriter out = new BufferedWriter(new FileWriter(settings.getTarget()))) {
-            writePublicationList(items, out, settings);
+            writePublicationList(out, settings);
         } catch (IOException ioe) {
             System.err.println("Exception occurred.");
             ioe.printStackTrace();
         }
     }
 
-    protected abstract void writePublicationList(List<BibItem> items, BufferedWriter out, FormatSettings settings) throws IOException;
+    protected abstract void writePublicationList(BufferedWriter out, FormatSettings settings) throws IOException;
 
     protected void categorizePapers(List<BibItem> items) {
+        // TODO: pull from settings
         categories = new ArrayList<>();
         categories.add(new SubmittedCategory());
         categories.add(new JournalCategory());
@@ -70,14 +61,6 @@ public abstract class PublicationListWriter {
 
             if (c.getItems().isEmpty()) {
                 it.remove();
-            }
-        }
-    }
-
-    protected void setNotes(FormatSettings settings) {
-        for (OutputCategory c : categories) {
-            if (settings.getCategoryNotes().containsKey(c)) {
-                c.setNote(settings.getCategoryNotes().get(c));
             }
         }
     }

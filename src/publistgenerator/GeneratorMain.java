@@ -40,7 +40,7 @@ public class GeneratorMain {
             // Parse all publications
             List<BibItem> items = BibTeXParser.parseFile(settings.getPublications());
 
-            HTMLPublicationListWriter writer = new HTMLPublicationListWriter(new File(webDir, "publications/PublicationsHeader.html"), new File(webDir, "publications/PublicationsFooter.html"));
+            HTMLPublicationListWriter writer = new HTMLPublicationListWriter();
             writer.writePublicationList(items, settings.getHtmlSettings());
 
             PlainPublicationListWriter plainWriter = new PlainPublicationListWriter();
