@@ -20,9 +20,7 @@ public class FormatSettings {
     // Author info
     private boolean listAllAuthors = false;
     // Presented
-    private boolean underlinePresented = false;
     private String presentedText = null;
-    private File presentedImage = null;
     // Numbering
     private boolean numberGlobally = false;
     private boolean numberLocally = false;
@@ -46,28 +44,12 @@ public class FormatSettings {
         this.listAllAuthors = listAllAuthors;
     }
 
-    public boolean isUnderlinePresented() {
-        return underlinePresented;
-    }
-
-    public void setUnderlinePresented(boolean underlinePresented) {
-        this.underlinePresented = underlinePresented;
-    }
-
     public String getPresentedText() {
         return presentedText;
     }
 
     public void setPresentedText(String presentedText) {
         this.presentedText = presentedText;
-    }
-
-    public File getPresentedImage() {
-        return presentedImage;
-    }
-
-    public void setPresentedImage(File presentedImage) {
-        this.presentedImage = presentedImage;
     }
 
     public boolean isNumberGlobally() {

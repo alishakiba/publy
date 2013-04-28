@@ -12,19 +12,10 @@ import java.io.File;
  */
 public class HTMLSettings extends FormatSettings {
 
-    public enum Mode {
-        SINGLE_PAGE, TABS, MULTIPLE_PAGES;
-    }
-    
-    private Mode mode;
     private boolean includeAbstracts;
     private boolean includeBibtext; // TODO: more specific
     private File header; // TODO: more specific, as I will be generating a lot of javascript for the head. I guess bodyHeader? No, has to include page title and stuff. Perhaps scan for end of head and insert custom js.
     private File footer;
-
-    public Mode getMode() {
-        return mode;
-    }
 
     public File getHeader() {
         return header;
