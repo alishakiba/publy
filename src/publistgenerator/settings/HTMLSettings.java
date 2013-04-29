@@ -63,8 +63,9 @@ public class HTMLSettings extends FormatSettings {
     private PublicationType includeAbstracts = PublicationType.ALL;
     private PublicationType includeBibtex = PublicationType.ARXIV;
     private PublicationType includePDF = PublicationType.ARXIV;
-    private File header; // TODO: more specific, as I will be generating a lot of javascript for the head. I guess bodyHeader? No, has to include page title and stuff. Perhaps scan for end of head and insert custom js.
+    private File header;
     private File footer;
+    private String googleAnalyticsUser = null;
 
     public File getHeader() {
         return header;
