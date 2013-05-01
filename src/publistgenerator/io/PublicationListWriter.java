@@ -23,7 +23,7 @@ public abstract class PublicationListWriter {
     protected List<OutputCategory> categories;
 
     public void writePublicationList(List<BibItem> items, FormatSettings settings) {
-        categorizePapers(items);
+        categorizePapers(items, settings);
 
         try (BufferedWriter out = new BufferedWriter(new FileWriter(settings.getTarget()))) {
             writePublicationList(out, settings);
@@ -35,18 +35,8 @@ public abstract class PublicationListWriter {
 
     protected abstract void writePublicationList(BufferedWriter out, FormatSettings settings) throws IOException;
 
-    protected void categorizePapers(List<BibItem> items) {
-        // TODO: pull from settings
-        categories = new ArrayList<>();
-        categories.add(new SubmittedCategory());
-        categories.add(new JournalCategory());
-        categories.add(new ConferenceCategory());
-        categories.add(new BookChapterCategory());
-        categories.add(new ThesisCategory());
-        categories.add(new TalksCategory());
-        categories.add(new UnpublishedCategory());
-        categories.add(new OtherCategory());
-
+    protected void categorizePapers(List<BibItem> items, FormatSettings settings) {
+        categories = new ArrayList<>(settings.getCategories());
         List<BibItem> tempItems = new ArrayList<>(items);
 
         for (OutputCategory c : categories) {
