@@ -26,12 +26,12 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     @Override
     protected void writePublicationList(BufferedWriter out, FormatSettings settings) throws IOException {
         this.settings = (HTMLSettings) settings;
+        itemWriter = new HTMLBibItemWriter(out);
+        
         writePublicationList(out);
     }
     
     private void writePublicationList(BufferedWriter out) throws IOException {
-        itemWriter = new HTMLBibItemWriter(out);
-        
         // Copy the header from the header file
         copyFile(settings.getHeader(), out);
 
@@ -49,12 +49,9 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     
     private void copyFile(File inputFile, BufferedWriter out) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
-            String line = reader.readLine();
-
-            while (line != null) {
+            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 out.write(line);
                 out.newLine();
-                line = reader.readLine();
             }
         }
     }
