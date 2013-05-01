@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import publistgenerator.bibitem.*;
 import publistgenerator.io.BibItemWriter;
+import publistgenerator.settings.HTMLSettings;
 
 /**
  *
@@ -18,8 +19,11 @@ import publistgenerator.io.BibItemWriter;
  */
 public class HTMLBibItemWriter extends BibItemWriter {
 
-    public HTMLBibItemWriter(BufferedWriter out) {
+    private HTMLSettings settings;
+
+    public HTMLBibItemWriter(BufferedWriter out, HTMLSettings settings) {
         super(out);
+        this.settings = settings;
     }
 
     @Override
@@ -143,7 +147,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         output(item.get("note"), ".<br>", true);
 
         // links (no bibtex for talks)
-        writeLinks(item, false);
+        writeLinks(item, false, false);
     }
 
     @Override
@@ -152,7 +156,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         output(item.get("note"), ".<br>", true);
 
-        writeLinks(item);
+        // links (only bibtex if it's on the arXiv)
+        writeLinks(item, false, item.anyNonEmpty("arxiv"));
     }
 
     protected void writeTitleAndAuthorsHTML(BibItem item) throws IOException {
@@ -180,7 +185,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         // Abstract if included
         String abstr = item.get("abstract");
 
-        if (abstr != null && !abstr.isEmpty()) {
+        if (abstr != null && !abstr.isEmpty() && settings.includeAbstract(item)) {
             out.newLine();
 
             // Show \ hide link for the abstract
@@ -257,26 +262,28 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeStatus(BibItem item, String booktitle) throws IOException {
-        if (booktitle.startsWith("Proceedings of ")) {
-            booktitle = booktitle.substring("Proceedings of ".length());
+        String title = booktitle;
+
+        if (title.startsWith("Proceedings of ")) {
+            title = title.substring("Proceedings of ".length());
         }
 
         switch (item.get("status")) {
             case "submitted":
                 out.write("Submitted to <span class=\"booktitle\">");
-                out.write(booktitle);
+                out.write(title);
                 out.write("</span>.<br>");
                 out.newLine();
                 break;
             case "accepted":
                 out.write("Accepted to <span class=\"booktitle\">");
-                out.write(booktitle);
+                out.write(title);
                 out.write("</span>.<br>");
                 out.newLine();
                 break;
             case "acceptedrev":
                 out.write("Accepted, pending minor revisions, to <span class=\"booktitle\">");
-                out.write(booktitle);
+                out.write(title);
                 out.write("</span>.<br>");
                 out.newLine();
                 break;
@@ -291,18 +298,20 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private void writeLinks(BibItem item) throws IOException {
-        if (item.anyNonEmpty("arxiv")) {
-            writeLinks(item, true);
-        } else if ("submitted".equals(item.get("status")) || item.getType().equals("unpublished")) {
-            writeLinks(item, false);
+        if (settings.includeBibtex(item)) {
+            if (HTMLSettings.PublicationType.ACCEPTED.matches(item)) {
+                writeLinks(item, true, false);
+            } else if (item.anyNonEmpty("arxiv")) {
+                writeLinks(item, false, true);
+            }
         } else {
-            writeLinks(item, true);
+            writeLinks(item, false, false);
         }
     }
 
-    private void writeLinks(BibItem item, boolean includeBibtex) throws IOException {
+    private void writeLinks(BibItem item, boolean includeBibtex, boolean includeArxivBibtex) throws IOException {
         // PDF link
-        if (item.anyNonEmpty("pdf")) {
+        if (item.anyNonEmpty("pdf") && settings.includePDF(item)) {
             out.write("   [<a href=\"publications/papers/");
             out.write(item.get("year"));
             out.write("/");
@@ -345,40 +354,40 @@ public class HTMLBibItemWriter extends BibItemWriter {
         // Conference version(s) link(s)
         if (item.anyNonEmpty("conf")) {
             String[] confPapers = item.get("conf").split(",");
-            
+
             int i = 1;
 
             for (String paper : confPapers) {
                 out.write("   [<a href=\"#");
                 out.write(paper.trim());
                 out.write("\">Conference version");
-                
+
                 if (confPapers.length > 1) {
                     out.write(" " + i);
                     i++;
                 }
-                
+
                 out.write("</a>]");
                 out.newLine();
             }
         }
-        
+
         // Journal version(s) link(s)
         if (item.anyNonEmpty("journ")) {
             String[] journPapers = item.get("journ").split(",");
-            
+
             int i = 1;
 
             for (String paper : journPapers) {
                 out.write("   [<a href=\"#");
                 out.write(paper.trim());
                 out.write("\">Journal version");
-                
+
                 if (journPapers.length > 1) {
                     out.write(" " + i);
                     i++;
                 }
-                
+
                 out.write("</a>]");
                 out.newLine();
             }
@@ -386,11 +395,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // BibTeX link
         if (includeBibtex) {
-            if (item.anyNonEmpty("arxiv") && ("submitted".equals(item.get("status")) || "unpublished".equals(item.getType()))) {
-                writeArXivBibTeXHTML(item);
-            } else {
-                writeBibTeXHTML(item);
-            }
+            writeBibTeXHTML(item);
+        } else if (includeArxivBibtex) {
+            writeArXivBibTeXHTML(item);
         }
     }
 

@@ -60,7 +60,7 @@ public class HTMLSettings extends FormatSettings {
         }
     }
     
-    private PublicationType includeAbstracts = PublicationType.ALL;
+    private PublicationType includeAbstract = PublicationType.ALL;
     private PublicationType includeBibtex = PublicationType.ARXIV;
     private PublicationType includePDF = PublicationType.ARXIV;
     private File header;
@@ -75,16 +75,16 @@ public class HTMLSettings extends FormatSettings {
         return footer;
     }
 
-    public PublicationType getIncludeAbstracts() {
-        return includeAbstracts;
+    public boolean includeAbstract(BibItem item) {
+        return includeAbstract.matches(item);
     }
 
-    public PublicationType getIncludeBibtex() {
-        return includeBibtex;
+    public boolean includeBibtex(BibItem item) {
+        return includeBibtex.matches(item);
     }
 
-    public PublicationType getIncludePDF() {
-        return includePDF;
+    public boolean includePDF(BibItem item) {
+        return includePDF.matches(item);
     }
 
     public String getGoogleAnalyticsUser() {

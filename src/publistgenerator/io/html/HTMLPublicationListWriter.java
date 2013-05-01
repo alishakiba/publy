@@ -7,7 +7,6 @@ package publistgenerator.io.html;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.OutputCategory;
 import publistgenerator.io.PublicationListWriter;
@@ -26,7 +25,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     @Override
     protected void writePublicationList(BufferedWriter out, FormatSettings settings) throws IOException {
         this.settings = (HTMLSettings) settings;
-        itemWriter = new HTMLBibItemWriter(out);
+        itemWriter = new HTMLBibItemWriter(out, this.settings);
         
         writePublicationList(out);
     }
