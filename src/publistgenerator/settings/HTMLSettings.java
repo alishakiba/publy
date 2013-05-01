@@ -74,4 +74,20 @@ public class HTMLSettings extends FormatSettings {
     public File getFooter() {
         return footer;
     }
+
+    public PublicationType getIncludeAbstracts() {
+        return includeAbstracts;
+    }
+
+    public PublicationType getIncludeBibtex() {
+        return includeBibtex;
+    }
+
+    public PublicationType getIncludePDF() {
+        return includePDF;
+    }
+
+    public String getGoogleAnalyticsUser() {
+        return googleAnalyticsUser;
+    }
 }
