@@ -303,6 +303,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 writeLinks(item, true, false);
             } else if (item.anyNonEmpty("arxiv")) {
                 writeLinks(item, false, true);
+            } else {
+                // Just in case.
+                writeLinks(item, false, false);
             }
         } else {
             writeLinks(item, false, false);
@@ -355,16 +358,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
         if (item.anyNonEmpty("conf")) {
             String[] confPapers = item.get("conf").split(",");
 
-            int i = 1;
-
-            for (String paper : confPapers) {
+            for (int i = 0; i < confPapers.length; i++) {
                 out.write("   [<a href=\"#");
-                out.write(paper.trim());
+                out.write(confPapers[i].trim());
                 out.write("\">Conference version");
 
                 if (confPapers.length > 1) {
                     out.write(" " + i);
-                    i++;
                 }
 
                 out.write("</a>]");
@@ -376,16 +376,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
         if (item.anyNonEmpty("journ")) {
             String[] journPapers = item.get("journ").split(",");
 
-            int i = 1;
-
-            for (String paper : journPapers) {
+            for (int i = 0; i < journPapers.length; i++) {
                 out.write("   [<a href=\"#");
-                out.write(paper.trim());
+                out.write(journPapers[i].trim());
                 out.write("\">Journal version");
 
                 if (journPapers.length > 1) {
                     out.write(" " + i);
-                    i++;
                 }
 
                 out.write("</a>]");

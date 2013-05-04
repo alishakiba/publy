@@ -61,7 +61,7 @@ public class HTMLSettings extends FormatSettings {
     }
     
     private PublicationType includeAbstract = PublicationType.ALL;
-    private PublicationType includeBibtex = PublicationType.ARXIV;
+    private PublicationType includeBibtex = PublicationType.ARXIV; // ALL should not be an option here.
     private PublicationType includePDF = PublicationType.ARXIV;
     private File header;
     private File footer;
