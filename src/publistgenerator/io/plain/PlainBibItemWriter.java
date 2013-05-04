@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import publistgenerator.bibitem.*;
 import publistgenerator.io.BibItemWriter;
+import publistgenerator.settings.FormatSettings;
 
 /**
  *
@@ -15,8 +16,8 @@ import publistgenerator.io.BibItemWriter;
  */
 public class PlainBibItemWriter extends BibItemWriter {
 
-    public PlainBibItemWriter(BufferedWriter out) {
-        super(out);
+    public PlainBibItemWriter(BufferedWriter out, FormatSettings settings) {
+        super(out, settings);
     }
 
     @Override

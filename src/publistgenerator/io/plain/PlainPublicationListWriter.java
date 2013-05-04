@@ -25,7 +25,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
     @Override
     protected void writePublicationList(BufferedWriter out, FormatSettings settings) throws IOException {
         this.settings = settings;
-        itemWriter = new PlainBibItemWriter(out);
+        itemWriter = new PlainBibItemWriter(out, settings);
         
         // Write the body
         out.write("My publications as of " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".");

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import publistgenerator.bibitem.*;
+import publistgenerator.settings.FormatSettings;
 
 /**
  *
@@ -17,11 +18,13 @@ import publistgenerator.bibitem.*;
 public abstract class BibItemWriter {
 
     protected BufferedWriter out;
-    
-    public BibItemWriter(BufferedWriter out) {
+    protected FormatSettings settings;
+
+    public BibItemWriter(BufferedWriter out, FormatSettings settings) {
         this.out = out;
+        this.settings = settings;
     }
-    
+
     public void write(BibItem item) throws IOException {
         if (item instanceof Article) {
             write((Article) item);
@@ -49,11 +52,11 @@ public abstract class BibItemWriter {
     public abstract void write(MastersThesis item) throws IOException;
 
     public abstract void write(PhDThesis item) throws IOException;
-    
+
     public abstract void write(InCollection item) throws IOException;
-    
+
     public abstract void write(InvitedTalk item) throws IOException;
-    
+
     public abstract void write(Unpublished item) throws IOException;
 
     protected String formatTitle(BibItem item) {
@@ -75,7 +78,9 @@ public abstract class BibItemWriter {
             List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
 
             for (Author a : item.getAuthors()) {
-                authorLinks.add(a.getHtmlName());
+                if (settings.isListAllAuthors() || !a.isMe()) {
+                    authorLinks.add(a.getHtmlName());
+                }
             }
 
             return formatNames(authorLinks);
@@ -85,19 +90,16 @@ public abstract class BibItemWriter {
     protected String formatNames(List<String> names) {
         StringBuilder result = new StringBuilder();
 
-        int namePtr = 1;
-        int numNames = names.size();
-        int namesLeft = numNames;
+        if (!settings.isListAllAuthors()) {
+            result.append("With ");
+        }
 
-        while (namesLeft > 0) {
-            String name = names.get(namePtr - 1);
+        for (int i = 0; i < names.size(); i++) {
+            String name = names.get(i);
 
-            if (namePtr > 1) {
-                if (namesLeft > 1) {
-                    result.append(", ");
-                    result.append(name);
-                } else {
-                    if (numNames > 2) {
+            if (i > 0) {
+                if (i == names.size() - 1) { // Last name
+                    if (names.size() > 2) {
                         result.append(",");
                     }
 
@@ -107,13 +109,13 @@ public abstract class BibItemWriter {
                         result.append(" and ");
                         result.append(name);
                     }
+                } else {
+                    result.append(", ");
+                    result.append(name);
                 }
             } else {
                 result.append(name);
             }
-
-            namePtr++;
-            namesLeft--;
         }
 
         return result.toString();
@@ -139,10 +141,10 @@ public abstract class BibItemWriter {
 
                 // TODO: fix better
                 /* if (outputState == OutputState.MID_SENTENCE) {
-                result = "number " + number;
-                } else {
-                result = "Number " + number;
-                }*/
+                 result = "number " + number;
+                 } else {
+                 result = "Number " + number;
+                 }*/
                 result = "number " + number;
 
                 String series = item.get("series");
@@ -211,22 +213,22 @@ public abstract class BibItemWriter {
             return string + connective;
         }
     }
-    
+
     protected void output(String string) throws IOException {
         if (string != null) {
             out.write(string);
         }
     }
-    
+
     protected void output(String string, String connective) throws IOException {
         output(string, connective, false);
     }
-    
+
     protected void output(String string, String connective, boolean newLine) throws IOException {
         if (string != null && !string.isEmpty()) {
             out.write(string);
             out.write(connective);
-            
+
             if (newLine) {
                 out.newLine();
             }

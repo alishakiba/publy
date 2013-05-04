@@ -19,11 +19,11 @@ import publistgenerator.settings.HTMLSettings;
  */
 public class HTMLBibItemWriter extends BibItemWriter {
 
-    private HTMLSettings settings;
+    private HTMLSettings htmlSettings;
 
     public HTMLBibItemWriter(BufferedWriter out, HTMLSettings settings) {
-        super(out);
-        this.settings = settings;
+        super(out, settings);
+        this.htmlSettings = settings;
     }
 
     @Override
@@ -185,7 +185,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         // Abstract if included
         String abstr = item.get("abstract");
 
-        if (abstr != null && !abstr.isEmpty() && settings.includeAbstract(item)) {
+        if (abstr != null && !abstr.isEmpty() && htmlSettings.includeAbstract(item)) {
             out.newLine();
 
             // Show \ hide link for the abstract
@@ -298,7 +298,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private void writeLinks(BibItem item) throws IOException {
-        if (settings.includeBibtex(item)) {
+        if (htmlSettings.includeBibtex(item)) {
             if (HTMLSettings.PublicationType.ACCEPTED.matches(item)) {
                 writeLinks(item, true, false);
             } else if (item.anyNonEmpty("arxiv")) {
@@ -314,7 +314,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private void writeLinks(BibItem item, boolean includeBibtex, boolean includeArxivBibtex) throws IOException {
         // PDF link
-        if (item.anyNonEmpty("pdf") && settings.includePDF(item)) {
+        if (item.anyNonEmpty("pdf") && htmlSettings.includePDF(item)) {
             out.write("   [<a href=\"publications/papers/");
             out.write(item.get("year"));
             out.write("/");
