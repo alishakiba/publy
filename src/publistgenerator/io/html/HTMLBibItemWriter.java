@@ -179,7 +179,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
         // Icon if I presented this paper at the conference
         if ("yes".equals(item.get("presented"))) {
             out.newLine();
-            out.write("   <img src=\"images/presentation.png\" alt=\"(presented)\" class=\"presented\">");
+            out.write("   ");
+            out.write(settings.getPresentedText());
         }
 
         // Abstract if included

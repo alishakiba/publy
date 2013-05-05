@@ -140,7 +140,8 @@ public class PlainBibItemWriter extends BibItemWriter {
         out.write(".");
 
         if ("yes".equals(item.get("presented"))) {
-            out.write(" (*)");
+            out.write(" ");
+            out.write(settings.getPresentedText());
         }
 
         out.newLine();
@@ -181,26 +182,28 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     private void writeStatus(BibItem item, String booktitle) throws IOException {
-        if (booktitle.startsWith("Proceedings of ")) {
-            booktitle = booktitle.substring("Proceedings of ".length());
+        String title = booktitle;
+        
+        if (title.startsWith("Proceedings of ")) {
+            title = title.substring("Proceedings of ".length());
         }
 
         switch (item.get("status")) {
             case "submitted":
                 out.write("Submitted to ");
-                out.write(booktitle);
+                out.write(title);
                 out.write(".");
                 out.newLine();
                 break;
             case "accepted":
                 out.write("Accepted to ");
-                out.write(booktitle);
+                out.write(title);
                 out.write(".");
                 out.newLine();
                 break;
             case "acceptedrev":
                 out.write("Accepted, pending minor revisions, to ");
-                out.write(booktitle);
+                out.write(title);
                 out.write(".");
                 out.newLine();
                 break;
