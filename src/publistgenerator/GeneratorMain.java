@@ -4,7 +4,6 @@
  */
 package publistgenerator;
 
-import java.io.File;
 import java.util.List;
 import javax.swing.JOptionPane;
 import publistgenerator.bibitem.BibItem;
@@ -20,22 +19,19 @@ import plgsettings.settings.SettingsReader;
  */
 public class GeneratorMain {
 
-    private static final String DEFAULT_SETTINGS_LOCATION = "./PubListGenerator.config";
-    private static File webDir = new File("../../../My Dropbox/Website/"); // TODO: remove. Should be part of settings
-
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // Read settings
-        Settings settings = SettingsReader.parseSettings(DEFAULT_SETTINGS_LOCATION);
+        Settings settings = SettingsReader.parseSettings();
 
         if (settings == null) {
             // Notify the user
-            JOptionPane.showMessageDialog(null, "No configuration information was found. Please create a configuration in the Settings window.", "Publication List Generator - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
-            
+            JOptionPane.showMessageDialog(null, "No configuration information was found. Please set up your preferences.", "Publication List Generator - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
+
             // Launch the GUI
-            // TODO
+            plgsettings.PLGSettings.launchGUI(settings);
         } else {
             // Parse all publications
             List<BibItem> items = BibTeXParser.parseFile(settings.getPublications());
