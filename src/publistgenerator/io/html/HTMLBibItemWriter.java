@@ -157,7 +157,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         output(item.get("note"), ".<br>", true);
 
         // links (only bibtex if it's on the arXiv)
-        writeLinks(item, false, item.anyNonEmpty("arxiv"));
+        writeLinks(item, false, item.anyNonEmpty("arxiv") && htmlSettings.includeBibtex(item));
     }
 
     protected void writeTitleAndAuthorsHTML(BibItem item, int number) throws IOException {
@@ -169,24 +169,25 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeTitleAndAbstractHTML(BibItem item, int number) throws IOException {
+        out.write("   ");
+        
         // Number
         if (number >= 0) {
-            out.write("   <span class=\"number\">");
+            out.write("<span class=\"number\">");
             out.write(number);
-            out.write(". <span>");
+            out.write(".<span> ");
         }
 
         // Title
-        out.write("   <a id=\"");
+        out.write("<a id=\"");
         out.write(item.getId());
         out.write("\"><h2 class=\"title\">");
         out.write(formatTitle(item));
         out.write("</h2>.</a>");
 
-        // Icon if I presented this paper at the conference
+        // Add text if I presented this paper at the conference
         if ("yes".equals(item.get("presented"))) {
-            out.newLine();
-            out.write("   ");
+            out.write(" ");
             out.write(settings.getPresentedText());
         }
 
