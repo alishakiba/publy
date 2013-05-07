@@ -4,6 +4,7 @@
  */
 package publistgenerator.category;
 
+import plgsettings.settings.CategoryIdentifier;
 import publistgenerator.bibitem.BibItem;
 
 /**
@@ -13,7 +14,7 @@ import publistgenerator.bibitem.BibItem;
 public class BookChapterCategory extends OutputCategory {
 
     public BookChapterCategory() {
-        super("Chapters", "Chapters in Books");
+        super("Chapters", "Chapters in Books", CategoryIdentifier.CHAPTER);
     }
     
     @Override

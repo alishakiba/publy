@@ -4,6 +4,7 @@
  */
 package publistgenerator.category;
 
+import plgsettings.settings.CategoryIdentifier;
 import publistgenerator.bibitem.BibItem;
 
 /**
@@ -13,7 +14,7 @@ import publistgenerator.bibitem.BibItem;
 public class TalksCategory extends OutputCategory {
 
     public TalksCategory() {
-        super("Talks", "Invited Talks");
+        super("Talks", "Invited Talks", CategoryIdentifier.TALK);
     }
 
     @Override

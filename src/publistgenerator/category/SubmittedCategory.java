@@ -5,6 +5,7 @@
 
 package publistgenerator.category;
 
+import plgsettings.settings.CategoryIdentifier;
 import publistgenerator.bibitem.BibItem;
 
 /**
@@ -14,7 +15,7 @@ import publistgenerator.bibitem.BibItem;
 public class SubmittedCategory extends OutputCategory {
 
     public SubmittedCategory() {
-        super("Submitted", "Currently under review");
+        super("Submitted", "Currently under review", CategoryIdentifier.SUBMITTED);
     }
 
     @Override

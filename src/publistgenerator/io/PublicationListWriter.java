@@ -10,9 +10,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import plgsettings.settings.CategoryIdentifier;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.*;
-import publistgenerator.settings.FormatSettings;
+import plgsettings.settings.FormatSettings;
 
 /**
  *
@@ -36,7 +37,12 @@ public abstract class PublicationListWriter {
     protected abstract void writePublicationList(BufferedWriter out, FormatSettings settings) throws IOException;
 
     protected void categorizePapers(List<BibItem> items, FormatSettings settings) {
-        categories = new ArrayList<>(settings.getCategories());
+        categories = new ArrayList<>(settings.getCategories().size());
+        
+        for (CategoryIdentifier category : settings.getCategories()) {
+            categories.add(OutputCategory.fromIdentifier(category));
+        }
+        
         List<BibItem> tempItems = new ArrayList<>(items);
 
         for (OutputCategory c : categories) {

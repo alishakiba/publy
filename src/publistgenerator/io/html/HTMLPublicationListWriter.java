@@ -10,11 +10,11 @@ import java.util.Date;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.OutputCategory;
 import publistgenerator.io.PublicationListWriter;
-import publistgenerator.settings.FormatSettings;
-import static publistgenerator.settings.FormatSettings.Numbering.GLOBAL;
-import static publistgenerator.settings.FormatSettings.Numbering.LOCAL;
-import static publistgenerator.settings.FormatSettings.Numbering.NONE;
-import publistgenerator.settings.HTMLSettings;
+import plgsettings.settings.FormatSettings;
+import static plgsettings.settings.FormatSettings.Numbering.GLOBAL;
+import static plgsettings.settings.FormatSettings.Numbering.LOCAL;
+import static plgsettings.settings.FormatSettings.Numbering.NONE;
+import plgsettings.settings.HTMLSettings;
 
 /**
  *
@@ -81,7 +81,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.newLine();
         writeNavigation(c, out);
 
-        String note = settings.getCategoryNotes().get(c);
+        String note = settings.getCategoryNotes().get(c.getId());
 
         if (note != null && !note.isEmpty()) {
             out.write(" <p class=\"indent\">");

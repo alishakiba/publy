@@ -5,6 +5,7 @@
 
 package publistgenerator.category;
 
+import plgsettings.settings.CategoryIdentifier;
 import publistgenerator.bibitem.BibItem;
 
 /**
@@ -14,8 +15,7 @@ import publistgenerator.bibitem.BibItem;
 public class ConferenceCategory extends OutputCategory {
 
     public ConferenceCategory() {
-        super("Conference", "Conference papers");
-        //setNote("Conference papers that I presented are marked with <img src=\"images/presentation.png\" alt=\"(presented)\" class=\"presented\">.  <span class=\"attribution\">(Icon by <a href=\"http://www.doublejdesign.co.uk/\">Double-J Design</a>)</span>");
+        super("Conference", "Conference papers", CategoryIdentifier.CONFERENCE);
     }
 
     @Override

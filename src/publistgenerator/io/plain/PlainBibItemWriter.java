@@ -6,9 +6,9 @@ package publistgenerator.io.plain;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import plgsettings.settings.FormatSettings;
 import publistgenerator.bibitem.*;
 import publistgenerator.io.BibItemWriter;
-import publistgenerator.settings.FormatSettings;
 
 /**
  *

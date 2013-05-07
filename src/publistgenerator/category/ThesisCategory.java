@@ -5,7 +5,7 @@
 
 package publistgenerator.category;
 
-import java.util.List;
+import plgsettings.settings.CategoryIdentifier;
 import publistgenerator.bibitem.BibItem;
 
 /**
@@ -15,7 +15,7 @@ import publistgenerator.bibitem.BibItem;
 public class ThesisCategory extends OutputCategory {
 
     public ThesisCategory() {
-        super("Theses", "Theses");
+        super("Theses", "Theses", CategoryIdentifier.THESIS);
     }
 
     @Override
@@ -30,13 +30,20 @@ public class ThesisCategory extends OutputCategory {
     }
 
     @Override
-    public void populate(List<BibItem> items) {
-        super.populate(items);
-
+    public String getName() {
         if (getItems() != null && getItems().size() == 1) {
-            setName("Thesis");
-            setShortName("Thesis");
+            return "Thesis";
+        } else {
+            return "Theses";
         }
     }
 
+    @Override
+    public String getShortName() {
+        if (getItems() != null && getItems().size() == 1) {
+            return "Thesis";
+        } else {
+            return "Theses";
+        }
+    }
 }

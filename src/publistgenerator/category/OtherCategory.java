@@ -5,6 +5,7 @@
 
 package publistgenerator.category;
 
+import plgsettings.settings.CategoryIdentifier;
 import publistgenerator.bibitem.BibItem;
 
 /**
@@ -14,7 +15,7 @@ import publistgenerator.bibitem.BibItem;
 public class OtherCategory extends OutputCategory {
 
     public OtherCategory() {
-        super("Other", "Other");
+        super("Other", "Other", CategoryIdentifier.OTHER);
     }
 
     @Override

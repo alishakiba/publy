@@ -2,6 +2,7 @@
  */
 package publistgenerator.category;
 
+import plgsettings.settings.CategoryIdentifier;
 import publistgenerator.bibitem.BibItem;
 
 /**
@@ -11,7 +12,7 @@ import publistgenerator.bibitem.BibItem;
 public class UnpublishedCategory extends OutputCategory {
 
     public UnpublishedCategory() {
-        super("Unpublished", "Unpublished manuscripts");
+        super("Unpublished", "Unpublished manuscripts", CategoryIdentifier.UNPUBLISHED);
     }
 
     @Override

@@ -5,6 +5,7 @@
 
 package publistgenerator.category;
 
+import plgsettings.settings.CategoryIdentifier;
 import publistgenerator.bibitem.BibItem;
 
 /**
@@ -14,7 +15,7 @@ import publistgenerator.bibitem.BibItem;
 public class JournalCategory extends OutputCategory {
 
     public JournalCategory() {
-        super("Journal", "Journal papers");
+        super("Journal", "Journal papers", CategoryIdentifier.JOURNAL);
     }
 
     @Override

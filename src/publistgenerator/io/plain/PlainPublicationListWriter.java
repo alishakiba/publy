@@ -11,7 +11,7 @@ import java.util.Date;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.OutputCategory;
 import publistgenerator.io.PublicationListWriter;
-import publistgenerator.settings.FormatSettings;
+import plgsettings.settings.FormatSettings;
 
 /**
  *
@@ -47,7 +47,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         out.newLine();
         out.newLine();
 
-        String note = settings.getCategoryNotes().get(c);
+        String note = settings.getCategoryNotes().get(c.getId());
 
         if (note != null && !note.isEmpty()) {
             out.write(note);

@@ -8,6 +8,7 @@ package publistgenerator.category;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import plgsettings.settings.CategoryIdentifier;
 import publistgenerator.bibitem.BibItem;
 
 /**
@@ -16,32 +17,53 @@ import publistgenerator.bibitem.BibItem;
  */
 public abstract class OutputCategory {
     private String shortName, name;
+    private CategoryIdentifier id;
     private List<BibItem> items;
 
-    public OutputCategory(String shortName, String name) {
+    protected OutputCategory(String shortName, String name, CategoryIdentifier id) {
         this.shortName = shortName;
         this.name = name;
-        items = new ArrayList<BibItem>();
+        this.id = id;
+        items = new ArrayList<>();
+    }
+    
+    public static OutputCategory fromIdentifier(CategoryIdentifier id) {
+        switch (id) {
+            case CHAPTER:
+                return new BookChapterCategory();
+            case CONFERENCE:
+                return new ConferenceCategory();
+            case JOURNAL:
+                return new JournalCategory();
+            case OTHER:
+                return new OtherCategory();
+            case SUBMITTED:
+                return new SubmittedCategory();
+            case TALK:
+                return new TalksCategory();
+            case THESIS:
+                return new ThesisCategory();
+            case UNPUBLISHED:
+                return new UnpublishedCategory();
+            default:
+                throw new AssertionError("Unknown category identifier: " + id.name());
+        }
     }
 
     public List<BibItem> getItems() {
         return items;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
-
     public String getShortName() {
         return shortName;
+    }
+
+    public CategoryIdentifier getId() {
+        return id;
     }
 
     public void populate(List<BibItem> items) {

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import publistgenerator.bibitem.*;
 import publistgenerator.io.BibItemWriter;
-import publistgenerator.settings.HTMLSettings;
+import plgsettings.settings.HTMLSettings;
 
 /**
  *
@@ -157,7 +157,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         output(item.get("note"), ".<br>", true);
 
         // links (only bibtex if it's on the arXiv)
-        writeLinks(item, false, item.anyNonEmpty("arxiv") && htmlSettings.includeBibtex(item));
+        writeLinks(item, false, item.anyNonEmpty("arxiv") && includeBibtex(item));
     }
 
     protected void writeTitleAndAuthorsHTML(BibItem item, int number) throws IOException {
@@ -170,7 +170,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     protected void writeTitleAndAbstractHTML(BibItem item, int number) throws IOException {
         out.write("   ");
-        
+
         // Number
         if (number >= 0) {
             out.write("<span class=\"number\">");
@@ -194,7 +194,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         // Abstract if included
         String abstr = item.get("abstract");
 
-        if (abstr != null && !abstr.isEmpty() && htmlSettings.includeAbstract(item)) {
+        if (abstr != null && !abstr.isEmpty() && includeAbstract(item)) {
             out.newLine();
 
             // Show \ hide link for the abstract
@@ -307,8 +307,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private void writeLinks(BibItem item) throws IOException {
-        if (htmlSettings.includeBibtex(item)) {
-            if (HTMLSettings.PublicationType.ACCEPTED.matches(item)) {
+        if (includeBibtex(item)) {
+            if (matches(HTMLSettings.PublicationType.ACCEPTED, item)) {
                 writeLinks(item, true, false);
             } else if (item.anyNonEmpty("arxiv")) {
                 writeLinks(item, false, true);
@@ -323,7 +323,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private void writeLinks(BibItem item, boolean includeBibtex, boolean includeArxivBibtex) throws IOException {
         // PDF link
-        if (item.anyNonEmpty("pdf") && htmlSettings.includePDF(item)) {
+        if (item.anyNonEmpty("pdf") && includePDF(item)) {
             out.write("   [<a href=\"publications/papers/");
             out.write(item.get("year"));
             out.write("/");
@@ -585,5 +585,41 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private String latexify(String string) {
         return string.replaceAll("&", "{\\\\&amp;}");
+    }
+
+    private boolean includeAbstract(BibItem item) {
+        return matches(htmlSettings.getIncludeAbstract(), item);
+    }
+
+    private boolean includeBibtex(BibItem item) {
+        return matches(htmlSettings.getIncludeBibtex(), item);
+    }
+
+    private boolean includePDF(BibItem item) {
+        return matches(htmlSettings.getIncludePDF(), item);
+    }
+
+    public boolean matches(HTMLSettings.PublicationType type, BibItem item) {
+        if (type == HTMLSettings.PublicationType.ALL) {
+            return true;
+        } else if (type == HTMLSettings.PublicationType.NONE) {
+            return false;
+        } else {
+            if (item.anyNonEmpty("arxiv")) {
+                return true;
+            } else if (type == HTMLSettings.PublicationType.ARXIV) {
+                return false;
+            } else {
+                if (item.anyNonEmpty("status")) {
+                    if (type == HTMLSettings.PublicationType.PUBLISHED) {
+                        return false;
+                    } else {
+                        return item.get("status").startsWith("accepted");
+                    }
+                } else {
+                    return true;
+                }
+            }
+        }
     }
 }

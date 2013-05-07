@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import publistgenerator.bibitem.*;
-import publistgenerator.settings.FormatSettings;
+import plgsettings.settings.FormatSettings;
 
 /**
  *
