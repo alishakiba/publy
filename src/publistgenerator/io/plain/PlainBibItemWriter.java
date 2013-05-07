@@ -21,7 +21,8 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(Article item) throws IOException {
+    public void write(Article item, int number) throws IOException {
+        writeNumber(number);
         writeTitleAndAuthors(item);
 
         // Handle submitted / accepted
@@ -58,16 +59,17 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(InProceedings item) throws IOException {
-        writePart(item);
+    public void write(InProceedings item, int number) throws IOException {
+        writePart(item, number);
     }
 
     @Override
-    public void write(InCollection item) throws IOException {
-        writePart(item);
+    public void write(InCollection item, int number) throws IOException {
+        writePart(item, number);
     }
 
-    private void writePart(BibItem item) throws IOException {
+    private void writePart(BibItem item, int number) throws IOException {
+        writeNumber(number);
         writeTitleAndAuthors(item);
 
         if (item.anyNonEmpty("status")) {
@@ -89,7 +91,8 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(MastersThesis item) throws IOException {
+    public void write(MastersThesis item, int number) throws IOException {
+        writeNumber(number);
         writeTitleAndAuthors(item);
 
         out.write("Master's thesis, ");
@@ -103,7 +106,8 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(PhDThesis item) throws IOException {
+    public void write(PhDThesis item, int number) throws IOException {
+        writeNumber(number);
         writeTitleAndAuthors(item);
 
         out.write("PhD thesis, ");
@@ -117,7 +121,8 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(InvitedTalk item) throws IOException {
+    public void write(InvitedTalk item, int number) throws IOException {
+        writeNumber(number);
         out.write(formatTitle(item));
         out.write(".");
         out.newLine();
@@ -129,10 +134,18 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
     
     @Override
-    public void write(Unpublished item) throws IOException {
+    public void write(Unpublished item, int number) throws IOException {
+        writeNumber(number);
         writeTitleAndAuthors(item);
 
         output(item.get("note"), ".", true);
+    }
+    
+    private void writeNumber(int number) throws IOException {
+        if (number >= 0) {
+            out.write(number);
+            out.write(". ");
+        }
     }
 
     private void writeTitleAndAuthors(BibItem item) throws IOException {

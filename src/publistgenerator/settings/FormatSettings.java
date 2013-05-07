@@ -15,6 +15,24 @@ import publistgenerator.category.OutputCategory;
  */
 public class FormatSettings {
 
+    public enum Numbering {
+
+        NONE, LOCAL, GLOBAL;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case NONE:
+                    return "None";
+                case LOCAL:
+                    return "Within sections";
+                case GLOBAL:
+                    return "Globally";
+                default:
+                    throw new InternalError("Unknown Numbering.");
+            }
+        }
+    }
     // General
     private File target;
     // Author info
@@ -22,8 +40,7 @@ public class FormatSettings {
     // Presented
     private String presentedText = null;
     // Numbering
-    private boolean numberGlobally = false;
-    private boolean numberLocally = false;
+    private Numbering numbering = Numbering.NONE;
     // Categories
     private List<OutputCategory> categories;
     private Map<OutputCategory, String> categoryNotes;
@@ -52,20 +69,12 @@ public class FormatSettings {
         this.presentedText = presentedText;
     }
 
-    public boolean isNumberGlobally() {
-        return numberGlobally;
+    public Numbering getNumbering() {
+        return numbering;
     }
 
-    public void setNumberGlobally(boolean numberGlobally) {
-        this.numberGlobally = numberGlobally;
-    }
-
-    public boolean isNumberLocally() {
-        return numberLocally;
-    }
-
-    public void setNumberLocally(boolean numberLocally) {
-        this.numberLocally = numberLocally;
+    public void setNumbering(Numbering numbering) {
+        this.numbering = numbering;
     }
 
     public List<OutputCategory> getCategories() {

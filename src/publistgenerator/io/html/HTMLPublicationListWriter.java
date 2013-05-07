@@ -11,6 +11,9 @@ import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.OutputCategory;
 import publistgenerator.io.PublicationListWriter;
 import publistgenerator.settings.FormatSettings;
+import static publistgenerator.settings.FormatSettings.Numbering.GLOBAL;
+import static publistgenerator.settings.FormatSettings.Numbering.LOCAL;
+import static publistgenerator.settings.FormatSettings.Numbering.NONE;
 import publistgenerator.settings.HTMLSettings;
 
 /**
@@ -21,11 +24,13 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
     private HTMLBibItemWriter itemWriter;
     private HTMLSettings settings;
+    private int globalCount;
 
     @Override
     protected void writePublicationList(BufferedWriter out, FormatSettings settings) throws IOException {
         this.settings = (HTMLSettings) settings;
         itemWriter = new HTMLBibItemWriter(out, this.settings);
+        globalCount = 0;
 
         writePublicationList(out);
     }
@@ -69,6 +74,8 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
+        int localCount = 0;
+        
         out.write(" <div class=\"section\"><h1 class=\"sectiontitle\"><a id=\"" + c.getShortName().toLowerCase() + "\">" + c.getName() + "</a></h1>");
         out.newLine();
         out.newLine();
@@ -85,9 +92,24 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
 
         for (BibItem item : c.getItems()) {
+            globalCount++;
+            localCount++;
+            
             out.write("  <div class=\"bibentry\">");
             out.newLine();
-            itemWriter.write(item);
+
+            switch (settings.getNumbering()) {
+                case NONE:
+                    itemWriter.write(item, -1);
+                    break;
+                case LOCAL:
+                    itemWriter.write(item, localCount);
+                    break;
+                case GLOBAL:
+                    itemWriter.write(item, globalCount);
+                    break;
+            }
+            
             out.write("  </div>");
             out.newLine();
             out.newLine();
