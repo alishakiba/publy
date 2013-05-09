@@ -11,7 +11,7 @@ import publistgenerator.io.BibTeXParser;
 import publistgenerator.io.html.HTMLPublicationListWriter;
 import publistgenerator.io.plain.PlainPublicationListWriter;
 import plgsettings.settings.Settings;
-import plgsettings.settings.SettingsReader;
+import plgsettings.io.SettingsReader;
 
 /**
  *
