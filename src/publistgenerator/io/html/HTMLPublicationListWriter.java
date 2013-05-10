@@ -33,26 +33,30 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void writePublicationList(BufferedWriter out) throws IOException {
-        if (settings.getHeader() != null) {
+        if (settings.getHeader() == null) {
+            writeDefaultHeader(out);
+        } else {
             // Copy the header from the header file
             copyFile(settings.getHeader(), out);
         }
 
         // Write the body
         out.write(" <p>My publications as of " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".");
-        
+
         if (settings.linkToTextVersion()) {
             // TODO: use plaintext target instead of hard-coding publications.txt
             out.write("Also available as <a href=\"publications.txt\" rel=\"alternate\">plain text</a>.</p>");
         }
-        
+
         out.newLine();
 
         for (OutputCategory c : categories) {
             writeCategory(c, out);
         }
 
-        if (settings.getFooter() != null) {
+        if (settings.getFooter() == null) {
+            writeDefaultFooter(out);
+        } else {
             // Copy the footer from the footer file
             copyFile(settings.getFooter(), out);
         }
@@ -415,5 +419,33 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             out.write(" </script>");
             out.newLine();
         }
+    }
+
+    private void writeDefaultHeader(BufferedWriter out) throws IOException {
+        out.write("<!DOCTYPE html>");
+        out.newLine();
+        out.write("<html>");
+        out.newLine();
+        out.write("  <head>");
+        out.newLine();
+        out.write("    <title>Publications</title>");
+        out.newLine();
+        out.write("    <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">");
+        out.newLine();
+        out.write("  </head>");
+        out.newLine();
+        out.write("  <body>");
+        out.newLine();
+        out.write("    <noscript><p>Some elements on this site require JavaScript. Enable it for the best experience.</p></noscript>");
+        out.newLine();
+        out.write("  ");
+        out.newLine();
+    }
+
+    private void writeDefaultFooter(BufferedWriter out) throws IOException {
+        out.write("  </body>");
+        out.newLine();
+        out.write("</html>");
+        out.newLine();
     }
 }
