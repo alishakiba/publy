@@ -7,14 +7,11 @@ package publistgenerator.io.html;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import plgsettings.settings.FormatSettings;
+import plgsettings.settings.HTMLSettings;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.OutputCategory;
 import publistgenerator.io.PublicationListWriter;
-import plgsettings.settings.FormatSettings;
-import static plgsettings.settings.FormatSettings.Numbering.GLOBAL;
-import static plgsettings.settings.FormatSettings.Numbering.LOCAL;
-import static plgsettings.settings.FormatSettings.Numbering.NONE;
-import plgsettings.settings.HTMLSettings;
 
 /**
  *
@@ -36,19 +33,29 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void writePublicationList(BufferedWriter out) throws IOException {
-        // Copy the header from the header file
-        copyFile(settings.getHeader(), out);
+        if (settings.getHeader() != null) {
+            // Copy the header from the header file
+            copyFile(settings.getHeader(), out);
+        }
 
         // Write the body
-        out.write(" <p>My publications as of " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ". Also available as <a href=\"publications.txt\" rel=\"alternate\">plain text</a>.</p>");
+        out.write(" <p>My publications as of " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".");
+        
+        if (settings.linkToTextVersion()) {
+            // TODO: use plaintext target instead of hard-coding publications.txt
+            out.write("Also available as <a href=\"publications.txt\" rel=\"alternate\">plain text</a>.</p>");
+        }
+        
         out.newLine();
 
         for (OutputCategory c : categories) {
             writeCategory(c, out);
         }
 
-        // Copy the footer from the footer file
-        copyFile(settings.getFooter(), out);
+        if (settings.getFooter() != null) {
+            // Copy the footer from the footer file
+            copyFile(settings.getFooter(), out);
+        }
     }
 
     private void copyFile(File inputFile, BufferedWriter out) throws IOException {
@@ -75,7 +82,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
     private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
         int localCount = 0;
-        
+
         out.write(" <div class=\"section\"><h1 class=\"sectiontitle\"><a id=\"" + c.getShortName().toLowerCase() + "\">" + c.getName() + "</a></h1>");
         out.newLine();
         out.newLine();
@@ -94,7 +101,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         for (BibItem item : c.getItems()) {
             globalCount++;
             localCount++;
-            
+
             out.write("  <div class=\"bibentry\">");
             out.newLine();
 
@@ -109,7 +116,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                     itemWriter.write(item, globalCount);
                     break;
             }
-            
+
             out.write("  </div>");
             out.newLine();
             out.newLine();

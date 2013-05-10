@@ -36,11 +36,15 @@ public class GeneratorMain {
             // Parse all publications
             List<BibItem> items = BibTeXParser.parseFile(settings.getPublications());
 
-            HTMLPublicationListWriter writer = new HTMLPublicationListWriter();
-            writer.writePublicationList(items, settings.getHtmlSettings());
+            if (settings.generateHTML()) {
+                HTMLPublicationListWriter writer = new HTMLPublicationListWriter();
+                writer.writePublicationList(items, settings.getHtmlSettings());
+            }
 
-            PlainPublicationListWriter plainWriter = new PlainPublicationListWriter();
-            plainWriter.writePublicationList(items, settings.getPlainSettings());
+            if (settings.generateText()) {
+                PlainPublicationListWriter plainWriter = new PlainPublicationListWriter();
+                plainWriter.writePublicationList(items, settings.getPlainSettings());
+            }
         }
     }
 }

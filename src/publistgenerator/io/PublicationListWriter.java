@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import plgsettings.settings.CategoryIdentifier;
+import plgsettings.settings.FormatSettings;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.category.*;
-import plgsettings.settings.FormatSettings;
 
 /**
  *
