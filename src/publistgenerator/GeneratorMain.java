@@ -6,12 +6,12 @@ package publistgenerator;
 
 import java.util.List;
 import javax.swing.JOptionPane;
+import plgsettings.io.SettingsReader;
+import plgsettings.settings.Settings;
 import publistgenerator.bibitem.BibItem;
 import publistgenerator.io.BibTeXParser;
 import publistgenerator.io.html.HTMLPublicationListWriter;
 import publistgenerator.io.plain.PlainPublicationListWriter;
-import plgsettings.settings.Settings;
-import plgsettings.io.SettingsReader;
 
 /**
  *
