@@ -2,21 +2,21 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package publistgenerator.category;
 
-import plgsettings.settings.CategoryIdentifier;
-import publistgenerator.bibitem.BibItem;
+package publistgenerator.data.category;
+
+import publistgenerator.data.bibitem.BibItem;
 
 /**
  *
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
-public class BookChapterCategory extends OutputCategory {
+public class ConferenceCategory extends OutputCategory {
 
-    public BookChapterCategory() {
-        super("Chapters", "Chapters in Books", CategoryIdentifier.CHAPTER);
+    public ConferenceCategory() {
+        super("Conference", "Conference papers", CategoryIdentifier.CONFERENCE);
     }
-    
+
     @Override
     public boolean fitsCategory(BibItem item) {
         String type = item.getType();
@@ -24,8 +24,8 @@ public class BookChapterCategory extends OutputCategory {
         if (type == null) {
             return false;
         } else {
-            return type.equals("incollection");
+            return type.equals("inproceedings");
         }
     }
-    
+
 }

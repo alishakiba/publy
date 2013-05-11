@@ -4,6 +4,16 @@
  */
 package publistgenerator.io;
 
+import publistgenerator.data.bibitem.Venue;
+import publistgenerator.data.bibitem.InProceedings;
+import publistgenerator.data.bibitem.InCollection;
+import publistgenerator.data.bibitem.MastersThesis;
+import publistgenerator.data.bibitem.PhDThesis;
+import publistgenerator.data.bibitem.Unpublished;
+import publistgenerator.data.bibitem.Article;
+import publistgenerator.data.bibitem.InvitedTalk;
+import publistgenerator.data.bibitem.Author;
+import publistgenerator.data.bibitem.BibItem;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -11,7 +21,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import publistgenerator.bibitem.*;
 
 /**
  *

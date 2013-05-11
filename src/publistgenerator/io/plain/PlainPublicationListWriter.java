@@ -8,10 +8,10 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import publistgenerator.bibitem.BibItem;
-import publistgenerator.category.OutputCategory;
+import publistgenerator.data.bibitem.BibItem;
+import publistgenerator.data.category.OutputCategory;
 import publistgenerator.io.PublicationListWriter;
-import plgsettings.settings.FormatSettings;
+import publistgenerator.data.settings.FormatSettings;
 
 /**
  *

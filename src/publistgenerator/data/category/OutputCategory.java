@@ -3,13 +3,12 @@
  * and open the template in the editor.
  */
 
-package publistgenerator.category;
+package publistgenerator.data.category;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import plgsettings.settings.CategoryIdentifier;
-import publistgenerator.bibitem.BibItem;
+import publistgenerator.data.bibitem.BibItem;
 
 /**
  *

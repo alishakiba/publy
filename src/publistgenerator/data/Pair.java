@@ -1,6 +1,6 @@
 /*
  */
-package publistgenerator;
+package publistgenerator.data;
 
 /**
  *

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package publistgenerator.bibitem;
+package publistgenerator.data.bibitem;
 
 import java.util.Map.Entry;
 import java.util.*;

@@ -1,9 +1,8 @@
 /*
  */
-package publistgenerator.category;
+package publistgenerator.data.category;
 
-import plgsettings.settings.CategoryIdentifier;
-import publistgenerator.bibitem.BibItem;
+import publistgenerator.data.bibitem.BibItem;
 
 /**
  *

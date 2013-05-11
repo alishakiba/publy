@@ -7,10 +7,10 @@ package publistgenerator.io.html;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import plgsettings.settings.FormatSettings;
-import plgsettings.settings.HTMLSettings;
-import publistgenerator.bibitem.BibItem;
-import publistgenerator.category.OutputCategory;
+import publistgenerator.data.settings.FormatSettings;
+import publistgenerator.data.settings.HTMLSettings;
+import publistgenerator.data.bibitem.BibItem;
+import publistgenerator.data.category.OutputCategory;
 import publistgenerator.io.PublicationListWriter;
 
 /**

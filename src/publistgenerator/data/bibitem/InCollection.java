@@ -1,4 +1,4 @@
-package publistgenerator.bibitem;
+package publistgenerator.data.bibitem;
 
 /**
  * incollection: A part of a book having its own title.
