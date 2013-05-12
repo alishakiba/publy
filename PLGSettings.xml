@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<plgsettings>
+  <!-- Relative path to a BibTeX file with the publication list -->
+  <publications></publications>
+  
+  <!-- Settings for plain-text output -->
+  <generateplaintext>true</generateplaintext>
+  <plaintextsettings>
+    <target>pub.txt</target>
+    <listallauthors>false</listallauthors>
+    <presentedtext></presentedtext>
+    <numbering>NONE</numbering>
+    <categories>
+      <category>SUBMITTED</category>
+      <category>JOURNAL</category>
+      <category>CONFERENCE</category>
+    </categories>
+    <categorynotes>
+      <note category="CONFERENCE">These are my conference papers.</note>
+    </categorynotes>
+  </plaintextsettings>
+  
+  <!-- Settings for HTML output -->
+  <generatehtml>true</generatehtml>
+  <htmlsettings>
+    <target>pub.html</target>
+    <listallauthors>false</listallauthors>
+    <presentedtext></presentedtext>
+    <numbering>NONE</numbering>
+    <categories>
+      <category>SUBMITTED</category>
+      <category>JOURNAL</category>
+      <category>CONFERENCE</category>
+    </categories>
+    <categorynotes>
+      <note category="CONFERENCE">These are my conference papers.</note>
+    </categorynotes>
+    <!-- HTML-specific settings -->
+    <linktotextversion>false</linktotextversion>
+    <includeabstract>ALL</includeabstract>
+    <includebibtex>ARXIV</includebibtex>
+    <includepdf>ARXIV</includepdf>
+    <header></header>
+    <footer></footer>
+    <googleanalyticsuser></googleanalyticsuser>
+  </htmlsettings>
+</plgsettings>
