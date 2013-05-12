@@ -42,6 +42,7 @@ public class MainFrame extends javax.swing.JFrame {
         consoleTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Publication List Generator");
 
         mainSplitPane.setDividerLocation(200);
         mainSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
@@ -68,7 +69,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(pubLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pubTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                .addComponent(pubTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pubBrowseButton)
                 .addContainerGap())
@@ -90,11 +91,11 @@ public class MainFrame extends javax.swing.JFrame {
         htmlPanel.setLayout(htmlPanelLayout);
         htmlPanelLayout.setHorizontalGroup(
             htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 393, Short.MAX_VALUE)
+            .addGap(0, 678, Short.MAX_VALUE)
         );
         htmlPanelLayout.setVerticalGroup(
             htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 126, Short.MAX_VALUE)
+            .addGap(0, 344, Short.MAX_VALUE)
         );
 
         settingsTabbedPane.addTab("HTML", null, htmlPanel, "");
@@ -103,11 +104,11 @@ public class MainFrame extends javax.swing.JFrame {
         plainPanel.setLayout(plainPanelLayout);
         plainPanelLayout.setHorizontalGroup(
             plainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 393, Short.MAX_VALUE)
+            .addGap(0, 678, Short.MAX_VALUE)
         );
         plainPanelLayout.setVerticalGroup(
             plainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 126, Short.MAX_VALUE)
+            .addGap(0, 344, Short.MAX_VALUE)
         );
 
         settingsTabbedPane.addTab("Text", plainPanel);
