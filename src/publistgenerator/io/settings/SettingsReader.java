@@ -25,7 +25,7 @@ import publistgenerator.data.settings.Settings;
  */
 public class SettingsReader extends DefaultHandler {
 
-    private static final String DEFAULT_SETTINGS_LOCATION = "./PubListGenerator.config";
+    private static final String DEFAULT_SETTINGS_LOCATION = "./PLGSettings.xml";
     private StringBuilder textBuffer; // Contains the characters that are read between start and end elements (e.g. <item>Text</item>)
     private Settings settings; // Contains the read settings after parsing.
     private FormatSettings format = null;
@@ -40,6 +40,7 @@ public class SettingsReader extends DefaultHandler {
         Settings settings = null;
 
         if (settingsFile.exists()) {
+            settings = new Settings();
             parseSettings(settings, settingsFile);
         }
 

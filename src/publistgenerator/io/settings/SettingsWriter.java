@@ -76,13 +76,12 @@ public class SettingsWriter {
         out.write("    <!-- HTML-specific settings -->");
         out.newLine();
         
-        // TODO: finish
         output(out, 4, "linktotextversion", makeString(settings.getHtmlSettings().linkToTextVersion()));
-        output(out, 4, "includeabstract", makeString(settings.getHtmlSettings().getTarget()));
-        output(out, 4, "includebibtex", makeString(settings.getHtmlSettings().getTarget()));
-        output(out, 4, "includepdf", makeString(settings.getHtmlSettings().getTarget()));
-        output(out, 4, "header", makeString(settings.getHtmlSettings().getTarget()));
-        output(out, 4, "footer", makeString(settings.getHtmlSettings().getTarget()));
+        output(out, 4, "includeabstract", makeString(settings.getHtmlSettings().getIncludeAbstract()));
+        output(out, 4, "includebibtex", makeString(settings.getHtmlSettings().getIncludeBibtex()));
+        output(out, 4, "includepdf", makeString(settings.getHtmlSettings().getIncludePDF()));
+        output(out, 4, "header", makeString(settings.getHtmlSettings().getHeader()));
+        output(out, 4, "footer", makeString(settings.getHtmlSettings().getFooter()));
         output(out, 4, "googleanalyticsuser", settings.getHtmlSettings().getGoogleAnalyticsUser());
         
         out.write("  </htmlsettings>");
