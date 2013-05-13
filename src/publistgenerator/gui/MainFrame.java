@@ -2,17 +2,31 @@
  */
 package publistgenerator.gui;
 
+import publistgenerator.data.settings.Settings;
+
 /**
  *
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
 public class MainFrame extends javax.swing.JFrame {
 
+    private Settings settings;
+
     /**
      * Creates new form MainFrame
      */
-    public MainFrame() {
+    public MainFrame(Settings settings) {
+        this.settings = settings;
         initComponents();
+        populateValues();
+    }
+
+    private void populateValues() {
+        if (settings.getPublications() == null) {
+            pubTextField.setText("");
+        } else {
+            pubTextField.setText(settings.getPublications().getPath());
+        }
     }
 
     /**
@@ -95,7 +109,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         htmlPanelLayout.setVerticalGroup(
             htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 344, Short.MAX_VALUE)
+            .addGap(0, 126, Short.MAX_VALUE)
         );
 
         settingsTabbedPane.addTab("HTML", null, htmlPanel, "");
@@ -108,7 +122,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         plainPanelLayout.setVerticalGroup(
             plainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 344, Short.MAX_VALUE)
+            .addGap(0, 126, Short.MAX_VALUE)
         );
 
         settingsTabbedPane.addTab("Text", plainPanel);
@@ -164,7 +178,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(cancelButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(saveNQuitButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(229, Short.MAX_VALUE))
         );
 
         bottomPanel.add(buttonPanel, java.awt.BorderLayout.LINE_END);
@@ -208,7 +222,7 @@ public class MainFrame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new MainFrame().setVisible(true);
+                new MainFrame(new Settings()).setVisible(true);
             }
         });
     }

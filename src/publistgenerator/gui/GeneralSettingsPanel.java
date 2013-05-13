@@ -2,17 +2,64 @@
  */
 package publistgenerator.gui;
 
+import publistgenerator.data.settings.FormatSettings;
+
 /**
  *
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
 public class GeneralSettingsPanel extends javax.swing.JPanel {
 
+    private FormatSettings settings;
+    
     /**
-     * Creates new form FormatSettingsPanel
+     * Creates new form GeneralSettingsPanel
      */
-    public GeneralSettingsPanel() {
+    public GeneralSettingsPanel(FormatSettings settings) {
+        this.settings = settings;
         initComponents();
+        populateValues();
+    }
+    
+    private void populateValues() {
+        // Target
+        if (settings.getTarget() == null) {
+            targetTextField.setText("");
+        } else {
+            targetTextField.setText(settings.getTarget().getPath());
+        }
+        
+        // List all authors
+        if (settings.isListAllAuthors()) {
+            listAllRadioButton.setSelected(true);
+        } else {
+            listOtherRadioButton.setSelected(true);
+        }
+        
+        // PresentedText
+        if (settings.getPresentedText() == null) {
+            presentedTextField.setText("");
+        } else {
+            presentedTextField.setText(settings.getPresentedText());
+        }
+        
+        // Numbering
+        switch (settings.getNumbering()) {
+            case NONE:
+                numNoneRadioButton.setSelected(true);
+                break;
+            case LOCAL:
+                numLocalRadioButton.setSelected(true);
+                break;
+            case GLOBAL:
+                numGlobalRadioButton.setSelected(true);
+                break;
+            default:
+                throw new AssertionError("Unknown numbering: " + settings.getNumbering());
+        }
+        
+        // Categories
+        // TODO
     }
 
     /**

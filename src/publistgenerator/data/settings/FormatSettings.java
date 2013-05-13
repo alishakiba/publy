@@ -20,20 +20,6 @@ public class FormatSettings {
     public enum Numbering {
 
         NONE, LOCAL, GLOBAL;
-
-        @Override
-        public String toString() {
-            switch (this) {
-                case NONE:
-                    return "None";
-                case LOCAL:
-                    return "Within sections";
-                case GLOBAL:
-                    return "Globally";
-                default:
-                    throw new InternalError("Unknown Numbering.");
-            }
-        }
     }
     // General
     private File target;
