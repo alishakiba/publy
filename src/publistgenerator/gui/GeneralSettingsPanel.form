@@ -199,6 +199,9 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JTextField" name="targetTextField">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="targetTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        targetTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        targetTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="targetBrowseButton">
       <Properties>
@@ -214,6 +217,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="presentedTextField">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="presentedTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        presentedTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        presentedTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JRadioButton" name="numNoneRadioButton">
       <Properties>
@@ -341,6 +347,9 @@
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="noteTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        noteTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        noteTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

@@ -3,12 +3,12 @@
 package publistgenerator.gui;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Set;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
-import javax.swing.ListModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
 
@@ -21,7 +21,14 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     private FormatSettings settings;
     private DefaultListModel<CategoryIdentifier> inListModel;
     private DefaultListModel<CategoryIdentifier> outListModel;
-    private CategoryIdentifier selectedCategory;
+    private CategoryIdentifier selectedCategory = null;
+
+    /**
+     * Empty constructor, for use in the NetBeans GUI editor.
+     */
+    public GeneralSettingsPanel() {
+        initComponents();
+    }
     
     /**
      * Creates new form GeneralSettingsPanel
@@ -142,6 +149,18 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("General Settings"));
 
+        targetTextField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                targetTextFieldTextChanged(e);
+            }
+            public void removeUpdate(DocumentEvent e) {
+                targetTextFieldTextChanged(e);
+            }
+            public void changedUpdate(DocumentEvent e) {
+                //Plain text components do not fire these events
+            }
+        });
+
         targetBrowseButton.setText("Browse...");
         targetBrowseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -150,6 +169,18 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         });
 
         presentedLabel.setText("Text added after papers I presented");
+
+        presentedTextField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                presentedTextFieldTextChanged(e);
+            }
+            public void removeUpdate(DocumentEvent e) {
+                presentedTextFieldTextChanged(e);
+            }
+            public void changedUpdate(DocumentEvent e) {
+                //Plain text components do not fire these events
+            }
+        });
 
         numGroup.add(numNoneRadioButton);
         numNoneRadioButton.setText("None");
@@ -178,6 +209,17 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         noteLabel.setText("Text at the start");
 
+        noteTextField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                noteTextFieldTextChanged(e);
+            }
+            public void removeUpdate(DocumentEvent e) {
+                noteTextFieldTextChanged(e);
+            }
+            public void changedUpdate(DocumentEvent e) {
+                //Plain text components do not fire these events
+            }
+        });
         noteTextField.setEnabled(false);
 
         javax.swing.GroupLayout catPanelLayout = new javax.swing.GroupLayout(catPanel);
@@ -405,30 +447,59 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_targetBrowseButtonActionPerformed
 
+    private void targetTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
+        // Update the settings
+        settings.setTarget(new File(targetTextField.getText()));
+    }
+    
+    private void presentedTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
+        // Update the settings
+        settings.setPresentedText(presentedTextField.getText());
+    }
+    
+    private void noteTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
+        // Update the settings
+        settings.getCategoryNotes().put(selectedCategory, noteTextField.getText());
+    }
+
     private void inButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inButtonActionPerformed
         CategoryIdentifier selected = (CategoryIdentifier) outCatList.getSelectedValue();
 
+        // Update the UI
         inListModel.addElement(selected);
         outListModel.removeElement(selected);
 
         inCatList.setSelectedValue(selected, true);
+
+        // Update the settings
+        settings.getCategories().add(selected);
     }//GEN-LAST:event_inButtonActionPerformed
 
     private void outButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_outButtonActionPerformed
         CategoryIdentifier selected = (CategoryIdentifier) inCatList.getSelectedValue();
 
+        // Update the UI
         outListModel.addElement(selected);
         inListModel.removeElement(selected);
 
         outCatList.setSelectedValue(selected, true);
+
+        // Update the settings
+        settings.getCategories().remove(selected);
     }//GEN-LAST:event_outButtonActionPerformed
 
     private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
         int selected = inCatList.getSelectedIndex();
 
         if (selected > 0) {
-            CategoryIdentifier up = inListModel.set(selected - 1, inListModel.get(selected));
+            // Update the UI
+            CategoryIdentifier up = inListModel.set(selected - 1, selectedCategory);
             inListModel.set(selected, up);
+            // TODO: change selection?
+
+            // Update the settings
+            settings.getCategories().set(selected - 1, selectedCategory);
+            settings.getCategories().set(selected, up);
         }
     }//GEN-LAST:event_upButtonActionPerformed
 
@@ -436,14 +507,20 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         int selected = inCatList.getSelectedIndex();
 
         if (selected < inListModel.getSize() - 1) {
-            CategoryIdentifier down = inListModel.set(selected + 1, inListModel.get(selected));
+            // Update the UI
+            CategoryIdentifier down = inListModel.set(selected + 1, selectedCategory);
             inListModel.set(selected, down);
+            // TODO: change selection?
+            
+            // Update the settings
+            settings.getCategories().set(selected + 1, selectedCategory);
+            settings.getCategories().set(selected, down);
         }
     }//GEN-LAST:event_downButtonActionPerformed
 
     private void setSelectedCategory(CategoryIdentifier c) {
         selectedCategory = c;
-        
+
         if (c == null) {
             // Note
             noteTextField.setText("");
@@ -454,7 +531,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             noteTextField.setEnabled(true);
         }
     }
-    
+
     private void inCatListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_inCatListValueChanged
         if (!evt.getValueIsAdjusting()) {
             if (inCatList.getSelectedIndex() == -1) {
@@ -462,7 +539,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                 outButton.setEnabled(false);
                 upButton.setEnabled(false);
                 downButton.setEnabled(false);
-                
+
                 if (outCatList.getSelectedIndex() == -1) {
                     // No selection at all, disable category settings
                     setSelectedCategory(null);
@@ -472,10 +549,10 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                 outButton.setEnabled(true);
                 upButton.setEnabled(true);
                 downButton.setEnabled(true);
-                
+
                 // Remove selection in the out list
                 outCatList.setSelectedIndex(-1);
-                
+
                 setSelectedCategory((CategoryIdentifier) inCatList.getSelectedValue());
             }
         }
@@ -486,7 +563,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             if (outCatList.getSelectedIndex() == -1) {
                 //No selection, disable button
                 inButton.setEnabled(false);
-                
+
                 if (inCatList.getSelectedIndex() == -1) {
                     // No selection at all, disable category settings
                     setSelectedCategory(null);
@@ -494,10 +571,10 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             } else {
                 //Selection, enable button
                 inButton.setEnabled(true);
-                
+
                 // Remove selection in the in list
                 inCatList.setSelectedIndex(-1);
-                
+
                 setSelectedCategory((CategoryIdentifier) outCatList.getSelectedValue());
             }
         }

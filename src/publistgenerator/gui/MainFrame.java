@@ -45,6 +45,7 @@ public class MainFrame extends javax.swing.JFrame {
         pubTextField = new javax.swing.JTextField();
         pubBrowseButton = new javax.swing.JButton();
         settingsTabbedPane = new javax.swing.JTabbedPane();
+        htmlScrollPane = new javax.swing.JScrollPane();
         htmlPanel = new javax.swing.JPanel();
         plainPanel = new javax.swing.JPanel();
         bottomPanel = new javax.swing.JPanel();
@@ -58,7 +59,7 @@ public class MainFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Publication List Generator");
 
-        mainSplitPane.setDividerLocation(200);
+        mainSplitPane.setDividerLocation(getHeight() - 150);
         mainSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         mainSplitPane.setResizeWeight(1.0);
 
@@ -83,7 +84,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(pubLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pubTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
+                .addComponent(pubTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pubBrowseButton)
                 .addContainerGap())
@@ -105,24 +106,26 @@ public class MainFrame extends javax.swing.JFrame {
         htmlPanel.setLayout(htmlPanelLayout);
         htmlPanelLayout.setHorizontalGroup(
             htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 678, Short.MAX_VALUE)
+            .addGap(0, 750, Short.MAX_VALUE)
         );
         htmlPanelLayout.setVerticalGroup(
             htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 126, Short.MAX_VALUE)
+            .addGap(0, 541, Short.MAX_VALUE)
         );
 
-        settingsTabbedPane.addTab("HTML", null, htmlPanel, "");
+        htmlScrollPane.setViewportView(htmlPanel);
+
+        settingsTabbedPane.addTab("HTML", htmlScrollPane);
 
         javax.swing.GroupLayout plainPanelLayout = new javax.swing.GroupLayout(plainPanel);
         plainPanel.setLayout(plainPanelLayout);
         plainPanelLayout.setHorizontalGroup(
             plainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 678, Short.MAX_VALUE)
+            .addGap(0, 752, Short.MAX_VALUE)
         );
         plainPanelLayout.setVerticalGroup(
             plainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 126, Short.MAX_VALUE)
+            .addGap(0, 543, Short.MAX_VALUE)
         );
 
         settingsTabbedPane.addTab("Text", plainPanel);
@@ -178,7 +181,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(cancelButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(saveNQuitButton)
-                .addContainerGap(229, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
 
         bottomPanel.add(buttonPanel, java.awt.BorderLayout.LINE_END);
@@ -234,6 +237,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextArea consoleTextArea;
     private javax.swing.JButton generateButton;
     private javax.swing.JPanel htmlPanel;
+    private javax.swing.JScrollPane htmlScrollPane;
     private javax.swing.JSplitPane mainSplitPane;
     private javax.swing.JPanel plainPanel;
     private javax.swing.JButton pubBrowseButton;
