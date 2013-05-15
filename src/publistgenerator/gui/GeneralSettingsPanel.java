@@ -2,6 +2,14 @@
  */
 package publistgenerator.gui;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.EnumSet;
+import java.util.Set;
+import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
+import javax.swing.ListModel;
+import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
 
 /**
@@ -11,6 +19,9 @@ import publistgenerator.data.settings.FormatSettings;
 public class GeneralSettingsPanel extends javax.swing.JPanel {
 
     private FormatSettings settings;
+    private DefaultListModel<CategoryIdentifier> inListModel;
+    private DefaultListModel<CategoryIdentifier> outListModel;
+    private CategoryIdentifier selectedCategory;
     
     /**
      * Creates new form GeneralSettingsPanel
@@ -20,7 +31,8 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         initComponents();
         populateValues();
     }
-    
+
+    @SuppressWarnings("unchecked")
     private void populateValues() {
         // Target
         if (settings.getTarget() == null) {
@@ -28,21 +40,21 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         } else {
             targetTextField.setText(settings.getTarget().getPath());
         }
-        
+
         // List all authors
         if (settings.isListAllAuthors()) {
             listAllRadioButton.setSelected(true);
         } else {
             listOtherRadioButton.setSelected(true);
         }
-        
+
         // PresentedText
         if (settings.getPresentedText() == null) {
             presentedTextField.setText("");
         } else {
             presentedTextField.setText(settings.getPresentedText());
         }
-        
+
         // Numbering
         switch (settings.getNumbering()) {
             case NONE:
@@ -57,9 +69,29 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             default:
                 throw new AssertionError("Unknown numbering: " + settings.getNumbering());
         }
-        
+
         // Categories
-        // TODO
+        Set<CategoryIdentifier> in = EnumSet.noneOf(CategoryIdentifier.class);
+        Set<CategoryIdentifier> out = EnumSet.allOf(CategoryIdentifier.class);
+
+        for (CategoryIdentifier c : settings.getCategories()) {
+            in.add(c);
+            out.remove(c);
+        }
+
+        inListModel = new DefaultListModel<>();
+        outListModel = new DefaultListModel<>();
+
+        for (CategoryIdentifier c : in) {
+            inListModel.addElement(c);
+        }
+
+        for (CategoryIdentifier c : out) {
+            outListModel.addElement(c);
+        }
+
+        inCatList.setModel(inListModel);
+        outCatList.setModel(outListModel);
     }
 
     /**
@@ -73,6 +105,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         listGroup = new javax.swing.ButtonGroup();
         numGroup = new javax.swing.ButtonGroup();
+        targetFileChooser = new javax.swing.JFileChooser();
         targetTextField = new javax.swing.JTextField();
         targetBrowseButton = new javax.swing.JButton();
         presentedLabel = new javax.swing.JLabel();
@@ -89,22 +122,32 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         listOtherRadioButton = new javax.swing.JRadioButton();
         numLabel = new javax.swing.JLabel();
         numSeparator = new javax.swing.JSeparator();
-        jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jSeparator2 = new javax.swing.JSeparator();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList();
+        catLabel = new javax.swing.JLabel();
+        catSeparator = new javax.swing.JSeparator();
+        catPanel = new javax.swing.JPanel();
+        noteLabel = new javax.swing.JLabel();
+        noteSeparator = new javax.swing.JSeparator();
+        noteTextField = new javax.swing.JTextField();
+        inCatScrollPane = new javax.swing.JScrollPane();
+        inCatList = new javax.swing.JList();
+        inButton = new javax.swing.JButton();
+        outButton = new javax.swing.JButton();
+        catButtonSeparator = new javax.swing.JSeparator();
+        upButton = new javax.swing.JButton();
+        downButton = new javax.swing.JButton();
+        outCatScrollPane = new javax.swing.JScrollPane();
+        outCatList = new javax.swing.JList();
+
+        targetFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("General Settings"));
 
         targetBrowseButton.setText("Browse...");
+        targetBrowseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                targetBrowseButtonActionPerformed(evt);
+            }
+        });
 
         presentedLabel.setText("Text added after papers I presented");
 
@@ -129,42 +172,95 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         numLabel.setText("Publication numbering");
 
-        jLabel1.setText("Category selection");
+        catLabel.setText("Category selection");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Category Settings"));
+        catPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Category Settings"));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        noteLabel.setText("Text at the start");
+
+        noteTextField.setEnabled(false);
+
+        javax.swing.GroupLayout catPanelLayout = new javax.swing.GroupLayout(catPanel);
+        catPanel.setLayout(catPanelLayout);
+        catPanelLayout.setHorizontalGroup(
+            catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(catPanelLayout.createSequentialGroup()
+                .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(catPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(noteLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(noteSeparator))
+                    .addGroup(catPanelLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(noteTextField)))
+                .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 164, Short.MAX_VALUE)
+        catPanelLayout.setVerticalGroup(
+            catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(catPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(noteSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(noteLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(noteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        inCatList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        inCatList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        inCatList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                inCatListValueChanged(evt);
+            }
+        });
+        inCatScrollPane.setViewportView(inCatList);
 
-        jButton1.setText("<html>&larr;</html>");
+        inButton.setText("<html>&larr;</html>");
+        inButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inButtonActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("<html>&rarr;</html>");
+        outButton.setText("<html>&rarr;</html>");
+        outButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                outButtonActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("<html>&uarr;</html>");
+        upButton.setText("<html>&uarr;</html>");
+        upButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                upButtonActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("<html>&darr;</html>");
+        downButton.setText("<html>&darr;</html>");
+        downButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                downButtonActionPerformed(evt);
+            }
+        });
 
-        jList2.setModel(new javax.swing.AbstractListModel() {
+        outCatList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane2.setViewportView(jList2);
+        outCatList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        outCatList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                outCatListValueChanged(evt);
+            }
+        });
+        outCatScrollPane.setViewportView(outCatList);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -174,7 +270,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(catPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(numLabel)
@@ -210,9 +306,9 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                                         .addComponent(targetBrowseButton)))))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(catLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator1)
+                        .addComponent(catSeparator)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -227,21 +323,21 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                                         .addGap(18, 18, 18)
                                         .addComponent(numGlobalRadioButton))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(inCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jButton1)
-                                            .addComponent(jButton2)
-                                            .addComponent(jButton3)
-                                            .addComponent(jButton4)
-                                            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(inButton)
+                                            .addComponent(outButton)
+                                            .addComponent(upButton)
+                                            .addComponent(downButton)
+                                            .addComponent(catButtonSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jScrollPane1, jScrollPane2});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {inCatScrollPane, outCatScrollPane});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,57 +375,167 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                     .addComponent(numGlobalRadioButton))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(catSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(catLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(inButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(outButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(catButtonSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(upButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addComponent(downButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(inCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(catPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void targetBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_targetBrowseButtonActionPerformed
+        int opened = targetFileChooser.showOpenDialog(this);
+
+        if (opened == JFileChooser.APPROVE_OPTION) {
+            targetTextField.setText(targetFileChooser.getSelectedFile().getPath());
+        }
+    }//GEN-LAST:event_targetBrowseButtonActionPerformed
+
+    private void inButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inButtonActionPerformed
+        CategoryIdentifier selected = (CategoryIdentifier) outCatList.getSelectedValue();
+
+        inListModel.addElement(selected);
+        outListModel.removeElement(selected);
+
+        inCatList.setSelectedValue(selected, true);
+    }//GEN-LAST:event_inButtonActionPerformed
+
+    private void outButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_outButtonActionPerformed
+        CategoryIdentifier selected = (CategoryIdentifier) inCatList.getSelectedValue();
+
+        outListModel.addElement(selected);
+        inListModel.removeElement(selected);
+
+        outCatList.setSelectedValue(selected, true);
+    }//GEN-LAST:event_outButtonActionPerformed
+
+    private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
+        int selected = inCatList.getSelectedIndex();
+
+        if (selected > 0) {
+            CategoryIdentifier up = inListModel.set(selected - 1, inListModel.get(selected));
+            inListModel.set(selected, up);
+        }
+    }//GEN-LAST:event_upButtonActionPerformed
+
+    private void downButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downButtonActionPerformed
+        int selected = inCatList.getSelectedIndex();
+
+        if (selected < inListModel.getSize() - 1) {
+            CategoryIdentifier down = inListModel.set(selected + 1, inListModel.get(selected));
+            inListModel.set(selected, down);
+        }
+    }//GEN-LAST:event_downButtonActionPerformed
+
+    private void setSelectedCategory(CategoryIdentifier c) {
+        selectedCategory = c;
+        
+        if (c == null) {
+            // Note
+            noteTextField.setText("");
+            noteTextField.setEnabled(false);
+        } else {
+            // Note
+            noteTextField.setText(settings.getCategoryNotes().get(c));
+            noteTextField.setEnabled(true);
+        }
+    }
+    
+    private void inCatListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_inCatListValueChanged
+        if (!evt.getValueIsAdjusting()) {
+            if (inCatList.getSelectedIndex() == -1) {
+                // No selection, disable buttons
+                outButton.setEnabled(false);
+                upButton.setEnabled(false);
+                downButton.setEnabled(false);
+                
+                if (outCatList.getSelectedIndex() == -1) {
+                    // No selection at all, disable category settings
+                    setSelectedCategory(null);
+                }
+            } else {
+                // Selection, enable buttons
+                outButton.setEnabled(true);
+                upButton.setEnabled(true);
+                downButton.setEnabled(true);
+                
+                // Remove selection in the out list
+                outCatList.setSelectedIndex(-1);
+                
+                setSelectedCategory((CategoryIdentifier) inCatList.getSelectedValue());
+            }
+        }
+    }//GEN-LAST:event_inCatListValueChanged
+
+    private void outCatListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_outCatListValueChanged
+        if (!evt.getValueIsAdjusting()) {
+            if (outCatList.getSelectedIndex() == -1) {
+                //No selection, disable button
+                inButton.setEnabled(false);
+                
+                if (inCatList.getSelectedIndex() == -1) {
+                    // No selection at all, disable category settings
+                    setSelectedCategory(null);
+                }
+            } else {
+                //Selection, enable button
+                inButton.setEnabled(true);
+                
+                // Remove selection in the in list
+                inCatList.setSelectedIndex(-1);
+                
+                setSelectedCategory((CategoryIdentifier) outCatList.getSelectedValue());
+            }
+        }
+    }//GEN-LAST:event_outCatListValueChanged
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel authorLabel;
     private javax.swing.JSeparator authorSeparator;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JList jList1;
-    private javax.swing.JList jList2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator catButtonSeparator;
+    private javax.swing.JLabel catLabel;
+    private javax.swing.JPanel catPanel;
+    private javax.swing.JSeparator catSeparator;
+    private javax.swing.JButton downButton;
+    private javax.swing.JButton inButton;
+    private javax.swing.JList inCatList;
+    private javax.swing.JScrollPane inCatScrollPane;
     private javax.swing.JRadioButton listAllRadioButton;
     private javax.swing.ButtonGroup listGroup;
     private javax.swing.JRadioButton listOtherRadioButton;
+    private javax.swing.JLabel noteLabel;
+    private javax.swing.JSeparator noteSeparator;
+    private javax.swing.JTextField noteTextField;
     private javax.swing.JRadioButton numGlobalRadioButton;
     private javax.swing.ButtonGroup numGroup;
     private javax.swing.JLabel numLabel;
     private javax.swing.JRadioButton numLocalRadioButton;
     private javax.swing.JRadioButton numNoneRadioButton;
     private javax.swing.JSeparator numSeparator;
+    private javax.swing.JButton outButton;
+    private javax.swing.JList outCatList;
+    private javax.swing.JScrollPane outCatScrollPane;
     private javax.swing.JLabel presentedLabel;
     private javax.swing.JSeparator presentedSeparator;
     private javax.swing.JTextField presentedTextField;
     private javax.swing.JButton targetBrowseButton;
+    private javax.swing.JFileChooser targetFileChooser;
     private javax.swing.JLabel targetLabel;
     private javax.swing.JSeparator targetSeparator;
     private javax.swing.JTextField targetTextField;
+    private javax.swing.JButton upButton;
     // End of variables declaration//GEN-END:variables
 }

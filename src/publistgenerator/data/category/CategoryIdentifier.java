@@ -21,7 +21,7 @@ public enum CategoryIdentifier {
             case THESIS: return "Theses";
             case UNPUBLISHED: return "Unpublished manuscripts";
             default:
-                throw new InternalError("Unknown category identifier: " + this);
+                throw new AssertionError("Unknown category identifier: " + this);
         }
     }
 }
