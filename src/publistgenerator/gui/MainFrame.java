@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.io.File;
 import java.util.Arrays;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFileChooser;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import publistgenerator.data.settings.HTMLSettings;
@@ -29,14 +30,45 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void populateValues() {
+        // Publications
         if (settings.getPublications() == null) {
             pubTextField.setText("");
+            pubFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         } else {
             pubTextField.setText(settings.getPublications().getPath());
+            pubFileChooser.setCurrentDirectory(settings.getPublications().getParentFile());
+        }
+
+        // All general settings are already done, so populate HTML-specific settings
+        // Header & Footer
+        headerTextField.setText(settings.getHtmlSettings().getHeader().getPath());
+        footerTextField.setText(settings.getHtmlSettings().getFooter().getPath());
+
+        // Point the file choosers to the correct directory
+        if (settings.getHtmlSettings().getHeader() == null) {
+            headerFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+        } else {
+            headerFileChooser.setCurrentDirectory(settings.getHtmlSettings().getHeader().getParentFile());
         }
         
-        // All general settings are already done
-        // TODO: populate HTML-specific settings
+        if (settings.getHtmlSettings().getFooter()== null) {
+            footerFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+        } else {
+            footerFileChooser.setCurrentDirectory(settings.getHtmlSettings().getFooter().getParentFile());
+        }
+
+        // Link to text
+        linkToTextCheckBox.setSelected(settings.getHtmlSettings().linkToTextVersion());
+
+        // Publication links
+        abstractComboBox.setSelectedItem(settings.getHtmlSettings().getIncludeAbstract());
+        bibtexComboBox.setSelectedItem(settings.getHtmlSettings().getIncludeBibtex());
+        pdfComboBox.setSelectedItem(settings.getHtmlSettings().getIncludePDF());
+
+        // Google analytics
+        String user = settings.getHtmlSettings().getGoogleAnalyticsUser();
+        analyticsUserTextField.setText(user);
+        analyticsCheckBox.setSelected(user != null && !user.isEmpty());
     }
 
     /**
@@ -48,6 +80,9 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pubFileChooser = new javax.swing.JFileChooser();
+        headerFileChooser = new javax.swing.JFileChooser();
+        footerFileChooser = new javax.swing.JFileChooser();
         mainSplitPane = new javax.swing.JSplitPane();
         topPanel = new javax.swing.JPanel();
         publicationsPanel = new javax.swing.JPanel();
@@ -165,6 +200,11 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         headerBrowseButton.setText("Browse...");
+        headerBrowseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                headerBrowseButtonActionPerformed(evt);
+            }
+        });
 
         footerTextField.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
@@ -179,6 +219,11 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         footerBrowseButton.setText("Browse...");
+        footerBrowseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                footerBrowseButtonActionPerformed(evt);
+            }
+        });
 
         linkToTextLabel.setText("Link to plain text");
 
@@ -383,6 +428,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         plainCheckBox.setSelected(true);
         plainCheckBox.setText("Generate a plain text publication list");
+        plainCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                plainCheckBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout plainPanelLayout = new javax.swing.GroupLayout(plainPanel);
         plainPanel.setLayout(plainPanelLayout);
@@ -493,21 +543,25 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_saveNQuitButtonActionPerformed
 
     private void pubBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pubBrowseButtonActionPerformed
-        // TODO add your handling code here:
+        int opened = pubFileChooser.showOpenDialog(this);
+
+        if (opened == JFileChooser.APPROVE_OPTION) {
+            pubTextField.setText(pubFileChooser.getSelectedFile().getPath());
+        }
     }//GEN-LAST:event_pubBrowseButtonActionPerformed
 
     private void htmlCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_htmlCheckBoxActionPerformed
         // Update the settings
         settings.setGenerateHTML(htmlCheckBox.isSelected());
-        
+
         // Update the UI
         htmlGeneralSettingsPanel.setEnabled(htmlCheckBox.isSelected());
-        
+
         htmlOnlySettingsPanel.setEnabled(htmlCheckBox.isSelected());
         for (Component c : htmlOnlySettingsPanel.getComponents()) {
             c.setEnabled(htmlCheckBox.isSelected());
         }
-        
+
         analyticsUserTextField.setEnabled(htmlCheckBox.isSelected() && analyticsCheckBox.isSelected());
     }//GEN-LAST:event_htmlCheckBoxActionPerformed
 
@@ -519,13 +573,13 @@ public class MainFrame extends javax.swing.JFrame {
         if (analyticsCheckBox.isSelected()) {
             // Update settings
             settings.getHtmlSettings().setGoogleAnalyticsUser(analyticsUserTextField.getText());
-            
+
             // Update UI
             analyticsUserTextField.setEnabled(true);
         } else {
             // Update settings
             settings.getHtmlSettings().setGoogleAnalyticsUser(null);
-            
+
             // Update UI
             analyticsUserTextField.setEnabled(false);
         }
@@ -543,6 +597,30 @@ public class MainFrame extends javax.swing.JFrame {
         settings.getHtmlSettings().setIncludePDF((HTMLSettings.PublicationType) pdfComboBox.getSelectedItem());
     }//GEN-LAST:event_pdfComboBoxActionPerformed
 
+    private void headerBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_headerBrowseButtonActionPerformed
+        int opened = headerFileChooser.showOpenDialog(this);
+
+        if (opened == JFileChooser.APPROVE_OPTION) {
+            headerTextField.setText(headerFileChooser.getSelectedFile().getPath());
+        }
+    }//GEN-LAST:event_headerBrowseButtonActionPerformed
+
+    private void footerBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_footerBrowseButtonActionPerformed
+        int opened = footerFileChooser.showOpenDialog(this);
+
+        if (opened == JFileChooser.APPROVE_OPTION) {
+            footerTextField.setText(footerFileChooser.getSelectedFile().getPath());
+        }
+    }//GEN-LAST:event_footerBrowseButtonActionPerformed
+
+    private void plainCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plainCheckBoxActionPerformed
+        // Update the settings
+        settings.setGenerateText(plainCheckBox.isSelected());
+
+        // Update the UI
+        plainSettingsPanel.setEnabled(plainCheckBox.isSelected());
+    }//GEN-LAST:event_plainCheckBoxActionPerformed
+
     private void analyticsUserTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
         settings.getHtmlSettings().setGoogleAnalyticsUser(analyticsUserTextField.getText());
@@ -557,7 +635,7 @@ public class MainFrame extends javax.swing.JFrame {
         // Update the settings
         settings.getHtmlSettings().setFooter(new File(footerTextField.getText()));
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -586,9 +664,11 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane consoleScrollPane;
     private javax.swing.JTextArea consoleTextArea;
     private javax.swing.JButton footerBrowseButton;
+    private javax.swing.JFileChooser footerFileChooser;
     private javax.swing.JTextField footerTextField;
     private javax.swing.JButton generateButton;
     private javax.swing.JButton headerBrowseButton;
+    private javax.swing.JFileChooser headerFileChooser;
     private javax.swing.JLabel headerLabel;
     private javax.swing.JSeparator headerSeparator;
     private javax.swing.JTextField headerTextField;
@@ -610,6 +690,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane plainScrollPane;
     private publistgenerator.gui.GeneralSettingsPanel plainSettingsPanel;
     private javax.swing.JButton pubBrowseButton;
+    private javax.swing.JFileChooser pubFileChooser;
     private javax.swing.JLabel pubLabel;
     private javax.swing.JTextField pubTextField;
     private javax.swing.JPanel publicationsPanel;
