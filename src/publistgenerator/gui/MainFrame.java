@@ -11,6 +11,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.data.settings.Settings;
+import publistgenerator.io.settings.SettingsWriter;
 
 /**
  *
@@ -38,22 +39,25 @@ public class MainFrame extends javax.swing.JFrame {
             pubTextField.setText(settings.getPublications().getPath());
             pubFileChooser.setCurrentDirectory(settings.getPublications().getParentFile());
         }
+        
+        htmlCheckBox.setSelected(settings.generateHTML());
+        plainCheckBox.setSelected(settings.generateText());
 
         // All general settings are already done, so populate HTML-specific settings
         // Header & Footer
-        headerTextField.setText(settings.getHtmlSettings().getHeader().getPath());
-        footerTextField.setText(settings.getHtmlSettings().getFooter().getPath());
-
-        // Point the file choosers to the correct directory
         if (settings.getHtmlSettings().getHeader() == null) {
+            headerTextField.setText("");
             headerFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         } else {
+            headerTextField.setText(settings.getHtmlSettings().getHeader().getPath());
             headerFileChooser.setCurrentDirectory(settings.getHtmlSettings().getHeader().getParentFile());
         }
         
         if (settings.getHtmlSettings().getFooter()== null) {
+            footerTextField.setText("");
             footerFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         } else {
+            footerTextField.setText(settings.getHtmlSettings().getFooter().getPath());
             footerFileChooser.setCurrentDirectory(settings.getHtmlSettings().getFooter().getParentFile());
         }
 
@@ -535,11 +539,12 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void saveNQuitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveNQuitButtonActionPerformed
-        // TODO add your handling code here:
+        SettingsWriter.writeSettings(settings);
+        dispose();
     }//GEN-LAST:event_saveNQuitButtonActionPerformed
 
     private void pubBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pubBrowseButtonActionPerformed

@@ -21,8 +21,8 @@ import publistgenerator.data.settings.Settings;
  */
 public class SettingsWriter {
 
-    public static void writeSettings(Settings settings, File outputFile) {
-        try (BufferedWriter out = new BufferedWriter(new FileWriter(outputFile))) {
+    public static void writeSettings(Settings settings) {
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(SettingsReader.DEFAULT_SETTINGS_LOCATION))) {
             // Write header
             out.write("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
             out.newLine();
@@ -75,7 +75,7 @@ public class SettingsWriter {
 
         out.write("    <!-- HTML-specific settings -->");
         out.newLine();
-        
+
         output(out, 4, "linktotextversion", makeString(settings.getHtmlSettings().linkToTextVersion()));
         output(out, 4, "includeabstract", makeString(settings.getHtmlSettings().getIncludeAbstract()));
         output(out, 4, "includebibtex", makeString(settings.getHtmlSettings().getIncludeBibtex()));
@@ -83,7 +83,7 @@ public class SettingsWriter {
         output(out, 4, "header", makeString(settings.getHtmlSettings().getHeader()));
         output(out, 4, "footer", makeString(settings.getHtmlSettings().getFooter()));
         output(out, 4, "googleanalyticsuser", settings.getHtmlSettings().getGoogleAnalyticsUser());
-        
+
         out.write("  </htmlsettings>");
         out.newLine();
         out.newLine();
@@ -123,7 +123,11 @@ public class SettingsWriter {
         out.write("<");
         out.write(tag);
         out.write(">");
-        out.write(content);
+        
+        if (content != null) {
+            out.write(content);
+        }
+        
         out.write("</");
         out.write(tag);
         out.write(">");
@@ -148,7 +152,11 @@ public class SettingsWriter {
         }
 
         out.write(">");
-        out.write(content);
+        
+        if (content != null) {
+            out.write(content);
+        }
+        
         out.write("</");
         out.write(tag);
         out.write(">");
@@ -175,7 +183,7 @@ public class SettingsWriter {
     }
 
     private static String makeString(File f) {
-        return f.getPath();
+        return (f == null ? "" : f.getPath());
     }
 
     private static String makeString(Enum e) {

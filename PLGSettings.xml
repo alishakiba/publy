@@ -2,41 +2,37 @@
 <plgsettings>
   <!-- Relative path to a BibTeX file with the publication list -->
   <publications></publications>
-  
+
   <!-- Settings for plain-text output -->
-  <generateplaintext>true</generateplaintext>
+  <generateplaintext>false</generateplaintext>
   <plaintextsettings>
-    <target>pub.txt</target>
-    <listallauthors>false</listallauthors>
+    <target></target>
+    <listallauthors>true</listallauthors>
     <presentedtext></presentedtext>
     <numbering>NONE</numbering>
     <categories>
-      <category>SUBMITTED</category>
-      <category>JOURNAL</category>
       <category>CONFERENCE</category>
+      <category>JOURNAL</category>
     </categories>
     <categorynotes>
-      <note category="CONFERENCE">These are my conference papers.</note>
+      <note category="CONFERENCE">Co</note>
+      <note category="JOURNAL">Jou</note>
     </categorynotes>
   </plaintextsettings>
-  
+
   <!-- Settings for HTML output -->
-  <generatehtml>true</generatehtml>
+  <generatehtml>false</generatehtml>
   <htmlsettings>
-    <target>pub.html</target>
-    <listallauthors>false</listallauthors>
+    <target></target>
+    <listallauthors>true</listallauthors>
     <presentedtext></presentedtext>
     <numbering>NONE</numbering>
     <categories>
-      <category>SUBMITTED</category>
-      <category>JOURNAL</category>
-      <category>CONFERENCE</category>
     </categories>
     <categorynotes>
-      <note category="CONFERENCE">These are my conference papers.</note>
     </categorynotes>
     <!-- HTML-specific settings -->
-    <linktotextversion>false</linktotextversion>
+    <linktotextversion>true</linktotextversion>
     <includeabstract>ALL</includeabstract>
     <includebibtex>ARXIV</includebibtex>
     <includepdf>ARXIV</includepdf>
@@ -44,4 +40,5 @@
     <footer></footer>
     <googleanalyticsuser></googleanalyticsuser>
   </htmlsettings>
+
 </plgsettings>

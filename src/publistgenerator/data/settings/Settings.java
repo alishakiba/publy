@@ -25,7 +25,9 @@ public class Settings {
      */
     public Settings() {
         publications = null;
+        generateHTML = true;
         htmlSettings = new HTMLSettings();
+        generateText = false;
         plainSettings = new FormatSettings();
     }
 
@@ -66,7 +68,9 @@ public class Settings {
      * remains the same.
      */
     public void resetToDefault() {
+        generateHTML = true;
         htmlSettings = new HTMLSettings();
+        generateText = false;
         plainSettings = new FormatSettings();
     }
 }
