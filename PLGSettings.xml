@@ -11,17 +11,13 @@
     <presentedtext></presentedtext>
     <numbering>NONE</numbering>
     <categories>
-      <category>CONFERENCE</category>
-      <category>JOURNAL</category>
     </categories>
     <categorynotes>
-      <note category="CONFERENCE">Co</note>
-      <note category="JOURNAL">Jou</note>
     </categorynotes>
   </plaintextsettings>
 
   <!-- Settings for HTML output -->
-  <generatehtml>false</generatehtml>
+  <generatehtml>true</generatehtml>
   <htmlsettings>
     <target></target>
     <listallauthors>true</listallauthors>

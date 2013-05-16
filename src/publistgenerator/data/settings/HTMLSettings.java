@@ -35,7 +35,7 @@ public class HTMLSettings extends FormatSettings {
         }
     }
     
-    private boolean linkToTextVersion = true;
+    private boolean linkToTextVersion = false;
     private PublicationType includeAbstract = PublicationType.ALL;
     private PublicationType includeBibtex = PublicationType.ARXIV; // ALL should not be an option here.
     private PublicationType includePDF = PublicationType.ARXIV;
