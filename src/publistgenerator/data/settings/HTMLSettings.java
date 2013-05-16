@@ -20,15 +20,15 @@ public class HTMLSettings extends FormatSettings {
         public String toString() {
             switch (this) {
                 case NONE:
-                    return "None";
+                    return "No papers";
                 case PUBLISHED:
                     return "Published papers";
                 case ACCEPTED:
-                    return "Accepted manuscripts";
+                    return "Accepted papers";
                 case ARXIV:
-                    return "Accepted or on the arXiv";
+                    return "Accepted or arXiv papers";
                 case ALL:
-                    return "All";
+                    return "All papers";
                 default:
                     throw new InternalError("Unrecognized PublicationType: " + this);
             }

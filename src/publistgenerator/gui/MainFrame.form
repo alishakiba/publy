@@ -330,9 +330,9 @@
                             <Component class="javax.swing.JSeparator" name="headerSeparator">
                             </Component>
                             <Component class="javax.swing.JTextField" name="headerTextField">
-                              <Properties>
-                                <Property name="text" type="java.lang.String" value="jTextField1"/>
-                              </Properties>
+                              <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="headerTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        headerTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        headerTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
+                              </AuxValues>
                             </Component>
                             <Component class="javax.swing.JButton" name="headerBrowseButton">
                               <Properties>
@@ -340,9 +340,9 @@
                               </Properties>
                             </Component>
                             <Component class="javax.swing.JTextField" name="footerTextField">
-                              <Properties>
-                                <Property name="text" type="java.lang.String" value="jTextField1"/>
-                              </Properties>
+                              <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="footerTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        footerTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        footerTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
+                              </AuxValues>
                             </Component>
                             <Component class="javax.swing.JButton" name="footerBrowseButton">
                               <Properties>
@@ -360,6 +360,9 @@
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Include a link to the plaintext publication list"/>
                               </Properties>
+                              <Events>
+                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="linkToTextCheckBoxActionPerformed"/>
+                              </Events>
                             </Component>
                             <Component class="javax.swing.JLabel" name="linksLabel">
                               <Properties>
@@ -375,15 +378,13 @@
                             </Component>
                             <Component class="javax.swing.JComboBox" name="abstractComboBox">
                               <Properties>
-                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                                  <StringArray count="4">
-                                    <StringItem index="0" value="Item 1"/>
-                                    <StringItem index="1" value="Item 2"/>
-                                    <StringItem index="2" value="Item 3"/>
-                                    <StringItem index="3" value="Item 4"/>
-                                  </StringArray>
+                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                  <Connection code="new DefaultComboBoxModel(HTMLSettings.PublicationType.values())" type="code"/>
                                 </Property>
                               </Properties>
+                              <Events>
+                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="abstractComboBoxActionPerformed"/>
+                              </Events>
                             </Component>
                             <Component class="javax.swing.JLabel" name="bibtexLabel">
                               <Properties>
@@ -397,27 +398,23 @@
                             </Component>
                             <Component class="javax.swing.JComboBox" name="bibtexComboBox">
                               <Properties>
-                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                                  <StringArray count="4">
-                                    <StringItem index="0" value="Item 1"/>
-                                    <StringItem index="1" value="Item 2"/>
-                                    <StringItem index="2" value="Item 3"/>
-                                    <StringItem index="3" value="Item 4"/>
-                                  </StringArray>
+                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                  <Connection code="new DefaultComboBoxModel(Arrays.copyOfRange(HTMLSettings.PublicationType.values(), 0, 4))" type="code"/>
                                 </Property>
                               </Properties>
+                              <Events>
+                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bibtexComboBoxActionPerformed"/>
+                              </Events>
                             </Component>
                             <Component class="javax.swing.JComboBox" name="pdfComboBox">
                               <Properties>
-                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                                  <StringArray count="4">
-                                    <StringItem index="0" value="Item 1"/>
-                                    <StringItem index="1" value="Item 2"/>
-                                    <StringItem index="2" value="Item 3"/>
-                                    <StringItem index="3" value="Item 4"/>
-                                  </StringArray>
+                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                  <Connection code="new DefaultComboBoxModel(HTMLSettings.PublicationType.values())" type="code"/>
                                 </Property>
                               </Properties>
+                              <Events>
+                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pdfComboBoxActionPerformed"/>
+                              </Events>
                             </Component>
                             <Component class="javax.swing.JLabel" name="analyticsLabel">
                               <Properties>
@@ -430,6 +427,9 @@
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Include analytics code"/>
                               </Properties>
+                              <Events>
+                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analyticsCheckBoxActionPerformed"/>
+                              </Events>
                             </Component>
                             <Component class="javax.swing.JLabel" name="analyticsUserLabel">
                               <Properties>
@@ -440,6 +440,9 @@
                               <Properties>
                                 <Property name="enabled" type="boolean" value="false"/>
                               </Properties>
+                              <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="analyticsUserTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        analyticsUserTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        analyticsUserTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
+                              </AuxValues>
                             </Component>
                           </SubComponents>
                         </Container>

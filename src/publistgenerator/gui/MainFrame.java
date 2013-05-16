@@ -3,6 +3,12 @@
 package publistgenerator.gui;
 
 import java.awt.Component;
+import java.io.File;
+import java.util.Arrays;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.data.settings.Settings;
 
 /**
@@ -28,6 +34,9 @@ public class MainFrame extends javax.swing.JFrame {
         } else {
             pubTextField.setText(settings.getPublications().getPath());
         }
+        
+        // All general settings are already done
+        // TODO: populate HTML-specific settings
     }
 
     /**
@@ -143,38 +152,94 @@ public class MainFrame extends javax.swing.JFrame {
 
         headerLabel.setText("Header & Footer");
 
-        headerTextField.setText("jTextField1");
+        headerTextField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                headerTextFieldTextChanged(e);
+            }
+            public void removeUpdate(DocumentEvent e) {
+                headerTextFieldTextChanged(e);
+            }
+            public void changedUpdate(DocumentEvent e) {
+                //Plain text components do not fire these events
+            }
+        });
 
         headerBrowseButton.setText("Browse...");
 
-        footerTextField.setText("jTextField1");
+        footerTextField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                footerTextFieldTextChanged(e);
+            }
+            public void removeUpdate(DocumentEvent e) {
+                footerTextFieldTextChanged(e);
+            }
+            public void changedUpdate(DocumentEvent e) {
+                //Plain text components do not fire these events
+            }
+        });
 
         footerBrowseButton.setText("Browse...");
 
         linkToTextLabel.setText("Link to plain text");
 
         linkToTextCheckBox.setText("Include a link to the plaintext publication list");
+        linkToTextCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                linkToTextCheckBoxActionPerformed(evt);
+            }
+        });
 
         linksLabel.setText("Per publication links");
 
         abstractLabel.setText("Include the abstract for:");
 
-        abstractComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        abstractComboBox.setModel(new DefaultComboBoxModel(HTMLSettings.PublicationType.values()));
+        abstractComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abstractComboBoxActionPerformed(evt);
+            }
+        });
 
         bibtexLabel.setText("Include the BibTeX for:");
 
         pdfLabel.setText("Include the PDF for:");
 
-        bibtexComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        bibtexComboBox.setModel(new DefaultComboBoxModel(Arrays.copyOfRange(HTMLSettings.PublicationType.values(), 0, 4)));
+        bibtexComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bibtexComboBoxActionPerformed(evt);
+            }
+        });
 
-        pdfComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        pdfComboBox.setModel(new DefaultComboBoxModel(HTMLSettings.PublicationType.values()));
+        pdfComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pdfComboBoxActionPerformed(evt);
+            }
+        });
 
         analyticsLabel.setText("Google analytics");
 
         analyticsCheckBox.setText("Include analytics code");
+        analyticsCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                analyticsCheckBoxActionPerformed(evt);
+            }
+        });
 
         analyticsUserLabel.setText("Account identifier:");
 
+        analyticsUserTextField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                analyticsUserTextFieldTextChanged(e);
+            }
+            public void removeUpdate(DocumentEvent e) {
+                analyticsUserTextFieldTextChanged(e);
+            }
+            public void changedUpdate(DocumentEvent e) {
+                //Plain text components do not fire these events
+            }
+        });
         analyticsUserTextField.setEnabled(false);
 
         javax.swing.GroupLayout htmlOnlySettingsPanelLayout = new javax.swing.GroupLayout(htmlOnlySettingsPanel);
@@ -446,6 +511,53 @@ public class MainFrame extends javax.swing.JFrame {
         analyticsUserTextField.setEnabled(htmlCheckBox.isSelected() && analyticsCheckBox.isSelected());
     }//GEN-LAST:event_htmlCheckBoxActionPerformed
 
+    private void linkToTextCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkToTextCheckBoxActionPerformed
+        settings.getHtmlSettings().setLinkToTextVersion(linkToTextCheckBox.isSelected());
+    }//GEN-LAST:event_linkToTextCheckBoxActionPerformed
+
+    private void analyticsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyticsCheckBoxActionPerformed
+        if (analyticsCheckBox.isSelected()) {
+            // Update settings
+            settings.getHtmlSettings().setGoogleAnalyticsUser(analyticsUserTextField.getText());
+            
+            // Update UI
+            analyticsUserTextField.setEnabled(true);
+        } else {
+            // Update settings
+            settings.getHtmlSettings().setGoogleAnalyticsUser(null);
+            
+            // Update UI
+            analyticsUserTextField.setEnabled(false);
+        }
+    }//GEN-LAST:event_analyticsCheckBoxActionPerformed
+
+    private void abstractComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abstractComboBoxActionPerformed
+        settings.getHtmlSettings().setIncludeAbstract((HTMLSettings.PublicationType) abstractComboBox.getSelectedItem());
+    }//GEN-LAST:event_abstractComboBoxActionPerformed
+
+    private void bibtexComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bibtexComboBoxActionPerformed
+        settings.getHtmlSettings().setIncludeBibtex((HTMLSettings.PublicationType) bibtexComboBox.getSelectedItem());
+    }//GEN-LAST:event_bibtexComboBoxActionPerformed
+
+    private void pdfComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pdfComboBoxActionPerformed
+        settings.getHtmlSettings().setIncludePDF((HTMLSettings.PublicationType) pdfComboBox.getSelectedItem());
+    }//GEN-LAST:event_pdfComboBoxActionPerformed
+
+    private void analyticsUserTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
+        // Update the settings
+        settings.getHtmlSettings().setGoogleAnalyticsUser(analyticsUserTextField.getText());
+    }
+
+    private void headerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
+        // Update the settings
+        settings.getHtmlSettings().setHeader(new File(headerTextField.getText()));
+    }
+
+    private void footerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
+        // Update the settings
+        settings.getHtmlSettings().setFooter(new File(footerTextField.getText()));
+    }
+    
     /**
      * @param args the command line arguments
      */
