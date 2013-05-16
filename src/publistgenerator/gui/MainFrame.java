@@ -42,7 +42,10 @@ public class MainFrame extends javax.swing.JFrame {
         }
         
         htmlCheckBox.setSelected(settings.generateHTML());
+        setHtmlEnabled(settings.generateHTML());
+        
         plainCheckBox.setSelected(settings.generateText());
+        plainSettingsPanel.setEnabled(settings.generateText());
 
         // All general settings are already done, so populate HTML-specific settings
         // Header & Footer
@@ -561,16 +564,20 @@ public class MainFrame extends javax.swing.JFrame {
         settings.setGenerateHTML(htmlCheckBox.isSelected());
 
         // Update the UI
-        htmlGeneralSettingsPanel.setEnabled(htmlCheckBox.isSelected());
-
-        htmlOnlySettingsPanel.setEnabled(htmlCheckBox.isSelected());
-        for (Component c : htmlOnlySettingsPanel.getComponents()) {
-            c.setEnabled(htmlCheckBox.isSelected());
-        }
-
-        analyticsUserTextField.setEnabled(htmlCheckBox.isSelected() && analyticsCheckBox.isSelected());
+        setHtmlEnabled(htmlCheckBox.isSelected());
     }//GEN-LAST:event_htmlCheckBoxActionPerformed
 
+    private void setHtmlEnabled(boolean enabled) {
+        htmlGeneralSettingsPanel.setEnabled(enabled);
+
+        htmlOnlySettingsPanel.setEnabled(enabled);
+        for (Component c : htmlOnlySettingsPanel.getComponents()) {
+            c.setEnabled(enabled);
+        }
+
+        analyticsUserTextField.setEnabled(enabled && analyticsCheckBox.isSelected());
+    }
+    
     private void linkToTextCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkToTextCheckBoxActionPerformed
         settings.getHtmlSettings().setLinkToTextVersion(linkToTextCheckBox.isSelected());
     }//GEN-LAST:event_linkToTextCheckBoxActionPerformed
