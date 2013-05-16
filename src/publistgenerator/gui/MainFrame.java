@@ -47,31 +47,31 @@ public class MainFrame extends javax.swing.JFrame {
         settingsTabbedPane = new javax.swing.JTabbedPane();
         htmlScrollPane = new javax.swing.JScrollPane();
         htmlPanel = new javax.swing.JPanel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        generalSettingsPanel1 = new publistgenerator.gui.GeneralSettingsPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jLabel3 = new javax.swing.JLabel();
-        jSeparator3 = new javax.swing.JSeparator();
-        jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
-        jComboBox3 = new javax.swing.JComboBox();
-        jLabel7 = new javax.swing.JLabel();
-        jSeparator4 = new javax.swing.JSeparator();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jLabel8 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        htmlCheckBox = new javax.swing.JCheckBox();
+        htmlGeneralSettingsPanel = new publistgenerator.gui.GeneralSettingsPanel();
+        htmlOnlySettingsPanel = new javax.swing.JPanel();
+        headerLabel = new javax.swing.JLabel();
+        headerSeparator = new javax.swing.JSeparator();
+        headerTextField = new javax.swing.JTextField();
+        headerBrowseButton = new javax.swing.JButton();
+        footerTextField = new javax.swing.JTextField();
+        footerBrowseButton = new javax.swing.JButton();
+        linkToTextLabel = new javax.swing.JLabel();
+        linkToTextSeparator = new javax.swing.JSeparator();
+        linkToTextCheckBox = new javax.swing.JCheckBox();
+        linksLabel = new javax.swing.JLabel();
+        linksSeparator = new javax.swing.JSeparator();
+        abstractLabel = new javax.swing.JLabel();
+        abstractComboBox = new javax.swing.JComboBox();
+        bibtexLabel = new javax.swing.JLabel();
+        pdfLabel = new javax.swing.JLabel();
+        bibtexComboBox = new javax.swing.JComboBox();
+        pdfComboBox = new javax.swing.JComboBox();
+        analyticsLabel = new javax.swing.JLabel();
+        analyticsSeparator = new javax.swing.JSeparator();
+        analyticsCheckBox = new javax.swing.JCheckBox();
+        analyticsUserLabel = new javax.swing.JLabel();
+        analyticsUserTextField = new javax.swing.JTextField();
         plainScrollPane = new javax.swing.JScrollPane();
         plainPanel = new javax.swing.JPanel();
         plainCheckBox = new javax.swing.JCheckBox();
@@ -130,151 +130,151 @@ public class MainFrame extends javax.swing.JFrame {
 
         topPanel.add(publicationsPanel, java.awt.BorderLayout.NORTH);
 
-        jCheckBox1.setSelected(true);
-        jCheckBox1.setText("Generate an HTML publication list");
+        htmlCheckBox.setSelected(true);
+        htmlCheckBox.setText("Generate an HTML publication list");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("HTML-Only Settings"));
+        htmlOnlySettingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("HTML-Only Settings"));
 
-        jLabel1.setText("Header & Footer");
+        headerLabel.setText("Header & Footer");
 
-        jTextField1.setText("jTextField1");
+        headerTextField.setText("jTextField1");
 
-        jButton1.setText("Browse...");
+        headerBrowseButton.setText("Browse...");
 
-        jTextField2.setText("jTextField1");
+        footerTextField.setText("jTextField1");
 
-        jButton2.setText("Browse...");
+        footerBrowseButton.setText("Browse...");
 
-        jLabel2.setText("Link to plain text");
+        linkToTextLabel.setText("Link to plain text");
 
-        jCheckBox2.setText("Include a link to the plaintext publication list");
+        linkToTextCheckBox.setText("Include a link to the plaintext publication list");
 
-        jLabel3.setText("Per publication links");
+        linksLabel.setText("Per publication links");
 
-        jLabel4.setText("Include the abstract for:");
+        abstractLabel.setText("Include the abstract for:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        abstractComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jLabel5.setText("Include the BibTeX for:");
+        bibtexLabel.setText("Include the BibTeX for:");
 
-        jLabel6.setText("Include the PDF for:");
+        pdfLabel.setText("Include the PDF for:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        bibtexComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        pdfComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jLabel7.setText("Google analytics");
+        analyticsLabel.setText("Google analytics");
 
-        jCheckBox3.setText("Include analytics code");
+        analyticsCheckBox.setText("Include analytics code");
 
-        jLabel8.setText("Account identifier:");
+        analyticsUserLabel.setText("Account identifier:");
 
-        jTextField3.setEnabled(false);
+        analyticsUserTextField.setEnabled(false);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout htmlOnlySettingsPanelLayout = new javax.swing.GroupLayout(htmlOnlySettingsPanel);
+        htmlOnlySettingsPanel.setLayout(htmlOnlySettingsPanelLayout);
+        htmlOnlySettingsPanelLayout.setHorizontalGroup(
+            htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
+                        .addComponent(headerLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(headerSeparator))
+                    .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
+                        .addComponent(linkToTextLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator2))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addComponent(linkToTextSeparator))
+                    .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
+                        .addComponent(linksLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator3))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
+                        .addComponent(linksSeparator))
+                    .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
+                        .addComponent(analyticsLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator4))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(analyticsSeparator))
+                    .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField2)
+                        .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, htmlOnlySettingsPanelLayout.createSequentialGroup()
+                                .addComponent(footerTextField)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField1)
+                                .addComponent(footerBrowseButton))
+                            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
+                                .addComponent(headerTextField)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
+                                .addComponent(headerBrowseButton))
+                            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
+                                .addComponent(bibtexLabel)
                                 .addGap(18, 18, 18)
-                                .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
+                                .addComponent(bibtexComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
+                                .addComponent(abstractLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
+                                .addComponent(abstractComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
+                                .addComponent(pdfLabel)
                                 .addGap(31, 31, 31)
-                                .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBox2)
-                                    .addComponent(jCheckBox3))
+                                .addComponent(pdfComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
+                                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(linkToTextCheckBox)
+                                    .addComponent(analyticsCheckBox))
                                 .addGap(0, 93, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
+                            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
+                                .addComponent(analyticsUserLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField3)))))
+                                .addComponent(analyticsUserTextField)))))
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        htmlOnlySettingsPanelLayout.setVerticalGroup(
+            htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(headerSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(headerLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(headerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(headerBrowseButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(footerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(footerBrowseButton))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(linkToTextLabel)
+                    .addComponent(linkToTextSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jCheckBox2)
+                .addComponent(linkToTextCheckBox)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(linksLabel)
+                    .addComponent(linksSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(abstractLabel)
+                    .addComponent(abstractComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bibtexLabel)
+                    .addComponent(bibtexComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(pdfLabel)
+                    .addComponent(pdfComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel7)
-                    .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(analyticsLabel)
+                    .addComponent(analyticsSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox3)
+                .addComponent(analyticsCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(analyticsUserLabel)
+                    .addComponent(analyticsUserTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -286,23 +286,23 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(htmlPanelLayout.createSequentialGroup()
-                        .addComponent(jCheckBox1)
+                        .addComponent(htmlCheckBox)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(htmlPanelLayout.createSequentialGroup()
-                        .addComponent(generalSettingsPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(htmlGeneralSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(htmlOnlySettingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         htmlPanelLayout.setVerticalGroup(
             htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(htmlPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jCheckBox1)
+                .addComponent(htmlCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(generalSettingsPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(htmlGeneralSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(htmlOnlySettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
@@ -438,40 +438,40 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox abstractComboBox;
+    private javax.swing.JLabel abstractLabel;
+    private javax.swing.JCheckBox analyticsCheckBox;
+    private javax.swing.JLabel analyticsLabel;
+    private javax.swing.JSeparator analyticsSeparator;
+    private javax.swing.JLabel analyticsUserLabel;
+    private javax.swing.JTextField analyticsUserTextField;
+    private javax.swing.JComboBox bibtexComboBox;
+    private javax.swing.JLabel bibtexLabel;
     private javax.swing.JPanel bottomPanel;
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JScrollPane consoleScrollPane;
     private javax.swing.JTextArea consoleTextArea;
-    private publistgenerator.gui.GeneralSettingsPanel generalSettingsPanel1;
+    private javax.swing.JButton footerBrowseButton;
+    private javax.swing.JTextField footerTextField;
     private javax.swing.JButton generateButton;
+    private javax.swing.JButton headerBrowseButton;
+    private javax.swing.JLabel headerLabel;
+    private javax.swing.JSeparator headerSeparator;
+    private javax.swing.JTextField headerTextField;
+    private javax.swing.JCheckBox htmlCheckBox;
+    private publistgenerator.gui.GeneralSettingsPanel htmlGeneralSettingsPanel;
+    private javax.swing.JPanel htmlOnlySettingsPanel;
     private javax.swing.JPanel htmlPanel;
     private javax.swing.JScrollPane htmlScrollPane;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
-    private javax.swing.JComboBox jComboBox3;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JCheckBox linkToTextCheckBox;
+    private javax.swing.JLabel linkToTextLabel;
+    private javax.swing.JSeparator linkToTextSeparator;
+    private javax.swing.JLabel linksLabel;
+    private javax.swing.JSeparator linksSeparator;
     private javax.swing.JSplitPane mainSplitPane;
+    private javax.swing.JComboBox pdfComboBox;
+    private javax.swing.JLabel pdfLabel;
     private javax.swing.JCheckBox plainCheckBox;
     private javax.swing.JPanel plainPanel;
     private javax.swing.JScrollPane plainScrollPane;

@@ -134,13 +134,13 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
-                                          <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+                                          <Component id="htmlCheckBox" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       </Group>
                                       <Group type="102" attributes="0">
-                                          <Component id="generalSettingsPanel1" min="-2" max="-2" attributes="0"/>
+                                          <Component id="htmlGeneralSettingsPanel" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Component id="jPanel1" max="32767" attributes="0"/>
+                                          <Component id="htmlOnlySettingsPanel" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -151,11 +151,11 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="htmlCheckBox" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="generalSettingsPanel1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="htmlGeneralSettingsPanel" min="-2" max="-2" attributes="0"/>
+                                      <Component id="htmlOnlySettingsPanel" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace pref="26" max="32767" attributes="0"/>
                               </Group>
@@ -163,15 +163,15 @@
                         </DimensionLayout>
                       </Layout>
                       <SubComponents>
-                        <Component class="javax.swing.JCheckBox" name="jCheckBox1">
+                        <Component class="javax.swing.JCheckBox" name="htmlCheckBox">
                           <Properties>
                             <Property name="selected" type="boolean" value="true"/>
                             <Property name="text" type="java.lang.String" value="Generate an HTML publication list"/>
                           </Properties>
                         </Component>
-                        <Component class="publistgenerator.gui.GeneralSettingsPanel" name="generalSettingsPanel1">
+                        <Component class="publistgenerator.gui.GeneralSettingsPanel" name="htmlGeneralSettingsPanel">
                         </Component>
-                        <Container class="javax.swing.JPanel" name="jPanel1">
+                        <Container class="javax.swing.JPanel" name="htmlOnlySettingsPanel">
                           <Properties>
                             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -187,64 +187,64 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" attributes="0">
-                                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="headerLabel" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jSeparator1" max="32767" attributes="0"/>
+                                              <Component id="headerSeparator" max="32767" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                                              <Component id="linkToTextLabel" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jSeparator2" max="32767" attributes="0"/>
+                                              <Component id="linkToTextSeparator" max="32767" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="linksLabel" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jSeparator3" max="32767" attributes="0"/>
+                                              <Component id="linksSeparator" max="32767" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                                              <Component id="analyticsLabel" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jSeparator4" max="32767" attributes="0"/>
+                                              <Component id="analyticsSeparator" max="32767" attributes="0"/>
                                           </Group>
                                           <Group type="102" attributes="0">
                                               <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="1" attributes="0">
-                                                      <Component id="jTextField2" max="32767" attributes="0"/>
+                                                      <Component id="footerTextField" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="footerBrowseButton" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                                   <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jTextField1" max="32767" attributes="0"/>
+                                                      <Component id="headerTextField" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="headerBrowseButton" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                                   <Group type="102" attributes="0">
-                                                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="bibtexLabel" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                      <Component id="jComboBox2" max="32767" attributes="0"/>
+                                                      <Component id="bibtexComboBox" max="32767" attributes="0"/>
                                                   </Group>
                                                   <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="abstractLabel" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                      <Component id="jComboBox1" max="32767" attributes="0"/>
+                                                      <Component id="abstractComboBox" max="32767" attributes="0"/>
                                                   </Group>
                                                   <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="pdfLabel" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                                                      <Component id="jComboBox3" max="32767" attributes="0"/>
+                                                      <Component id="pdfComboBox" max="32767" attributes="0"/>
                                                   </Group>
                                                   <Group type="102" attributes="0">
                                                       <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Component id="jCheckBox2" min="-2" max="-2" attributes="0"/>
-                                                          <Component id="jCheckBox3" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="linkToTextCheckBox" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="analyticsCheckBox" min="-2" max="-2" attributes="0"/>
                                                       </Group>
                                                       <EmptySpace min="0" pref="93" max="32767" attributes="0"/>
                                                   </Group>
                                                   <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="analyticsUserLabel" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                      <Component id="jTextField3" max="32767" attributes="0"/>
+                                                      <Component id="analyticsUserTextField" max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
@@ -258,57 +258,57 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="1" attributes="0">
-                                          <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
-                                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                                          <Component id="headerSeparator" min="-2" pref="10" max="-2" attributes="0"/>
+                                          <Component id="headerLabel" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="headerTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="headerBrowseButton" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="footerTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="footerBrowseButton" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="1" attributes="0">
-                                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
+                                          <Component id="linkToTextLabel" min="-2" max="-2" attributes="0"/>
+                                          <Component id="linkToTextSeparator" min="-2" pref="10" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="jCheckBox2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="linkToTextCheckBox" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="1" attributes="0">
-                                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jSeparator3" min="-2" pref="10" max="-2" attributes="0"/>
+                                          <Component id="linksLabel" min="-2" max="-2" attributes="0"/>
+                                          <Component id="linksSeparator" min="-2" pref="10" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="abstractLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="abstractComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jComboBox2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="bibtexLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="bibtexComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jComboBox3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="pdfLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="pdfComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="1" attributes="0">
-                                          <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jSeparator4" min="-2" pref="10" max="-2" attributes="0"/>
+                                          <Component id="analyticsLabel" min="-2" max="-2" attributes="0"/>
+                                          <Component id="analyticsSeparator" min="-2" pref="10" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jCheckBox3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="analyticsCheckBox" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jTextField3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="analyticsUserLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="analyticsUserTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="32767" attributes="0"/>
                                   </Group>
@@ -316,58 +316,58 @@
                             </DimensionLayout>
                           </Layout>
                           <SubComponents>
-                            <Component class="javax.swing.JLabel" name="jLabel1">
+                            <Component class="javax.swing.JLabel" name="headerLabel">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Header &amp; Footer"/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JSeparator" name="jSeparator1">
+                            <Component class="javax.swing.JSeparator" name="headerSeparator">
                             </Component>
-                            <Component class="javax.swing.JTextField" name="jTextField1">
+                            <Component class="javax.swing.JTextField" name="headerTextField">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="jTextField1"/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JButton" name="jButton1">
+                            <Component class="javax.swing.JButton" name="headerBrowseButton">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Browse..."/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JTextField" name="jTextField2">
+                            <Component class="javax.swing.JTextField" name="footerTextField">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="jTextField1"/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JButton" name="jButton2">
+                            <Component class="javax.swing.JButton" name="footerBrowseButton">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Browse..."/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel2">
+                            <Component class="javax.swing.JLabel" name="linkToTextLabel">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Link to plain text"/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JSeparator" name="jSeparator2">
+                            <Component class="javax.swing.JSeparator" name="linkToTextSeparator">
                             </Component>
-                            <Component class="javax.swing.JCheckBox" name="jCheckBox2">
+                            <Component class="javax.swing.JCheckBox" name="linkToTextCheckBox">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Include a link to the plaintext publication list"/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel3">
+                            <Component class="javax.swing.JLabel" name="linksLabel">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Per publication links"/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JSeparator" name="jSeparator3">
+                            <Component class="javax.swing.JSeparator" name="linksSeparator">
                             </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel4">
+                            <Component class="javax.swing.JLabel" name="abstractLabel">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Include the abstract for:"/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JComboBox" name="jComboBox1">
+                            <Component class="javax.swing.JComboBox" name="abstractComboBox">
                               <Properties>
                                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                                   <StringArray count="4">
@@ -379,17 +379,17 @@
                                 </Property>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel5">
+                            <Component class="javax.swing.JLabel" name="bibtexLabel">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Include the BibTeX for:"/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel6">
+                            <Component class="javax.swing.JLabel" name="pdfLabel">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Include the PDF for:"/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JComboBox" name="jComboBox2">
+                            <Component class="javax.swing.JComboBox" name="bibtexComboBox">
                               <Properties>
                                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                                   <StringArray count="4">
@@ -401,7 +401,7 @@
                                 </Property>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JComboBox" name="jComboBox3">
+                            <Component class="javax.swing.JComboBox" name="pdfComboBox">
                               <Properties>
                                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                                   <StringArray count="4">
@@ -413,24 +413,24 @@
                                 </Property>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel7">
+                            <Component class="javax.swing.JLabel" name="analyticsLabel">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Google analytics"/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JSeparator" name="jSeparator4">
+                            <Component class="javax.swing.JSeparator" name="analyticsSeparator">
                             </Component>
-                            <Component class="javax.swing.JCheckBox" name="jCheckBox3">
+                            <Component class="javax.swing.JCheckBox" name="analyticsCheckBox">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Include analytics code"/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel8">
+                            <Component class="javax.swing.JLabel" name="analyticsUserLabel">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Account identifier:"/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JTextField" name="jTextField3">
+                            <Component class="javax.swing.JTextField" name="analyticsUserTextField">
                               <Properties>
                                 <Property name="enabled" type="boolean" value="false"/>
                               </Properties>
