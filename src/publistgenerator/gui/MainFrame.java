@@ -2,6 +2,7 @@
  */
 package publistgenerator.gui;
 
+import java.awt.Component;
 import publistgenerator.data.settings.Settings;
 
 /**
@@ -48,7 +49,7 @@ public class MainFrame extends javax.swing.JFrame {
         htmlScrollPane = new javax.swing.JScrollPane();
         htmlPanel = new javax.swing.JPanel();
         htmlCheckBox = new javax.swing.JCheckBox();
-        htmlGeneralSettingsPanel = new publistgenerator.gui.GeneralSettingsPanel();
+        htmlGeneralSettingsPanel = new publistgenerator.gui.GeneralSettingsPanel(settings.getHtmlSettings());
         htmlOnlySettingsPanel = new javax.swing.JPanel();
         headerLabel = new javax.swing.JLabel();
         headerSeparator = new javax.swing.JSeparator();
@@ -132,6 +133,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         htmlCheckBox.setSelected(true);
         htmlCheckBox.setText("Generate an HTML publication list");
+        htmlCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                htmlCheckBoxActionPerformed(evt);
+            }
+        });
 
         htmlOnlySettingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("HTML-Only Settings"));
 
@@ -424,6 +430,21 @@ public class MainFrame extends javax.swing.JFrame {
     private void pubBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pubBrowseButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_pubBrowseButtonActionPerformed
+
+    private void htmlCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_htmlCheckBoxActionPerformed
+        // Update the settings
+        settings.setGenerateHTML(htmlCheckBox.isSelected());
+        
+        // Update the UI
+        htmlGeneralSettingsPanel.setEnabled(htmlCheckBox.isSelected());
+        
+        htmlOnlySettingsPanel.setEnabled(htmlCheckBox.isSelected());
+        for (Component c : htmlOnlySettingsPanel.getComponents()) {
+            c.setEnabled(htmlCheckBox.isSelected());
+        }
+        
+        analyticsUserTextField.setEnabled(htmlCheckBox.isSelected() && analyticsCheckBox.isSelected());
+    }//GEN-LAST:event_htmlCheckBoxActionPerformed
 
     /**
      * @param args the command line arguments

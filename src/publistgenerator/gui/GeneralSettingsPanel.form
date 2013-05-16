@@ -382,6 +382,7 @@
     <Component class="javax.swing.JButton" name="inButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&amp;larr;&lt;/html&gt;"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inButtonActionPerformed"/>
@@ -390,6 +391,7 @@
     <Component class="javax.swing.JButton" name="outButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&amp;rarr;&lt;/html&gt;"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="outButtonActionPerformed"/>
@@ -400,6 +402,7 @@
     <Component class="javax.swing.JButton" name="upButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&amp;uarr;&lt;/html&gt;"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="upButtonActionPerformed"/>
@@ -408,6 +411,7 @@
     <Component class="javax.swing.JButton" name="downButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&amp;darr;&lt;/html&gt;"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="downButtonActionPerformed"/>

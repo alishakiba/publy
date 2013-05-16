@@ -168,8 +168,14 @@
                             <Property name="selected" type="boolean" value="true"/>
                             <Property name="text" type="java.lang.String" value="Generate an HTML publication list"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="htmlCheckBoxActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="publistgenerator.gui.GeneralSettingsPanel" name="htmlGeneralSettingsPanel">
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new publistgenerator.gui.GeneralSettingsPanel(settings.getHtmlSettings())"/>
+                          </AuxValues>
                         </Component>
                         <Container class="javax.swing.JPanel" name="htmlOnlySettingsPanel">
                           <Properties>

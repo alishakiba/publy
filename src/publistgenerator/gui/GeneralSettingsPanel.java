@@ -2,6 +2,7 @@
  */
 package publistgenerator.gui;
 
+import java.awt.Component;
 import java.io.File;
 import java.util.EnumSet;
 import java.util.Set;
@@ -29,7 +30,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     public GeneralSettingsPanel() {
         initComponents();
     }
-    
+
     /**
      * Creates new form GeneralSettingsPanel
      */
@@ -99,6 +100,44 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         inCatList.setModel(inListModel);
         outCatList.setModel(outListModel);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+
+        // Dis/enable all components
+        for (Component c : getComponents()) {
+            c.setEnabled(enabled);
+        }
+
+        // Handle components that are not directly on the main panel
+        inCatList.setEnabled(enabled);
+        outCatList.setEnabled(enabled);
+
+        noteLabel.setEnabled(enabled);
+        noteTextField.setEnabled(enabled);
+
+        // Handle the buttons correctly
+        if (enabled) {
+            if (inCatList.getSelectedIndex() > -1) {
+                inButton.setEnabled(false);
+                outButton.setEnabled(true);
+                upButton.setEnabled(inCatList.getSelectedIndex() > 0);
+                downButton.setEnabled(inCatList.getSelectedIndex() < inListModel.getSize() - 1);
+            } else if (outCatList.getSelectedIndex() > -1) {
+                inButton.setEnabled(true);
+                outButton.setEnabled(false);
+                upButton.setEnabled(false);
+                downButton.setEnabled(false);
+            } else {
+                // No selection
+                inButton.setEnabled(false);
+                outButton.setEnabled(false);
+                upButton.setEnabled(false);
+                downButton.setEnabled(false);
+            }
+        }
     }
 
     /**
@@ -264,6 +303,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         inCatScrollPane.setViewportView(inCatList);
 
         inButton.setText("<html>&larr;</html>");
+        inButton.setEnabled(false);
         inButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inButtonActionPerformed(evt);
@@ -271,6 +311,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         });
 
         outButton.setText("<html>&rarr;</html>");
+        outButton.setEnabled(false);
         outButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 outButtonActionPerformed(evt);
@@ -278,6 +319,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         });
 
         upButton.setText("<html>&uarr;</html>");
+        upButton.setEnabled(false);
         upButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 upButtonActionPerformed(evt);
@@ -285,6 +327,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         });
 
         downButton.setText("<html>&darr;</html>");
+        downButton.setEnabled(false);
         downButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 downButtonActionPerformed(evt);
@@ -451,15 +494,17 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         // Update the settings
         settings.setTarget(new File(targetTextField.getText()));
     }
-    
+
     private void presentedTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
         settings.setPresentedText(presentedTextField.getText());
     }
-    
+
     private void noteTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
-        settings.getCategoryNotes().put(selectedCategory, noteTextField.getText());
+        if (selectedCategory != null) {
+            settings.getCategoryNotes().put(selectedCategory, noteTextField.getText());
+        }
     }
 
     private void inButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inButtonActionPerformed
@@ -495,7 +540,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             // Update the UI
             CategoryIdentifier up = inListModel.set(selected - 1, selectedCategory);
             inListModel.set(selected, up);
-            // TODO: change selection?
+            inCatList.setSelectedValue(selectedCategory, true);
 
             // Update the settings
             settings.getCategories().set(selected - 1, selectedCategory);
@@ -510,8 +555,8 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             // Update the UI
             CategoryIdentifier down = inListModel.set(selected + 1, selectedCategory);
             inListModel.set(selected, down);
-            // TODO: change selection?
-            
+            inCatList.setSelectedValue(selectedCategory, true);
+
             // Update the settings
             settings.getCategories().set(selected + 1, selectedCategory);
             settings.getCategories().set(selected, down);
@@ -534,7 +579,9 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
     private void inCatListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_inCatListValueChanged
         if (!evt.getValueIsAdjusting()) {
-            if (inCatList.getSelectedIndex() == -1) {
+            int selected = inCatList.getSelectedIndex();
+
+            if (selected == -1) {
                 // No selection, disable buttons
                 outButton.setEnabled(false);
                 upButton.setEnabled(false);
@@ -547,11 +594,12 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             } else {
                 // Selection, enable buttons
                 outButton.setEnabled(true);
-                upButton.setEnabled(true);
-                downButton.setEnabled(true);
+
+                upButton.setEnabled(selected > 0);
+                downButton.setEnabled(selected < inListModel.getSize() - 1);
 
                 // Remove selection in the out list
-                outCatList.setSelectedIndex(-1);
+                outCatList.clearSelection();
 
                 setSelectedCategory((CategoryIdentifier) inCatList.getSelectedValue());
             }
@@ -573,7 +621,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                 inButton.setEnabled(true);
 
                 // Remove selection in the in list
-                inCatList.setSelectedIndex(-1);
+                inCatList.clearSelection();
 
                 setSelectedCategory((CategoryIdentifier) outCatList.getSelectedValue());
             }
