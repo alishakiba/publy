@@ -35,18 +35,22 @@ public class GeneratorMain {
             MainFrame mf = new MainFrame(new Settings());
             mf.setVisible(true);
         } else {
-            // Parse all publications
-            List<BibItem> items = BibTeXParser.parseFile(settings.getPublications());
+            generatePublicationList(settings);
+        }
+    }
 
-            if (settings.generateHTML()) {
-                HTMLPublicationListWriter writer = new HTMLPublicationListWriter();
-                writer.writePublicationList(items, settings.getHtmlSettings());
-            }
+    public static void generatePublicationList(Settings settings) {
+        // Parse all publications
+        List<BibItem> items = BibTeXParser.parseFile(settings.getPublications());
 
-            if (settings.generateText()) {
-                PlainPublicationListWriter plainWriter = new PlainPublicationListWriter();
-                plainWriter.writePublicationList(items, settings.getPlainSettings());
-            }
+        if (settings.generateHTML()) {
+            HTMLPublicationListWriter writer = new HTMLPublicationListWriter();
+            writer.writePublicationList(items, settings.getHtmlSettings());
+        }
+
+        if (settings.generateText()) {
+            PlainPublicationListWriter plainWriter = new PlainPublicationListWriter();
+            plainWriter.writePublicationList(items, settings.getPlainSettings());
         }
     }
 }

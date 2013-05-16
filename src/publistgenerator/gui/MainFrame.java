@@ -9,6 +9,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import publistgenerator.GeneratorMain;
 import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.data.settings.Settings;
 import publistgenerator.io.settings.SettingsWriter;
@@ -535,7 +536,7 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        // TODO add your handling code here:
+        GeneratorMain.generatePublicationList(settings);
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
