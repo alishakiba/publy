@@ -43,6 +43,10 @@ public class HTMLSettings extends FormatSettings {
     private File footer = null;
     private String googleAnalyticsUser = null;
 
+    public HTMLSettings(Settings settings) {
+        super(settings);
+    }
+
     public boolean linkToTextVersion() {
         return linkToTextVersion;
     }

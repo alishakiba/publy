@@ -26,9 +26,9 @@ public class Settings {
     public Settings() {
         publications = null;
         generateHTML = true;
-        htmlSettings = new HTMLSettings();
+        htmlSettings = new HTMLSettings(this);
         generateText = false;
-        plainSettings = new FormatSettings();
+        plainSettings = new FormatSettings(this);
     }
 
     public File getPublications() {
@@ -69,8 +69,8 @@ public class Settings {
      */
     public void resetToDefault() {
         generateHTML = true;
-        htmlSettings = new HTMLSettings();
+        htmlSettings = new HTMLSettings(this);
         generateText = false;
-        plainSettings = new FormatSettings();
+        plainSettings = new FormatSettings(this);
     }
 }

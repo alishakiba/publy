@@ -44,8 +44,9 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.write(" <p>My publications as of " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".");
 
         if (settings.linkToTextVersion()) {
-            // TODO: use plaintext target instead of hard-coding publications.txt
-            out.write("Also available as <a href=\"publications.txt\" rel=\"alternate\">plain text</a>.</p>");
+            out.write("Also available as <a href=\"");
+            out.write(settings.getSettings().getPlainSettings().getTarget().getPath());
+            out.write("\" rel=\"alternate\">plain text</a>.</p>");
         }
 
         out.newLine();
@@ -432,6 +433,9 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.newLine();
         out.write("    <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">");
         out.newLine();
+        
+        writeJavascript(out);
+        
         out.write("  </head>");
         out.newLine();
         out.write("  <body>");

@@ -21,6 +21,8 @@ public class FormatSettings {
 
         NONE, LOCAL, GLOBAL;
     }
+    // Link to parent, to access the settings of other formats
+    private Settings settings;
     // General
     private File target;
     // Author info
@@ -32,6 +34,14 @@ public class FormatSettings {
     // Categories
     private List<CategoryIdentifier> categories = new ArrayList<>();
     private Map<CategoryIdentifier, String> categoryNotes = new EnumMap<>(CategoryIdentifier.class);
+
+    public FormatSettings(Settings settings) {
+        this.settings = settings;
+    }
+
+    public Settings getSettings() {
+        return settings;
+    }
 
     public File getTarget() {
         return target;
