@@ -21,13 +21,22 @@ public class PlainPublicationListWriter extends PublicationListWriter {
 
     private PlainBibItemWriter itemWriter;
     private FormatSettings settings;
-    private int globalCount;
+    private int count;
+
+    public PlainPublicationListWriter(FormatSettings settings) {
+        super(settings);
+        this.settings = settings;
+    }
 
     @Override
-    protected void writePublicationList(BufferedWriter out, FormatSettings settings) throws IOException {
-        this.settings = settings;
+    protected void writePublicationList(BufferedWriter out) throws IOException {
         itemWriter = new PlainBibItemWriter(out, settings);
-        globalCount = 0;
+
+        if (settings.getNumbering() == FormatSettings.Numbering.NONE) {
+            count = -1;
+        } else {
+            count = 0;
+        }
 
         // Write the body
         out.write("My publications as of " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".");
@@ -41,8 +50,6 @@ public class PlainPublicationListWriter extends PublicationListWriter {
     }
 
     private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
-        int localCount = 0;
-
         out.write(c.getName() + ".");
         out.newLine();
         out.newLine();
@@ -56,24 +63,19 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         }
 
         for (BibItem item : c.getItems()) {
-            globalCount++;
-            localCount++;
-
-            switch (settings.getNumbering()) {
-                case NONE:
-                    itemWriter.write(item, -1);
-                    break;
-                case LOCAL:
-                    itemWriter.write(item, localCount);
-                    break;
-                case GLOBAL:
-                    itemWriter.write(item, globalCount);
-                    break;
+            if (settings.getNumbering() != FormatSettings.Numbering.NONE) {
+                count++;
             }
-            
+
+            itemWriter.write(item, count);
             out.newLine();
         }
 
         out.newLine();
+
+        // Reset the count if necessary
+        if (settings.getNumbering() == FormatSettings.Numbering.LOCAL) {
+            count = 0;
+        }
     }
 }

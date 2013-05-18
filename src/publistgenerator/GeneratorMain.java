@@ -44,13 +44,13 @@ public class GeneratorMain {
         List<BibItem> items = BibTeXParser.parseFile(settings.getPublications());
 
         if (settings.generateHTML()) {
-            HTMLPublicationListWriter writer = new HTMLPublicationListWriter();
-            writer.writePublicationList(items, settings.getHtmlSettings());
+            HTMLPublicationListWriter writer = new HTMLPublicationListWriter(settings.getHtmlSettings());
+            writer.writePublicationList(items);
         }
 
         if (settings.generateText()) {
-            PlainPublicationListWriter plainWriter = new PlainPublicationListWriter();
-            plainWriter.writePublicationList(items, settings.getPlainSettings());
+            PlainPublicationListWriter plainWriter = new PlainPublicationListWriter(settings.getPlainSettings());
+            plainWriter.writePublicationList(items);
         }
     }
 }

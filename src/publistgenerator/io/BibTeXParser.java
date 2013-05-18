@@ -52,10 +52,7 @@ public class BibTeXParser {
         HashSet<String> ids = new HashSet<>();
         ArrayList<BibItem> items = new ArrayList<>();
 
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new FileReader(file));
-
+        try (BufferedReader in = new BufferedReader(new FileReader(file))) {
             String line = in.readLine();
 
             while (line != null) {
@@ -100,13 +97,6 @@ public class BibTeXParser {
         } catch (IOException ex) {
             System.err.println("Exception occurred.");
             ex.printStackTrace();
-        } finally {
-            try {
-                in.close();
-            } catch (IOException ex) {
-                System.err.println("Exception occurred.");
-                ex.printStackTrace();
-            }
         }
 
         return items;
@@ -120,14 +110,14 @@ public class BibTeXParser {
         int level = levelChange(line);
 
         while (level > 0) {
-            line = in.readLine();
+            String inputLine = in.readLine();
 
-            if (line == null) {
+            if (inputLine == null) {
                 throw new IOException("Unexpected EoF.");
             } else {
-                line = line.trim();
-                content.append(line);
-                level += levelChange(line);
+                inputLine = inputLine.trim();
+                content.append(inputLine);
+                level += levelChange(inputLine);
             }
         }
 
@@ -189,6 +179,9 @@ public class BibTeXParser {
                     break;
                 case '}':
                     change--;
+                    break;
+                default:
+                    // No change
                     break;
             }
         }

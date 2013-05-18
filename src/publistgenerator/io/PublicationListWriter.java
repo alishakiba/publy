@@ -22,27 +22,32 @@ import publistgenerator.data.bibitem.BibItem;
 public abstract class PublicationListWriter {
 
     protected List<OutputCategory> categories;
+    private FormatSettings settings;
 
-    public void writePublicationList(List<BibItem> items, FormatSettings settings) {
+    public PublicationListWriter(FormatSettings settings) {
+        this.settings = settings;
+        
+        categories = new ArrayList<>(settings.getCategories().size());
+        
+        for (CategoryIdentifier category : settings.getCategories()) {
+            categories.add(OutputCategory.fromIdentifier(category));
+        }
+    }
+
+    public void writePublicationList(List<BibItem> items) {
         categorizePapers(items, settings);
 
         try (BufferedWriter out = new BufferedWriter(new FileWriter(settings.getTarget()))) {
-            writePublicationList(out, settings);
+            writePublicationList(out);
         } catch (IOException ioe) {
             System.err.println("Exception occurred.");
             ioe.printStackTrace();
         }
     }
 
-    protected abstract void writePublicationList(BufferedWriter out, FormatSettings settings) throws IOException;
+    protected abstract void writePublicationList(BufferedWriter out) throws IOException;
 
     protected void categorizePapers(List<BibItem> items, FormatSettings settings) {
-        categories = new ArrayList<>(settings.getCategories().size());
-        
-        for (CategoryIdentifier category : settings.getCategories()) {
-            categories.add(OutputCategory.fromIdentifier(category));
-        }
-        
         List<BibItem> tempItems = new ArrayList<>(items);
 
         for (OutputCategory c : categories) {

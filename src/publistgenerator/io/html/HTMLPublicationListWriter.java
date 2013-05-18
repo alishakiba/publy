@@ -7,7 +7,6 @@ package publistgenerator.io.html;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.data.bibitem.BibItem;
 import publistgenerator.data.category.OutputCategory;
@@ -23,16 +22,16 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     private HTMLSettings settings;
     private int globalCount;
 
-    @Override
-    protected void writePublicationList(BufferedWriter out, FormatSettings settings) throws IOException {
-        this.settings = (HTMLSettings) settings;
-        itemWriter = new HTMLBibItemWriter(out, this.settings);
-        globalCount = 0;
-
-        writePublicationList(out);
+    public HTMLPublicationListWriter(HTMLSettings settings) {
+        super(settings);
+        this.settings = settings;
     }
 
-    private void writePublicationList(BufferedWriter out) throws IOException {
+    @Override
+    protected void writePublicationList(BufferedWriter out) throws IOException {
+        itemWriter = new HTMLBibItemWriter(out, settings);
+        globalCount = 0;
+
         if (settings.getHeader() == null) {
             writeDefaultHeader(out);
         } else {

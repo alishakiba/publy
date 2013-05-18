@@ -234,9 +234,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
             for (Author a : item.getAuthors()) {
                 if (a == null) {
-                    System.err.println("Author is null! List: " + item.getAuthors());
+                    throw new AssertionError("Null author found: " + item.getAuthors());
+                } else {
+                    authorLinks.add(a.getLinkedHtmlName());
                 }
-                authorLinks.add(a.getLinkedHtmlName());
             }
 
             return formatNames(authorLinks);

@@ -74,6 +74,8 @@ public class SettingsReader extends DefaultHandler {
             case "note":
                 noteFor = CategoryIdentifier.valueOf(attrs.getValue("category"));
                 break;
+            default:
+                break;
         }
     }
 
@@ -99,8 +101,7 @@ public class SettingsReader extends DefaultHandler {
                 settings.setGenerateHTML(Boolean.parseBoolean(text));
                 break;
             case "plaintextsettings":
-                format = null;
-                break;
+            // Fall through
             case "htmlsettings":
                 format = null;
                 break;
@@ -145,6 +146,8 @@ public class SettingsReader extends DefaultHandler {
                 break;
             case "googleanalyticsuser":
                 ((HTMLSettings) format).setGoogleAnalyticsUser(text);
+                break;
+            default:
                 break;
         }
     }
