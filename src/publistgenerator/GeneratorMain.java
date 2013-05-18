@@ -4,7 +4,11 @@
  */
 package publistgenerator;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import publistgenerator.io.settings.SettingsReader;
 import publistgenerator.data.settings.Settings;
@@ -41,14 +45,22 @@ public class GeneratorMain {
 
     public static void generatePublicationList(Settings settings) {
         // Parse all publications
-        List<BibItem> items = BibTeXParser.parseFile(settings.getPublications());
+        List<BibItem> items = null;
+        
+        try {
+            items = BibTeXParser.parseFile(settings.getPublications());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(GeneratorMain.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(GeneratorMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-        if (settings.generateHTML()) {
+        if (items != null && settings.generateHTML()) {
             HTMLPublicationListWriter writer = new HTMLPublicationListWriter(settings.getHtmlSettings());
             writer.writePublicationList(items);
         }
 
-        if (settings.generateText()) {
+        if (items != null && settings.generateText()) {
             PlainPublicationListWriter plainWriter = new PlainPublicationListWriter(settings.getPlainSettings());
             plainWriter.writePublicationList(items);
         }

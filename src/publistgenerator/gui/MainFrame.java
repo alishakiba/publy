@@ -9,6 +9,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import publistgenerator.Console;
 import publistgenerator.GeneratorMain;
 import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.data.settings.Settings;
@@ -29,6 +30,9 @@ public class MainFrame extends javax.swing.JFrame {
         this.settings = settings;
         initComponents();
         populateValues();
+        
+        Console.setOutputTarget(consoleTextArea);
+        Console.log("Testmessage");
     }
 
     private void populateValues() {

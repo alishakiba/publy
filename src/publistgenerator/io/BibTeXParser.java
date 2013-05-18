@@ -31,14 +31,14 @@ public class BibTeXParser {
     private BibTeXParser() {
     }
 
-    public static List<BibItem> parseFile(File file) {
+    public static List<BibItem> parseFile(File file) throws IOException {
         HashMap<String, String> abbreviations = new HashMap<>();
         HashMap<String, Venue> venues = new HashMap<>();
         HashMap<String, Author> authors = new HashMap<>();
 
         parsePreliminaries(file, abbreviations, venues, authors);
         List<BibItem> items = parseItems(file);
-        
+
         for (BibItem item : items) {
             setVenue(item, venues);
             expandAbbreviations(item, abbreviations, venues);
@@ -48,14 +48,12 @@ public class BibTeXParser {
         return items;
     }
 
-    private static List<BibItem> parseItems(File file) {
+    private static List<BibItem> parseItems(File file) throws IOException {
         HashSet<String> ids = new HashSet<>();
         ArrayList<BibItem> items = new ArrayList<>();
 
         try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-            String line = in.readLine();
-
-            while (line != null) {
+            for (String line = in.readLine(); line != null; line = in.readLine()) {
                 // Process this line
                 line = line.trim();
 
@@ -81,22 +79,17 @@ public class BibTeXParser {
                     if (item != null) {
                         parseItem(item, line, in);
 
-                        if (!ids.contains(item.getId()) && item.checkMandatoryFields()) {
-                            ids.add(item.getId());
-                            items.add(item);
+                        if (ids.contains(item.getId())) {
+                            throw new AssertionError("Duplicate publication identifier: " + item.getId());
                         } else {
-                            if (ids.contains(item.getId())) {
-                                System.err.println("duplicate id: " + item.getId());
+                            if (item.checkMandatoryFields()) {
+                                ids.add(item.getId());
+                                items.add(item);
                             }
                         }
                     }
                 }
-
-                line = in.readLine();
             }
-        } catch (IOException ex) {
-            System.err.println("Exception occurred.");
-            ex.printStackTrace();
         }
 
         return items;
@@ -181,7 +174,6 @@ public class BibTeXParser {
                     change--;
                     break;
                 default:
-                    // No change
                     break;
             }
         }
@@ -189,7 +181,7 @@ public class BibTeXParser {
         return change;
     }
 
-    private static void parsePreliminaries(File file, Map<String, String> abbreviations, Map<String, Venue> venues, Map<String, Author> authors) {
+    private static void parsePreliminaries(File file, Map<String, String> abbreviations, Map<String, Venue> venues, Map<String, Author> authors) throws IOException {
         try (BufferedReader in = new BufferedReader(new FileReader(file))) {
             for (String line = in.readLine(); line != null; line = in.readLine()) {
                 // Process this line
@@ -205,9 +197,6 @@ public class BibTeXParser {
                     parseVenue(line, false, venues);
                 }
             }
-        } catch (IOException ex) {
-            System.err.println("Exception occurred.");
-            ex.printStackTrace();
         }
     }
     // Patterns for author and abbreviation parsing
@@ -218,11 +207,6 @@ public class BibTeXParser {
     private static final Pattern htmlPattern = Pattern.compile("htmlname=\"([^\"]*)\"");
     private static final Pattern latexPattern = Pattern.compile("latexname=\"([^\"]*)\"");
     private static final Pattern urlPattern = Pattern.compile("url=\"([^\"]*)\"");
-    private static final Pattern categoryPattern = Pattern.compile("category=\"([^\"]*)\"");
-    private static final Pattern textPattern = Pattern.compile(" text=\"(.*?[^\\\\])\"");
-    private static final Pattern htmltextPattern = Pattern.compile("htmltext=\"(.*?[^\\\\])\"");
-    private static final Pattern plaintextPattern = Pattern.compile("plaintext=\"(.*?[^\\\\])\"");
-    private static final Pattern latextextPattern = Pattern.compile("latextext=\"(.*?[^\\\\])\"");
 
     private static void parseAuthor(String line, Map<String, Author> authors) {
         String shortName = null, latexName = null, htmlName = null, url = null;
@@ -315,7 +299,6 @@ public class BibTeXParser {
             System.err.println((conference ? "Conference" : "Journal") + " tag detected, but no full information found: " + line);
         }
     }
-
     // Pattern for detecting an author link
     private static final Pattern authorPattern = Pattern.compile("<([^<>]*)>");
 
