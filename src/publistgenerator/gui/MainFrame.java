@@ -9,6 +9,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.StyledDocument;
 import publistgenerator.Console;
 import publistgenerator.GeneratorMain;
 import publistgenerator.data.settings.HTMLSettings;
@@ -31,8 +32,16 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         populateValues();
         
-        Console.setOutputTarget(consoleTextArea);
-        Console.log("Testmessage");
+        // Make sure all console output from the generation is redirected to the text area.
+        Console.setOutputTarget(consoleTextPane);
+    }
+    
+    /**
+     * Replaces the content of the console text area with the specified StyledDocument.
+     * @param doc 
+     */
+    public void setConsoleText(StyledDocument doc) {
+        consoleTextPane.setDocument(doc);
     }
 
     private void populateValues() {
@@ -139,7 +148,7 @@ public class MainFrame extends javax.swing.JFrame {
         cancelButton = new javax.swing.JButton();
         saveNQuitButton = new javax.swing.JButton();
         consoleScrollPane = new javax.swing.JScrollPane();
-        consoleTextArea = new javax.swing.JTextArea();
+        consoleTextPane = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Publication List Generator");
@@ -527,11 +536,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         bottomPanel.add(buttonPanel, java.awt.BorderLayout.LINE_END);
 
-        consoleTextArea.setEditable(false);
-        consoleTextArea.setColumns(20);
-        consoleTextArea.setLineWrap(true);
-        consoleTextArea.setRows(5);
-        consoleScrollPane.setViewportView(consoleTextArea);
+        consoleScrollPane.setViewportView(consoleTextPane);
 
         bottomPanel.add(consoleScrollPane, java.awt.BorderLayout.CENTER);
 
@@ -679,7 +684,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JScrollPane consoleScrollPane;
-    private javax.swing.JTextArea consoleTextArea;
+    private javax.swing.JTextPane consoleTextPane;
     private javax.swing.JButton footerBrowseButton;
     private javax.swing.JFileChooser footerFileChooser;
     private javax.swing.JTextField footerTextField;
