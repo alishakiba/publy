@@ -248,6 +248,18 @@ public abstract class BibItemWriter {
             }
         }
     }
+    
+    protected void output(String prefix, String string, String connective, boolean newLine) throws IOException {
+        if (string != null && !string.isEmpty()) {
+            out.write(prefix);
+            out.write(string);
+            out.write(connective);
+
+            if (newLine) {
+                out.newLine();
+            }
+        }
+    }
 
     // TODO: remove? Seems unused
     protected String addPeriod(String string) {
