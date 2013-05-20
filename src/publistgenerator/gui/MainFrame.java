@@ -565,6 +565,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         if (opened == JFileChooser.APPROVE_OPTION) {
             pubTextField.setText(pubFileChooser.getSelectedFile().getPath());
+            settings.setPublications(pubFileChooser.getSelectedFile());
         }
     }//GEN-LAST:event_pubBrowseButtonActionPerformed
 

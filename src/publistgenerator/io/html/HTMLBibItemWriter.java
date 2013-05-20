@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import publistgenerator.Console;
 import publistgenerator.data.bibitem.Article;
 import publistgenerator.data.bibitem.Author;
 import publistgenerator.data.bibitem.BibItem;
@@ -228,15 +229,18 @@ public class HTMLBibItemWriter extends BibItemWriter {
         String author = item.get("author");
 
         if (author == null) {
+            Console.error("No authors found for %s.", item.getId());
             return "";
         } else {
             List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
 
             for (Author a : item.getAuthors()) {
                 if (a == null) {
-                    throw new AssertionError("Null author found: " + item.getAuthors());
+                    Console.error("Null author found for %s.%n(Authors: %s)", item.getId(), item.getAuthors().toString());
                 } else {
-                    authorLinks.add(a.getLinkedHtmlName());
+                    if (settings.isListAllAuthors() || !a.isMe()) {
+                        authorLinks.add(a.getLinkedHtmlName());
+                    }
                 }
             }
 

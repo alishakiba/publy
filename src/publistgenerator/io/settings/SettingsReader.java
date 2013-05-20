@@ -89,63 +89,74 @@ public class SettingsReader extends DefaultHandler {
             textBuffer = null;
         }
 
+        if (text != null && !text.isEmpty()) {
+            switch (qName) {
+                // General settings
+                case "publications":
+                    settings.setPublications(new File(text));
+                    break;
+                case "generateplaintext":
+                    settings.setGenerateText(Boolean.parseBoolean(text));
+                    break;
+                case "generatehtml":
+                    settings.setGenerateHTML(Boolean.parseBoolean(text));
+                    break;
+                // Format settings
+                case "target":
+                    format.setTarget(new File(text));
+                    break;
+                case "listallauthors":
+                    format.setListAllAuthors(Boolean.parseBoolean(text));
+                    break;
+                case "presentedtext":
+                    format.setPresentedText(text);
+                    break;
+                case "numbering":
+                    format.setNumbering(FormatSettings.Numbering.valueOf(text));
+                    break;
+                case "category":
+                    format.addCategory(CategoryIdentifier.valueOf(text));
+                    break;
+                case "note":
+                    format.setNote(noteFor, text);
+                    break;
+                // HTML-specific settings
+                case "linktotextversion":
+                    ((HTMLSettings) format).setLinkToTextVersion(Boolean.parseBoolean(text));
+                    break;
+                case "includeabstract":
+                    ((HTMLSettings) format).setIncludeAbstract(HTMLSettings.PublicationType.valueOf(text));
+                    break;
+                case "includebibtex":
+                    ((HTMLSettings) format).setIncludeBibtex(HTMLSettings.PublicationType.valueOf(text));
+                    break;
+                case "includepdf":
+                    ((HTMLSettings) format).setIncludePDF(HTMLSettings.PublicationType.valueOf(text));
+                    break;
+                case "header":
+                    ((HTMLSettings) format).setHeader(new File(text));
+                    break;
+                case "footer":
+                    ((HTMLSettings) format).setFooter(new File(text));
+                    break;
+                case "googleanalyticsuser":
+                    ((HTMLSettings) format).setGoogleAnalyticsUser(text);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         switch (qName) {
             // General settings
-            case "publications":
-                settings.setPublications(new File(text));
-                break;
-            case "generateplaintext":
-                settings.setGenerateText(Boolean.parseBoolean(text));
-                break;
-            case "generatehtml":
-                settings.setGenerateHTML(Boolean.parseBoolean(text));
-                break;
             case "plaintextsettings":
             // Fall through
             case "htmlsettings":
                 format = null;
                 break;
             // Format settings
-            case "target":
-                format.setTarget(new File(text));
-                break;
-            case "listallauthors":
-                format.setListAllAuthors(Boolean.parseBoolean(text));
-                break;
-            case "presentedtext":
-                format.setPresentedText(text);
-                break;
-            case "numbering":
-                format.setNumbering(FormatSettings.Numbering.valueOf(text));
-                break;
-            case "category":
-                format.addCategory(CategoryIdentifier.valueOf(text));
-                break;
             case "note":
-                format.setNote(noteFor, text);
                 noteFor = null;
-                break;
-            // HTML-specific settings
-            case "linktotextversion":
-                ((HTMLSettings) format).setLinkToTextVersion(Boolean.parseBoolean(text));
-                break;
-            case "includeabstract":
-                ((HTMLSettings) format).setIncludeAbstract(HTMLSettings.PublicationType.valueOf(text));
-                break;
-            case "includebibtex":
-                ((HTMLSettings) format).setIncludeBibtex(HTMLSettings.PublicationType.valueOf(text));
-                break;
-            case "includepdf":
-                ((HTMLSettings) format).setIncludePDF(HTMLSettings.PublicationType.valueOf(text));
-                break;
-            case "header":
-                ((HTMLSettings) format).setHeader(new File(text));
-                break;
-            case "footer":
-                ((HTMLSettings) format).setFooter(new File(text));
-                break;
-            case "googleanalyticsuser":
-                ((HTMLSettings) format).setGoogleAnalyticsUser(text);
                 break;
             default:
                 break;

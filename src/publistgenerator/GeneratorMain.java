@@ -4,6 +4,7 @@
  */
 package publistgenerator;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -44,25 +45,34 @@ public class GeneratorMain {
     }
 
     public static void generatePublicationList(Settings settings) {
-        // Parse all publications
-        List<BibItem> items = null;
-        
-        try {
-            items = BibTeXParser.parseFile(settings.getPublications());
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(GeneratorMain.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(GeneratorMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // Check if the publication list is set and exists
+        File pubList = settings.getPublications();
 
-        if (items != null && settings.generateHTML()) {
-            HTMLPublicationListWriter writer = new HTMLPublicationListWriter(settings.getHtmlSettings());
-            writer.writePublicationList(items);
-        }
+        if (pubList == null) {
+            Console.error("No publication list was set.");
+        } else if (!pubList.exists()) {
+            Console.error("No publication list was found at: %s", pubList.getPath());
+        } else {
+            // Parse all publications
+            List<BibItem> items = null;
 
-        if (items != null && settings.generateText()) {
-            PlainPublicationListWriter plainWriter = new PlainPublicationListWriter(settings.getPlainSettings());
-            plainWriter.writePublicationList(items);
+            try {
+                items = BibTeXParser.parseFile(settings.getPublications());
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(GeneratorMain.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(GeneratorMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            if (items != null && settings.generateHTML()) {
+                HTMLPublicationListWriter writer = new HTMLPublicationListWriter(settings.getHtmlSettings());
+                writer.writePublicationList(items);
+            }
+
+            if (items != null && settings.generateText()) {
+                PlainPublicationListWriter plainWriter = new PlainPublicationListWriter(settings.getPlainSettings());
+                plainWriter.writePublicationList(items);
+            }
         }
     }
 }

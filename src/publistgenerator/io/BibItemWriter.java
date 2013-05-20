@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import publistgenerator.Console;
 import publistgenerator.data.bibitem.Article;
 import publistgenerator.data.bibitem.Author;
 import publistgenerator.data.bibitem.BibItem;
@@ -81,13 +82,18 @@ public abstract class BibItemWriter {
         String author = item.get("author");
 
         if (author == null) {
+            Console.error("No authors found for %s.", item.getId());
             return "";
         } else {
             List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
 
             for (Author a : item.getAuthors()) {
-                if (settings.isListAllAuthors() || !a.isMe()) {
-                    authorLinks.add(a.getHtmlName());
+                if (a == null) {
+                    Console.error("Null author found for %s.%n(Authors: %s)", item.getId(), item.getAuthors().toString());
+                } else {
+                    if (settings.isListAllAuthors() || !a.isMe()) {
+                        authorLinks.add(a.getHtmlName());
+                    }
                 }
             }
 
