@@ -4,22 +4,22 @@
  */
 package publistgenerator.io.html;
 
-import publistgenerator.data.bibitem.InProceedings;
-import publistgenerator.data.bibitem.InCollection;
-import publistgenerator.data.bibitem.MastersThesis;
-import publistgenerator.data.bibitem.PhDThesis;
-import publistgenerator.data.bibitem.Unpublished;
-import publistgenerator.data.bibitem.Article;
-import publistgenerator.data.bibitem.InvitedTalk;
-import publistgenerator.data.bibitem.Author;
-import publistgenerator.data.bibitem.BibItem;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import publistgenerator.io.BibItemWriter;
+import publistgenerator.data.bibitem.Article;
+import publistgenerator.data.bibitem.Author;
+import publistgenerator.data.bibitem.BibItem;
+import publistgenerator.data.bibitem.InCollection;
+import publistgenerator.data.bibitem.InProceedings;
+import publistgenerator.data.bibitem.InvitedTalk;
+import publistgenerator.data.bibitem.MastersThesis;
+import publistgenerator.data.bibitem.PhDThesis;
+import publistgenerator.data.bibitem.Unpublished;
 import publistgenerator.data.settings.HTMLSettings;
+import publistgenerator.io.BibItemWriter;
 
 /**
  *

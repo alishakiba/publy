@@ -4,16 +4,16 @@
  */
 package publistgenerator.io;
 
-import publistgenerator.data.category.OutputCategory;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import publistgenerator.data.category.CategoryIdentifier;
-import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.data.bibitem.BibItem;
+import publistgenerator.data.category.CategoryIdentifier;
+import publistgenerator.data.category.OutputCategory;
+import publistgenerator.data.settings.FormatSettings;
 
 /**
  *

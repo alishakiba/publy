@@ -4,16 +4,16 @@
  */
 package publistgenerator.io.plain;
 
-import publistgenerator.data.bibitem.InProceedings;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import publistgenerator.data.bibitem.Article;
+import publistgenerator.data.bibitem.BibItem;
 import publistgenerator.data.bibitem.InCollection;
+import publistgenerator.data.bibitem.InProceedings;
+import publistgenerator.data.bibitem.InvitedTalk;
 import publistgenerator.data.bibitem.MastersThesis;
 import publistgenerator.data.bibitem.PhDThesis;
 import publistgenerator.data.bibitem.Unpublished;
-import publistgenerator.data.bibitem.Article;
-import publistgenerator.data.bibitem.InvitedTalk;
-import publistgenerator.data.bibitem.BibItem;
-import java.io.BufferedWriter;
-import java.io.IOException;
 import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.io.BibItemWriter;
 

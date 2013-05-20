@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import publistgenerator.io.settings.SettingsReader;
-import publistgenerator.data.settings.Settings;
 import publistgenerator.data.bibitem.BibItem;
+import publistgenerator.data.settings.Settings;
 import publistgenerator.gui.MainFrame;
 import publistgenerator.io.BibTeXParser;
 import publistgenerator.io.html.HTMLPublicationListWriter;
 import publistgenerator.io.plain.PlainPublicationListWriter;
+import publistgenerator.io.settings.SettingsReader;
 
 /**
  *

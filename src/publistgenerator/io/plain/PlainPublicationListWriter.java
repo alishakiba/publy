@@ -10,8 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import publistgenerator.data.bibitem.BibItem;
 import publistgenerator.data.category.OutputCategory;
-import publistgenerator.io.PublicationListWriter;
 import publistgenerator.data.settings.FormatSettings;
+import publistgenerator.io.PublicationListWriter;
 
 /**
  *
