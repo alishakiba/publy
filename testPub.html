@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Publications</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+ <!-- Functional stylesheet -->
+ <link rel="stylesheet" href="interactive.css" type="text/css">
+
+ <!-- Hide interactive elements for users who have JavaScript disabled -->
+ <noscript>
+  <style type="text/css">
+   .interactive { display:none; }
+  </style>
+ </noscript>
+
+ <!-- jQuery framework -->
+ <script src="jquery-1.9.1.min.js" type="text/javascript"></script>
+
+ <!-- Detection for links to specific articles -->
+ <script type="text/javascript">
+  $(document).ready(function() {
+   // Run once, for page reloads
+   var hash = window.location.hash;
+   if (hash) {
+    showOnly(hash.substring(1) + "_abstract");
+   }
+  
+   // Run every time the hash changes
+   $(window).on('hashchange', function() {
+    showOnly(document.location.hash.substring(1) + "_abstract");
+   });
+  });
+ </script>
+
+ <!-- Function for toggling visibility of abstracts and BibTeX etc. -->
+ <script type="text/javascript">
+  function toggle(divID) {
+   $("#" + divID + "_plus").toggle();
+   $("#" + divID + "_minus").toggle();
+   $("#" + divID).slideToggle(500);
+  }
+  
+  function show(divID) {
+   $("#" + divID + "_plus").hide();
+   $("#" + divID + "_minus").show();
+   $("#" + divID).show();
+  }
+  
+  function hide(divID) {
+   $("#" + divID + "_plus").show();
+   $("#" + divID + "_minus").hide();
+   $("#" + divID).hide();
+  }
+  
+  function showOnly(divID) {
+   $(".collapsible").hide();
+   $(".hidden").hide();
+   $(".shown").show();
+   
+   toggle(divID);
+  }
+ </script>
+
+ <!-- Include MathJax to convert LaTeX formulas to HTML on the fly -->
+ <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+   tex2jax: {
+    inlineMath: [['$','$'], ['\(','\)']],
+    processEscapes: true
+   }
+  });
+ </script>
+ <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  </head>
+  <body>
+    <noscript><p>Some elements on this site require JavaScript. Enable it for the best experience.</p></noscript>
+  
+ <p>My publications as of 20 May 2013.
+ <div class="section"><h1 class="sectiontitle"><a id="journal">Journal papers</a></h1>
+
+ <div class="pubnav">
+  <a href="#journal" class="navcurrent" id="JournalToJournal">Journal</a>
+ </div>
+
+  <div class="bibentry">
+   <a id="bose2012making"><h2 class="title">Making triangulations 4-connected using flips</h2>.</a><br>
+   .<br>
+   <span class="booktitle">Computational Geometry: Theory and Applications special issue for CCCG 2011</span>, 2012.<br>
+   [<a href="http://dx.doi.org/10.1016/j.comgeo.2012.10.012">DOI</a>]
+  </div>
+
+ </div>
+
+  </body>
+</html>
