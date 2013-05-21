@@ -197,7 +197,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write(item.getId());
         out.write("\"><h2 class=\"title\">");
         out.write(formatTitle(item));
-        out.write("</h2>.</a>");
+        out.write("</h2></a>");
 
         // Add text if I presented this paper
         if ("yes".equals(item.get("presented"))) {

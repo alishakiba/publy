@@ -133,7 +133,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void writeNavigation(OutputCategory current, BufferedWriter out) throws IOException {
-        out.write("      <div class=\"pubnav\">");
+        out.write("      <p class=\"pubnav\">");
         out.newLine();
 
         for (int i = 0; i < categories.size(); i++) {
@@ -149,7 +149,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                 out.write("nav\"");
             }
 
-            out.write(" id=\"");
+            out.write(" id=\"nav_");
             out.write(current.getShortName());
             out.write("To");
             out.write(c.getShortName());
@@ -165,7 +165,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             out.newLine();
         }
 
-        out.write("      </div>");
+        out.write("      </p>");
         out.newLine();
         out.newLine();
     }
