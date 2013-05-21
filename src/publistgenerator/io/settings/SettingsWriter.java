@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import publistgenerator.Console;
 import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.data.settings.Settings;
@@ -37,7 +38,7 @@ public class SettingsWriter {
             out.write("</plgsettings>");
             out.newLine();
         } catch (IOException ex) {
-            Logger.getLogger(SettingsWriter.class.getName()).log(Level.SEVERE, null, ex);
+            Console.exception(ex, "Exception occurred while saving settings.");
         }
     }
 

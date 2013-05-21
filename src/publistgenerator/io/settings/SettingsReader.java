@@ -6,14 +6,13 @@ package publistgenerator.io.settings;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import publistgenerator.Console;
 import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.data.settings.HTMLSettings;
@@ -58,7 +57,7 @@ public class SettingsReader extends DefaultHandler {
             SAXParser saxParser = factory.newSAXParser();
             saxParser.parse(inputFile, handler);
         } catch (ParserConfigurationException | SAXException | IOException ex) {
-            Logger.getLogger(SettingsReader.class.getName()).log(Level.SEVERE, null, ex);
+            Console.exception(ex, "Exception occurred while parsing the configuration file.");
         }
     }
 
