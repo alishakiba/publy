@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import publistgenerator.Console;
 import publistgenerator.data.bibitem.Article;
 import publistgenerator.data.bibitem.Author;
 import publistgenerator.data.bibitem.BibItem;
@@ -80,7 +81,7 @@ public class BibTeXParser {
                         parseItem(item, line, in);
 
                         if (ids.contains(item.getId())) {
-                            throw new AssertionError("Duplicate publication identifier: " + item.getId());
+                            Console.error("Duplicate publication identifier: %s", item.getId());
                         } else {
                             if (item.checkMandatoryFields()) {
                                 ids.add(item.getId());
@@ -106,7 +107,7 @@ public class BibTeXParser {
             String inputLine = in.readLine();
 
             if (inputLine == null) {
-                throw new IOException("Unexpected EoF.");
+                throw new IOException("Unclosed BibItem at end of file.");
             } else {
                 inputLine = inputLine.trim();
                 content.append(inputLine);
@@ -116,11 +117,12 @@ public class BibTeXParser {
 
         String body = content.toString();
 
-        // Keep only the part between the first pair of braces
+        // Keep only the part between the outermost pair of braces
         body = body.substring(body.indexOf('{') + 1, body.lastIndexOf('}'));
 
         // Split the body into the comma-separated chunks
-        // NOTE: this creates too many chunks, but we can detect when a value continues into the next chunk by looking at the braces
+        // (this creates too many chunks, but we can detect when a value
+        // continues into the next chunk by looking at the braces)
         String[] chunks = body.split(",");
 
         // Parse the id
@@ -130,8 +132,10 @@ public class BibTeXParser {
         int i = 1;
 
         while (i < chunks.length) {
+            // Parse the attribute name
             String attr = chunks[i].substring(0, chunks[i].indexOf('=')).trim().toLowerCase();
 
+            // Parse its value, from several chunks if necessary
             StringBuilder value = new StringBuilder(chunks[i].substring(chunks[i].indexOf('=') + 1));
 
             int chunkLevel = levelChange(chunks[i]);
@@ -140,7 +144,7 @@ public class BibTeXParser {
                 i++;
 
                 if (i == chunks.length) {
-                    throw new IOException("Unexpected EoF.");
+                    throw new IOException("Unclosed BibItem at end of file.");
                 } else {
                     value.append(",");
                     value.append(chunks[i]);
@@ -307,15 +311,21 @@ public class BibTeXParser {
         String author = item.get("author");
 
         if (author != null && !author.isEmpty()) {
-            Matcher matcher = authorPattern.matcher(author);
+            String[] paperAuthors = author.split(" and ");
 
-            while (matcher.find()) {
-                Author a = authors.get(matcher.group(1));
+            for (String paperAuthor : paperAuthors) {
+                Matcher matcher = authorPattern.matcher(paperAuthor);
 
-                if (a == null) {
-                    System.err.println("No author found for \"" + matcher.group(1) + "\"!");
+                if (matcher.find()) {
+                    Author a = authors.get(matcher.group(1));
+
+                    if (a == null) {
+                        Console.error("Author abbreviation \"%s\" is used, but never defined.", matcher.group(1));
+                    } else {
+                        item.getAuthors().add(a);
+                    }
                 } else {
-                    item.getAuthors().add(a);
+                    item.getAuthors().add(new Author(paperAuthor));
                 }
             }
         }
@@ -324,32 +334,32 @@ public class BibTeXParser {
 
     private static void expandAbbreviations(BibItem item, Map<String, String> abbreviations, Map<String, Venue> venues) {
         for (String field : item.getFields()) {
-            String val = item.get(field);
+            String currentValue = item.get(field);
 
-            if (val != null && !val.isEmpty()) {
+            if (currentValue != null && !currentValue.isEmpty()) {
                 StringBuilder finalValue = new StringBuilder();
-                Matcher matcher = abbrPattern.matcher(val);
+                Matcher matcher = abbrPattern.matcher(currentValue);
                 int prevEnd = 0;
 
                 while (matcher.find()) {
-                    String abbr = matcher.group(1);
+                    String abbreviation = matcher.group(1);
                     int start = matcher.start();
                     int end = matcher.end();
 
-                    finalValue.append(val.substring(prevEnd, start));
+                    finalValue.append(currentValue.substring(prevEnd, start));
 
-                    if (abbreviations.containsKey(abbr)) {
-                        finalValue.append(abbreviations.get(abbr));
-                    } else if (venues.containsKey(abbr)) {
-                        finalValue.append(venues.get(abbr).getFullName());
+                    if (abbreviations.containsKey(abbreviation)) {
+                        finalValue.append(abbreviations.get(abbreviation));
+                    } else if (venues.containsKey(abbreviation)) {
+                        finalValue.append(venues.get(abbreviation).getFullName());
                     } else {
-                        System.err.println("Abbreviation \"" + matcher.group(1) + "\" not found!");
+                        Console.error("Abbreviation \"%s\" is used, but never defined.", matcher.group(1));
                     }
 
                     prevEnd = end;
                 }
 
-                finalValue.append(val.substring(prevEnd, val.length()));
+                finalValue.append(currentValue.substring(prevEnd, currentValue.length()));
 
                 item.put(field, finalValue.toString());
             }

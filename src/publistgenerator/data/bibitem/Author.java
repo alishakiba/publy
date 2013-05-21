@@ -18,6 +18,10 @@ public class Author {
         this.htmlName = htmlName;
     }
 
+    public Author(String author) {
+        this(author, author, author);
+    }
+
     public String getAbbreviation() {
         return abbreviation;
     }
