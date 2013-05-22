@@ -38,6 +38,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
         consoleTextPane = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Publication List Generator - Console");
 
         generateButton.setText("Generate");
         generateButton.setToolTipText("Run the generator with the current settings.");
@@ -89,6 +90,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
 
         getContentPane().add(buttonPanel, java.awt.BorderLayout.LINE_END);
 
+        consoleTextPane.setEditable(false);
         consoleTextPane.setPreferredSize(new java.awt.Dimension(300, 20));
         consoleScrollPane.setViewportView(consoleTextPane);
 

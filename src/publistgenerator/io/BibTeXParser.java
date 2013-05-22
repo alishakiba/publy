@@ -60,6 +60,8 @@ public class BibTeXParser {
             expandAbbreviations(item, abbreviations, venues);
             replaceAuthors(item, authors);
         }
+        
+        Console.log("Publications list \"%s\" parsed successfully.", file.getName());
 
         return items;
     }
@@ -127,8 +129,6 @@ public class BibTeXParser {
     }
 
     private static BibItem parseBibItem(String bibItem) {
-        Console.log("Parsing bibitem:%n%s", bibItem);
-        
         BibItem item = initializeBibItem(bibItem);
 
         if (item != null) {
@@ -173,8 +173,6 @@ public class BibTeXParser {
                 valueStart = body.indexOf('=');
             }
         }
-        
-        Console.log("Result:%n%s%n", (item == null ? "null" : item.toString()));
 
         return item;
     }
