@@ -116,7 +116,9 @@ public abstract class BibItem {
 
         sb.append("@");
         sb.append(getType());
-        sb.append(" {\n");
+        sb.append(" {");
+        sb.append(id);
+        sb.append(",\n");
 
         for (Entry<String, String> entry : values.entrySet()) {
             sb.append("  ");

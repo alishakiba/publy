@@ -56,7 +56,9 @@ public class BibTeXParser {
         try (BufferedReader in = new BufferedReader(new FileReader(file))) {
             for (String line = in.readLine(); line != null; line = in.readLine()) {
                 // Process this line
-                line = line.trim();
+                line = line.trim().toLowerCase();
+
+                Console.log("Line: %s", line);
 
                 if (!line.isEmpty()) {
                     BibItem item = null;
@@ -110,15 +112,19 @@ public class BibTeXParser {
                 throw new IOException("Unclosed BibItem at end of file.");
             } else {
                 inputLine = inputLine.trim();
-                content.append(inputLine);
+                content.append(" ").append(inputLine);
                 level += levelChange(inputLine);
             }
         }
 
         String body = content.toString();
 
+        Console.log("Parsing bibitem:%n%s", body);
+
         // Keep only the part between the outermost pair of braces
-        body = body.substring(body.indexOf('{') + 1, body.lastIndexOf('}'));
+        body = body.substring(body.indexOf('{') + 1, body.lastIndexOf('}')).trim();
+
+        Console.log("Inner body:%n%s", body);
 
         // Split the body into the comma-separated chunks
         // (this creates too many chunks, but we can detect when a value
@@ -126,42 +132,53 @@ public class BibTeXParser {
         String[] chunks = body.split(",");
 
         // Parse the id
-        item.setId(chunks[0]);
+        item.setId(chunks[0].trim());
 
         // Parse the attributes
         int i = 1;
 
         while (i < chunks.length) {
-            // Parse the attribute name
-            String attr = chunks[i].substring(0, chunks[i].indexOf('=')).trim().toLowerCase();
+            int valueStart = chunks[i].indexOf('=');
 
-            // Parse its value, from several chunks if necessary
-            StringBuilder value = new StringBuilder(chunks[i].substring(chunks[i].indexOf('=') + 1));
+            if (valueStart != -1) {
+                // Parse the attribute name
+                String attr = chunks[i].substring(0, valueStart).trim().toLowerCase();
 
-            int chunkLevel = levelChange(chunks[i]);
+                // Parse its value, from several chunks if necessary
+                StringBuilder value = new StringBuilder(chunks[i].substring(valueStart + 1));
 
-            while (chunkLevel > 0) {
-                i++;
+                int chunkLevel = levelChange(chunks[i]);
 
-                if (i == chunks.length) {
-                    throw new IOException("Unclosed BibItem at end of file.");
-                } else {
-                    value.append(",");
-                    value.append(chunks[i]);
-                    chunkLevel += levelChange(chunks[i]);
+                while (chunkLevel > 0) {
+                    i++;
+
+                    if (i == chunks.length) {
+                        throw new IOException("Unclosed BibItem at end of file.");
+                    } else {
+                        value.append(",");
+                        value.append(chunks[i]);
+                        chunkLevel += levelChange(chunks[i]);
+                    }
                 }
+
+                String attrValue = value.toString().trim();
+
+                // Throw away the outer pair of braces or quotes
+                if ((attrValue.startsWith("{") && attrValue.endsWith("}"))
+                        || (attrValue.startsWith("\"") && attrValue.endsWith("\""))) {
+                    attrValue = attrValue.substring(1, attrValue.length() - 1).trim();
+                }
+
+                //attrValue = attrValue.substring(attrValue.indexOf('{') + 1, attrValue.lastIndexOf('}'));
+
+                // Add this pair to the item
+                item.put(attr, attrValue);
             }
-
-            String attrValue = value.toString();
-
-            // Throw away the outer pair of braces
-            attrValue = attrValue.substring(attrValue.indexOf('{') + 1, attrValue.lastIndexOf('}'));
-
-            // Add this pair to the item
-            item.put(attr, attrValue);
 
             i++;
         }
+
+        Console.log("Result:%n%s", item.getBibTeX());
     }
 
     private static int levelChange(String line) {

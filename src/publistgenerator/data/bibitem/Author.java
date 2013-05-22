@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package publistgenerator.data.bibitem;
 
 /**
@@ -10,6 +9,7 @@ package publistgenerator.data.bibitem;
  * @author Sander
  */
 public class Author {
+
     private String abbreviation, latexName, htmlName, url;
 
     public Author(String abbreviation, String latexName, String htmlName) {
@@ -65,23 +65,32 @@ public class Author {
     public void setUrl(String url) {
         this.url = url;
     }
-    
+
     public boolean isMe() {
         return "me".equals(abbreviation);
     }
 
     private String formatName(String name) {
-        // Convert a name in format <Last name(s)>, <First name(s)> to <First letter of first name(s)> <Last name(s)>
-        if (!name.contains(",")) {
-            System.err.println("No comma! Name: " + name);
+        String first, last;
+        int comma = name.indexOf(',');
+        int space = name.indexOf(' ');
+        
+        if (comma != -1) {
+            // Convert a name in format <Last name(s)>, <First name(s)> to <First letter of first name(s)> <Last name(s)>
+            last = name.substring(0, comma).trim();
+            first = name.substring(comma + 1).trim();
+        } else if (space != -1) {
+            // Assume the format is "<First name> <Last name(s)>"
+            first = name.substring(0, space).trim();
+            last = name.substring(space + 1).trim();
+        } else {
+            // Unknown format, or just the last name
+            return name;
         }
-
-        String last = name.substring(0, name.indexOf(", "));
-        String first = name.substring(name.indexOf(", ") + 2);
-
+        
         return Character.toUpperCase(first.charAt(0)) + ". " + last;
     }
-    
+
     @Override
     public String toString() {
         return "Author{" + "abbreviation=\"" + abbreviation + "\", latexName=\"" + latexName + "\", htmlName=\"" + htmlName + "\", url=\"" + url + "\"}";
