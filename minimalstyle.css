@@ -11,6 +11,10 @@ body {
  display: inline;
 }
 
+.booktitle {
+ font-style: italic;
+}
+
 /* TODO: Prune to minimal style */
 /*.section {
  margin-top: 2em;
@@ -27,10 +31,6 @@ body {
  font-size: 1em;
  font-weight: bold;
  display: inline;
-}
-
-.booktitle {
- font-style: italic;
 }
 
 .bibentry {
