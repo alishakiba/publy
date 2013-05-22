@@ -8,11 +8,16 @@ body {
 }
 
 .title {
+ font-size: 1em;
  display: inline;
 }
 
 .booktitle {
  font-style: italic;
+}
+
+.bibentry {
+ margin-top: 1em;
 }
 
 /* TODO: Prune to minimal style */
