@@ -127,6 +127,8 @@ public class BibTeXParser {
     }
 
     private static BibItem parseBibItem(String bibItem) {
+        Console.log("Parsing bibitem:%n%s", bibItem);
+        
         BibItem item = initializeBibItem(bibItem);
 
         if (item != null) {
@@ -161,12 +163,18 @@ public class BibTeXParser {
                     break;
                 } else {
                     item.put(name, body.substring(valuePos.getFirst(), valuePos.getSecond()).trim());
-                    body = body.substring(valuePos.getSecond() + 1).trim();
+                    body = body.substring(valuePos.getSecond() + valuePos.getFirst()).trim(); // Skip a final delimiter if there are any (valuePos.getFirst == 1)
+                    
+                    if (body.startsWith(",")) {
+                        body = body.substring(1).trim();
+                    }
                 }
 
                 valueStart = body.indexOf('=');
             }
         }
+        
+        Console.log("Result:%n%s%n", (item == null ? "null" : item.toString()));
 
         return item;
     }
@@ -228,9 +236,13 @@ public class BibTeXParser {
                 index++;
             }
         } else {
-            // No delimiters. Capture everything up to the next ','
+            // No delimiters. Capture everything up to the next ',' or the end of the item
             valueStart = 0;
             valueEnd = body.indexOf(',');
+            
+            if (valueEnd == -1) {
+                valueEnd = body.length();
+            }
         }
 
         if (valueEnd == -1) {
@@ -241,7 +253,7 @@ public class BibTeXParser {
     }
 
     private static void parseTag(String tag, Map<String, String> abbreviations, Map<String, Venue> venues, Map<String, Author> authors) {
-        String type = tag.substring(1, tag.indexOf(' ')).trim().toLowerCase();
+        String type = tag.substring(1, tag.indexOf(' ', 2)).trim().toLowerCase();
 
         switch (type) {
             case "author":
@@ -257,7 +269,7 @@ public class BibTeXParser {
                 parseVenue(tag, false, venues);
                 break;
             default:
-                Console.error("Unrecognized tag type \"%s\".", type);
+                Console.error("Unrecognized tag type \"%s\" at line \"%s\".", type, tag);
                 break;
         }
     }

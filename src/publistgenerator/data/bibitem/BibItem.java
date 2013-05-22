@@ -67,7 +67,7 @@ public abstract class BibItem {
 
             if (v == null || v.isEmpty()) {
                 complete = false;
-                Console.error("Item %s is missing mandatory field %s.", id, field);
+                Console.error("Item \"%s\" is missing mandatory field %s.", id, field);
             }
         }
 
