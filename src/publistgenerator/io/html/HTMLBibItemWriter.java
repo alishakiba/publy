@@ -461,7 +461,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write("  author={");
 
             for (int i = 0; i < item.getAuthors().size(); i++) {
-                out.write(item.getAuthors().get(i).getRawLatexName());
+                out.write(item.getAuthors().get(i).getLatexName());
 
                 if (i < item.getAuthors().size() - 1) {
                     out.write(" and ");
@@ -539,7 +539,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write("  author={");
 
             for (int i = 0; i < item.getAuthors().size(); i++) {
-                out.write(item.getAuthors().get(i).getRawLatexName());
+                out.write(item.getAuthors().get(i).getLatexName());
 
                 if (i < item.getAuthors().size() - 1) {
                     out.write(" and ");

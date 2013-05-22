@@ -433,6 +433,8 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.newLine();
         out.write("    <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">");
         out.newLine();
+        out.write("    <link rel=\"stylesheet\" href=\"minimalstyle.css\" type=\"text/css\">");
+        out.newLine();
         
         writeJavascript(out);
         

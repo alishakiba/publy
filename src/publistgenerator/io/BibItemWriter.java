@@ -92,7 +92,7 @@ public abstract class BibItemWriter {
                     Console.error("Null author found for %s.%n(Authors: %s)", item.getId(), item.getAuthors().toString());
                 } else {
                     if (settings.isListAllAuthors() || !a.isMe()) {
-                        authorLinks.add(a.getHtmlName());
+                        authorLinks.add(a.getFormattedHtmlName());
                     }
                 }
             }
@@ -248,7 +248,7 @@ public abstract class BibItemWriter {
             }
         }
     }
-    
+
     protected void output(String prefix, String string, String connective, boolean newLine) throws IOException {
         if (string != null && !string.isEmpty()) {
             out.write(prefix);
@@ -284,6 +284,7 @@ public abstract class BibItemWriter {
         if (s.contains("{")) {
             StringBuilder sb = new StringBuilder();
             int level = 0;
+            boolean first = true;
 
             for (char c : s.toCharArray()) {
                 switch (c) {
@@ -295,10 +296,17 @@ public abstract class BibItemWriter {
                         break;
                     default:
                         if (level == 0) {
-                            sb.append(Character.toLowerCase(c));
+                            if (first) {
+                                sb.append(Character.toUpperCase(c));
+                                first = false;
+                            } else {
+                                sb.append(Character.toLowerCase(c));
+                            }
                         } else {
                             sb.append(c);
+                            first = false;
                         }
+
                         break;
                 }
             }

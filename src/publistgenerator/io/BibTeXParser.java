@@ -37,7 +37,7 @@ public class BibTeXParser {
     private static final Pattern abbPattern = Pattern.compile("abbr=\"([^\"]*)\"");
     private static final Pattern namePattern = Pattern.compile(" name=\"([^\"]*)\"");
     private static final Pattern htmlPattern = Pattern.compile("htmlname=\"([^\"]*)\"");
-    private static final Pattern latexPattern = Pattern.compile("latexname=\"([^\"]*)\"");
+    private static final Pattern plainPattern = Pattern.compile("plaintextname=\"([^\"]*)\"");
     private static final Pattern urlPattern = Pattern.compile("url=\"([^\"]*)\"");
     // Pattern for detecting an author link
     private static final Pattern authorPattern = Pattern.compile("<([^<>]*)>");
@@ -62,6 +62,10 @@ public class BibTeXParser {
         }
         
         Console.log("Publications list \"%s\" parsed successfully.", file.getName());
+        
+        for (BibItem item : items) {
+            Console.log("%s", item.toString());
+        }
 
         return items;
     }
@@ -273,7 +277,7 @@ public class BibTeXParser {
     }
 
     private static void parseAuthor(String line, Map<String, Author> authors) {
-        String shortName = null, latexName = null, htmlName = null, url = null;
+        String shortName = null, name = null, plaintextName = null, htmlName = null, url = null;
 
         Matcher matcher = shortPattern.matcher(line);
 
@@ -284,8 +288,7 @@ public class BibTeXParser {
         matcher = namePattern.matcher(line);
 
         if (matcher.find()) {
-            latexName = matcher.group(1);
-            htmlName = matcher.group(1);
+            name = matcher.group(1);
         }
 
         matcher = htmlPattern.matcher(line);
@@ -294,10 +297,10 @@ public class BibTeXParser {
             htmlName = matcher.group(1);
         }
 
-        matcher = latexPattern.matcher(line);
+        matcher = plainPattern.matcher(line);
 
         if (matcher.find()) {
-            latexName = matcher.group(1);
+            plaintextName = matcher.group(1);
         }
 
         matcher = urlPattern.matcher(line);
@@ -306,13 +309,23 @@ public class BibTeXParser {
             url = matcher.group(1);
         }
 
-        if (shortName != null && htmlName != null && latexName != null) {
-            Author author = new Author(shortName, latexName, htmlName);
-            author.setUrl(url);
-
-            authors.put(shortName, author);
+        if (shortName == null) {
+            Console.error("Author tag is missing mandatory field \"short\":%n%s", line);
+        } else if (name == null) {
+            Console.error("Author tag is missing mandatory field \"name\":%n%s", line);
         } else {
-            Console.error("Author tag detected, but no full author information found:%n%s", line);
+            Author author = new Author(shortName, name);
+            author.setUrl(url);
+            
+            if (htmlName != null) {
+                author.setHtmlName(htmlName);
+            }
+            
+            if (plaintextName != null) {
+                author.setPlaintextName(plaintextName);
+            }
+            
+            authors.put(shortName, author);
         }
     }
 

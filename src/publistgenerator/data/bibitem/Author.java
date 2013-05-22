@@ -10,16 +10,21 @@ package publistgenerator.data.bibitem;
  */
 public class Author {
 
-    private String abbreviation, latexName, htmlName, url;
+    private String abbreviation, plaintextName, latexName, htmlName, url;
 
-    public Author(String abbreviation, String latexName, String htmlName) {
+    public Author(String abbreviation, String plaintextName, String latexName, String htmlName) {
         this.abbreviation = abbreviation;
+        this.plaintextName = plaintextName;
         this.latexName = latexName;
         this.htmlName = htmlName;
     }
 
-    public Author(String author) {
-        this(author, author, author);
+    public Author(String latexName) {
+        this(latexName, latexName, latexName, latexName);
+    }
+    
+    public Author(String abbreviation, String latexName) {
+        this(abbreviation, latexName, latexName, latexName);
     }
 
     public String getAbbreviation() {
@@ -30,7 +35,23 @@ public class Author {
         this.abbreviation = abbreviation;
     }
 
+    public String getPlaintextName() {
+        return plaintextName;
+    }
+    
+    public String getFormattedPlaintextName() {
+        return formatName(plaintextName);
+    }
+
+    public void setPlaintextName(String plaintextName) {
+        this.plaintextName = plaintextName;
+    }
+
     public String getHtmlName() {
+        return htmlName;
+    }
+    
+    public String getFormattedHtmlName() {
         return formatName(htmlName);
     }
 
@@ -47,11 +68,11 @@ public class Author {
     }
 
     public String getLatexName() {
-        return formatName(latexName);
-    }
-
-    public String getRawLatexName() {
         return latexName;
+    }
+    
+    public String getFormattedLatexName() {
+        return formatName(latexName);
     }
 
     public void setLatexName(String latexName) {
@@ -69,18 +90,18 @@ public class Author {
     public boolean isMe() {
         return "me".equals(abbreviation);
     }
-
+    
     private String formatName(String name) {
         String first, last;
         int comma = name.indexOf(',');
-        int space = name.indexOf(' ');
+        int space = name.lastIndexOf(' ');
         
         if (comma != -1) {
             // Convert a name in format <Last name(s)>, <First name(s)> to <First letter of first name(s)> <Last name(s)>
             last = name.substring(0, comma).trim();
             first = name.substring(comma + 1).trim();
         } else if (space != -1) {
-            // Assume the format is "<First name> <Last name(s)>"
+            // Assume the format is "<First name(s)> <Last name>"
             first = name.substring(0, space).trim();
             last = name.substring(space + 1).trim();
         } else {
@@ -93,6 +114,6 @@ public class Author {
 
     @Override
     public String toString() {
-        return "Author{" + "abbreviation=\"" + abbreviation + "\", latexName=\"" + latexName + "\", htmlName=\"" + htmlName + "\", url=\"" + url + "\"}";
+        return "Author{" + "abbreviation=\"" + abbreviation + "\", latexName=\"" + latexName + "\", plaintextname=\"" + plaintextName + "\", htmlName=\"" + htmlName + "\", url=\"" + url + "\"}";
     }
 }
