@@ -62,10 +62,6 @@ public class BibTeXParser {
         }
         
         Console.log("Publications list \"%s\" parsed successfully.", file.getName());
-        
-        for (BibItem item : items) {
-            Console.log("%s", item.toString());
-        }
 
         return items;
     }
