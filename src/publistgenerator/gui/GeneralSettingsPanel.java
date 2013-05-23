@@ -75,19 +75,14 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         }
 
         // Categories
-        Set<CategoryIdentifier> in = EnumSet.noneOf(CategoryIdentifier.class);
+        inListModel = new DefaultListModel<>();
+        outListModel = new DefaultListModel<>();
+        
         Set<CategoryIdentifier> out = EnumSet.allOf(CategoryIdentifier.class);
 
         for (CategoryIdentifier c : settings.getCategories()) {
-            in.add(c);
-            out.remove(c);
-        }
-
-        inListModel = new DefaultListModel<>();
-        outListModel = new DefaultListModel<>();
-
-        for (CategoryIdentifier c : in) {
             inListModel.addElement(c);
+            out.remove(c);
         }
 
         for (CategoryIdentifier c : out) {

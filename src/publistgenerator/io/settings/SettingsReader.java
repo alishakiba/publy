@@ -42,6 +42,11 @@ public class SettingsReader extends DefaultHandler {
 
         if (settingsFile.exists()) {
             settings = new Settings();
+            
+            // Clear the default categories
+            settings.getHtmlSettings().getCategories().clear();
+            settings.getPlainSettings().getCategories().clear();
+            
             parseSettings(settings, settingsFile);
         }
 
