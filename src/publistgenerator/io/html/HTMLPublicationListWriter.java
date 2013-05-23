@@ -7,6 +7,8 @@ package publistgenerator.io.html;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import publistgenerator.data.bibitem.BibItem;
 import publistgenerator.data.category.OutputCategory;
 import publistgenerator.data.settings.HTMLSettings;
@@ -25,6 +27,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     private HTMLBibItemWriter itemWriter;
     private HTMLSettings settings;
     private int globalCount;
+    private Pattern hrefPattern = Pattern.compile("href\\s*=\\s*\"([^\"]*)\"");
 
     public HTMLPublicationListWriter(HTMLSettings settings) {
         super(settings);
@@ -84,6 +87,38 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                 } else {
                     out.write(line);
                     out.newLine();
+                }
+
+                // Copy referenced files from the data directory to the output directory
+                if (line.contains("href")) {
+                    // See if this is a reference to a file in the data directory
+                    Matcher m = hrefPattern.matcher(line);
+
+                    while (m.find()) {
+                        // Check if this file already exists; if so, do nothing
+                        String file = m.group(1);
+
+                        File reference = new File(settings.getTarget().getParentFile(), file);
+
+                        if (!reference.exists()) {
+                            // Grab the file name
+                            String fileName = reference.getName();
+
+                            // See if there is a file with this name in data
+                            File dataDir = new File(DEFAULT_BASEJS_LOCATION).getParentFile();
+                            
+                            for (File f : dataDir.listFiles()) {
+                                if (f.isFile() && f.getName().equals(fileName)) {
+                                    // Copy this file to the target directory
+                                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(reference))) {
+                                        copyFile(f, writer);
+                                    }
+                                    
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
