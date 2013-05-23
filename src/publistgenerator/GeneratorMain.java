@@ -58,18 +58,29 @@ public class GeneratorMain {
 
             try {
                 items = BibTeXParser.parseFile(settings.getPublications());
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(GeneratorMain.class.getName()).log(Level.SEVERE, null, ex);
+                Console.error("Exception while parsing:%n%s", ex.toString());
             }
 
             if (items != null && settings.generateHTML()) {
-                HTMLPublicationListWriter writer = new HTMLPublicationListWriter(settings.getHtmlSettings());
-                writer.writePublicationList(items);
+                try {
+                    HTMLPublicationListWriter writer = new HTMLPublicationListWriter(settings.getHtmlSettings());
+                    writer.writePublicationList(items);
+                } catch (Exception ex) {
+                    Logger.getLogger(GeneratorMain.class.getName()).log(Level.SEVERE, null, ex);
+                    Console.error("Exception while writing HTML:%n%s", ex.toString());
+                }
             }
 
             if (items != null && settings.generateText()) {
-                PlainPublicationListWriter plainWriter = new PlainPublicationListWriter(settings.getPlainSettings());
-                plainWriter.writePublicationList(items);
+                try {
+                    PlainPublicationListWriter plainWriter = new PlainPublicationListWriter(settings.getPlainSettings());
+                    plainWriter.writePublicationList(items);
+                } catch (Exception ex) {
+                    Logger.getLogger(GeneratorMain.class.getName()).log(Level.SEVERE, null, ex);
+                    Console.error("Exception while writing plain text:%n%s", ex.toString());
+                }
             }
         }
     }
