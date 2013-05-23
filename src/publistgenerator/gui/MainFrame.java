@@ -3,6 +3,7 @@
 package publistgenerator.gui;
 
 import java.io.File;
+import java.nio.file.Path;
 import javax.swing.JFileChooser;
 import javax.swing.text.StyledDocument;
 import publistgenerator.Console;
@@ -25,17 +26,43 @@ public class MainFrame extends javax.swing.JFrame {
         this.settings = settings;
         initComponents();
         populateValues();
-        
+
         // Make sure all console output from the generation is redirected to the text area.
         Console.setOutputTarget(consoleTextPane);
     }
-    
+
     /**
-     * Replaces the content of the console text area with the specified StyledDocument.
-     * @param doc 
+     * Replaces the content of the console text area with the specified
+     * StyledDocument.
+     *
+     * @param doc
      */
     public void setConsoleText(StyledDocument doc) {
         consoleTextPane.setDocument(doc);
+    }
+
+    /**
+     * Returns a path to the given file that is relative to the current working
+     * directory.
+     *
+     * @param file
+     * @return
+     */
+    static String getRelativePath(File file) {
+        Path workingDir = (new File(System.getProperty("user.dir"))).toPath();
+        return workingDir.relativize(file.toPath()).toString();
+    }
+
+    /**
+     * Resolves the given path against the current working directory and returns
+     * the corresponding file.
+     *
+     * @param relativePath
+     * @return
+     */
+    static File getFile(String relativePath) {
+        Path workingDir = (new File(System.getProperty("user.dir"))).toPath();
+        return workingDir.resolve(relativePath).toFile();
     }
 
     private void populateValues() {
@@ -44,13 +71,13 @@ public class MainFrame extends javax.swing.JFrame {
             pubTextField.setText("");
             pubFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         } else {
-            pubTextField.setText(settings.getPublications().getPath());
+            pubTextField.setText(getRelativePath(settings.getPublications()));
             pubFileChooser.setCurrentDirectory(settings.getPublications().getParentFile());
         }
-        
+
         htmlCheckBox.setSelected(settings.generateHTML());
         setHtmlEnabled(settings.generateHTML());
-        
+
         plainCheckBox.setSelected(settings.generateText());
         plainSettingsPanel.setEnabled(settings.generateText());
     }
@@ -291,7 +318,7 @@ public class MainFrame extends javax.swing.JFrame {
         int opened = pubFileChooser.showOpenDialog(this);
 
         if (opened == JFileChooser.APPROVE_OPTION) {
-            pubTextField.setText(pubFileChooser.getSelectedFile().getPath());
+            pubTextField.setText(getRelativePath(pubFileChooser.getSelectedFile()));
             settings.setPublications(pubFileChooser.getSelectedFile());
         }
     }//GEN-LAST:event_pubBrowseButtonActionPerformed
@@ -308,7 +335,7 @@ public class MainFrame extends javax.swing.JFrame {
         htmlGeneralSettingsPanel.setEnabled(enabled);
         htmlSettingsPanel.setEnabled(enabled);
     }
-    
+
     private void plainCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plainCheckBoxActionPerformed
         // Update the settings
         settings.setGenerateText(plainCheckBox.isSelected());

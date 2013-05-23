@@ -45,8 +45,10 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         // Target
         if (settings.getTarget() == null) {
             targetTextField.setText("");
+            targetFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         } else {
-            targetTextField.setText(settings.getTarget().getPath());
+            targetTextField.setText(MainFrame.getRelativePath(settings.getTarget()));
+            targetFileChooser.setCurrentDirectory(settings.getTarget().getParentFile());
         }
 
         // List all authors
@@ -489,13 +491,13 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         int opened = targetFileChooser.showOpenDialog(this);
 
         if (opened == JFileChooser.APPROVE_OPTION) {
-            targetTextField.setText(targetFileChooser.getSelectedFile().getPath());
+            targetTextField.setText(MainFrame.getRelativePath(targetFileChooser.getSelectedFile()));
         }
     }//GEN-LAST:event_targetBrowseButtonActionPerformed
 
     private void targetTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
-        settings.setTarget(new File(targetTextField.getText()));
+        settings.setTarget(MainFrame.getFile(targetTextField.getText()));
     }
 
     private void presentedTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {

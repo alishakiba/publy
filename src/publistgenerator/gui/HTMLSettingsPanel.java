@@ -41,7 +41,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             headerTextField.setText("");
             headerFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         } else {
-            headerTextField.setText(settings.getHeader().getPath());
+            headerTextField.setText(MainFrame.getRelativePath(settings.getHeader()));
             headerFileChooser.setCurrentDirectory(settings.getHeader().getParentFile());
         }
         
@@ -49,7 +49,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             footerTextField.setText("");
             footerFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         } else {
-            footerTextField.setText(settings.getFooter().getPath());
+            footerTextField.setText(MainFrame.getRelativePath(settings.getFooter()));
             footerFileChooser.setCurrentDirectory(settings.getFooter().getParentFile());
         }
 
@@ -333,7 +333,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         int opened = headerFileChooser.showOpenDialog(this);
 
         if (opened == JFileChooser.APPROVE_OPTION) {
-            headerTextField.setText(headerFileChooser.getSelectedFile().getPath());
+            headerTextField.setText(MainFrame.getRelativePath(headerFileChooser.getSelectedFile()));
         }
     }//GEN-LAST:event_headerBrowseButtonActionPerformed
 
@@ -341,7 +341,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         int opened = footerFileChooser.showOpenDialog(this);
 
         if (opened == JFileChooser.APPROVE_OPTION) {
-            footerTextField.setText(footerFileChooser.getSelectedFile().getPath());
+            footerTextField.setText(MainFrame.getRelativePath(footerFileChooser.getSelectedFile()));
         }
     }//GEN-LAST:event_footerBrowseButtonActionPerformed
 
@@ -384,12 +384,12 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
 
     private void headerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
-        settings.setHeader(new File(headerTextField.getText()));
+        settings.setHeader(MainFrame.getFile(headerTextField.getText()));
     }
 
     private void footerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
-        settings.setFooter(new File(footerTextField.getText()));
+        settings.setFooter(MainFrame.getFile(footerTextField.getText()));
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
