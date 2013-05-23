@@ -297,7 +297,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         out.write(indent);
-        
+
         switch (item.get("status")) {
             case "submitted":
                 out.write("Submitted to <span class=\"booktitle\">");
@@ -329,12 +329,16 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private void writeLinks(BibItem item) throws IOException {
         if (includeBibtex(item)) {
+            Console.log("Deciding on bibtex for %s.", item.getId());
             if (matches(HTMLSettings.PublicationType.ACCEPTED, item)) {
+                Console.log("Accepted, thus full bibtex.");
                 writeLinks(item, true, false);
             } else if (item.anyNonEmpty("arxiv")) {
+                Console.log("Arxiv, thus arxiv bibtex.");
                 writeLinks(item, false, true);
             } else {
                 // Just in case.
+                Console.log("Other, thus no bibtex.");
                 writeLinks(item, false, false);
             }
         } else {
@@ -629,26 +633,29 @@ public class HTMLBibItemWriter extends BibItemWriter {
         return matches(htmlSettings.getIncludePDF(), item);
     }
 
-    public boolean matches(HTMLSettings.PublicationType type, BibItem item) {
+    public static boolean matches(HTMLSettings.PublicationType type, BibItem item) {
         if (type == HTMLSettings.PublicationType.ALL) {
             return true;
         } else if (type == HTMLSettings.PublicationType.NONE) {
             return false;
         } else {
-            if (item.anyNonEmpty("arxiv")) {
-                return true;
-            } else if (type == HTMLSettings.PublicationType.ARXIV) {
-                return false;
-            } else {
-                if (item.anyNonEmpty("status")) {
-                    if (type == HTMLSettings.PublicationType.PUBLISHED) {
-                        return false;
-                    } else {
-                        return item.get("status").startsWith("accepted");
-                    }
+            if (item.anyNonEmpty("status")) {
+                if (type == HTMLSettings.PublicationType.PUBLISHED) {
+                    return false;
                 } else {
-                    return true;
+                    if (item.get("status").startsWith("accepted")) {
+                        return true;
+                    } else {
+                        if (type == HTMLSettings.PublicationType.ACCEPTED) {
+                            return false;
+                        } else {
+                            // Type is ARXIV
+                            return item.anyNonEmpty("arxiv");
+                        }
+                    }
                 }
+            } else {
+                return true;
             }
         }
     }
