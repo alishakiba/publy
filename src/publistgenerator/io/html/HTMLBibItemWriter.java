@@ -346,9 +346,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         // PDF link
         if (item.anyNonEmpty("pdf") && includePDF(item)) {
             out.write(indent);
-            out.write("[<a href=\"publications/papers/");
-            out.write(item.get("year"));
-            out.write("/");
+            out.write("[<a href=\"");
             out.write(URLEncoder.encode(item.get("pdf"), "UTF-8").replaceAll("\\+", "%20"));
             out.write("\">pdf</a>]");
             out.newLine();
@@ -375,16 +373,26 @@ public class HTMLBibItemWriter extends BibItemWriter {
         // Slides link
         if (item.anyNonEmpty("slides")) {
             String slides = item.get("slides");
-            String extension = slides.substring(slides.lastIndexOf('.') + 1);
+            String extension = null;
+
+            int extensionStart = slides.lastIndexOf('.');
+
+            if (extensionStart > -1) {
+                extension = slides.substring(extensionStart + 1);
+            }
 
             out.write(indent);
-            out.write("[<a href=\"publications/slides/");
-            out.write(item.get("year"));
-            out.write("/");
+            out.write("[<a href=\"");
             out.write(URLEncoder.encode(slides, "UTF-8").replaceAll("\\+", "%20"));
-            out.write("\">Slides (");
-            out.write(extension);
-            out.write(")</a>]");
+            out.write("\">Slides");
+
+            if (extension != null) {
+                out.write(" (");
+                out.write(extension);
+                out.write(")");
+            }
+
+            out.write("</a>]");
             out.newLine();
         }
 
