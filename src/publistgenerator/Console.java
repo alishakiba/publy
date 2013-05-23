@@ -44,7 +44,7 @@ public class Console {
         // Re-check, because textPane might have been set by createConsoleFrame()
         if (textPane != null) {
             try {
-                textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(format + "%n", args), logAttributes);
+                textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" " + format + "%n", args), logAttributes);
             } catch (BadLocationException ex) {
                 // This should never happen
                 throw new AssertionError(ex);
@@ -65,7 +65,7 @@ public class Console {
         // Re-check, because textPane might have been set by createConsoleFrame()
         if (textPane != null) {
             try {
-                textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(format + "%n", args), errorAttributes);
+                textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" " + format + "%n", args), errorAttributes);
             } catch (BadLocationException ex) {
                 // This should never happen
                 throw new AssertionError(ex);

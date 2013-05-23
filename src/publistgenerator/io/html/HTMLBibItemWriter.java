@@ -5,6 +5,7 @@
 package publistgenerator.io.html;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -350,6 +351,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write(URLEncoder.encode(item.get("pdf"), "UTF-8").replaceAll("\\+", "%20"));
             out.write("\">pdf</a>]");
             out.newLine();
+            
+            checkExistance(item.get("pdf"));
         }
 
         // arXiv link
@@ -394,6 +397,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
             out.write("</a>]");
             out.newLine();
+            
+            checkExistance(item.get("slides"));
         }
 
         // Conference version(s) link(s)
@@ -442,6 +447,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
     }
 
+    private void checkExistance(String path) {
+        File file = new File(settings.getTarget().getParentFile(), path);
+        
+        if (!file.exists()) {
+            Console.log("Warning: linked file \"%s\" cannot be found at \"%s\".", path, file.getPath());
+        }
+    }
+    
     private void writeBibTeXHTML(BibItem item) throws IOException {
         // Show / hide links
         writeToggleLink(item.getId() + "_bibtex", "BibTeX");
