@@ -43,13 +43,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     private void populateValues() {
         // Target
-        if (settings.getTarget() == null) {
-            targetTextField.setText("");
-            targetFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
-        } else {
-            targetTextField.setText(MainFrame.getRelativePath(settings.getTarget()));
-            targetFileChooser.setCurrentDirectory(settings.getTarget().getParentFile());
-        }
+        updateTarget();
 
         // List all authors
         if (settings.isListAllAuthors()) {
@@ -102,6 +96,20 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         inCatList.setModel(inListModel);
         outCatList.setModel(outListModel);
+    }
+
+    /**
+     * Refreshes the target from the current settings. This property is
+     * sometimes set by the MainFrame.
+     */
+    void updateTarget() {
+        if (settings.getTarget() == null) {
+            targetTextField.setText("");
+            targetFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+        } else {
+            targetTextField.setText(MainFrame.getRelativePath(settings.getTarget()));
+            targetFileChooser.setCurrentDirectory(settings.getTarget().getParentFile());
+        }
     }
 
     @Override

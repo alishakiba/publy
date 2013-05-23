@@ -331,6 +331,34 @@ public class MainFrame extends javax.swing.JFrame {
         if (opened == JFileChooser.APPROVE_OPTION) {
             pubTextField.setText(getRelativePath(pubFileChooser.getSelectedFile()));
             settings.setPublications(pubFileChooser.getSelectedFile());
+
+            if (settings.getHtmlSettings().getTarget() == null || settings.getPlainSettings().getTarget() == null) {
+                // Set initial targets
+                String baseName = pubFileChooser.getSelectedFile().getName();
+                int extension = baseName.lastIndexOf('.');
+                
+                if (extension > -1) {
+                    baseName = baseName.substring(0, extension);
+                }
+
+                if (settings.getHtmlSettings().getTarget() == null) {
+                    // Set an initial target
+                    File target = new File(pubFileChooser.getSelectedFile().getParentFile(), baseName + ".html");
+                    settings.getHtmlSettings().setTarget(target);
+                    
+                    // Update the GUI
+                    htmlGeneralSettingsPanel.updateTarget();
+                }
+
+                if (settings.getPlainSettings().getTarget() == null) {
+                    // Set an initial target
+                    File target = new File(pubFileChooser.getSelectedFile().getParentFile(), baseName + ".txt");
+                    settings.getPlainSettings().setTarget(target);
+                    
+                    // Update the GUI
+                    plainSettingsPanel.updateTarget();
+                }
+            }
         }
     }//GEN-LAST:event_pubBrowseButtonActionPerformed
 
