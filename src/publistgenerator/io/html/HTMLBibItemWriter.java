@@ -329,16 +329,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private void writeLinks(BibItem item) throws IOException {
         if (includeBibtex(item)) {
-            Console.log("Deciding on bibtex for %s.", item.getId());
             if (matches(HTMLSettings.PublicationType.ACCEPTED, item)) {
-                Console.log("Accepted, thus full bibtex.");
                 writeLinks(item, true, false);
             } else if (item.anyNonEmpty("arxiv")) {
-                Console.log("Arxiv, thus arxiv bibtex.");
                 writeLinks(item, false, true);
             } else {
                 // Just in case.
-                Console.log("Other, thus no bibtex.");
                 writeLinks(item, false, false);
             }
         } else {
