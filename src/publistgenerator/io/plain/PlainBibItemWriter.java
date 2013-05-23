@@ -159,7 +159,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         out.write(formatTitle(item));
         out.write(".");
 
-        if ("yes".equals(item.get("presented"))) {
+        if ("yes".equals(item.get("presented")) && settings.getPresentedText() != null && !settings.getPresentedText().isEmpty()) {
             out.write(" ");
             out.write(settings.getPresentedText());
         }
