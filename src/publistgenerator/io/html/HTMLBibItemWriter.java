@@ -200,7 +200,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("</h2></a>");
 
         // Add text if I presented this paper
-        if ("yes".equals(item.get("presented"))) {
+        if ("yes".equals(item.get("presented")) && settings.getPresentedText() != null && !settings.getPresentedText().isEmpty()) {
             out.write(" ");
             out.write(settings.getPresentedText());
         }
