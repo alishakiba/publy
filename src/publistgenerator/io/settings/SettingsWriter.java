@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.data.settings.Settings;
+import publistgenerator.gui.MainFrame;
 
 /**
  *
@@ -183,7 +184,7 @@ public class SettingsWriter {
     }
 
     private static String makeString(File f) {
-        return (f == null ? "" : f.getPath());
+        return MainFrame.getRelativePath(f);
     }
 
     private static String makeString(Enum e) {

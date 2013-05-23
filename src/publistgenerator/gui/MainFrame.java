@@ -43,26 +43,37 @@ public class MainFrame extends javax.swing.JFrame {
 
     /**
      * Returns a path to the given file that is relative to the current working
-     * directory.
+     * directory. When the file is
+     * <code>null</code>, an empty path is returned instead.
      *
      * @param file
      * @return
      */
-    static String getRelativePath(File file) {
-        Path workingDir = (new File(System.getProperty("user.dir"))).toPath();
-        return workingDir.relativize(file.toPath()).toString();
+    public static String getRelativePath(File file) {
+        if (file == null) {
+            return "";
+        } else {
+            Path workingDir = (new File(System.getProperty("user.dir"))).toPath();
+            return workingDir.relativize(file.toPath()).toString();
+        }
     }
 
     /**
      * Resolves the given path against the current working directory and returns
-     * the corresponding file.
+     * the corresponding file. When the path is
+     * <code>null</code> or empty,
+     * <code>null</code> is returned instead.
      *
      * @param relativePath
      * @return
      */
-    static File getFile(String relativePath) {
-        Path workingDir = (new File(System.getProperty("user.dir"))).toPath();
-        return workingDir.resolve(relativePath).toFile();
+    public static File getFile(String relativePath) {
+        if (relativePath == null || relativePath.isEmpty()) {
+            return null;
+        } else {
+            Path workingDir = (new File(System.getProperty("user.dir"))).toPath();
+            return workingDir.resolve(relativePath).toFile();
+        }
     }
 
     private void populateValues() {
