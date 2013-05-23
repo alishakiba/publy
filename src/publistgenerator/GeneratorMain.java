@@ -58,8 +58,6 @@ public class GeneratorMain {
 
             try {
                 items = BibTeXParser.parseFile(settings.getPublications());
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(GeneratorMain.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(GeneratorMain.class.getName()).log(Level.SEVERE, null, ex);
             }
