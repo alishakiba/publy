@@ -301,7 +301,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.newLine();
         out.write("      tex2jax: {");
         out.newLine();
-        out.write("       inlineMath: [['$','$'], ['\\(','\\)']],");
+        out.write("       inlineMath: [['$','$'], ['\\\\(','\\\\)']],");
         out.newLine();
         out.write("       processEscapes: true");
         out.newLine();
