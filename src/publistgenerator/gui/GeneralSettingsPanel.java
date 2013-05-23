@@ -116,7 +116,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         outCatList.setEnabled(enabled);
 
         noteLabel.setEnabled(enabled);
-        noteTextField.setEnabled(enabled);
+        noteTextField.setEnabled(enabled && selectedCategory != null);
 
         // Handle the buttons correctly
         if (enabled) {
