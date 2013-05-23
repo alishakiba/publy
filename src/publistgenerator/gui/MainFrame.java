@@ -3,7 +3,10 @@
 package publistgenerator.gui;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.text.StyledDocument;
 import publistgenerator.Console;
@@ -321,8 +324,12 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void saveNQuitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveNQuitButtonActionPerformed
-        SettingsWriter.writeSettings(settings);
-        dispose();
+        try {
+            SettingsWriter.writeSettings(settings);
+            dispose();
+        } catch (IOException ex) {
+            Console.error("Exception when saving settings: %s", ex.toString());
+        }
     }//GEN-LAST:event_saveNQuitButtonActionPerformed
 
     private void pubBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pubBrowseButtonActionPerformed

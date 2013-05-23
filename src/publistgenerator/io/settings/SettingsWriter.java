@@ -9,8 +9,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.data.settings.Settings;
@@ -22,7 +20,15 @@ import publistgenerator.gui.MainFrame;
  */
 public class SettingsWriter {
 
-    public static void writeSettings(Settings settings) {
+    public static void writeSettings(Settings settings) throws IOException {
+        File parentDir = new File(SettingsReader.DEFAULT_SETTINGS_LOCATION).getParentFile();
+        
+        if (!parentDir.exists()) {
+            if (!parentDir.mkdirs()) {
+                throw new IOException("Could not create the directory \"" + parentDir.getPath() + "\" to store the settings.");
+            }
+        }
+        
         try (BufferedWriter out = new BufferedWriter(new FileWriter(SettingsReader.DEFAULT_SETTINGS_LOCATION))) {
             // Write header
             out.write("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
@@ -37,8 +43,6 @@ public class SettingsWriter {
             // Write footer
             out.write("</plgsettings>");
             out.newLine();
-        } catch (IOException ex) {
-            Logger.getLogger(SettingsWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
