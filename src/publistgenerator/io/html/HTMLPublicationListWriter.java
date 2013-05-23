@@ -18,6 +18,10 @@ import publistgenerator.io.PublicationListWriter;
  */
 public class HTMLPublicationListWriter extends PublicationListWriter {
 
+    public static final String DEFAULT_BASEJS_LOCATION = "data/basejs.html";
+    public static final String DEFAULT_GAJS_LOCATION = "data/gajs.html";
+    public static final String DEFAULT_HEADER_LOCATION = "data/defaultHeader.html";
+    public static final String DEFAULT_FOOTER_LOCATION = "data/defaultFooter.html";
     private HTMLBibItemWriter itemWriter;
     private HTMLSettings settings;
     private int globalCount;
@@ -33,7 +37,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         globalCount = 0;
 
         if (settings.getHeader() == null) {
-            writeDefaultHeader(out);
+            publistgenerator.Console.error("No header found. The generated HTML file will not be valid.");
         } else {
             // Copy the header from the header file
             copyFile(settings.getHeader(), out);
@@ -56,7 +60,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
 
         if (settings.getFooter() == null) {
-            writeDefaultFooter(out);
+            publistgenerator.Console.error("No footer found. The generated HTML file will not be valid.");
         } else {
             // Copy the footer from the footer file
             copyFile(settings.getFooter(), out);
@@ -171,287 +175,34 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void writeJavascript(BufferedWriter out) throws IOException {
-        // Functional stylesheet
-        out.write("    <!-- Functional stylesheet -->");
-        out.newLine();
-        out.write("    <link rel=\"stylesheet\" href=\"interactive.css\" type=\"text/css\">");
-        out.newLine();
-        out.newLine();
+        File baseJs = new File(DEFAULT_BASEJS_LOCATION);
 
-        // Hide interactive stuff
-        out.write("    <!-- Hide interactive elements for users who have JavaScript disabled -->");
-        out.newLine();
-        out.write("    <noscript>");
-        out.newLine();
-        out.write("     <style type=\"text/css\">");
-        out.newLine();
-        out.write("      .interactive { display:none; }");
-        out.newLine();
-        out.write("     </style>");
-        out.newLine();
-        out.write("    </noscript>");
-        out.newLine();
-        out.newLine();
-
-        // jQuery
-        out.write("    <!-- jQuery framework -->");
-        out.newLine();
-        out.write("    <script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js\"></script>");
-        out.newLine();
-        out.newLine();
-
-        // Article linking
-        out.write("    <!-- Detection for links to specific articles -->");
-        out.newLine();
-        out.write("    <script type=\"text/javascript\">");
-        out.newLine();
-        out.write("     $(document).ready(function() {");
-        out.newLine();
-        out.write("      // Run once, for page reloads");
-        out.newLine();
-        out.write("      var hash = window.location.hash;");
-        out.newLine();
-        out.write("      if (hash) {");
-        out.newLine();
-        out.write("       showOnly(hash.substring(1) + \"_abstract\");");
-        out.newLine();
-        out.write("      }");
-        out.newLine();
-        out.write("     ");
-        out.newLine();
-        out.write("      // Run every time the hash changes");
-        out.newLine();
-        out.write("      $(window).on('hashchange', function() {");
-        out.newLine();
-        out.write("       showOnly(document.location.hash.substring(1) + \"_abstract\");");
-        out.newLine();
-        out.write("      });");
-        out.newLine();
-        out.write("     });");
-        out.newLine();
-        out.write("    </script>");
-        out.newLine();
-        out.newLine();
-
-        // Toggle code
-        out.write("    <!-- Function for toggling visibility of abstracts and BibTeX etc. -->");
-        out.newLine();
-        out.write("    <script type=\"text/javascript\">");
-        out.newLine();
-        out.write("     function toggle(divID) {");
-        out.newLine();
-        out.write("      $(\"#\" + divID + \"_plus\").toggle();");
-        out.newLine();
-        out.write("      $(\"#\" + divID + \"_minus\").toggle();");
-        out.newLine();
-        out.write("      $(\"#\" + divID).slideToggle(500);");
-        out.newLine();
-        out.write("     }");
-        out.newLine();
-        out.write("     ");
-        out.newLine();
-        out.write("     function show(divID) {");
-        out.newLine();
-        out.write("      $(\"#\" + divID + \"_plus\").hide();");
-        out.newLine();
-        out.write("      $(\"#\" + divID + \"_minus\").show();");
-        out.newLine();
-        out.write("      $(\"#\" + divID).show();");
-        out.newLine();
-        out.write("     }");
-        out.newLine();
-        out.write("     ");
-        out.newLine();
-        out.write("     function hide(divID) {");
-        out.newLine();
-        out.write("      $(\"#\" + divID + \"_plus\").show();");
-        out.newLine();
-        out.write("      $(\"#\" + divID + \"_minus\").hide();");
-        out.newLine();
-        out.write("      $(\"#\" + divID).hide();");
-        out.newLine();
-        out.write("     }");
-        out.newLine();
-        out.write("     ");
-        out.newLine();
-        out.write("     function showOnly(divID) {");
-        out.newLine();
-        out.write("      $(\".collapsible\").hide();");
-        out.newLine();
-        out.write("      $(\".hidden\").hide();");
-        out.newLine();
-        out.write("      $(\".shown\").show();");
-        out.newLine();
-        out.write("      ");
-        out.newLine();
-        out.write("      toggle(divID);");
-        out.newLine();
-        out.write("     }");
-        out.newLine();
-        out.write("    </script>");
-        out.newLine();
-        out.newLine();
-
-        // MathJax
-        out.write("    <!-- Include MathJax to convert LaTeX formulas to HTML on the fly -->");
-        out.newLine();
-        out.write("    <script type=\"text/x-mathjax-config\">");
-        out.newLine();
-        out.write("     MathJax.Hub.Config({");
-        out.newLine();
-        out.write("      tex2jax: {");
-        out.newLine();
-        out.write("       inlineMath: [['$','$'], ['\\\\(','\\\\)']],");
-        out.newLine();
-        out.write("       processEscapes: true");
-        out.newLine();
-        out.write("      }");
-        out.newLine();
-        out.write("     });");
-        out.newLine();
-        out.write("    </script>");
-        out.newLine();
-        out.write("    <script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>");
-        out.newLine();
-        out.newLine();
-
-        // Last: Google Analytics code
-        if (settings.getGoogleAnalyticsUser() != null) {
-            // Download tracking
-            out.write("    <!-- Track external links and file downloads with Google Analytics -->");
-            out.newLine();
-            out.write("    <script type=\"text/javascript\">");
-            out.newLine();
-            out.write("    if (typeof jQuery != 'undefined') {");
-            out.newLine();
-            out.write("      jQuery(document).ready(function($) {");
-            out.newLine();
-            out.write("        var filetypes = /\\.(zip|jar|pdf|ppt*)$/i;");
-            out.newLine();
-            out.write("        var baseHref = '';");
-            out.newLine();
-            out.write("        if (jQuery('base').attr('href') != undefined)");
-            out.newLine();
-            out.write("          baseHref = jQuery('base').attr('href');");
-            out.newLine();
-            out.write("        jQuery('a').each(function() {");
-            out.newLine();
-            out.write("          var href = jQuery(this).attr('href');");
-            out.newLine();
-            out.write("          if (href && (href.match(/^https?\\:/i)) && (!href.match(document.domain))) {");
-            out.newLine();
-            out.write("            jQuery(this).click(function() {");
-            out.newLine();
-            out.write("              var extLink = href.replace(/^https?\\:\\/\\//i, '');");
-            out.newLine();
-            out.write("              _gaq.push(['_trackEvent', 'External', 'Click', extLink]);");
-            out.newLine();
-            out.write("              if (jQuery(this).attr('target') != undefined && jQuery(this).attr('target').toLowerCase() != '_blank') {");
-            out.newLine();
-            out.write("                setTimeout(function() { location.href = href; }, 200);");
-            out.newLine();
-            out.write("                return false;");
-            out.newLine();
-            out.write("              }");
-            out.newLine();
-            out.write("            });");
-            out.newLine();
-            out.write("          }");
-            out.newLine();
-            out.write("          else if (href && href.match(filetypes)) {");
-            out.newLine();
-            out.write("            jQuery(this).click(function() {");
-            out.newLine();
-            out.write("              var extension = (/[.]/.exec(href)) ? /[^.]+$/.exec(href) : undefined;");
-            out.newLine();
-            out.write("              var filePath = href;");
-            out.newLine();
-            out.write("              _gaq.push(['_trackEvent', 'Download', 'Click-' + extension, filePath]);");
-            out.newLine();
-            out.write("              if (jQuery(this).attr('target') != undefined && jQuery(this).attr('target').toLowerCase() != '_blank') {");
-            out.newLine();
-            out.write("                setTimeout(function() { location.href = baseHref + href; }, 200);");
-            out.newLine();
-            out.write("                return false;");
-            out.newLine();
-            out.write("              }");
-            out.newLine();
-            out.write("            });");
-            out.newLine();
-            out.write("          }");
-            out.newLine();
-            out.write("        });");
-            out.newLine();
-            out.write("      });");
-            out.newLine();
-            out.write("    }");
-            out.newLine();
-            out.write("    </script>");
-            out.newLine();
-            out.newLine();
-
-            // Google Analytics
-            out.write("    <!-- Google analytics code -->");
-            out.newLine();
-            out.write("    <script type=\"text/javascript\">");
-            out.newLine();
-            out.write("      var _gaq = _gaq || [];");
-            out.newLine();
-            out.write("      var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';");
-            out.newLine();
-            out.write("      _gaq.push(['_require', 'inpage_linkid', pluginUrl]);");
-            out.newLine();
-            out.write("      _gaq.push(['_setAccount', '" + settings.getGoogleAnalyticsUser() + "']);");
-            out.newLine();
-            out.write("      _gaq.push(['_trackPageview']);");
-            out.newLine();
-            out.write("    ");
-            out.newLine();
-            out.write("      (function() {");
-            out.newLine();
-            out.write("        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;");
-            out.newLine();
-            out.write("        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';");
-            out.newLine();
-            out.write("        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);");
-            out.newLine();
-            out.write("      })();");
-            out.newLine();
-            out.write("    </script>");
-            out.newLine();
+        if (baseJs.exists()) {
+            copyFile(baseJs, out);
+        } else {
+            publistgenerator.Console.error("Cannot find base javascript file \"%s\".", baseJs.getPath());
         }
-    }
 
-    private void writeDefaultHeader(BufferedWriter out) throws IOException {
-        out.write("<!DOCTYPE html>");
-        out.newLine();
-        out.write("<html>");
-        out.newLine();
-        out.write("  <head>");
-        out.newLine();
-        out.write("    <title>Publications</title>");
-        out.newLine();
-        out.write("    <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">");
-        out.newLine();
-        out.write("    <link rel=\"stylesheet\" href=\"minimalstyle.css\" type=\"text/css\">");
-        out.newLine();
-        
-        writeJavascript(out);
-        
-        out.write("  </head>");
-        out.newLine();
-        out.write("  <body>");
-        out.newLine();
-        out.write("    <noscript><p>Some elements on this site require JavaScript. Enable it for the best experience.</p></noscript>");
-        out.newLine();
-        out.write("  ");
-        out.newLine();
-    }
+        // Google Analytics code
+        if (settings.getGoogleAnalyticsUser() != null && !settings.getGoogleAnalyticsUser().isEmpty()) {
+            File gaJs = new File(DEFAULT_GAJS_LOCATION);
 
-    private void writeDefaultFooter(BufferedWriter out) throws IOException {
-        out.write("  </body>");
-        out.newLine();
-        out.write("</html>");
-        out.newLine();
+            if (gaJs.exists()) {
+                try (BufferedReader reader = new BufferedReader(new FileReader(gaJs))) {
+                    for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+                        if (line.contains("~GAUSERACCOUNT~")) {
+                            // Replace the user account place-holder with the actual value
+                            out.write(line.replaceAll("~GAUSERACCOUNT~", settings.getGoogleAnalyticsUser()));
+                            out.newLine();
+                        } else {
+                            out.write(line);
+                            out.newLine();
+                        }
+                    }
+                }
+            } else {
+                publistgenerator.Console.error("Cannot find Google Analytics javascript file \"%s\".", gaJs.getPath());
+            }
+        }
     }
 }

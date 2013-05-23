@@ -5,6 +5,8 @@
 package publistgenerator.data.settings;
 
 import java.io.File;
+import publistgenerator.gui.MainFrame;
+import publistgenerator.io.html.HTMLPublicationListWriter;
 
 /**
  *
@@ -39,8 +41,8 @@ public class HTMLSettings extends FormatSettings {
     private PublicationType includeAbstract = PublicationType.ALL;
     private PublicationType includeBibtex = PublicationType.ARXIV; // ALL should not be an option here.
     private PublicationType includePDF = PublicationType.ARXIV;
-    private File header = null;
-    private File footer = null;
+    private File header = MainFrame.getFile(HTMLPublicationListWriter.DEFAULT_HEADER_LOCATION);
+    private File footer = MainFrame.getFile(HTMLPublicationListWriter.DEFAULT_FOOTER_LOCATION);
     private String googleAnalyticsUser = null;
 
     public HTMLSettings(Settings settings) {
