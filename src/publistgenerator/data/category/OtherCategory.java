@@ -19,7 +19,7 @@ public class OtherCategory extends OutputCategory {
 
     @Override
     public boolean fitsCategory(BibItem item) {
-        return true;
+        return !"submitted".equals(item.get("status"));
     }
 
 }
