@@ -196,7 +196,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         // jQuery
         out.write("    <!-- jQuery framework -->");
         out.newLine();
-        out.write("    <script src=\"jquery-1.9.1.min.js\" type=\"text/javascript\"></script>");
+        out.write("    <script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js\"></script>");
         out.newLine();
         out.newLine();
 
