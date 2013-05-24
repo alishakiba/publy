@@ -228,7 +228,7 @@ public class PlainBibItemWriter extends BibItemWriter {
                 out.newLine();
                 break;
             default:
-                throw new InternalError("Unrecognized status: \"" + item.get("status") + "\"");
+                throw new AssertionError("Unrecognized status: \"" + item.get("status") + "\"");
         }
     }
 }

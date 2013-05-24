@@ -3,6 +3,8 @@
 package publistgenerator;
 
 import java.awt.Color;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
@@ -66,6 +68,30 @@ public class Console {
         if (textPane != null) {
             try {
                 textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" " + format + "%n", args), errorAttributes);
+            } catch (BadLocationException ex) {
+                // This should never happen
+                throw new AssertionError(ex);
+            }
+        }
+    }
+    
+    public static void except(Throwable exception, String format, Object... args) {
+        StringWriter stackTrace = new StringWriter();
+        exception.printStackTrace(new PrintWriter(stackTrace));
+        
+        if (textPane == null) {
+            if (System.console() == null) {
+                createConsoleFrame();
+            } else {
+                System.console().format("ERROR: " + format + "%n%s%n%s%n", args, exception.toString(), stackTrace.toString());
+                System.console().flush();
+            }
+        }
+        
+        // Re-check, because textPane might have been set by createConsoleFrame()
+        if (textPane != null) {
+            try {
+                textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" " + format + "%n%s%n%s%n", args, exception.toString(), stackTrace.toString()), errorAttributes);
             } catch (BadLocationException ex) {
                 // This should never happen
                 throw new AssertionError(ex);

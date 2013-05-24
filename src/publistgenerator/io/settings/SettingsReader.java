@@ -36,36 +36,32 @@ public class SettingsReader extends DefaultHandler {
         this.settings = settings;
     }
 
-    public static Settings parseSettings() {
+    public static Settings parseSettings() throws ParserConfigurationException, SAXException, IOException {
         File settingsFile = new File(DEFAULT_SETTINGS_LOCATION);
         Settings settings = null;
 
         if (settingsFile.exists()) {
             settings = new Settings();
-            
+
             // Clear the default categories
             settings.getHtmlSettings().getCategories().clear();
             settings.getPlainSettings().getCategories().clear();
-            
+
             parseSettings(settings, settingsFile);
         }
 
         return settings;
     }
 
-    private static void parseSettings(Settings settings, File inputFile) {
+    private static void parseSettings(Settings settings, File inputFile) throws ParserConfigurationException, SAXException, IOException {
         // Use the default (non-validating) parser
         SAXParserFactory factory = SAXParserFactory.newInstance();
         // Create a new instance of this class as handler
         SettingsReader handler = new SettingsReader(settings);
 
-        try {
-            // Parse the input
-            SAXParser saxParser = factory.newSAXParser();
-            saxParser.parse(inputFile, handler);
-        } catch (ParserConfigurationException | SAXException | IOException ex) {
-            Logger.getLogger(SettingsReader.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // Parse the input
+        SAXParser saxParser = factory.newSAXParser();
+        saxParser.parse(inputFile, handler);
     }
 
     @Override

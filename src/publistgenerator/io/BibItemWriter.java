@@ -50,7 +50,7 @@ public abstract class BibItemWriter {
         } else if (item instanceof Unpublished) {
             write((Unpublished) item, number);
         } else {
-            throw new InternalError("Unrecognized BibItem type: " + item.getType());
+            throw new AssertionError("Unrecognized BibItem type: " + item.getType());
         }
     }
 

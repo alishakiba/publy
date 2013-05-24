@@ -32,7 +32,7 @@ public class HTMLSettings extends FormatSettings {
                 case ALL:
                     return "All papers";
                 default:
-                    throw new InternalError("Unrecognized PublicationType: " + this);
+                    throw new AssertionError("Unrecognized PublicationType: " + this);
             }
         }
     }

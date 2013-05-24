@@ -325,8 +325,8 @@ public class MainFrame extends javax.swing.JFrame {
         try {
             SettingsWriter.writeSettings(settings);
             dispose();
-        } catch (IOException ex) {
-            Console.error("Exception when saving settings: %s", ex.toString());
+        } catch (Exception | AssertionError ex) {
+            Console.except(ex, "Exception when saving settings:");
         }
     }//GEN-LAST:event_saveNQuitButtonActionPerformed
 

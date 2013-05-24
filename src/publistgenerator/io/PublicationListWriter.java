@@ -34,14 +34,11 @@ public abstract class PublicationListWriter {
         }
     }
 
-    public void writePublicationList(List<BibItem> items) {
+    public void writePublicationList(List<BibItem> items) throws IOException {
         categorizePapers(items, settings);
 
         try (BufferedWriter out = new BufferedWriter(new FileWriter(settings.getTarget()))) {
             writePublicationList(out);
-        } catch (IOException ioe) {
-            System.err.println("Exception occurred.");
-            ioe.printStackTrace();
         }
     }
 
