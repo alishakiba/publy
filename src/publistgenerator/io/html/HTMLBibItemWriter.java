@@ -177,10 +177,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     protected void writeTitleAndAuthorsHTML(BibItem item, int number) throws IOException {
         writeTitleAndAbstractHTML(item, number);
-        out.write(indent);
-        out.write(formatAuthors(item));
-        out.write(".<br>");
-        out.newLine();
+
+        // Don't add an authors line if it's just me and I just want to list co-authors
+        if (settings.isListAllAuthors() || item.getAuthors().size() > 1) {
+            out.write(indent);
+            out.write(formatAuthors(item));
+            out.write(".<br>");
+            out.newLine();
+        }
     }
 
     protected void writeTitleAndAbstractHTML(BibItem item, int number) throws IOException {
@@ -189,7 +193,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         // Number
         if (number >= 0) {
             out.write("<span class=\"number\">");
-            out.write(number);
+            out.write(Integer.toString(number));
             out.write(".<span> ");
         }
 
@@ -351,7 +355,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write(URLEncoder.encode(item.get("pdf"), "UTF-8").replaceAll("\\+", "%20"));
             out.write("\">pdf</a>]");
             out.newLine();
-            
+
             checkExistance(item.get("pdf"));
         }
 
@@ -397,7 +401,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
             out.write("</a>]");
             out.newLine();
-            
+
             checkExistance(item.get("slides"));
         }
 
@@ -449,12 +453,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private void checkExistance(String path) {
         File file = new File(settings.getTarget().getParentFile(), path);
-        
+
         if (!file.exists()) {
             Console.log("Warning: linked file \"%s\" cannot be found at \"%s\".", path, file.getPath());
         }
     }
-    
+
     private void writeBibTeXHTML(BibItem item) throws IOException {
         // Show / hide links
         writeToggleLink(item.getId() + "_bibtex", "BibTeX");
