@@ -77,7 +77,7 @@
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <Component id="targetTextField" max="32767" attributes="0"/>
+                                      <Component id="targetTextField" pref="0" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="targetBrowseButton" min="-2" max="-2" attributes="0"/>
                                   </Group>
@@ -95,7 +95,7 @@
                   <Group type="102" attributes="0">
                       <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="presentedTextField" max="32767" attributes="0"/>
+                          <Component id="presentedTextField" pref="0" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
@@ -199,6 +199,9 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JTextField" name="targetTextField">
+      <Properties>
+        <Property name="columns" type="int" value="30"/>
+      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="targetTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        targetTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        targetTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
       </AuxValues>
@@ -217,6 +220,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="presentedTextField">
+      <Properties>
+        <Property name="columns" type="int" value="40"/>
+      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="presentedTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        presentedTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        presentedTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
       </AuxValues>
@@ -313,7 +319,7 @@
                       </Group>
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                          <Component id="noteTextField" max="32767" attributes="0"/>
+                          <Component id="noteTextField" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -345,6 +351,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="noteTextField">
           <Properties>
+            <Property name="columns" type="int" value="38"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <AuxValues>

@@ -5,6 +5,7 @@
 package publistgenerator.io.html;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import publistgenerator.io.BibItemWriter;
 public class HTMLBibItemWriter extends BibItemWriter {
 
     private HTMLSettings htmlSettings;
+    private static final String indent = "        ";
 
     public HTMLBibItemWriter(BufferedWriter out, HTMLSettings settings) {
         super(out, settings);
@@ -43,7 +45,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
         if (item.anyNonEmpty("status")) {
             writeStatus(item, item.get("journal"));
         } else {
-            out.write("   <span class=\"booktitle\">");
+            out.write(indent);
+            out.write("<span class=\"booktitle\">");
             out.write(item.get("journal"));
             out.write("</span>, ");
 
@@ -70,7 +73,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.newLine();
         }
 
-        output(item.get("note"), ".<br>", true);
+        output(indent, item.get("note"), ".<br>", true);
 
         writeLinks(item);
     }
@@ -97,7 +100,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
         if (item.anyNonEmpty("status")) {
             writeStatus(item, item.get("booktitle"));
         } else {
-            out.write("   In <span class=\"booktitle\">");
+            out.write(indent);
+            out.write("In <span class=\"booktitle\">");
             out.write(item.get("booktitle"));
             out.write("</span>, ");
 
@@ -109,7 +113,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.newLine();
         }
 
-        output(item.get("note"), ".<br>", true);
+        output(indent, item.get("note"), ".<br>", true);
 
         writeLinks(item);
     }
@@ -118,14 +122,15 @@ public class HTMLBibItemWriter extends BibItemWriter {
     public void write(MastersThesis item, int number) throws IOException {
         writeTitleAndAuthorsHTML(item, number);
 
-        out.write("   Master's thesis, ");
+        out.write(indent);
+        out.write("Master's thesis, ");
         out.write(item.get("school"));
         out.write(", ");
         out.write(item.get("year"));
         out.write(".<br>");
         out.newLine();
 
-        output(item.get("note"), ".<br>", true);
+        output(indent, item.get("note"), ".<br>", true);
 
         writeLinks(item);
     }
@@ -134,14 +139,15 @@ public class HTMLBibItemWriter extends BibItemWriter {
     public void write(PhDThesis item, int number) throws IOException {
         writeTitleAndAuthorsHTML(item, number);
 
-        out.write("   PhD thesis, ");
+        out.write(indent);
+        out.write("PhD thesis, ");
         out.write(item.get("school"));
         out.write(", ");
         out.write(item.get("year"));
         out.write(".<br>");
         out.newLine();
 
-        output(item.get("note"), ".<br>", true);
+        output(indent, item.get("note"), ".<br>", true);
 
         writeLinks(item);
     }
@@ -150,10 +156,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
     public void write(InvitedTalk item, int number) throws IOException {
         writeTitleAndAbstractHTML(item, number);
 
-        output(item.get("address"), ", ");
+        output(indent, item.get("address"), ", ", false);
         output(formatDate(item), ".<br>", true);
 
-        output(item.get("note"), ".<br>", true);
+        output(indent, item.get("note"), ".<br>", true);
 
         // links (no bibtex for talks)
         writeLinks(item, false, false);
@@ -163,7 +169,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     public void write(Unpublished item, int number) throws IOException {
         writeTitleAndAuthorsHTML(item, number);
 
-        output(item.get("note"), ".<br>", true);
+        output(indent, item.get("note"), ".<br>", true);
 
         // links (only bibtex if it's on the arXiv)
         writeLinks(item, false, item.anyNonEmpty("arxiv") && includeBibtex(item));
@@ -171,14 +177,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     protected void writeTitleAndAuthorsHTML(BibItem item, int number) throws IOException {
         writeTitleAndAbstractHTML(item, number);
-        out.write("   ");
+        out.write(indent);
         out.write(formatAuthors(item));
         out.write(".<br>");
         out.newLine();
     }
 
     protected void writeTitleAndAbstractHTML(BibItem item, int number) throws IOException {
-        out.write("   ");
+        out.write(indent);
 
         // Number
         if (number >= 0) {
@@ -192,10 +198,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write(item.getId());
         out.write("\"><h2 class=\"title\">");
         out.write(formatTitle(item));
-        out.write("</h2>.</a>");
+        out.write("</h2></a>");
 
-        // Add text if I presented this paper at the conference
-        if ("yes".equals(item.get("presented"))) {
+        // Add text if I presented this paper
+        if ("yes".equals(item.get("presented")) && settings.getPresentedText() != null && !settings.getPresentedText().isEmpty()) {
             out.write(" ");
             out.write(settings.getPresentedText());
         }
@@ -212,7 +218,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.newLine();
 
             // Actual abstract
-            out.write("   <div id=\"");
+            out.write(indent);
+            out.write("<div id=\"");
             out.write(item.getId());
             out.write("_abstract\" class=\"collapsible\"><div class=\"abstract\"><span class=\"abstractword\">Abstract: </span>");
             out.write(abstr);
@@ -290,6 +297,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
             title = title.substring("Proceedings of ".length());
         }
 
+        out.write(indent);
+
         switch (item.get("status")) {
             case "submitted":
                 out.write("Submitted to <span class=\"booktitle\">");
@@ -310,7 +319,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 out.newLine();
                 break;
             default:
-                throw new InternalError("Unrecognized status: \"" + item.get("status") + "\"");
+                throw new AssertionError("Unrecognized status: \"" + item.get("status") + "\"");
         }
     }
 
@@ -337,17 +346,19 @@ public class HTMLBibItemWriter extends BibItemWriter {
     private void writeLinks(BibItem item, boolean includeBibtex, boolean includeArxivBibtex) throws IOException {
         // PDF link
         if (item.anyNonEmpty("pdf") && includePDF(item)) {
-            out.write("   [<a href=\"publications/papers/");
-            out.write(item.get("year"));
-            out.write("/");
+            out.write(indent);
+            out.write("[<a href=\"");
             out.write(URLEncoder.encode(item.get("pdf"), "UTF-8").replaceAll("\\+", "%20"));
             out.write("\">pdf</a>]");
             out.newLine();
+            
+            checkExistance(item.get("pdf"));
         }
 
         // arXiv link
         if (item.anyNonEmpty("arxiv")) {
-            out.write("   [<a href=\"http://arxiv.org/abs/");
+            out.write(indent);
+            out.write("[<a href=\"http://arxiv.org/abs/");
             out.write(item.get("arxiv"));
             out.write("\">arXiv</a>]");
             out.newLine();
@@ -355,7 +366,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // DOI link
         if (item.anyNonEmpty("doi")) {
-            out.write("   [<a href=\"http://dx.doi.org/");
+            out.write(indent);
+            out.write("[<a href=\"http://dx.doi.org/");
             out.write(item.get("doi"));
             out.write("\">DOI</a>]");
             out.newLine();
@@ -364,16 +376,29 @@ public class HTMLBibItemWriter extends BibItemWriter {
         // Slides link
         if (item.anyNonEmpty("slides")) {
             String slides = item.get("slides");
-            String extension = slides.substring(slides.lastIndexOf('.') + 1);
+            String extension = null;
 
-            out.write("   [<a href=\"publications/slides/");
-            out.write(item.get("year"));
-            out.write("/");
+            int extensionStart = slides.lastIndexOf('.');
+
+            if (extensionStart > -1) {
+                extension = slides.substring(extensionStart + 1);
+            }
+
+            out.write(indent);
+            out.write("[<a href=\"");
             out.write(URLEncoder.encode(slides, "UTF-8").replaceAll("\\+", "%20"));
-            out.write("\">Slides (");
-            out.write(extension);
-            out.write(")</a>]");
+            out.write("\">Slides");
+
+            if (extension != null) {
+                out.write(" (");
+                out.write(extension);
+                out.write(")");
+            }
+
+            out.write("</a>]");
             out.newLine();
+            
+            checkExistance(item.get("slides"));
         }
 
         // Conference version(s) link(s)
@@ -381,7 +406,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
             String[] confPapers = item.get("conf").split(",");
 
             for (int i = 0; i < confPapers.length; i++) {
-                out.write("   [<a href=\"#");
+                out.write(indent);
+                out.write("[<a href=\"#");
                 out.write(confPapers[i].trim());
                 out.write("\">Conference version");
 
@@ -399,7 +425,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
             String[] journPapers = item.get("journ").split(",");
 
             for (int i = 0; i < journPapers.length; i++) {
-                out.write("   [<a href=\"#");
+                out.write(indent);
+                out.write("[<a href=\"#");
                 out.write(journPapers[i].trim());
                 out.write("\">Journal version");
 
@@ -420,12 +447,21 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
     }
 
+    private void checkExistance(String path) {
+        File file = new File(settings.getTarget().getParentFile(), path);
+        
+        if (!file.exists()) {
+            Console.log("Warning: linked file \"%s\" cannot be found at \"%s\".", path, file.getPath());
+        }
+    }
+    
     private void writeBibTeXHTML(BibItem item) throws IOException {
         // Show / hide links
         writeToggleLink(item.getId() + "_bibtex", "BibTeX");
 
         // Actual bibtex
-        out.write("   <div id=\"");
+        out.write(indent);
+        out.write("<div id=\"");
         out.write(item.getId());
         out.write("_bibtex\" class=\"collapsible\"><pre class=\"bibtex\">");
         out.newLine();
@@ -446,7 +482,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write("  author={");
 
             for (int i = 0; i < item.getAuthors().size(); i++) {
-                out.write(item.getAuthors().get(i).getRawLatexName());
+                out.write(item.getAuthors().get(i).getLatexName());
 
                 if (i < item.getAuthors().size() - 1) {
                     out.write(" and ");
@@ -504,7 +540,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
         writeToggleLink(item.getId() + "_bibtex", "BibTeX");
 
         // Actual bibtex
-        out.write("   <div id=\"");
+        out.write(indent);
+        out.write("<div id=\"");
         out.write(item.getId());
         out.write("_bibtex\" class=\"collapsible\"><pre class=\"bibtex\">");
         out.newLine();
@@ -523,7 +560,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write("  author={");
 
             for (int i = 0; i < item.getAuthors().size(); i++) {
-                out.write(item.getAuthors().get(i).getRawLatexName());
+                out.write(item.getAuthors().get(i).getLatexName());
 
                 if (i < item.getAuthors().size() - 1) {
                     out.write(" and ");
@@ -569,7 +606,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private void writeToggleLink(String id, String linkText) throws IOException {
         // Mark as interactive so users with JS disabled do not see links that do nothing
-        out.write("   <span class=\"interactive\">");
+        out.write(indent);
+        out.write("<span class=\"interactive\">");
 
         // Link to reveal
         out.write("[<a href=\"javascript:toggle('");
@@ -612,26 +650,29 @@ public class HTMLBibItemWriter extends BibItemWriter {
         return matches(htmlSettings.getIncludePDF(), item);
     }
 
-    public boolean matches(HTMLSettings.PublicationType type, BibItem item) {
+    public static boolean matches(HTMLSettings.PublicationType type, BibItem item) {
         if (type == HTMLSettings.PublicationType.ALL) {
             return true;
         } else if (type == HTMLSettings.PublicationType.NONE) {
             return false;
         } else {
-            if (item.anyNonEmpty("arxiv")) {
-                return true;
-            } else if (type == HTMLSettings.PublicationType.ARXIV) {
-                return false;
-            } else {
-                if (item.anyNonEmpty("status")) {
-                    if (type == HTMLSettings.PublicationType.PUBLISHED) {
-                        return false;
-                    } else {
-                        return item.get("status").startsWith("accepted");
-                    }
+            if (item.anyNonEmpty("status")) {
+                if (type == HTMLSettings.PublicationType.PUBLISHED) {
+                    return false;
                 } else {
-                    return true;
+                    if (item.get("status").startsWith("accepted")) {
+                        return true;
+                    } else {
+                        if (type == HTMLSettings.PublicationType.ACCEPTED) {
+                            return false;
+                        } else {
+                            // Type is ARXIV
+                            return item.anyNonEmpty("arxiv");
+                        }
+                    }
                 }
+            } else {
+                return true;
             }
         }
     }

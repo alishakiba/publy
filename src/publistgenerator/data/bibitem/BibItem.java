@@ -6,6 +6,7 @@ package publistgenerator.data.bibitem;
 
 import java.util.*;
 import java.util.Map.Entry;
+import publistgenerator.Console;
 
 /**
  *
@@ -66,7 +67,7 @@ public abstract class BibItem {
 
             if (v == null || v.isEmpty()) {
                 complete = false;
-                System.err.println("Item " + id + " is missing mandatory field " + field);
+                Console.error("Item \"%s\" is missing mandatory field %s.", id, field);
             }
         }
 
@@ -116,7 +117,9 @@ public abstract class BibItem {
 
         sb.append("@");
         sb.append(getType());
-        sb.append(" {\n");
+        sb.append(" {");
+        sb.append(id);
+        sb.append(",\n");
 
         for (Entry<String, String> entry : values.entrySet()) {
             sb.append("  ");

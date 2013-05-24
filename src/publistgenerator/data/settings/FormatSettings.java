@@ -37,6 +37,12 @@ public class FormatSettings {
 
     public FormatSettings(Settings settings) {
         this.settings = settings;
+        
+        // Default categories
+        categories.add(CategoryIdentifier.JOURNAL);
+        categories.add(CategoryIdentifier.CONFERENCE);
+        categories.add(CategoryIdentifier.CHAPTER);
+        categories.add(CategoryIdentifier.THESIS);
     }
 
     public Settings getSettings() {
