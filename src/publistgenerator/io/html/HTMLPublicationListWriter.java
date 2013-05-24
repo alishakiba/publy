@@ -5,6 +5,7 @@
 package publistgenerator.io.html;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -49,9 +50,12 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         // Write the body
         out.write("    <p>My publications as of " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".");
 
-        if (settings.linkToTextVersion()) {
+        if (settings.linkToTextVersion() && settings.getSettings().generateText() && settings.getSettings().getPlainSettings().getTarget() != null) {
+            Path htmlPage = settings.getTarget().getParentFile().toPath();
+            Path plainText = settings.getSettings().getPlainSettings().getTarget().toPath();
+            
             out.write(" Also available as <a href=\"");
-            out.write(settings.getSettings().getPlainSettings().getTarget().getPath());
+            out.write(htmlPage.relativize(plainText).toString());
             out.write("\" rel=\"alternate\">plain text</a>.");
         }
 
