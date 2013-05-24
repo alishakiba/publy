@@ -85,10 +85,10 @@ public class PlainBibItemWriter extends BibItemWriter {
             out.write("In ");
             out.write(item.get("booktitle"));
             out.write(", ");
-            
+
             writeVolume(item, ", ");
             output(formatPages(item).replaceAll("-+", "-"), ", ");
-            
+
             out.write(item.get("year"));
             out.write(".");
             out.newLine();
@@ -139,7 +139,7 @@ public class PlainBibItemWriter extends BibItemWriter {
 
         output(item.get("note"), ".", true);
     }
-    
+
     @Override
     public void write(Unpublished item, int number) throws IOException {
         writeNumber(number);
@@ -147,10 +147,10 @@ public class PlainBibItemWriter extends BibItemWriter {
 
         output(item.get("note"), ".", true);
     }
-    
+
     private void writeNumber(int number) throws IOException {
         if (number >= 0) {
-            out.write(number);
+            out.write(Integer.toString(number));
             out.write(". ");
         }
     }
@@ -164,9 +164,13 @@ public class PlainBibItemWriter extends BibItemWriter {
             out.write(settings.getPresentedText());
         }
 
-        out.newLine();
-        out.write(formatAuthors(item));
-        out.write(".");
+        // Don't add an authors line if it's just me and I just want to list co-authors
+        if (settings.isListAllAuthors() || item.getAuthors().size() > 1) {
+            out.newLine();
+            out.write(formatAuthors(item));
+            out.write(".");
+        }
+        
         out.newLine();
     }
 
@@ -203,7 +207,7 @@ public class PlainBibItemWriter extends BibItemWriter {
 
     private void writeStatus(BibItem item, String booktitle) throws IOException {
         String title = booktitle;
-        
+
         if (title.startsWith("Proceedings of ")) {
             title = title.substring("Proceedings of ".length());
         }
