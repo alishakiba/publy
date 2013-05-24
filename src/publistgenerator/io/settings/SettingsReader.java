@@ -6,17 +6,19 @@ package publistgenerator.io.settings;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import publistgenerator.Console;
 import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.data.settings.Settings;
+import publistgenerator.gui.MainFrame;
 
 /**
  *
@@ -24,7 +26,7 @@ import publistgenerator.data.settings.Settings;
  */
 public class SettingsReader extends DefaultHandler {
 
-    static final String DEFAULT_SETTINGS_LOCATION = "./PLGSettings.xml";
+    static final String DEFAULT_SETTINGS_LOCATION = "data/PLGSettings.xml";
     private StringBuilder textBuffer; // Contains the characters that are read between start and end elements (e.g. <item>Text</item>)
     private Settings settings; // Contains the read settings after parsing.
     private FormatSettings format = null;
@@ -34,31 +36,32 @@ public class SettingsReader extends DefaultHandler {
         this.settings = settings;
     }
 
-    public static Settings parseSettings() {
+    public static Settings parseSettings() throws ParserConfigurationException, SAXException, IOException {
         File settingsFile = new File(DEFAULT_SETTINGS_LOCATION);
         Settings settings = null;
 
         if (settingsFile.exists()) {
             settings = new Settings();
+
+            // Clear the default categories
+            settings.getHtmlSettings().getCategories().clear();
+            settings.getPlainSettings().getCategories().clear();
+
             parseSettings(settings, settingsFile);
         }
 
         return settings;
     }
 
-    private static void parseSettings(Settings settings, File inputFile) {
+    private static void parseSettings(Settings settings, File inputFile) throws ParserConfigurationException, SAXException, IOException {
         // Use the default (non-validating) parser
         SAXParserFactory factory = SAXParserFactory.newInstance();
         // Create a new instance of this class as handler
         SettingsReader handler = new SettingsReader(settings);
 
-        try {
-            // Parse the input
-            SAXParser saxParser = factory.newSAXParser();
-            saxParser.parse(inputFile, handler);
-        } catch (ParserConfigurationException | SAXException | IOException ex) {
-            Console.exception(ex, "Exception occurred while parsing the configuration file.");
-        }
+        // Parse the input
+        SAXParser saxParser = factory.newSAXParser();
+        saxParser.parse(inputFile, handler);
     }
 
     @Override
@@ -92,7 +95,7 @@ public class SettingsReader extends DefaultHandler {
             switch (qName) {
                 // General settings
                 case "publications":
-                    settings.setPublications(new File(text));
+                    settings.setPublications(MainFrame.getFile(text));
                     break;
                 case "generateplaintext":
                     settings.setGenerateText(Boolean.parseBoolean(text));
@@ -102,7 +105,7 @@ public class SettingsReader extends DefaultHandler {
                     break;
                 // Format settings
                 case "target":
-                    format.setTarget(new File(text));
+                    format.setTarget(MainFrame.getFile(text));
                     break;
                 case "listallauthors":
                     format.setListAllAuthors(Boolean.parseBoolean(text));
@@ -133,10 +136,10 @@ public class SettingsReader extends DefaultHandler {
                     ((HTMLSettings) format).setIncludePDF(HTMLSettings.PublicationType.valueOf(text));
                     break;
                 case "header":
-                    ((HTMLSettings) format).setHeader(new File(text));
+                    ((HTMLSettings) format).setHeader(MainFrame.getFile(text));
                     break;
                 case "footer":
-                    ((HTMLSettings) format).setFooter(new File(text));
+                    ((HTMLSettings) format).setFooter(MainFrame.getFile(text));
                     break;
                 case "googleanalyticsuser":
                     ((HTMLSettings) format).setGoogleAnalyticsUser(text);
