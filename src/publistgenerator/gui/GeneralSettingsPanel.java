@@ -230,12 +230,27 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         numGroup.add(numNoneRadioButton);
         numNoneRadioButton.setText("None");
+        numNoneRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                numNoneRadioButtonActionPerformed(evt);
+            }
+        });
 
         numGroup.add(numGlobalRadioButton);
         numGlobalRadioButton.setText("Global numbering");
+        numGlobalRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                numGlobalRadioButtonActionPerformed(evt);
+            }
+        });
 
         numGroup.add(numLocalRadioButton);
         numLocalRadioButton.setText("Section numbering");
+        numLocalRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                numLocalRadioButtonActionPerformed(evt);
+            }
+        });
 
         targetLabel.setText("Output file");
 
@@ -243,9 +258,19 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         listGroup.add(listAllRadioButton);
         listAllRadioButton.setText("List all authors");
+        listAllRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listAllRadioButtonActionPerformed(evt);
+            }
+        });
 
         listGroup.add(listOtherRadioButton);
         listOtherRadioButton.setText("List only my co-authors");
+        listOtherRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listOtherRadioButtonActionPerformed(evt);
+            }
+        });
 
         numLabel.setText("Publication numbering");
 
@@ -266,7 +291,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                 //Plain text components do not fire these events
             }
         });
-        noteTextField.setColumns(38);
+        noteTextField.setColumns(20);
         noteTextField.setEnabled(false);
 
         javax.swing.GroupLayout catPanelLayout = new javax.swing.GroupLayout(catPanel);
@@ -635,6 +660,27 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_outCatListValueChanged
+
+    private void listAllRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listAllRadioButtonActionPerformed
+        settings.setListAllAuthors(true);
+    }//GEN-LAST:event_listAllRadioButtonActionPerformed
+
+    private void listOtherRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listOtherRadioButtonActionPerformed
+        settings.setListAllAuthors(false);
+    }//GEN-LAST:event_listOtherRadioButtonActionPerformed
+
+    private void numNoneRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numNoneRadioButtonActionPerformed
+        settings.setNumbering(FormatSettings.Numbering.NONE);
+    }//GEN-LAST:event_numNoneRadioButtonActionPerformed
+
+    private void numLocalRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numLocalRadioButtonActionPerformed
+        settings.setNumbering(FormatSettings.Numbering.LOCAL);
+    }//GEN-LAST:event_numLocalRadioButtonActionPerformed
+
+    private void numGlobalRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numGlobalRadioButtonActionPerformed
+        settings.setNumbering(FormatSettings.Numbering.GLOBAL);
+    }//GEN-LAST:event_numGlobalRadioButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel authorLabel;
     private javax.swing.JSeparator authorSeparator;
