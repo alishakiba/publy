@@ -2,9 +2,14 @@
  */
 package publistgenerator.gui;
 
+import java.io.IOException;
+import javax.swing.JOptionPane;
 import javax.swing.text.StyledDocument;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 import publistgenerator.Console;
 import publistgenerator.GeneratorMain;
+import publistgenerator.data.settings.Settings;
 import publistgenerator.io.settings.SettingsReader;
 
 /**
@@ -100,16 +105,40 @@ public class ConsoleFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        GeneratorMain.generatePublicationList(SettingsReader.parseSettings());
+        Settings settings = null;
+
+        try {
+            settings = SettingsReader.parseSettings();
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Console.except(ex, "Exception occurred while parsing the configuration:");
+        }
+
+        if (settings != null) {
+            GeneratorMain.generatePublicationList(settings);
+        }
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void settingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsButtonActionPerformed
-        // Create the settings GUI
-        MainFrame mainFrame = new MainFrame(SettingsReader.parseSettings());
+        // Parse the settings (the user might have changed them manually)
+        Settings settings = null;
+
+        try {
+            settings = SettingsReader.parseSettings();
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Console.except(ex, "Exception occurred while parsing the configuration:");
+        }
+
+        if (settings == null) {
+            // Display an alert to the user
+            JOptionPane.showMessageDialog(null, "The configuration could not be parsed. The default configuration will be shown.", "Publication List Generator - Launching Settings Window", JOptionPane.WARNING_MESSAGE);
+        }
         
+        // Create the settings GUI
+        MainFrame mainFrame = new MainFrame(settings);
+
         // Copy the console text over
         mainFrame.setConsoleText((StyledDocument) consoleTextPane.getDocument());
-        
+
         // Close this window and open the settings GUI
         dispose();
         mainFrame.setVisible(true);
@@ -118,7 +147,6 @@ public class ConsoleFrame extends javax.swing.JFrame {
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton closeButton;

@@ -57,7 +57,7 @@ public class GeneratorMain {
             generatePublicationList(settings);
         }
     }
-
+    
     public static void generatePublicationList(Settings settings) {
         // Check if the publication list is set and exists
         File pubList = settings.getPublications();
