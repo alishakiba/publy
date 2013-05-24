@@ -159,7 +159,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         out.write(formatTitle(item));
         out.write(".");
 
-        if ("yes".equals(item.get("presented"))) {
+        if ("yes".equals(item.get("presented")) && settings.getPresentedText() != null && !settings.getPresentedText().isEmpty()) {
             out.write(" ");
             out.write(settings.getPresentedText());
         }
@@ -228,7 +228,7 @@ public class PlainBibItemWriter extends BibItemWriter {
                 out.newLine();
                 break;
             default:
-                throw new InternalError("Unrecognized status: \"" + item.get("status") + "\"");
+                throw new AssertionError("Unrecognized status: \"" + item.get("status") + "\"");
         }
     }
 }

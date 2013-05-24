@@ -19,12 +19,14 @@ public class ConferenceCategory extends OutputCategory {
 
     @Override
     public boolean fitsCategory(BibItem item) {
-        String type = item.getType();
-
-        if (type == null) {
-            return false;
+        if ("inproceedings".equals(item.getType())) {
+            if (item.anyNonEmpty("status") && !item.get("status").startsWith("accepted")) {
+                return false;
+            } else {
+                return true;
+            }
         } else {
-            return type.equals("inproceedings");
+            return false;
         }
     }
 

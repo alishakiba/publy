@@ -7,7 +7,7 @@ package publistgenerator.data.category;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.ListIterator;
 import publistgenerator.data.bibitem.BibItem;
 
 /**
@@ -15,6 +15,17 @@ import publistgenerator.data.bibitem.BibItem;
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
 public abstract class OutputCategory {
+    public static final CategoryIdentifier[] populateOrder = new CategoryIdentifier[] {
+        // Submitted items first
+        CategoryIdentifier.SUBMITTED,
+        // Then everything that only takes accepted items
+        CategoryIdentifier.CHAPTER, CategoryIdentifier.CONFERENCE, CategoryIdentifier.JOURNAL, CategoryIdentifier.THESIS,
+        // Then items for which it is unlikely that their status will ever matter
+        CategoryIdentifier.TALK, CategoryIdentifier.UNPUBLISHED,
+        // Finally all items that do not fit these categories
+        CategoryIdentifier.OTHER
+    };
+    
     private String shortName, name;
     private CategoryIdentifier id;
     private List<BibItem> items;
@@ -66,32 +77,31 @@ public abstract class OutputCategory {
     }
 
     public void populate(List<BibItem> items) {
-        for (BibItem item : items) {
+        for (ListIterator<BibItem> it = items.listIterator(); it.hasNext();) {
+            BibItem item = it.next();
+            
             if (fitsCategory(item)) {
                 this.items.add(item);
+                it.remove();
             }
-        }
-
-        for (BibItem item : this.items) {
-            items.remove(item);
         }
     }
 
     public abstract boolean fitsCategory(BibItem item);
 
     /**
-     * Equals and hashcode rely solely on short name, so categories that contain different items still appear the same.
+     * Equals and hashcode rely solely on the identifier, so categories that contain different items still appear the same.
      * @return 
      */
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 89 * hash + Objects.hashCode(this.shortName);
+        int hash = 7;
+        hash = 41 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
     }
 
     /**
-     * Equals and hashcode rely solely on short name, so categories that contain different items still appear the same.
+     * Equals and hashcode rely solely on the identifier, so categories that contain different items still appear the same.
      * @return 
      */
     @Override
@@ -103,7 +113,7 @@ public abstract class OutputCategory {
             return false;
         }
         final OutputCategory other = (OutputCategory) obj;
-        if (!Objects.equals(this.shortName, other.shortName)) {
+        if (this.id != other.id) {
             return false;
         }
         return true;

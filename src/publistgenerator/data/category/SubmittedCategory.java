@@ -19,13 +19,7 @@ public class SubmittedCategory extends OutputCategory {
 
     @Override
     public boolean fitsCategory(BibItem item) {
-        String status = item.get("status");
-
-        if (status != null) {
-            return status.equals("submitted");
-        } else {
-            return false;
-        }
+        return "submitted".equals(item.get("status"));
     }
 
 }

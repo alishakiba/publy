@@ -5,12 +5,13 @@
 package publistgenerator;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 import publistgenerator.data.bibitem.BibItem;
 import publistgenerator.data.settings.Settings;
 import publistgenerator.gui.MainFrame;
@@ -30,7 +31,14 @@ public class GeneratorMain {
      */
     public static void main(String[] args) {
         // Read settings
-        Settings settings = SettingsReader.parseSettings();
+        Settings settings = null;
+        Throwable exception = null;
+
+        try {
+            settings = SettingsReader.parseSettings();
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            exception = ex;
+        }
 
         if (settings == null) {
             // Notify the user
@@ -38,6 +46,12 @@ public class GeneratorMain {
 
             // Launch the GUI
             MainFrame mf = new MainFrame(new Settings());
+
+            // Report an Exception, if one occurred
+            if (exception != null) {
+                Console.except(exception, "Exception occurred while parsing the configuration:");
+            }
+
             mf.setVisible(true);
         } else {
             generatePublicationList(settings);
@@ -58,20 +72,26 @@ public class GeneratorMain {
 
             try {
                 items = BibTeXParser.parseFile(settings.getPublications());
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(GeneratorMain.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(GeneratorMain.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception | AssertionError ex) {
+                Console.except(ex, "Exception while parsing:%n");
             }
 
             if (items != null && settings.generateHTML()) {
-                HTMLPublicationListWriter writer = new HTMLPublicationListWriter(settings.getHtmlSettings());
-                writer.writePublicationList(items);
+                try {
+                    HTMLPublicationListWriter writer = new HTMLPublicationListWriter(settings.getHtmlSettings());
+                    writer.writePublicationList(items);
+                } catch (Exception | AssertionError ex) {
+                    Console.except(ex, "Exception while writing HTML:%n");
+                }
             }
 
             if (items != null && settings.generateText()) {
-                PlainPublicationListWriter plainWriter = new PlainPublicationListWriter(settings.getPlainSettings());
-                plainWriter.writePublicationList(items);
+                try {
+                    PlainPublicationListWriter plainWriter = new PlainPublicationListWriter(settings.getPlainSettings());
+                    plainWriter.writePublicationList(items);
+                } catch (Exception | AssertionError ex) {
+                    Console.except(ex, "Exception while writing plain text:%n");
+                }
             }
         }
     }

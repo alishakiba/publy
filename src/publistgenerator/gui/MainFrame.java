@@ -2,17 +2,13 @@
  */
 package publistgenerator.gui;
 
-import java.awt.Component;
 import java.io.File;
-import java.util.Arrays;
-import javax.swing.DefaultComboBoxModel;
+import java.io.IOException;
+import java.nio.file.Path;
 import javax.swing.JFileChooser;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.StyledDocument;
 import publistgenerator.Console;
 import publistgenerator.GeneratorMain;
-import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.data.settings.Settings;
 import publistgenerator.io.settings.SettingsWriter;
 
@@ -31,17 +27,54 @@ public class MainFrame extends javax.swing.JFrame {
         this.settings = settings;
         initComponents();
         populateValues();
-        
+
         // Make sure all console output from the generation is redirected to the text area.
         Console.setOutputTarget(consoleTextPane);
     }
-    
+
     /**
-     * Replaces the content of the console text area with the specified StyledDocument.
-     * @param doc 
+     * Replaces the content of the console text area with the specified
+     * StyledDocument.
+     *
+     * @param doc
      */
     public void setConsoleText(StyledDocument doc) {
         consoleTextPane.setDocument(doc);
+    }
+
+    /**
+     * Returns a path to the given file that is relative to the current working
+     * directory. When the file is
+     * <code>null</code>, an empty path is returned instead.
+     *
+     * @param file
+     * @return
+     */
+    public static String getRelativePath(File file) {
+        if (file == null) {
+            return "";
+        } else {
+            Path workingDir = (new File(System.getProperty("user.dir"))).toPath();
+            return workingDir.relativize(file.toPath()).toString();
+        }
+    }
+
+    /**
+     * Resolves the given path against the current working directory and returns
+     * the corresponding file. When the path is
+     * <code>null</code> or empty,
+     * <code>null</code> is returned instead.
+     *
+     * @param relativePath
+     * @return
+     */
+    public static File getFile(String relativePath) {
+        if (relativePath == null || relativePath.isEmpty()) {
+            return null;
+        } else {
+            Path workingDir = (new File(System.getProperty("user.dir"))).toPath();
+            return workingDir.resolve(relativePath).toFile();
+        }
     }
 
     private void populateValues() {
@@ -50,46 +83,15 @@ public class MainFrame extends javax.swing.JFrame {
             pubTextField.setText("");
             pubFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         } else {
-            pubTextField.setText(settings.getPublications().getPath());
+            pubTextField.setText(getRelativePath(settings.getPublications()));
             pubFileChooser.setCurrentDirectory(settings.getPublications().getParentFile());
         }
-        
+
         htmlCheckBox.setSelected(settings.generateHTML());
         setHtmlEnabled(settings.generateHTML());
-        
+
         plainCheckBox.setSelected(settings.generateText());
         plainSettingsPanel.setEnabled(settings.generateText());
-
-        // All general settings are already done, so populate HTML-specific settings
-        // Header & Footer
-        if (settings.getHtmlSettings().getHeader() == null) {
-            headerTextField.setText("");
-            headerFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
-        } else {
-            headerTextField.setText(settings.getHtmlSettings().getHeader().getPath());
-            headerFileChooser.setCurrentDirectory(settings.getHtmlSettings().getHeader().getParentFile());
-        }
-        
-        if (settings.getHtmlSettings().getFooter()== null) {
-            footerTextField.setText("");
-            footerFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
-        } else {
-            footerTextField.setText(settings.getHtmlSettings().getFooter().getPath());
-            footerFileChooser.setCurrentDirectory(settings.getHtmlSettings().getFooter().getParentFile());
-        }
-
-        // Link to text
-        linkToTextCheckBox.setSelected(settings.getHtmlSettings().linkToTextVersion());
-
-        // Publication links
-        abstractComboBox.setSelectedItem(settings.getHtmlSettings().getIncludeAbstract());
-        bibtexComboBox.setSelectedItem(settings.getHtmlSettings().getIncludeBibtex());
-        pdfComboBox.setSelectedItem(settings.getHtmlSettings().getIncludePDF());
-
-        // Google analytics
-        String user = settings.getHtmlSettings().getGoogleAnalyticsUser();
-        analyticsUserTextField.setText(user);
-        analyticsCheckBox.setSelected(user != null && !user.isEmpty());
     }
 
     /**
@@ -102,8 +104,6 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         pubFileChooser = new javax.swing.JFileChooser();
-        headerFileChooser = new javax.swing.JFileChooser();
-        footerFileChooser = new javax.swing.JFileChooser();
         mainSplitPane = new javax.swing.JSplitPane();
         topPanel = new javax.swing.JPanel();
         publicationsPanel = new javax.swing.JPanel();
@@ -115,29 +115,7 @@ public class MainFrame extends javax.swing.JFrame {
         htmlPanel = new javax.swing.JPanel();
         htmlCheckBox = new javax.swing.JCheckBox();
         htmlGeneralSettingsPanel = new publistgenerator.gui.GeneralSettingsPanel(settings.getHtmlSettings());
-        htmlOnlySettingsPanel = new javax.swing.JPanel();
-        headerLabel = new javax.swing.JLabel();
-        headerSeparator = new javax.swing.JSeparator();
-        headerTextField = new javax.swing.JTextField();
-        headerBrowseButton = new javax.swing.JButton();
-        footerTextField = new javax.swing.JTextField();
-        footerBrowseButton = new javax.swing.JButton();
-        linkToTextLabel = new javax.swing.JLabel();
-        linkToTextSeparator = new javax.swing.JSeparator();
-        linkToTextCheckBox = new javax.swing.JCheckBox();
-        linksLabel = new javax.swing.JLabel();
-        linksSeparator = new javax.swing.JSeparator();
-        abstractLabel = new javax.swing.JLabel();
-        abstractComboBox = new javax.swing.JComboBox();
-        bibtexLabel = new javax.swing.JLabel();
-        pdfLabel = new javax.swing.JLabel();
-        bibtexComboBox = new javax.swing.JComboBox();
-        pdfComboBox = new javax.swing.JComboBox();
-        analyticsLabel = new javax.swing.JLabel();
-        analyticsSeparator = new javax.swing.JSeparator();
-        analyticsCheckBox = new javax.swing.JCheckBox();
-        analyticsUserLabel = new javax.swing.JLabel();
-        analyticsUserTextField = new javax.swing.JTextField();
+        htmlSettingsPanel = new publistgenerator.gui.HTMLSettingsPanel(settings.getHtmlSettings());
         plainScrollPane = new javax.swing.JScrollPane();
         plainPanel = new javax.swing.JPanel();
         plainCheckBox = new javax.swing.JCheckBox();
@@ -162,6 +140,7 @@ public class MainFrame extends javax.swing.JFrame {
         pubLabel.setText("Publications file:");
 
         pubTextField.setEditable(false);
+        pubTextField.setColumns(50);
 
         pubBrowseButton.setText("Browse...");
         pubBrowseButton.addActionListener(new java.awt.event.ActionListener() {
@@ -178,7 +157,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(pubLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pubTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
+                .addComponent(pubTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pubBrowseButton)
                 .addContainerGap())
@@ -204,217 +183,6 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        htmlOnlySettingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("HTML-Only Settings"));
-
-        headerLabel.setText("Header & Footer");
-
-        headerTextField.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {
-                headerTextFieldTextChanged(e);
-            }
-            public void removeUpdate(DocumentEvent e) {
-                headerTextFieldTextChanged(e);
-            }
-            public void changedUpdate(DocumentEvent e) {
-                //Plain text components do not fire these events
-            }
-        });
-
-        headerBrowseButton.setText("Browse...");
-        headerBrowseButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                headerBrowseButtonActionPerformed(evt);
-            }
-        });
-
-        footerTextField.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {
-                footerTextFieldTextChanged(e);
-            }
-            public void removeUpdate(DocumentEvent e) {
-                footerTextFieldTextChanged(e);
-            }
-            public void changedUpdate(DocumentEvent e) {
-                //Plain text components do not fire these events
-            }
-        });
-
-        footerBrowseButton.setText("Browse...");
-        footerBrowseButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                footerBrowseButtonActionPerformed(evt);
-            }
-        });
-
-        linkToTextLabel.setText("Link to plain text");
-
-        linkToTextCheckBox.setText("Include a link to the plaintext publication list");
-        linkToTextCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                linkToTextCheckBoxActionPerformed(evt);
-            }
-        });
-
-        linksLabel.setText("Per publication links");
-
-        abstractLabel.setText("Include the abstract for:");
-
-        abstractComboBox.setModel(new DefaultComboBoxModel(HTMLSettings.PublicationType.values()));
-        abstractComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                abstractComboBoxActionPerformed(evt);
-            }
-        });
-
-        bibtexLabel.setText("Include the BibTeX for:");
-
-        pdfLabel.setText("Include the PDF for:");
-
-        bibtexComboBox.setModel(new DefaultComboBoxModel(Arrays.copyOfRange(HTMLSettings.PublicationType.values(), 0, 4)));
-        bibtexComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bibtexComboBoxActionPerformed(evt);
-            }
-        });
-
-        pdfComboBox.setModel(new DefaultComboBoxModel(HTMLSettings.PublicationType.values()));
-        pdfComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pdfComboBoxActionPerformed(evt);
-            }
-        });
-
-        analyticsLabel.setText("Google analytics");
-
-        analyticsCheckBox.setText("Include analytics code");
-        analyticsCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                analyticsCheckBoxActionPerformed(evt);
-            }
-        });
-
-        analyticsUserLabel.setText("Account identifier:");
-
-        analyticsUserTextField.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {
-                analyticsUserTextFieldTextChanged(e);
-            }
-            public void removeUpdate(DocumentEvent e) {
-                analyticsUserTextFieldTextChanged(e);
-            }
-            public void changedUpdate(DocumentEvent e) {
-                //Plain text components do not fire these events
-            }
-        });
-        analyticsUserTextField.setEnabled(false);
-
-        javax.swing.GroupLayout htmlOnlySettingsPanelLayout = new javax.swing.GroupLayout(htmlOnlySettingsPanel);
-        htmlOnlySettingsPanel.setLayout(htmlOnlySettingsPanelLayout);
-        htmlOnlySettingsPanelLayout.setHorizontalGroup(
-            htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
-                        .addComponent(headerLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(headerSeparator))
-                    .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
-                        .addComponent(linkToTextLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(linkToTextSeparator))
-                    .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
-                        .addComponent(linksLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(linksSeparator))
-                    .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
-                        .addComponent(analyticsLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(analyticsSeparator))
-                    .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, htmlOnlySettingsPanelLayout.createSequentialGroup()
-                                .addComponent(footerTextField)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(footerBrowseButton))
-                            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
-                                .addComponent(headerTextField)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(headerBrowseButton))
-                            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
-                                .addComponent(bibtexLabel)
-                                .addGap(18, 18, 18)
-                                .addComponent(bibtexComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
-                                .addComponent(abstractLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(abstractComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
-                                .addComponent(pdfLabel)
-                                .addGap(31, 31, 31)
-                                .addComponent(pdfComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
-                                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(linkToTextCheckBox)
-                                    .addComponent(analyticsCheckBox))
-                                .addGap(0, 93, Short.MAX_VALUE))
-                            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
-                                .addComponent(analyticsUserLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(analyticsUserTextField)))))
-                .addContainerGap())
-        );
-        htmlOnlySettingsPanelLayout.setVerticalGroup(
-            htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(htmlOnlySettingsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(headerSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(headerLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(headerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(headerBrowseButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(footerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(footerBrowseButton))
-                .addGap(18, 18, 18)
-                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(linkToTextLabel)
-                    .addComponent(linkToTextSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(linkToTextCheckBox)
-                .addGap(18, 18, 18)
-                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(linksLabel)
-                    .addComponent(linksSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(abstractLabel)
-                    .addComponent(abstractComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bibtexLabel)
-                    .addComponent(bibtexComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(pdfLabel)
-                    .addComponent(pdfComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(analyticsLabel)
-                    .addComponent(analyticsSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(analyticsCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(htmlOnlySettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(analyticsUserLabel)
-                    .addComponent(analyticsUserTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout htmlPanelLayout = new javax.swing.GroupLayout(htmlPanel);
         htmlPanel.setLayout(htmlPanelLayout);
         htmlPanelLayout.setHorizontalGroup(
@@ -422,14 +190,12 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(htmlPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(htmlPanelLayout.createSequentialGroup()
-                        .addComponent(htmlCheckBox)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(htmlCheckBox)
                     .addGroup(htmlPanelLayout.createSequentialGroup()
                         .addComponent(htmlGeneralSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(htmlOnlySettingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(htmlSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         htmlPanelLayout.setVerticalGroup(
             htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -437,9 +203,9 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(htmlCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(htmlGeneralSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(htmlOnlySettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(htmlSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
@@ -464,7 +230,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(plainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(plainCheckBox)
                     .addComponent(plainSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(390, Short.MAX_VALUE))
+                .addContainerGap(369, Short.MAX_VALUE))
         );
         plainPanelLayout.setVerticalGroup(
             plainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -556,16 +322,48 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void saveNQuitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveNQuitButtonActionPerformed
-        SettingsWriter.writeSettings(settings);
-        dispose();
+        try {
+            SettingsWriter.writeSettings(settings);
+            dispose();
+        } catch (Exception | AssertionError ex) {
+            Console.except(ex, "Exception when saving settings:");
+        }
     }//GEN-LAST:event_saveNQuitButtonActionPerformed
 
     private void pubBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pubBrowseButtonActionPerformed
         int opened = pubFileChooser.showOpenDialog(this);
 
         if (opened == JFileChooser.APPROVE_OPTION) {
-            pubTextField.setText(pubFileChooser.getSelectedFile().getPath());
+            pubTextField.setText(getRelativePath(pubFileChooser.getSelectedFile()));
             settings.setPublications(pubFileChooser.getSelectedFile());
+
+            if (settings.getHtmlSettings().getTarget() == null || settings.getPlainSettings().getTarget() == null) {
+                // Set initial targets
+                String baseName = pubFileChooser.getSelectedFile().getName();
+                int extension = baseName.lastIndexOf('.');
+                
+                if (extension > -1) {
+                    baseName = baseName.substring(0, extension);
+                }
+
+                if (settings.getHtmlSettings().getTarget() == null) {
+                    // Set an initial target
+                    File target = new File(pubFileChooser.getSelectedFile().getParentFile(), baseName + ".html");
+                    settings.getHtmlSettings().setTarget(target);
+                    
+                    // Update the GUI
+                    htmlGeneralSettingsPanel.updateTarget();
+                }
+
+                if (settings.getPlainSettings().getTarget() == null) {
+                    // Set an initial target
+                    File target = new File(pubFileChooser.getSelectedFile().getParentFile(), baseName + ".txt");
+                    settings.getPlainSettings().setTarget(target);
+                    
+                    // Update the GUI
+                    plainSettingsPanel.updateTarget();
+                }
+            }
         }
     }//GEN-LAST:event_pubBrowseButtonActionPerformed
 
@@ -579,62 +377,8 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void setHtmlEnabled(boolean enabled) {
         htmlGeneralSettingsPanel.setEnabled(enabled);
-
-        htmlOnlySettingsPanel.setEnabled(enabled);
-        for (Component c : htmlOnlySettingsPanel.getComponents()) {
-            c.setEnabled(enabled);
-        }
-
-        analyticsUserTextField.setEnabled(enabled && analyticsCheckBox.isSelected());
+        htmlSettingsPanel.setEnabled(enabled);
     }
-    
-    private void linkToTextCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkToTextCheckBoxActionPerformed
-        settings.getHtmlSettings().setLinkToTextVersion(linkToTextCheckBox.isSelected());
-    }//GEN-LAST:event_linkToTextCheckBoxActionPerformed
-
-    private void analyticsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyticsCheckBoxActionPerformed
-        if (analyticsCheckBox.isSelected()) {
-            // Update settings
-            settings.getHtmlSettings().setGoogleAnalyticsUser(analyticsUserTextField.getText());
-
-            // Update UI
-            analyticsUserTextField.setEnabled(true);
-        } else {
-            // Update settings
-            settings.getHtmlSettings().setGoogleAnalyticsUser(null);
-
-            // Update UI
-            analyticsUserTextField.setEnabled(false);
-        }
-    }//GEN-LAST:event_analyticsCheckBoxActionPerformed
-
-    private void abstractComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abstractComboBoxActionPerformed
-        settings.getHtmlSettings().setIncludeAbstract((HTMLSettings.PublicationType) abstractComboBox.getSelectedItem());
-    }//GEN-LAST:event_abstractComboBoxActionPerformed
-
-    private void bibtexComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bibtexComboBoxActionPerformed
-        settings.getHtmlSettings().setIncludeBibtex((HTMLSettings.PublicationType) bibtexComboBox.getSelectedItem());
-    }//GEN-LAST:event_bibtexComboBoxActionPerformed
-
-    private void pdfComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pdfComboBoxActionPerformed
-        settings.getHtmlSettings().setIncludePDF((HTMLSettings.PublicationType) pdfComboBox.getSelectedItem());
-    }//GEN-LAST:event_pdfComboBoxActionPerformed
-
-    private void headerBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_headerBrowseButtonActionPerformed
-        int opened = headerFileChooser.showOpenDialog(this);
-
-        if (opened == JFileChooser.APPROVE_OPTION) {
-            headerTextField.setText(headerFileChooser.getSelectedFile().getPath());
-        }
-    }//GEN-LAST:event_headerBrowseButtonActionPerformed
-
-    private void footerBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_footerBrowseButtonActionPerformed
-        int opened = footerFileChooser.showOpenDialog(this);
-
-        if (opened == JFileChooser.APPROVE_OPTION) {
-            footerTextField.setText(footerFileChooser.getSelectedFile().getPath());
-        }
-    }//GEN-LAST:event_footerBrowseButtonActionPerformed
 
     private void plainCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plainCheckBoxActionPerformed
         // Update the settings
@@ -643,21 +387,6 @@ public class MainFrame extends javax.swing.JFrame {
         // Update the UI
         plainSettingsPanel.setEnabled(plainCheckBox.isSelected());
     }//GEN-LAST:event_plainCheckBoxActionPerformed
-
-    private void analyticsUserTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
-        // Update the settings
-        settings.getHtmlSettings().setGoogleAnalyticsUser(analyticsUserTextField.getText());
-    }
-
-    private void headerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
-        // Update the settings
-        settings.getHtmlSettings().setHeader(new File(headerTextField.getText()));
-    }
-
-    private void footerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
-        // Update the settings
-        settings.getHtmlSettings().setFooter(new File(footerTextField.getText()));
-    }
 
     /**
      * @param args the command line arguments
@@ -672,42 +401,18 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox abstractComboBox;
-    private javax.swing.JLabel abstractLabel;
-    private javax.swing.JCheckBox analyticsCheckBox;
-    private javax.swing.JLabel analyticsLabel;
-    private javax.swing.JSeparator analyticsSeparator;
-    private javax.swing.JLabel analyticsUserLabel;
-    private javax.swing.JTextField analyticsUserTextField;
-    private javax.swing.JComboBox bibtexComboBox;
-    private javax.swing.JLabel bibtexLabel;
     private javax.swing.JPanel bottomPanel;
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JScrollPane consoleScrollPane;
     private javax.swing.JTextPane consoleTextPane;
-    private javax.swing.JButton footerBrowseButton;
-    private javax.swing.JFileChooser footerFileChooser;
-    private javax.swing.JTextField footerTextField;
     private javax.swing.JButton generateButton;
-    private javax.swing.JButton headerBrowseButton;
-    private javax.swing.JFileChooser headerFileChooser;
-    private javax.swing.JLabel headerLabel;
-    private javax.swing.JSeparator headerSeparator;
-    private javax.swing.JTextField headerTextField;
     private javax.swing.JCheckBox htmlCheckBox;
     private publistgenerator.gui.GeneralSettingsPanel htmlGeneralSettingsPanel;
-    private javax.swing.JPanel htmlOnlySettingsPanel;
     private javax.swing.JPanel htmlPanel;
     private javax.swing.JScrollPane htmlScrollPane;
-    private javax.swing.JCheckBox linkToTextCheckBox;
-    private javax.swing.JLabel linkToTextLabel;
-    private javax.swing.JSeparator linkToTextSeparator;
-    private javax.swing.JLabel linksLabel;
-    private javax.swing.JSeparator linksSeparator;
+    private publistgenerator.gui.HTMLSettingsPanel htmlSettingsPanel;
     private javax.swing.JSplitPane mainSplitPane;
-    private javax.swing.JComboBox pdfComboBox;
-    private javax.swing.JLabel pdfLabel;
     private javax.swing.JCheckBox plainCheckBox;
     private javax.swing.JPanel plainPanel;
     private javax.swing.JScrollPane plainScrollPane;

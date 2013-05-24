@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import publistgenerator.Console;
+import publistgenerator.data.Pair;
 import publistgenerator.data.bibitem.Article;
 import publistgenerator.data.bibitem.Author;
 import publistgenerator.data.bibitem.BibItem;
@@ -28,59 +30,56 @@ import publistgenerator.data.bibitem.Venue;
  */
 public class BibTeXParser {
 
+    private static final Pattern whiteSpace = Pattern.compile("\\s+"); // Regex that matches one or more whitespace characters
+    // Patterns for author and abbreviation parsing
+    private static final Pattern shortPattern = Pattern.compile("short=\"([^\"]*)\"");
+    private static final Pattern fullPattern = Pattern.compile("full=\"([^\"]*)\"");
+    private static final Pattern abbPattern = Pattern.compile("abbr=\"([^\"]*)\"");
+    private static final Pattern namePattern = Pattern.compile(" name=\"([^\"]*)\"");
+    private static final Pattern htmlPattern = Pattern.compile("htmlname=\"([^\"]*)\"");
+    private static final Pattern plainPattern = Pattern.compile("plaintextname=\"([^\"]*)\"");
+    private static final Pattern urlPattern = Pattern.compile("url=\"([^\"]*)\"");
+    // Pattern for detecting an author link
+    private static final Pattern authorPattern = Pattern.compile("<([^<>]*)>");
+    // Pattern for detecting an abbreviation
+    private static final Pattern abbrPattern = Pattern.compile("<<([^>]*)>>");
+
     private BibTeXParser() {
     }
 
     public static List<BibItem> parseFile(File file) throws IOException {
+        List<BibItem> items = new ArrayList<>();
         HashMap<String, String> abbreviations = new HashMap<>();
         HashMap<String, Venue> venues = new HashMap<>();
         HashMap<String, Author> authors = new HashMap<>();
 
-        parsePreliminaries(file, abbreviations, venues, authors);
-        List<BibItem> items = parseItems(file);
+        parseFile(file, items, abbreviations, venues, authors);
 
         for (BibItem item : items) {
             setVenue(item, venues);
             expandAbbreviations(item, abbreviations, venues);
             replaceAuthors(item, authors);
         }
+        
+        Console.log("Publications list \"%s\" parsed successfully.", file.getName());
 
         return items;
     }
 
-    private static List<BibItem> parseItems(File file) throws IOException {
-        HashSet<String> ids = new HashSet<>();
-        ArrayList<BibItem> items = new ArrayList<>();
+    private static void parseFile(File file, List<BibItem> items, Map<String, String> abbreviations, Map<String, Venue> venues, Map<String, Author> authors) throws IOException {
+        HashSet<String> ids = new HashSet<>(); // Bibitem identifiers, used to check for duplicates
 
         try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-            for (String line = in.readLine(); line != null; line = in.readLine()) {
-                // Process this line
-                line = line.trim();
+            for (String l = in.readLine(); l != null; l = in.readLine()) {
+                String line = l.trim();
 
-                if (!line.isEmpty()) {
-                    BibItem item = null;
-
-                    if (line.startsWith("@inproceedings") || line.startsWith("@conference")) {
-                        item = new InProceedings();
-                    } else if (line.startsWith("@article")) {
-                        item = new Article();
-                    } else if (line.startsWith("@mastersthesis")) {
-                        item = new MastersThesis();
-                    } else if (line.startsWith("@phdthesis")) {
-                        item = new PhDThesis();
-                    } else if (line.startsWith("@incollection")) {
-                        item = new InCollection();
-                    } else if (line.startsWith("@unpublished")) {
-                        item = new Unpublished();
-                    } else if (line.startsWith("@talk")) {
-                        item = new InvitedTalk();
-                    }
+                if (line.startsWith("@")) {
+                    // A Bibitem
+                    BibItem item = parseBibItem(collectItem(in, line, '{', '}'));
 
                     if (item != null) {
-                        parseItem(item, line, in);
-
                         if (ids.contains(item.getId())) {
-                            throw new AssertionError("Duplicate publication identifier: " + item.getId());
+                            Console.error("Duplicate publication identifier: %s", item.getId());
                         } else {
                             if (item.checkMandatoryFields()) {
                                 ids.add(item.getId());
@@ -88,128 +87,193 @@ public class BibTeXParser {
                             }
                         }
                     }
+                } else if (line.startsWith("<")) {
+                    // A custom tag
+                    parseTag(collectItem(in, line, '<', '>'), abbreviations, venues, authors);
                 }
             }
         }
-
-        return items;
     }
 
-    private static void parseItem(BibItem item, String line, BufferedReader in) throws IOException {
-        // First grab all contents of this bibitem into one long string to deal with different styles
-        // Assumption: no two bibitems on any line
-        StringBuilder content = new StringBuilder(line);
-
-        int level = levelChange(line);
+    private static String collectItem(BufferedReader in, String firstLine, char open, char close) throws IOException {
+        int level = levelChange(firstLine, open, close);
+        StringBuilder item = new StringBuilder(firstLine);
 
         while (level > 0) {
-            String inputLine = in.readLine();
+            String line = in.readLine();
 
-            if (inputLine == null) {
-                throw new IOException("Unexpected EoF.");
+            if (line == null) {
+                throw new IOException("Unclosed item starting at line \"" + firstLine + "\".");
             } else {
-                inputLine = inputLine.trim();
-                content.append(inputLine);
-                level += levelChange(inputLine);
+                item.append(" ").append(line);
+                level += levelChange(line, open, close);
             }
         }
 
-        String body = content.toString();
-
-        // Keep only the part between the first pair of braces
-        body = body.substring(body.indexOf('{') + 1, body.lastIndexOf('}'));
-
-        // Split the body into the comma-separated chunks
-        // NOTE: this creates too many chunks, but we can detect when a value continues into the next chunk by looking at the braces
-        String[] chunks = body.split(",");
-
-        // Parse the id
-        item.setId(chunks[0]);
-
-        // Parse the attributes
-        int i = 1;
-
-        while (i < chunks.length) {
-            String attr = chunks[i].substring(0, chunks[i].indexOf('=')).trim().toLowerCase();
-
-            StringBuilder value = new StringBuilder(chunks[i].substring(chunks[i].indexOf('=') + 1));
-
-            int chunkLevel = levelChange(chunks[i]);
-
-            while (chunkLevel > 0) {
-                i++;
-
-                if (i == chunks.length) {
-                    throw new IOException("Unexpected EoF.");
-                } else {
-                    value.append(",");
-                    value.append(chunks[i]);
-                    chunkLevel += levelChange(chunks[i]);
-                }
-            }
-
-            String attrValue = value.toString();
-
-            // Throw away the outer pair of braces
-            attrValue = attrValue.substring(attrValue.indexOf('{') + 1, attrValue.lastIndexOf('}'));
-
-            // Add this pair to the item
-            item.put(attr, attrValue);
-
-            i++;
-        }
+        // Replace all sequences of whitespace with a single space
+        return whiteSpace.matcher(item).replaceAll(" ");
     }
 
-    private static int levelChange(String line) {
-        char[] chars = line.toCharArray();
-
+    private static int levelChange(String line, char open, char close) {
         int change = 0;
 
-        for (char c : chars) {
-            switch (c) {
-                case '{':
-                    change++;
-                    break;
-                case '}':
-                    change--;
-                    break;
-                default:
-                    break;
+        for (char c : line.toCharArray()) {
+            if (c == open) {
+                change++;
+            } else if (c == close) {
+                change--;
             }
         }
 
         return change;
     }
 
-    private static void parsePreliminaries(File file, Map<String, String> abbreviations, Map<String, Venue> venues, Map<String, Author> authors) throws IOException {
-        try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-            for (String line = in.readLine(); line != null; line = in.readLine()) {
-                // Process this line
-                line = line.trim();
+    private static BibItem parseBibItem(String bibItem) {
+        BibItem item = initializeBibItem(bibItem);
 
-                if (line.startsWith("<author")) {
-                    parseAuthor(line, authors);
-                } else if (line.startsWith("<abbr")) {
-                    parseAbbreviation(line, abbreviations);
-                } else if (line.startsWith("<conf")) {
-                    parseVenue(line, true, venues);
-                } else if (line.startsWith("<journal")) {
-                    parseVenue(line, false, venues);
+        if (item != null) {
+            // Keep only the part between the outermost pair of braces
+            String body = bibItem.substring(bibItem.indexOf('{') + 1, bibItem.lastIndexOf('}')).trim();
+
+            // Parse the id
+            int idEnd = body.indexOf(',');
+
+            if (idEnd == -1) {
+                // No attributes
+                item.setId(body);
+                body = "";
+            } else {
+                item.setId(body.substring(0, idEnd).trim());
+                body = body.substring(idEnd + 1).trim();
+            }
+
+            // Parse the attributes
+            int valueStart = body.indexOf('=');
+
+            while (valueStart > 0) {
+                // Parse the attribute name
+                String name = body.substring(0, valueStart).trim().toLowerCase();
+                body = body.substring(valueStart + 1).trim();
+
+                // Parse the attribute value
+                Pair<Integer, Integer> valuePos = getNextValuePosition(body);
+
+                if (valuePos == null) {
+                    Console.error("Mismatched delimiters in attribute \"%s\" of publication \"%s\".", name, item.getId());
+                    break;
+                } else {
+                    item.put(name, body.substring(valuePos.getFirst(), valuePos.getSecond()).trim());
+                    body = body.substring(valuePos.getSecond() + valuePos.getFirst()).trim(); // Skip a final delimiter if there are any (valuePos.getFirst == 1)
+                    
+                    if (body.startsWith(",")) {
+                        body = body.substring(1).trim();
+                    }
                 }
+
+                valueStart = body.indexOf('=');
             }
         }
+
+        return item;
     }
-    // Patterns for author and abbreviation parsing
-    private static final Pattern shortPattern = Pattern.compile("short=\"([^\"]*)\"");
-    private static final Pattern fullPattern = Pattern.compile("full=\"([^\"]*)\"");
-    private static final Pattern abbPattern = Pattern.compile("abbr=\"([^\"]*)\"");
-    private static final Pattern namePattern = Pattern.compile(" name=\"([^\"]*)\"");
-    private static final Pattern htmlPattern = Pattern.compile("htmlname=\"([^\"]*)\"");
-    private static final Pattern latexPattern = Pattern.compile("latexname=\"([^\"]*)\"");
-    private static final Pattern urlPattern = Pattern.compile("url=\"([^\"]*)\"");
+
+    private static BibItem initializeBibItem(String bibItem) {
+        String type = bibItem.substring(1, bibItem.indexOf('{')).trim().toLowerCase();
+
+        switch (type) {
+            case "inproceedings":
+            case "conference":
+                return new InProceedings();
+            case "article":
+                return new Article();
+            case "mastersthesis":
+                return new MastersThesis();
+            case "phdthesis":
+                return new PhDThesis();
+            case "incollection":
+                return new InCollection();
+            case "unpublished":
+                return new Unpublished();
+            case "talk":
+                return new InvitedTalk();
+            default:
+                Console.error("Unrecognized publication type \"%s\".", type);
+                return null;
+        }
+    }
+
+    private static Pair<Integer, Integer> getNextValuePosition(String body) {
+        char firstChar = body.charAt(0);
+        int valueStart, valueEnd;
+
+        if (firstChar == '"') {
+            // Quote-delimited value
+            valueStart = 1;
+            valueEnd = body.indexOf('"', 1);
+        } else if (firstChar == '{') {
+            // Brace-delimited value
+            valueStart = 1;
+            valueEnd = -1;
+
+            int level = 0;
+            int index = 0;
+
+            for (char c : body.toCharArray()) {
+                if (c == '{') {
+                    level++;
+                } else if (c == '}') {
+                    level--;
+
+                    if (level == 0) {
+                        // Back at the initial level
+                        valueEnd = index;
+                        break;
+                    }
+                }
+
+                index++;
+            }
+        } else {
+            // No delimiters. Capture everything up to the next ',' or the end of the item
+            valueStart = 0;
+            valueEnd = body.indexOf(',');
+            
+            if (valueEnd == -1) {
+                valueEnd = body.length();
+            }
+        }
+
+        if (valueEnd == -1) {
+            return null;
+        } else {
+            return new Pair<>(valueStart, valueEnd);
+        }
+    }
+
+    private static void parseTag(String tag, Map<String, String> abbreviations, Map<String, Venue> venues, Map<String, Author> authors) {
+        String type = tag.substring(1, tag.indexOf(' ', 2)).trim().toLowerCase();
+
+        switch (type) {
+            case "author":
+                parseAuthor(tag, authors);
+                break;
+            case "abbr":
+                parseAbbreviation(tag, abbreviations);
+                break;
+            case "conf":
+                parseVenue(tag, true, venues);
+                break;
+            case "journal":
+                parseVenue(tag, false, venues);
+                break;
+            default:
+                Console.error("Unrecognized tag type \"%s\" at line \"%s\".", type, tag);
+                break;
+        }
+    }
 
     private static void parseAuthor(String line, Map<String, Author> authors) {
-        String shortName = null, latexName = null, htmlName = null, url = null;
+        String shortName = null, name = null, plaintextName = null, htmlName = null, url = null;
 
         Matcher matcher = shortPattern.matcher(line);
 
@@ -220,8 +284,7 @@ public class BibTeXParser {
         matcher = namePattern.matcher(line);
 
         if (matcher.find()) {
-            latexName = matcher.group(1);
-            htmlName = matcher.group(1);
+            name = matcher.group(1);
         }
 
         matcher = htmlPattern.matcher(line);
@@ -230,10 +293,10 @@ public class BibTeXParser {
             htmlName = matcher.group(1);
         }
 
-        matcher = latexPattern.matcher(line);
+        matcher = plainPattern.matcher(line);
 
         if (matcher.find()) {
-            latexName = matcher.group(1);
+            plaintextName = matcher.group(1);
         }
 
         matcher = urlPattern.matcher(line);
@@ -242,13 +305,23 @@ public class BibTeXParser {
             url = matcher.group(1);
         }
 
-        if (shortName != null && htmlName != null && latexName != null) {
-            Author author = new Author(shortName, latexName, htmlName);
-            author.setUrl(url);
-
-            authors.put(shortName, author);
+        if (shortName == null) {
+            Console.error("Author tag is missing mandatory field \"short\":%n%s", line);
+        } else if (name == null) {
+            Console.error("Author tag is missing mandatory field \"name\":%n%s", line);
         } else {
-            System.err.println("Author tag detected, but no full author information found: " + line);
+            Author author = new Author(shortName, name);
+            author.setUrl(url);
+            
+            if (htmlName != null) {
+                author.setHtmlName(htmlName);
+            }
+            
+            if (plaintextName != null) {
+                author.setPlaintextName(plaintextName);
+            }
+            
+            authors.put(shortName, author);
         }
     }
 
@@ -269,7 +342,7 @@ public class BibTeXParser {
         if (abbr != null && full != null) {
             abbreviations.put(abbr, full);
         } else {
-            System.err.println("Abbreviation tag detected, but no full information found: " + line);
+            Console.error("Abbreviation tag detected, but no full information found:%n%s", line);
         }
     }
 
@@ -296,60 +369,63 @@ public class BibTeXParser {
         if (shortName != null && fullName != null && abbreviation != null) {
             venues.put(shortName, new Venue(conference, abbreviation, fullName, shortName));
         } else {
-            System.err.println((conference ? "Conference" : "Journal") + " tag detected, but no full information found: " + line);
+            Console.error("%s tag detected, but no full information found:%n%s", (conference ? "Conference" : "Journal"), line);
         }
     }
-    // Pattern for detecting an author link
-    private static final Pattern authorPattern = Pattern.compile("<([^<>]*)>");
-
+    
     private static void replaceAuthors(BibItem item, Map<String, Author> authors) {
         // Replace authors
         String author = item.get("author");
 
         if (author != null && !author.isEmpty()) {
-            Matcher matcher = authorPattern.matcher(author);
+            String[] paperAuthors = author.split(" and ");
 
-            while (matcher.find()) {
-                Author a = authors.get(matcher.group(1));
+            for (String paperAuthor : paperAuthors) {
+                Matcher matcher = authorPattern.matcher(paperAuthor);
 
-                if (a == null) {
-                    System.err.println("No author found for \"" + matcher.group(1) + "\"!");
+                if (matcher.find()) {
+                    Author a = authors.get(matcher.group(1));
+
+                    if (a == null) {
+                        Console.error("Author abbreviation \"%s\" is used, but never defined.", matcher.group(1));
+                    } else {
+                        item.getAuthors().add(a);
+                    }
                 } else {
-                    item.getAuthors().add(a);
+                    item.getAuthors().add(new Author(paperAuthor));
                 }
             }
         }
     }
-    private static final Pattern abbrPattern = Pattern.compile("<<([^>]*)>>");
-
+    
     private static void expandAbbreviations(BibItem item, Map<String, String> abbreviations, Map<String, Venue> venues) {
         for (String field : item.getFields()) {
-            String val = item.get(field);
+            String currentValue = item.get(field);
 
-            if (val != null && !val.isEmpty()) {
+            if (currentValue != null && !currentValue.isEmpty()) {
                 StringBuilder finalValue = new StringBuilder();
-                Matcher matcher = abbrPattern.matcher(val);
+                Matcher matcher = abbrPattern.matcher(currentValue);
                 int prevEnd = 0;
 
                 while (matcher.find()) {
-                    String abbr = matcher.group(1);
+                    String abbreviation = matcher.group(1);
                     int start = matcher.start();
                     int end = matcher.end();
 
-                    finalValue.append(val.substring(prevEnd, start));
+                    finalValue.append(currentValue.substring(prevEnd, start));
 
-                    if (abbreviations.containsKey(abbr)) {
-                        finalValue.append(abbreviations.get(abbr));
-                    } else if (venues.containsKey(abbr)) {
-                        finalValue.append(venues.get(abbr).getFullName());
+                    if (abbreviations.containsKey(abbreviation)) {
+                        finalValue.append(abbreviations.get(abbreviation));
+                    } else if (venues.containsKey(abbreviation)) {
+                        finalValue.append(venues.get(abbreviation).getFullName());
                     } else {
-                        System.err.println("Abbreviation \"" + matcher.group(1) + "\" not found!");
+                        Console.error("Abbreviation \"%s\" is used, but never defined.", matcher.group(1));
                     }
 
                     prevEnd = end;
                 }
 
-                finalValue.append(val.substring(prevEnd, val.length()));
+                finalValue.append(currentValue.substring(prevEnd, currentValue.length()));
 
                 item.put(field, finalValue.toString());
             }

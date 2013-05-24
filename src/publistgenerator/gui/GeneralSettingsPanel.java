@@ -43,11 +43,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     private void populateValues() {
         // Target
-        if (settings.getTarget() == null) {
-            targetTextField.setText("");
-        } else {
-            targetTextField.setText(settings.getTarget().getPath());
-        }
+        updateTarget();
 
         // List all authors
         if (settings.isListAllAuthors()) {
@@ -79,19 +75,14 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         }
 
         // Categories
-        Set<CategoryIdentifier> in = EnumSet.noneOf(CategoryIdentifier.class);
+        inListModel = new DefaultListModel<>();
+        outListModel = new DefaultListModel<>();
+        
         Set<CategoryIdentifier> out = EnumSet.allOf(CategoryIdentifier.class);
 
         for (CategoryIdentifier c : settings.getCategories()) {
-            in.add(c);
-            out.remove(c);
-        }
-
-        inListModel = new DefaultListModel<>();
-        outListModel = new DefaultListModel<>();
-
-        for (CategoryIdentifier c : in) {
             inListModel.addElement(c);
+            out.remove(c);
         }
 
         for (CategoryIdentifier c : out) {
@@ -100,6 +91,20 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         inCatList.setModel(inListModel);
         outCatList.setModel(outListModel);
+    }
+
+    /**
+     * Refreshes the target from the current settings. This property is
+     * sometimes set by the MainFrame.
+     */
+    void updateTarget() {
+        if (settings.getTarget() == null) {
+            targetTextField.setText("");
+            targetFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+        } else {
+            targetTextField.setText(MainFrame.getRelativePath(settings.getTarget()));
+            targetFileChooser.setCurrentDirectory(settings.getTarget().getParentFile());
+        }
     }
 
     @Override
@@ -116,7 +121,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         outCatList.setEnabled(enabled);
 
         noteLabel.setEnabled(enabled);
-        noteTextField.setEnabled(enabled);
+        noteTextField.setEnabled(enabled && selectedCategory != null);
 
         // Handle the buttons correctly
         if (enabled) {
@@ -199,6 +204,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                 //Plain text components do not fire these events
             }
         });
+        targetTextField.setColumns(30);
 
         targetBrowseButton.setText("Browse...");
         targetBrowseButton.addActionListener(new java.awt.event.ActionListener() {
@@ -220,6 +226,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                 //Plain text components do not fire these events
             }
         });
+        presentedTextField.setColumns(40);
 
         numGroup.add(numNoneRadioButton);
         numNoneRadioButton.setText("None");
@@ -259,6 +266,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                 //Plain text components do not fire these events
             }
         });
+        noteTextField.setColumns(38);
         noteTextField.setEnabled(false);
 
         javax.swing.GroupLayout catPanelLayout = new javax.swing.GroupLayout(catPanel);
@@ -274,7 +282,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                         .addComponent(noteSeparator))
                     .addGroup(catPanelLayout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(noteTextField)))
+                        .addComponent(noteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         catPanelLayout.setVerticalGroup(
@@ -386,7 +394,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                                         .addComponent(listOtherRadioButton)
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(targetTextField)
+                                        .addComponent(targetTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(targetBrowseButton)))))
                         .addContainerGap())
@@ -398,7 +406,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(presentedTextField)
+                            .addComponent(presentedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -486,13 +494,13 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         int opened = targetFileChooser.showOpenDialog(this);
 
         if (opened == JFileChooser.APPROVE_OPTION) {
-            targetTextField.setText(targetFileChooser.getSelectedFile().getPath());
+            targetTextField.setText(MainFrame.getRelativePath(targetFileChooser.getSelectedFile()));
         }
     }//GEN-LAST:event_targetBrowseButtonActionPerformed
 
     private void targetTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
-        settings.setTarget(new File(targetTextField.getText()));
+        settings.setTarget(MainFrame.getFile(targetTextField.getText()));
     }
 
     private void presentedTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {

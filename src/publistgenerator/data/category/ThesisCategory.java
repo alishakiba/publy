@@ -19,12 +19,14 @@ public class ThesisCategory extends OutputCategory {
 
     @Override
     public boolean fitsCategory(BibItem item) {
-        String type = item.getType();
-
-        if (type == null) {
-            return false;
+        if ("mastersthesis".equals(item.getType()) || "phdthesis".equals(item.getType())) {
+            if (item.anyNonEmpty("status") && !item.get("status").startsWith("accepted")) {
+                return false;
+            } else {
+                return true;
+            }
         } else {
-            return type.equals("mastersthesis") || type.equals("phdthesis");
+            return false;
         }
     }
 
