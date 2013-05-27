@@ -22,13 +22,13 @@ public class SettingsWriter {
 
     public static void writeSettings(Settings settings) throws IOException {
         File parentDir = new File(SettingsReader.DEFAULT_SETTINGS_LOCATION).getParentFile();
-        
+
         if (!parentDir.exists()) {
             if (!parentDir.mkdirs()) {
                 throw new IOException("Could not create the directory \"" + parentDir.getPath() + "\" to store the settings.");
             }
         }
-        
+
         try (BufferedWriter out = new BufferedWriter(new FileWriter(SettingsReader.DEFAULT_SETTINGS_LOCATION))) {
             // Write header
             out.write("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
@@ -87,7 +87,7 @@ public class SettingsWriter {
         output(out, 4, "includepdf", makeString(settings.getHtmlSettings().getIncludePDF()));
         output(out, 4, "header", makeString(settings.getHtmlSettings().getHeader()));
         output(out, 4, "footer", makeString(settings.getHtmlSettings().getFooter()));
-        output(out, 4, "googleanalyticsuser", settings.getHtmlSettings().getGoogleAnalyticsUser());
+        output(out, 4, "googleanalyticsuser", makeCData(settings.getHtmlSettings().getGoogleAnalyticsUser()));
 
         out.write("  </htmlsettings>");
         out.newLine();
@@ -97,7 +97,7 @@ public class SettingsWriter {
     private static void writeFormatSettings(FormatSettings format, BufferedWriter out) throws IOException {
         output(out, 4, "target", makeString(format.getTarget()));
         output(out, 4, "listallauthors", makeString(format.isListAllAuthors()));
-        output(out, 4, "presentedtext", format.getPresentedText());
+        output(out, 4, "presentedtext", makeCData(format.getPresentedText()));
         output(out, 4, "numbering", makeString(format.getNumbering()));
 
         // Categories
@@ -116,7 +116,7 @@ public class SettingsWriter {
         out.newLine();
 
         for (Map.Entry<CategoryIdentifier, String> entry : format.getCategoryNotes().entrySet()) {
-            output(out, 6, "note", entry.getValue(), "category", makeString(entry.getKey()));
+            output(out, 6, "note", makeCData(entry.getValue()), "category", makeString(entry.getKey()));
         }
 
         out.write("    </categorynotes>");
@@ -128,11 +128,11 @@ public class SettingsWriter {
         out.write("<");
         out.write(tag);
         out.write(">");
-        
+
         if (content != null) {
             out.write(content);
         }
-        
+
         out.write("</");
         out.write(tag);
         out.write(">");
@@ -157,11 +157,11 @@ public class SettingsWriter {
         }
 
         out.write(">");
-        
+
         if (content != null) {
             out.write(content);
         }
-        
+
         out.write("</");
         out.write(tag);
         out.write(">");
@@ -178,6 +178,8 @@ public class SettingsWriter {
                 return "    ";
             case 6:
                 return "      ";
+            case 8:
+                return "        ";
             default:
                 throw new AssertionError("Unexpected indentation number: " + indent);
         }
@@ -193,5 +195,9 @@ public class SettingsWriter {
 
     private static String makeString(Enum e) {
         return e.name();
+    }
+
+    private static String makeCData(String content) {
+        return "<![CDATA[" + content + "]]>";
     }
 }

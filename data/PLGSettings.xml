@@ -8,7 +8,7 @@
   <plaintextsettings>
     <target>publications.txt</target>
     <listallauthors>true</listallauthors>
-    <presentedtext></presentedtext>
+    <presentedtext><![CDATA[null]]></presentedtext>
     <numbering>NONE</numbering>
     <categories>
     </categories>
@@ -21,22 +21,23 @@
   <htmlsettings>
     <target>testPub.html</target>
     <listallauthors>true</listallauthors>
-    <presentedtext></presentedtext>
+    <presentedtext><![CDATA[<img src="fubar.png">]]></presentedtext>
     <numbering>NONE</numbering>
     <categories>
       <category>JOURNAL</category>
       <category>CONFERENCE</category>
     </categories>
     <categorynotes>
+      <note category="CONFERENCE"><![CDATA[I have a line-end here:<br>]]></note>
     </categorynotes>
     <!-- HTML-specific settings -->
     <linktotextversion>false</linktotextversion>
     <includeabstract>ALL</includeabstract>
     <includebibtex>ARXIV</includebibtex>
     <includepdf>ARXIV</includepdf>
-    <header></header>
-    <footer></footer>
-    <googleanalyticsuser></googleanalyticsuser>
+    <header>data\defaultHeader.html</header>
+    <footer>data\defaultFooter.html</footer>
+    <googleanalyticsuser><![CDATA[null]]></googleanalyticsuser>
   </htmlsettings>
 
 </plgsettings>
