@@ -205,6 +205,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             }
         });
         targetTextField.setColumns(30);
+        targetTextField.setToolTipText("This file will be created or overridden with a list of your publications.");
 
         targetBrowseButton.setText("Browse...");
         targetBrowseButton.addActionListener(new java.awt.event.ActionListener() {
@@ -230,6 +231,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         numGroup.add(numNoneRadioButton);
         numNoneRadioButton.setText("None");
+        numNoneRadioButton.setToolTipText("Do not number any publications.");
         numNoneRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 numNoneRadioButtonActionPerformed(evt);
@@ -238,6 +240,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         numGroup.add(numGlobalRadioButton);
         numGlobalRadioButton.setText("Global numbering");
+        numGlobalRadioButton.setToolTipText("Number all publications sequentially, with no regard to sections.");
         numGlobalRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 numGlobalRadioButtonActionPerformed(evt);
@@ -246,6 +249,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         numGroup.add(numLocalRadioButton);
         numLocalRadioButton.setText("Section numbering");
+        numLocalRadioButton.setToolTipText("Number the publications in each section independently.");
         numLocalRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 numLocalRadioButtonActionPerformed(evt);
@@ -292,6 +296,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             }
         });
         noteTextField.setColumns(20);
+        noteTextField.setToolTipText("This text will be inserted after the category heading, before the publications in the category.");
         noteTextField.setEnabled(false);
 
         javax.swing.GroupLayout catPanelLayout = new javax.swing.GroupLayout(catPanel);
@@ -336,6 +341,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         inCatScrollPane.setViewportView(inCatList);
 
         inButton.setText("<html>&larr;</html>");
+        inButton.setToolTipText("Include the selected category.");
         inButton.setEnabled(false);
         inButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -344,6 +350,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         });
 
         outButton.setText("<html>&rarr;</html>");
+        outButton.setToolTipText("Remove the selected category.");
         outButton.setEnabled(false);
         outButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -352,6 +359,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         });
 
         upButton.setText("<html>&uarr;</html>");
+        upButton.setToolTipText("Move the selected category up.");
         upButton.setEnabled(false);
         upButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -360,6 +368,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         });
 
         downButton.setText("<html>&darr;</html>");
+        downButton.setToolTipText("Move the selected category down.");
         downButton.setEnabled(false);
         downButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -172,6 +172,7 @@
     <Component class="javax.swing.JTextField" name="headerTextField">
       <Properties>
         <Property name="columns" type="int" value="29"/>
+        <Property name="toolTipText" type="java.lang.String" value="The contents of this file will be copied to your publication list before the publications themselves are listed. See the provided default header for an example."/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="headerTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        headerTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        headerTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
@@ -188,6 +189,7 @@
     <Component class="javax.swing.JTextField" name="footerTextField">
       <Properties>
         <Property name="columns" type="int" value="29"/>
+        <Property name="toolTipText" type="java.lang.String" value="The contents of this file will be copied to your publication list after the publications themselves are listed. See the provided default footer for an example."/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="footerTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        footerTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        footerTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
@@ -278,6 +280,7 @@
     <Component class="javax.swing.JCheckBox" name="analyticsCheckBox">
       <Properties>
         <Property name="text" type="java.lang.String" value="Include analytics code"/>
+        <Property name="toolTipText" type="java.lang.String" value="This allows you to monitor your site usage through Google Analytics. To use this feature, you need a valid Google Analytics account."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analyticsCheckBoxActionPerformed"/>
