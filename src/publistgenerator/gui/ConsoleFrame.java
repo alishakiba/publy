@@ -54,7 +54,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
         });
 
         settingsButton.setText("Edit Settings");
-        settingsButton.setToolTipText("Closes the application without saving any changes to the settings.");
+        settingsButton.setToolTipText("Opens the settings editor.");
         settingsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 settingsButtonActionPerformed(evt);
@@ -62,7 +62,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
         });
 
         closeButton.setText("Close");
-        closeButton.setToolTipText("Closes the application and saves all changes to the settings.");
+        closeButton.setToolTipText("Closes the application.");
         closeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 closeButtonActionPerformed(evt);

@@ -130,6 +130,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             }
         });
         headerTextField.setColumns(29);
+        headerTextField.setToolTipText("The contents of this file will be copied to your publication list before the publications themselves are listed. See the provided default header for an example.");
 
         headerBrowseButton.setText("Browse...");
         headerBrowseButton.addActionListener(new java.awt.event.ActionListener() {
@@ -150,6 +151,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             }
         });
         footerTextField.setColumns(29);
+        footerTextField.setToolTipText("The contents of this file will be copied to your publication list after the publications themselves are listed. See the provided default footer for an example.");
 
         footerBrowseButton.setText("Browse...");
         footerBrowseButton.addActionListener(new java.awt.event.ActionListener() {
@@ -199,6 +201,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         analyticsLabel.setText("Google analytics");
 
         analyticsCheckBox.setText("Include analytics code");
+        analyticsCheckBox.setToolTipText("This allows you to monitor your site usage through Google Analytics. To use this feature, you need a valid Google Analytics account.");
         analyticsCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 analyticsCheckBoxActionPerformed(evt);

@@ -201,6 +201,7 @@
     <Component class="javax.swing.JTextField" name="targetTextField">
       <Properties>
         <Property name="columns" type="int" value="30"/>
+        <Property name="toolTipText" type="java.lang.String" value="This file will be created or overridden with a list of your publications."/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="targetTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        targetTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        targetTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
@@ -233,6 +234,7 @@
           <ComponentRef name="numGroup"/>
         </Property>
         <Property name="text" type="java.lang.String" value="None"/>
+        <Property name="toolTipText" type="java.lang.String" value="Do not number any publications."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numNoneRadioButtonActionPerformed"/>
@@ -244,6 +246,7 @@
           <ComponentRef name="numGroup"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Global numbering"/>
+        <Property name="toolTipText" type="java.lang.String" value="Number all publications sequentially, with no regard to sections."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numGlobalRadioButtonActionPerformed"/>
@@ -255,6 +258,7 @@
           <ComponentRef name="numGroup"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Section numbering"/>
+        <Property name="toolTipText" type="java.lang.String" value="Number the publications in each section independently."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numLocalRadioButtonActionPerformed"/>
@@ -367,6 +371,7 @@
         <Component class="javax.swing.JTextField" name="noteTextField">
           <Properties>
             <Property name="columns" type="int" value="20"/>
+            <Property name="toolTipText" type="java.lang.String" value="This text will be inserted after the category heading, before the publications in the category."/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <AuxValues>
@@ -404,6 +409,7 @@
     <Component class="javax.swing.JButton" name="inButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&amp;larr;&lt;/html&gt;"/>
+        <Property name="toolTipText" type="java.lang.String" value="Include the selected category."/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
@@ -413,6 +419,7 @@
     <Component class="javax.swing.JButton" name="outButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&amp;rarr;&lt;/html&gt;"/>
+        <Property name="toolTipText" type="java.lang.String" value="Remove the selected category."/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
@@ -424,6 +431,7 @@
     <Component class="javax.swing.JButton" name="upButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&amp;uarr;&lt;/html&gt;"/>
+        <Property name="toolTipText" type="java.lang.String" value="Move the selected category up."/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
@@ -433,6 +441,7 @@
     <Component class="javax.swing.JButton" name="downButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&amp;darr;&lt;/html&gt;"/>
+        <Property name="toolTipText" type="java.lang.String" value="Move the selected category down."/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
