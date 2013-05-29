@@ -105,6 +105,9 @@ public class ConsoleFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
+        // Clear the console before generating
+        consoleTextPane.setText("");
+        
         Settings settings = null;
 
         try {
