@@ -178,8 +178,6 @@ public class SettingsWriter {
                 return "    ";
             case 6:
                 return "      ";
-            case 8:
-                return "        ";
             default:
                 throw new AssertionError("Unexpected indentation number: " + indent);
         }

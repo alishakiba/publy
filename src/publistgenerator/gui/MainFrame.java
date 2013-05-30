@@ -3,7 +3,6 @@
 package publistgenerator.gui;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import javax.swing.JFileChooser;
 import javax.swing.text.StyledDocument;
@@ -314,6 +313,9 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
+        // Clear the console before generating
+        consoleTextPane.setText("");
+        
         GeneratorMain.generatePublicationList(settings);
     }//GEN-LAST:event_generateButtonActionPerformed
 
