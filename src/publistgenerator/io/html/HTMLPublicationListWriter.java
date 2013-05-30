@@ -227,6 +227,8 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             File gaJs = new File(DEFAULT_GAJS_LOCATION);
 
             if (gaJs.exists()) {
+                out.newLine();
+                
                 try (BufferedReader reader = new BufferedReader(new FileReader(gaJs))) {
                     for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                         if (line.contains("~GAUSERACCOUNT~")) {
