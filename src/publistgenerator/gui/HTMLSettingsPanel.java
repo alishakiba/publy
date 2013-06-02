@@ -3,7 +3,6 @@
 package publistgenerator.gui;
 
 import java.awt.Component;
-import java.io.File;
 import java.util.Arrays;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
@@ -60,7 +59,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         // Publication links
         abstractComboBox.setSelectedItem(settings.getIncludeAbstract());
         bibtexComboBox.setSelectedItem(settings.getIncludeBibtex());
-        pdfComboBox.setSelectedItem(settings.getIncludePDF());
+        paperComboBox.setSelectedItem(settings.getIncludePaper());
 
         // Google analytics
         String user = settings.getGoogleAnalyticsUser();
@@ -106,9 +105,9 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         abstractLabel = new javax.swing.JLabel();
         abstractComboBox = new javax.swing.JComboBox();
         bibtexLabel = new javax.swing.JLabel();
-        pdfLabel = new javax.swing.JLabel();
+        paperLabel = new javax.swing.JLabel();
         bibtexComboBox = new javax.swing.JComboBox();
-        pdfComboBox = new javax.swing.JComboBox();
+        paperComboBox = new javax.swing.JComboBox();
         analyticsLabel = new javax.swing.JLabel();
         analyticsSeparator = new javax.swing.JSeparator();
         analyticsCheckBox = new javax.swing.JCheckBox();
@@ -183,7 +182,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
 
         bibtexLabel.setText("Include the BibTeX for:");
 
-        pdfLabel.setText("Include the PDF for:");
+        paperLabel.setText("Include the paper for:");
 
         bibtexComboBox.setModel(new DefaultComboBoxModel(Arrays.copyOfRange(HTMLSettings.PublicationType.values(), 0, 4)));
         bibtexComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -192,10 +191,10 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             }
         });
 
-        pdfComboBox.setModel(new DefaultComboBoxModel(HTMLSettings.PublicationType.values()));
-        pdfComboBox.addActionListener(new java.awt.event.ActionListener() {
+        paperComboBox.setModel(new DefaultComboBoxModel(HTMLSettings.PublicationType.values()));
+        paperComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pdfComboBoxActionPerformed(evt);
+                paperComboBoxActionPerformed(evt);
             }
         });
 
@@ -260,26 +259,26 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(headerBrowseButton))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(bibtexLabel)
-                                .addGap(18, 18, 18)
-                                .addComponent(bibtexComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(abstractLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(abstractComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(pdfLabel)
-                                .addGap(31, 31, 31)
-                                .addComponent(pdfComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(analyticsUserLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(analyticsUserTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(linkToTextCheckBox)
                                     .addComponent(analyticsCheckBox))
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(0, 50, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(analyticsUserLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(analyticsUserTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(bibtexLabel)
+                                    .addComponent(paperLabel))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(paperComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(bibtexComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -317,8 +316,8 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                     .addComponent(bibtexComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(pdfLabel)
-                    .addComponent(pdfComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(paperLabel)
+                    .addComponent(paperComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(analyticsLabel)
@@ -361,9 +360,9 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         settings.setIncludeBibtex((HTMLSettings.PublicationType) bibtexComboBox.getSelectedItem());
     }//GEN-LAST:event_bibtexComboBoxActionPerformed
 
-    private void pdfComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pdfComboBoxActionPerformed
-        settings.setIncludePDF((HTMLSettings.PublicationType) pdfComboBox.getSelectedItem());
-    }//GEN-LAST:event_pdfComboBoxActionPerformed
+    private void paperComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paperComboBoxActionPerformed
+        settings.setIncludePaper((HTMLSettings.PublicationType) paperComboBox.getSelectedItem());
+    }//GEN-LAST:event_paperComboBoxActionPerformed
 
     private void analyticsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyticsCheckBoxActionPerformed
         if (analyticsCheckBox.isSelected()) {
@@ -419,7 +418,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JSeparator linkToTextSeparator;
     private javax.swing.JLabel linksLabel;
     private javax.swing.JSeparator linksSeparator;
-    private javax.swing.JComboBox pdfComboBox;
-    private javax.swing.JLabel pdfLabel;
+    private javax.swing.JComboBox paperComboBox;
+    private javax.swing.JLabel paperLabel;
     // End of variables declaration//GEN-END:variables
 }

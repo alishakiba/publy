@@ -66,31 +66,32 @@
                               <Component id="headerBrowseButton" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="bibtexLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="bibtexComboBox" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
                               <Component id="abstractLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="abstractComboBox" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="pdfLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                              <Component id="pdfComboBox" max="32767" attributes="0"/>
+                              <Component id="analyticsUserLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="analyticsUserTextField" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
+                          <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="linkToTextCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="analyticsCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="50" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="analyticsUserLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="analyticsUserTextField" pref="213" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="bibtexLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="paperLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="paperComboBox" max="32767" attributes="0"/>
+                                  <Component id="bibtexComboBox" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                   </Group>
@@ -141,8 +142,8 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="pdfLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="pdfComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="paperLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="paperComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
@@ -245,9 +246,9 @@
         <Property name="text" type="java.lang.String" value="Include the BibTeX for:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="pdfLabel">
+    <Component class="javax.swing.JLabel" name="paperLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Include the PDF for:"/>
+        <Property name="text" type="java.lang.String" value="Include the paper for:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="bibtexComboBox">
@@ -260,14 +261,14 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bibtexComboBoxActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JComboBox" name="pdfComboBox">
+    <Component class="javax.swing.JComboBox" name="paperComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="new DefaultComboBoxModel(HTMLSettings.PublicationType.values())" type="code"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pdfComboBoxActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="paperComboBoxActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="analyticsLabel">

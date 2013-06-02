@@ -132,7 +132,7 @@ public class SettingsReader extends DefaultHandler {
                     ((HTMLSettings) format).setIncludeBibtex(HTMLSettings.PublicationType.valueOf(text));
                     break;
                 case "includepdf":
-                    ((HTMLSettings) format).setIncludePDF(HTMLSettings.PublicationType.valueOf(text));
+                    ((HTMLSettings) format).setIncludePaper(HTMLSettings.PublicationType.valueOf(text));
                     break;
                 case "header":
                     ((HTMLSettings) format).setHeader(ResourceLocator.getFile(text));

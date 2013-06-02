@@ -85,7 +85,7 @@ public class SettingsWriter {
         output(out, 4, "linktotextversion", makeString(settings.getHtmlSettings().linkToTextVersion()));
         output(out, 4, "includeabstract", makeString(settings.getHtmlSettings().getIncludeAbstract()));
         output(out, 4, "includebibtex", makeString(settings.getHtmlSettings().getIncludeBibtex()));
-        output(out, 4, "includepdf", makeString(settings.getHtmlSettings().getIncludePDF()));
+        output(out, 4, "includepdf", makeString(settings.getHtmlSettings().getIncludePaper()));
         output(out, 4, "header", makeString(settings.getHtmlSettings().getHeader()));
         output(out, 4, "footer", makeString(settings.getHtmlSettings().getFooter()));
         output(out, 4, "googleanalyticsuser", makeCData(settings.getHtmlSettings().getGoogleAnalyticsUser()));

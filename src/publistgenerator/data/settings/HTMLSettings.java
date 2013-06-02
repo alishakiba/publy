@@ -41,7 +41,7 @@ public class HTMLSettings extends FormatSettings {
     private boolean linkToTextVersion = false;
     private PublicationType includeAbstract = PublicationType.ALL;
     private PublicationType includeBibtex = PublicationType.ARXIV; // ALL should not be an option here.
-    private PublicationType includePDF = PublicationType.ARXIV;
+    private PublicationType includePaper = PublicationType.ARXIV;
     private File header = ResourceLocator.getFile(HTMLPublicationListWriter.DEFAULT_HEADER_LOCATION);
     private File footer = ResourceLocator.getFile(HTMLPublicationListWriter.DEFAULT_FOOTER_LOCATION);
     private String googleAnalyticsUser = null;
@@ -62,8 +62,8 @@ public class HTMLSettings extends FormatSettings {
         return includeBibtex;
     }
 
-    public PublicationType getIncludePDF() {
-        return includePDF;
+    public PublicationType getIncludePaper() {
+        return includePaper;
     }
 
     public File getHeader() {
@@ -90,8 +90,8 @@ public class HTMLSettings extends FormatSettings {
         this.includeBibtex = includeBibtex;
     }
 
-    public void setIncludePDF(PublicationType includePDF) {
-        this.includePDF = includePDF;
+    public void setIncludePaper(PublicationType includePaper) {
+        this.includePaper = includePaper;
     }
 
     public void setHeader(File header) {
