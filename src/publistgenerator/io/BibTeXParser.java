@@ -60,8 +60,6 @@ public class BibTeXParser {
             expandAbbreviations(item, abbreviations, venues);
             replaceAuthors(item, authors);
         }
-        
-        Console.log("Publications list \"%s\" parsed successfully.", file.getName());
 
         return items;
     }
