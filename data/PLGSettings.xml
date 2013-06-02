@@ -8,7 +8,7 @@
   <plaintextsettings>
     <target>publications.txt</target>
     <listallauthors>true</listallauthors>
-    <presentedtext><![CDATA[null]]></presentedtext>
+    <presentedtext><![CDATA[]]></presentedtext>
     <numbering>NONE</numbering>
     <categories>
     </categories>
@@ -21,7 +21,7 @@
   <htmlsettings>
     <target>testPub.html</target>
     <listallauthors>true</listallauthors>
-    <presentedtext><![CDATA[<img src="fubar.png">]]></presentedtext>
+    <presentedtext><![CDATA[<img src="fubar.png" alt="Nope">]]></presentedtext>
     <numbering>NONE</numbering>
     <categories>
       <category>JOURNAL</category>
