@@ -12,6 +12,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
+import publistgenerator.io.ResourceLocator;
 
 /**
  *
@@ -100,9 +101,9 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     void updateTarget() {
         if (settings.getTarget() == null) {
             targetTextField.setText("");
-            targetFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+            targetFileChooser.setCurrentDirectory(ResourceLocator.getBaseDirectory().toFile());
         } else {
-            targetTextField.setText(MainFrame.getRelativePath(settings.getTarget()));
+            targetTextField.setText(ResourceLocator.getRelativePath(settings.getTarget()));
             targetFileChooser.setCurrentDirectory(settings.getTarget().getParentFile());
         }
     }
@@ -528,13 +529,13 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         int opened = targetFileChooser.showOpenDialog(this);
 
         if (opened == JFileChooser.APPROVE_OPTION) {
-            targetTextField.setText(MainFrame.getRelativePath(targetFileChooser.getSelectedFile()));
+            targetTextField.setText(ResourceLocator.getRelativePath(targetFileChooser.getSelectedFile()));
         }
     }//GEN-LAST:event_targetBrowseButtonActionPerformed
 
     private void targetTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
-        settings.setTarget(MainFrame.getFile(targetTextField.getText()));
+        settings.setTarget(ResourceLocator.getFile(targetTextField.getText()));
     }
 
     private void presentedTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {

@@ -13,6 +13,7 @@ import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.data.settings.Settings;
 import publistgenerator.gui.MainFrame;
+import publistgenerator.io.ResourceLocator;
 
 /**
  *
@@ -188,7 +189,7 @@ public class SettingsWriter {
     }
 
     private static String makeString(File f) {
-        return MainFrame.getRelativePath(f);
+        return ResourceLocator.getRelativePath(f);
     }
 
     private static String makeString(Enum e) {

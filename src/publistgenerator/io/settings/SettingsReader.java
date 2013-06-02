@@ -17,6 +17,7 @@ import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.data.settings.Settings;
 import publistgenerator.gui.MainFrame;
+import publistgenerator.io.ResourceLocator;
 
 /**
  *
@@ -93,7 +94,7 @@ public class SettingsReader extends DefaultHandler {
             switch (qName) {
                 // General settings
                 case "publications":
-                    settings.setPublications(MainFrame.getFile(text));
+                    settings.setPublications(ResourceLocator.getFile(text));
                     break;
                 case "generateplaintext":
                     settings.setGenerateText(Boolean.parseBoolean(text));
@@ -103,7 +104,7 @@ public class SettingsReader extends DefaultHandler {
                     break;
                 // Format settings
                 case "target":
-                    format.setTarget(MainFrame.getFile(text));
+                    format.setTarget(ResourceLocator.getFile(text));
                     break;
                 case "listallauthors":
                     format.setListAllAuthors(Boolean.parseBoolean(text));
@@ -134,10 +135,10 @@ public class SettingsReader extends DefaultHandler {
                     ((HTMLSettings) format).setIncludePDF(HTMLSettings.PublicationType.valueOf(text));
                     break;
                 case "header":
-                    ((HTMLSettings) format).setHeader(MainFrame.getFile(text));
+                    ((HTMLSettings) format).setHeader(ResourceLocator.getFile(text));
                     break;
                 case "footer":
-                    ((HTMLSettings) format).setFooter(MainFrame.getFile(text));
+                    ((HTMLSettings) format).setFooter(ResourceLocator.getFile(text));
                     break;
                 case "googleanalyticsuser":
                     ((HTMLSettings) format).setGoogleAnalyticsUser(text);

@@ -9,6 +9,7 @@ import javax.swing.text.StyledDocument;
 import publistgenerator.Console;
 import publistgenerator.GeneratorMain;
 import publistgenerator.data.settings.Settings;
+import publistgenerator.io.ResourceLocator;
 import publistgenerator.io.settings.SettingsWriter;
 
 /**
@@ -41,48 +42,13 @@ public class MainFrame extends javax.swing.JFrame {
         consoleTextPane.setDocument(doc);
     }
 
-    /**
-     * Returns a path to the given file that is relative to the current working
-     * directory. When the file is
-     * <code>null</code>, an empty path is returned instead.
-     *
-     * @param file
-     * @return
-     */
-    public static String getRelativePath(File file) {
-        if (file == null) {
-            return "";
-        } else {
-            Path workingDir = (new File(System.getProperty("user.dir"))).toPath();
-            return workingDir.relativize(file.toPath()).toString();
-        }
-    }
-
-    /**
-     * Resolves the given path against the current working directory and returns
-     * the corresponding file. When the path is
-     * <code>null</code> or empty,
-     * <code>null</code> is returned instead.
-     *
-     * @param relativePath
-     * @return
-     */
-    public static File getFile(String relativePath) {
-        if (relativePath == null || relativePath.isEmpty()) {
-            return null;
-        } else {
-            Path workingDir = (new File(System.getProperty("user.dir"))).toPath();
-            return workingDir.resolve(relativePath).toFile();
-        }
-    }
-
     private void populateValues() {
         // Publications
         if (settings.getPublications() == null) {
             pubTextField.setText("");
-            pubFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+            pubFileChooser.setCurrentDirectory(ResourceLocator.getBaseDirectory().toFile());
         } else {
-            pubTextField.setText(getRelativePath(settings.getPublications()));
+            pubTextField.setText(ResourceLocator.getRelativePath(settings.getPublications()));
             pubFileChooser.setCurrentDirectory(settings.getPublications().getParentFile());
         }
 
@@ -336,7 +302,7 @@ public class MainFrame extends javax.swing.JFrame {
         int opened = pubFileChooser.showOpenDialog(this);
 
         if (opened == JFileChooser.APPROVE_OPTION) {
-            pubTextField.setText(getRelativePath(pubFileChooser.getSelectedFile()));
+            pubTextField.setText(ResourceLocator.getRelativePath(pubFileChooser.getSelectedFile()));
             settings.setPublications(pubFileChooser.getSelectedFile());
 
             if (settings.getHtmlSettings().getTarget() == null || settings.getPlainSettings().getTarget() == null) {

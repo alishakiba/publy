@@ -10,6 +10,7 @@ import javax.swing.JFileChooser;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import publistgenerator.data.settings.HTMLSettings;
+import publistgenerator.io.ResourceLocator;
 
 /**
  *
@@ -39,17 +40,17 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         // Header & Footer
         if (settings.getHeader() == null) {
             headerTextField.setText("");
-            headerFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+            headerFileChooser.setCurrentDirectory(ResourceLocator.getBaseDirectory().toFile());
         } else {
-            headerTextField.setText(MainFrame.getRelativePath(settings.getHeader()));
+            headerTextField.setText(ResourceLocator.getRelativePath(settings.getHeader()));
             headerFileChooser.setCurrentDirectory(settings.getHeader().getParentFile());
         }
         
         if (settings.getFooter()== null) {
             footerTextField.setText("");
-            footerFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+            footerFileChooser.setCurrentDirectory(ResourceLocator.getBaseDirectory().toFile());
         } else {
-            footerTextField.setText(MainFrame.getRelativePath(settings.getFooter()));
+            footerTextField.setText(ResourceLocator.getRelativePath(settings.getFooter()));
             footerFileChooser.setCurrentDirectory(settings.getFooter().getParentFile());
         }
 
@@ -336,7 +337,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         int opened = headerFileChooser.showOpenDialog(this);
 
         if (opened == JFileChooser.APPROVE_OPTION) {
-            headerTextField.setText(MainFrame.getRelativePath(headerFileChooser.getSelectedFile()));
+            headerTextField.setText(ResourceLocator.getRelativePath(headerFileChooser.getSelectedFile()));
         }
     }//GEN-LAST:event_headerBrowseButtonActionPerformed
 
@@ -344,7 +345,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         int opened = footerFileChooser.showOpenDialog(this);
 
         if (opened == JFileChooser.APPROVE_OPTION) {
-            footerTextField.setText(MainFrame.getRelativePath(footerFileChooser.getSelectedFile()));
+            footerTextField.setText(ResourceLocator.getRelativePath(footerFileChooser.getSelectedFile()));
         }
     }//GEN-LAST:event_footerBrowseButtonActionPerformed
 
@@ -387,12 +388,12 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
 
     private void headerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
-        settings.setHeader(MainFrame.getFile(headerTextField.getText()));
+        settings.setHeader(ResourceLocator.getFile(headerTextField.getText()));
     }
 
     private void footerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
-        settings.setFooter(MainFrame.getFile(footerTextField.getText()));
+        settings.setFooter(ResourceLocator.getFile(footerTextField.getText()));
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
