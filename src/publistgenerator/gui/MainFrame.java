@@ -3,7 +3,6 @@
 package publistgenerator.gui;
 
 import java.io.File;
-import java.nio.file.Path;
 import javax.swing.JFileChooser;
 import javax.swing.text.StyledDocument;
 import publistgenerator.Console;
@@ -30,16 +29,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         // Make sure all console output from the generation is redirected to the text area.
         Console.setOutputTarget(consoleTextPane);
-    }
-
-    /**
-     * Replaces the content of the console text area with the specified
-     * StyledDocument.
-     *
-     * @param doc
-     */
-    public void setConsoleText(StyledDocument doc) {
-        consoleTextPane.setDocument(doc);
     }
 
     private void populateValues() {

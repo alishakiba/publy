@@ -77,20 +77,22 @@ public class Console {
     }
 
     public static void except(Throwable exception, String format, Object... args) {
-        StringWriter stackTrace = new StringWriter();
-        exception.printStackTrace(new PrintWriter(stackTrace));
+        String exceptionText;
+
+        if (PRINT_STACKTRACE) {
+            StringWriter stackTrace = new StringWriter();
+            exception.printStackTrace(new PrintWriter(stackTrace));
+            exceptionText = stackTrace.toString();
+        } else {
+            exceptionText = exception.toString();
+        }
 
         if (textPane == null) {
             if (System.console() == null) {
                 createConsoleFrame();
             } else {
                 System.console().format(" ERROR: " + format + "%n", args);
-                System.console().format("%s%n", exception.toString());
-
-                if (PRINT_STACKTRACE) {
-                    System.console().format("%s%n", stackTrace.toString());
-                }
-
+                System.console().format("%s%n", exceptionText);
                 System.console().flush();
             }
         }
@@ -99,11 +101,7 @@ public class Console {
         if (textPane != null) {
             try {
                 textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" " + format + "%n", args), errorAttributes);
-                textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format("%s%n", exception.toString()), errorAttributes);
-
-                if (PRINT_STACKTRACE) {
-                    textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format("%s%n", stackTrace.toString()), errorAttributes);
-                }
+                textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format("%s%n", exceptionText), errorAttributes);
             } catch (BadLocationException ex) {
                 // This should never happen
                 throw new AssertionError(ex);
@@ -112,6 +110,11 @@ public class Console {
     }
 
     public static void setOutputTarget(JTextPane textPane) {
+        if (Console.textPane != null) {
+            // Copy the current text over
+            textPane.setStyledDocument(Console.textPane.getStyledDocument());
+        }
+        
         Console.textPane = textPane;
     }
 
