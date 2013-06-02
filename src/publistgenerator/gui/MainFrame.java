@@ -2,9 +2,8 @@
  */
 package publistgenerator.gui;
 
-import java.io.File;
+import java.nio.file.Path;
 import javax.swing.JFileChooser;
-import javax.swing.text.StyledDocument;
 import publistgenerator.Console;
 import publistgenerator.GeneratorMain;
 import publistgenerator.data.settings.Settings;
@@ -38,7 +37,7 @@ public class MainFrame extends javax.swing.JFrame {
             pubFileChooser.setCurrentDirectory(ResourceLocator.getBaseDirectory().toFile());
         } else {
             pubTextField.setText(ResourceLocator.getRelativePath(settings.getPublications()));
-            pubFileChooser.setCurrentDirectory(settings.getPublications().getParentFile());
+            pubFileChooser.setCurrentDirectory(settings.getPublications().getParent().toFile());
         }
 
         htmlCheckBox.setSelected(settings.generateHTML());
@@ -291,8 +290,9 @@ public class MainFrame extends javax.swing.JFrame {
         int opened = pubFileChooser.showOpenDialog(this);
 
         if (opened == JFileChooser.APPROVE_OPTION) {
-            pubTextField.setText(ResourceLocator.getRelativePath(pubFileChooser.getSelectedFile()));
-            settings.setPublications(pubFileChooser.getSelectedFile());
+            Path selected = pubFileChooser.getSelectedFile().toPath();
+            pubTextField.setText(ResourceLocator.getRelativePath(selected));
+            settings.setPublications(selected);
 
             if (settings.getHtmlSettings().getTarget() == null || settings.getPlainSettings().getTarget() == null) {
                 // Set initial targets
@@ -305,8 +305,7 @@ public class MainFrame extends javax.swing.JFrame {
 
                 if (settings.getHtmlSettings().getTarget() == null) {
                     // Set an initial target
-                    File target = new File(pubFileChooser.getSelectedFile().getParentFile(), baseName + ".html");
-                    settings.getHtmlSettings().setTarget(target);
+                    settings.getHtmlSettings().setTarget(selected.resolveSibling(baseName + ".html"));
                     
                     // Update the GUI
                     htmlGeneralSettingsPanel.updateTarget();
@@ -314,8 +313,7 @@ public class MainFrame extends javax.swing.JFrame {
 
                 if (settings.getPlainSettings().getTarget() == null) {
                     // Set an initial target
-                    File target = new File(pubFileChooser.getSelectedFile().getParentFile(), baseName + ".txt");
-                    settings.getPlainSettings().setTarget(target);
+                    settings.getPlainSettings().setTarget(selected.resolveSibling(baseName + ".txt"));
                     
                     // Update the GUI
                     plainSettingsPanel.updateTarget();

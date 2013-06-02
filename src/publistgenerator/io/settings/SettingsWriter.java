@@ -8,11 +8,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Map;
 import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.data.settings.Settings;
-import publistgenerator.gui.MainFrame;
 import publistgenerator.io.ResourceLocator;
 
 /**
@@ -188,8 +188,8 @@ public class SettingsWriter {
         return Boolean.toString(b);
     }
 
-    private static String makeString(File f) {
-        return ResourceLocator.getRelativePath(f);
+    private static String makeString(Path p) {
+        return ResourceLocator.getRelativePath(p);
     }
 
     private static String makeString(Enum e) {

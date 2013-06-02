@@ -5,9 +5,10 @@
 package publistgenerator.io;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,7 +48,7 @@ public class BibTeXParser {
     private BibTeXParser() {
     }
 
-    public static List<BibItem> parseFile(File file) throws IOException {
+    public static List<BibItem> parseFile(Path file) throws IOException {
         List<BibItem> items = new ArrayList<>();
         HashMap<String, String> abbreviations = new HashMap<>();
         HashMap<String, Venue> venues = new HashMap<>();
@@ -64,10 +65,10 @@ public class BibTeXParser {
         return items;
     }
 
-    private static void parseFile(File file, List<BibItem> items, Map<String, String> abbreviations, Map<String, Venue> venues, Map<String, Author> authors) throws IOException {
+    private static void parseFile(Path file, List<BibItem> items, Map<String, String> abbreviations, Map<String, Venue> venues, Map<String, Author> authors) throws IOException {
         HashSet<String> ids = new HashSet<>(); // Bibitem identifiers, used to check for duplicates
 
-        try (BufferedReader in = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader in = Files.newBufferedReader(file, Charset.forName("UTF-8"))) {
             for (String l = in.readLine(); l != null; l = in.readLine()) {
                 String line = l.trim();
 

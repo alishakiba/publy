@@ -4,8 +4,9 @@
  */
 package publistgenerator;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
@@ -61,19 +62,19 @@ public class GeneratorMain {
     
     public static void generatePublicationList(Settings settings) {
         // Check if the publication list is set and exists
-        File pubList = settings.getPublications();
+        Path pubList = settings.getPublications();
 
         if (pubList == null) {
             Console.error("No publication list was set.");
-        } else if (!pubList.exists()) {
-            Console.error("No publication list was found at: %s", pubList.getPath());
+        } else if (Files.notExists(pubList)) {
+            Console.error("No publication list was found at: %s", pubList);
         } else {
             // Parse all publications
             List<BibItem> items = null;
             
             try {
                 items = BibTeXParser.parseFile(settings.getPublications());
-                Console.log("Publications list \"%s\" parsed successfully.", settings.getPublications().getName());
+                Console.log("Publications list \"%s\" parsed successfully.", settings.getPublications().getFileName());
             } catch (Exception | AssertionError ex) {
                 Console.except(ex, "Exception while parsing publications list:");
             }

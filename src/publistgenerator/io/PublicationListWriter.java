@@ -7,6 +7,8 @@ package publistgenerator.io;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -37,7 +39,7 @@ public abstract class PublicationListWriter {
     public void writePublicationList(List<BibItem> items) throws IOException {
         categorizePapers(items, settings);
 
-        try (BufferedWriter out = new BufferedWriter(new FileWriter(settings.getTarget()))) {
+        try (BufferedWriter out = Files.newBufferedWriter(settings.getTarget(), Charset.forName("UTF-8"))) {
             writePublicationList(out);
         }
     }
