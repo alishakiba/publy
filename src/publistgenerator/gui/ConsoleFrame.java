@@ -108,6 +108,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
         // Clear the console before generating
         consoleTextPane.setText("");
         
+        // Parse the settings again (the user might have changed them manually)
         Settings settings = null;
 
         try {
@@ -122,7 +123,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void settingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsButtonActionPerformed
-        // Parse the settings (the user might have changed them manually)
+        // Parse the settings again (the user might have changed them manually)
         Settings settings = null;
 
         try {
@@ -138,9 +139,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
         
         // Create the settings GUI
         MainFrame mainFrame = new MainFrame(settings);
-
-        // Copy the console text over
-        mainFrame.setConsoleText((StyledDocument) consoleTextPane.getDocument());
+        // The current console text is copied automatically
 
         // Close this window and open the settings GUI
         dispose();
