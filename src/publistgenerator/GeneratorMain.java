@@ -7,8 +7,6 @@ package publistgenerator;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
@@ -50,10 +48,13 @@ public class GeneratorMain {
             // Report an Exception, if one occurred
             if (exception != null) {
                 Console.except(exception, "Exception occurred while parsing the configuration:");
+            } else {
+                Console.log("Configuration parsed successfully.");
             }
 
             mf.setVisible(true);
         } else {
+            Console.log("Configuration parsed successfully.");
             generatePublicationList(settings);
         }
     }
@@ -69,19 +70,21 @@ public class GeneratorMain {
         } else {
             // Parse all publications
             List<BibItem> items = null;
-
+            
             try {
                 items = BibTeXParser.parseFile(settings.getPublications());
+                Console.log("Publications list \"%s\" parsed successfully.", settings.getPublications().getName());
             } catch (Exception | AssertionError ex) {
-                Console.except(ex, "Exception while parsing:%n");
+                Console.except(ex, "Exception while parsing publications list:");
             }
 
             if (items != null && settings.generateHTML()) {
                 try {
                     HTMLPublicationListWriter writer = new HTMLPublicationListWriter(settings.getHtmlSettings());
                     writer.writePublicationList(items);
+                    Console.log("HTML publication list written successfully.");
                 } catch (Exception | AssertionError ex) {
-                    Console.except(ex, "Exception while writing HTML:%n");
+                    Console.except(ex, "Exception while writing HTML publication list:");
                 }
             }
 
@@ -89,10 +92,13 @@ public class GeneratorMain {
                 try {
                     PlainPublicationListWriter plainWriter = new PlainPublicationListWriter(settings.getPlainSettings());
                     plainWriter.writePublicationList(items);
+                    Console.log("Plain text publication list written successfully.");
                 } catch (Exception | AssertionError ex) {
-                    Console.except(ex, "Exception while writing plain text:%n");
+                    Console.except(ex, "Exception while writing plain text publication list:");
                 }
             }
+            
+            Console.log("Done.");
         }
     }
 }

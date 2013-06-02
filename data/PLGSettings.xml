@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <plgsettings>
   <!-- Relative path to a BibTeX file with the publication list -->
-  <publications>publications.bib</publications>
+  <publications>testPub.bib</publications>
 
   <!-- Settings for plain-text output -->
   <generateplaintext>false</generateplaintext>
