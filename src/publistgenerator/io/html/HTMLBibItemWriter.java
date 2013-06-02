@@ -7,9 +7,13 @@ package publistgenerator.io.html;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import publistgenerator.Console;
 import publistgenerator.data.bibitem.Article;
 import publistgenerator.data.bibitem.Author;
@@ -348,15 +352,38 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private void writeLinks(BibItem item, boolean includeBibtex, boolean includeArxivBibtex) throws IOException {
-        // PDF link
-        if (item.anyNonEmpty("pdf") && includePDF(item)) {
-            out.write(indent);
-            out.write("[<a href=\"");
-            out.write(URLEncoder.encode(item.get("pdf"), "UTF-8").replaceAll("\\+", "%20"));
-            out.write("\">pdf</a>]");
-            out.newLine();
+        // Paper link
+        if (item.anyNonEmpty("paper") && includePaper(item)) {
+            try {
+                String link = (new URI(null, null, item.get("paper"), null)).toString();
+                String text;
 
-            checkExistance(item.get("pdf"));
+                // Use the extension as link text, or "Paper" if no extension is found
+                int dot = link.lastIndexOf('.');
+
+                if (dot != -1) {
+                    text = link.substring(dot + 1);
+
+                    // Convert *.ps.gz to ps
+                    if ("gz".equals(text) && link.lastIndexOf('.', dot - 1) != -1) {
+                        text = link.substring(link.lastIndexOf('.', dot - 1) + 1, dot);
+                    }
+                } else {
+                    text = "Paper";
+                }
+
+                out.write(indent);
+                out.write("[<a href=\"");
+                out.write(link);
+                out.write("\">");
+                out.write(text);
+                out.write("</a>]");
+                out.newLine();
+
+                checkExistance(item.get("paper"));
+            } catch (URISyntaxException ex) {
+                Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
+            }
         }
 
         // arXiv link
@@ -377,69 +404,42 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.newLine();
         }
 
-        // Slides link
-        if (item.anyNonEmpty("slides")) {
-            String slides = item.get("slides");
-            String extension = null;
+        // Other user-specified links
+        for (int i = 0; i < 20; i++) {
+            if (item.anyNonEmpty("link" + i)) {
+                String link = item.get("link" + i);
+                int divider = link.indexOf('|');
 
-            int extensionStart = slides.lastIndexOf('.');
+                if (divider == -1) {
+                    Console.error("No divider \"|\" found in link %d of item \"%s\". Links should be formatted as%n  link%d={<Link text>|<Link target>}", i, item.getId(), i);
+                } else {
+                    String text = link.substring(0, divider);
+                    String target = link.substring(divider + 1);
 
-            if (extensionStart > -1) {
-                extension = slides.substring(extensionStart + 1);
-            }
+                    if (target.startsWith("#")) {
+                        // Link to another paper, good as-is
+                    } else if (target.contains(":")) {
+                        // Most file systems prohibit colons in file names, so
+                        // it seems safe to assume that this indicates an
+                        // absolute URI and as such, should be fine.
+                    } else {
+                        // Most likely link to a file on disk. Encode correctly.
+                        try {
+                            checkExistance(target);
+                            target = (new URI(null, null, target, null)).toString();
+                        } catch (URISyntaxException ex) {
+                            Console.except(ex, "Could not parse the target of link%d of item \"%s\":", target, i, item.getId());
+                        }
+                    }
 
-            out.write(indent);
-            out.write("[<a href=\"");
-            out.write(URLEncoder.encode(slides, "UTF-8").replaceAll("\\+", "%20"));
-            out.write("\">Slides");
-
-            if (extension != null) {
-                out.write(" (");
-                out.write(extension);
-                out.write(")");
-            }
-
-            out.write("</a>]");
-            out.newLine();
-
-            checkExistance(item.get("slides"));
-        }
-
-        // Conference version(s) link(s)
-        if (item.anyNonEmpty("conf")) {
-            String[] confPapers = item.get("conf").split(",");
-
-            for (int i = 0; i < confPapers.length; i++) {
-                out.write(indent);
-                out.write("[<a href=\"#");
-                out.write(confPapers[i].trim());
-                out.write("\">Conference version");
-
-                if (confPapers.length > 1) {
-                    out.write(" " + i);
+                    out.write(indent);
+                    out.write("[<a href=\"");
+                    out.write(target);
+                    out.write("\">");
+                    out.write(text);
+                    out.write("</a>]");
+                    out.newLine();
                 }
-
-                out.write("</a>]");
-                out.newLine();
-            }
-        }
-
-        // Journal version(s) link(s)
-        if (item.anyNonEmpty("journ")) {
-            String[] journPapers = item.get("journ").split(",");
-
-            for (int i = 0; i < journPapers.length; i++) {
-                out.write(indent);
-                out.write("[<a href=\"#");
-                out.write(journPapers[i].trim());
-                out.write("\">Journal version");
-
-                if (journPapers.length > 1) {
-                    out.write(" " + i);
-                }
-
-                out.write("</a>]");
-                out.newLine();
             }
         }
 
@@ -448,14 +448,6 @@ public class HTMLBibItemWriter extends BibItemWriter {
             writeBibTeXHTML(item);
         } else if (includeArxivBibtex) {
             writeArXivBibTeXHTML(item);
-        }
-    }
-
-    private void checkExistance(String path) {
-        File file = new File(settings.getTarget().getParentFile(), path);
-
-        if (!file.exists()) {
-            Console.log("Warning: linked file \"%s\" cannot be found at \"%s\".", path, file.getPath());
         }
     }
 
@@ -650,8 +642,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
         return matches(htmlSettings.getIncludeBibtex(), item);
     }
 
-    private boolean includePDF(BibItem item) {
-        return matches(htmlSettings.getIncludePDF(), item);
+    private boolean includePaper(BibItem item) {
+        return matches(htmlSettings.getIncludePaper(), item);
     }
 
     public static boolean matches(HTMLSettings.PublicationType type, BibItem item) {
@@ -678,6 +670,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
             } else {
                 return true;
             }
+        }
+    }
+
+    private void checkExistance(String path) {
+        File file = new File(settings.getTarget().getParentFile(), path);
+
+        if (!file.exists()) {
+            Console.log("Warning: linked file \"%s\" cannot be found at \"%s\".", path, file.getPath());
         }
     }
 }
