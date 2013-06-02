@@ -7,11 +7,6 @@
     <Component class="javax.swing.ButtonGroup" name="numGroup">
     </Component>
     <Component class="javax.swing.JFileChooser" name="targetFileChooser">
-      <Properties>
-        <Property name="currentDirectory" type="java.io.File" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new File(System.getProperty(&quot;user.dir&quot;))" type="code"/>
-        </Property>
-      </Properties>
     </Component>
   </NonVisualComponents>
   <Properties>

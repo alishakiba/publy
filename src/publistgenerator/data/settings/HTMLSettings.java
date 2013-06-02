@@ -4,8 +4,7 @@
  */
 package publistgenerator.data.settings;
 
-import java.io.File;
-import publistgenerator.gui.MainFrame;
+import java.nio.file.Path;
 import publistgenerator.io.ResourceLocator;
 import publistgenerator.io.html.HTMLPublicationListWriter;
 
@@ -42,8 +41,8 @@ public class HTMLSettings extends FormatSettings {
     private PublicationType includeAbstract = PublicationType.ALL;
     private PublicationType includeBibtex = PublicationType.ARXIV; // ALL should not be an option here.
     private PublicationType includePaper = PublicationType.ARXIV;
-    private File header = ResourceLocator.getFile(HTMLPublicationListWriter.DEFAULT_HEADER_LOCATION);
-    private File footer = ResourceLocator.getFile(HTMLPublicationListWriter.DEFAULT_FOOTER_LOCATION);
+    private Path header = ResourceLocator.getFullPath(HTMLPublicationListWriter.DEFAULT_HEADER_LOCATION);
+    private Path footer = ResourceLocator.getFullPath(HTMLPublicationListWriter.DEFAULT_FOOTER_LOCATION);
     private String googleAnalyticsUser = null;
 
     public HTMLSettings(Settings settings) {
@@ -66,11 +65,11 @@ public class HTMLSettings extends FormatSettings {
         return includePaper;
     }
 
-    public File getHeader() {
+    public Path getHeader() {
         return header;
     }
 
-    public File getFooter() {
+    public Path getFooter() {
         return footer;
     }
 
@@ -94,11 +93,11 @@ public class HTMLSettings extends FormatSettings {
         this.includePaper = includePaper;
     }
 
-    public void setHeader(File header) {
+    public void setHeader(Path header) {
         this.header = header;
     }
 
-    public void setFooter(File footer) {
+    public void setFooter(Path footer) {
         this.footer = footer;
     }
 

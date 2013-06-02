@@ -5,15 +5,13 @@
 package publistgenerator.io.html;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import publistgenerator.Console;
 import publistgenerator.data.bibitem.Article;
 import publistgenerator.data.bibitem.Author;
@@ -674,10 +672,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private void checkExistance(String path) {
-        File file = new File(settings.getTarget().getParentFile(), path);
+        Path file = settings.getTarget().resolveSibling(path);
 
-        if (!file.exists()) {
-            Console.log("Warning: linked file \"%s\" cannot be found at \"%s\".", path, file.getPath());
+        if (Files.notExists(file)) {
+            Console.log("Warning: linked file \"%s\" cannot be found at \"%s\".", path, file);
         }
     }
 }

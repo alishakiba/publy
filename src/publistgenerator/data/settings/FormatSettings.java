@@ -4,7 +4,7 @@
  */
 package publistgenerator.data.settings;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -24,7 +24,7 @@ public class FormatSettings {
     // Link to parent, to access the settings of other formats
     private Settings settings;
     // General
-    private File target;
+    private Path target;
     // Author info
     private boolean listAllAuthors = true;
     // Presented
@@ -49,11 +49,11 @@ public class FormatSettings {
         return settings;
     }
 
-    public File getTarget() {
+    public Path getTarget() {
         return target;
     }
 
-    public void setTarget(File target) {
+    public void setTarget(Path target) {
         this.target = target;
     }
 

@@ -42,7 +42,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             headerFileChooser.setCurrentDirectory(ResourceLocator.getBaseDirectory().toFile());
         } else {
             headerTextField.setText(ResourceLocator.getRelativePath(settings.getHeader()));
-            headerFileChooser.setCurrentDirectory(settings.getHeader().getParentFile());
+            headerFileChooser.setCurrentDirectory(settings.getHeader().getParent().toFile());
         }
         
         if (settings.getFooter()== null) {
@@ -50,7 +50,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             footerFileChooser.setCurrentDirectory(ResourceLocator.getBaseDirectory().toFile());
         } else {
             footerTextField.setText(ResourceLocator.getRelativePath(settings.getFooter()));
-            footerFileChooser.setCurrentDirectory(settings.getFooter().getParentFile());
+            footerFileChooser.setCurrentDirectory(settings.getFooter().getParent().toFile());
         }
 
         // Link to text
@@ -336,7 +336,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         int opened = headerFileChooser.showOpenDialog(this);
 
         if (opened == JFileChooser.APPROVE_OPTION) {
-            headerTextField.setText(ResourceLocator.getRelativePath(headerFileChooser.getSelectedFile()));
+            headerTextField.setText(ResourceLocator.getRelativePath(headerFileChooser.getSelectedFile().toPath()));
         }
     }//GEN-LAST:event_headerBrowseButtonActionPerformed
 
@@ -344,7 +344,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         int opened = footerFileChooser.showOpenDialog(this);
 
         if (opened == JFileChooser.APPROVE_OPTION) {
-            footerTextField.setText(ResourceLocator.getRelativePath(footerFileChooser.getSelectedFile()));
+            footerTextField.setText(ResourceLocator.getRelativePath(footerFileChooser.getSelectedFile().toPath()));
         }
     }//GEN-LAST:event_footerBrowseButtonActionPerformed
 
@@ -387,12 +387,12 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
 
     private void headerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
-        settings.setHeader(ResourceLocator.getFile(headerTextField.getText()));
+        settings.setHeader(ResourceLocator.getFullPath(headerTextField.getText()));
     }
 
     private void footerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
-        settings.setFooter(ResourceLocator.getFile(footerTextField.getText()));
+        settings.setFooter(ResourceLocator.getFullPath(footerTextField.getText()));
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

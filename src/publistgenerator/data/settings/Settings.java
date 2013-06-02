@@ -4,7 +4,7 @@
  */
 package publistgenerator.data.settings;
 
-import java.io.File;
+import java.nio.file.Path;
 
 /**
  *
@@ -12,7 +12,7 @@ import java.io.File;
  */
 public class Settings {
 
-    private File publications;
+    private Path publications;
     private boolean generateHTML;
     private HTMLSettings htmlSettings;
     private boolean generateText;
@@ -31,7 +31,7 @@ public class Settings {
         plainSettings = new FormatSettings(this);
     }
 
-    public File getPublications() {
+    public Path getPublications() {
         return publications;
     }
 
@@ -51,7 +51,7 @@ public class Settings {
         return plainSettings;
     }
 
-    public void setPublications(File publications) {
+    public void setPublications(Path publications) {
         this.publications = publications;
     }
 

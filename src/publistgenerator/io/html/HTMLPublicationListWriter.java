@@ -4,16 +4,25 @@
  */
 package publistgenerator.io.html;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import publistgenerator.Console;
 import publistgenerator.data.bibitem.BibItem;
 import publistgenerator.data.category.OutputCategory;
 import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.io.PublicationListWriter;
+import publistgenerator.io.ResourceLocator;
 
 /**
  *
@@ -51,9 +60,9 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.write("    <p>My publications as of " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".");
 
         if (settings.linkToTextVersion() && settings.getSettings().generateText() && settings.getSettings().getPlainSettings().getTarget() != null) {
-            Path htmlPage = settings.getTarget().getParentFile().toPath();
-            Path plainText = settings.getSettings().getPlainSettings().getTarget().toPath();
-            
+            Path htmlPage = settings.getTarget().getParent();
+            Path plainText = settings.getSettings().getPlainSettings().getTarget();
+
             out.write(" Also available as <a href=\"");
             out.write(htmlPage.relativize(plainText).toString());
             out.write("\" rel=\"alternate\">plain text</a>.");
@@ -74,8 +83,8 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
     }
 
-    private void copyFile(File inputFile, BufferedWriter out) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+    private void copyFile(Path inputFile, BufferedWriter out) throws IOException {
+        try (BufferedReader reader = Files.newBufferedReader(inputFile, Charset.forName("UTF-8"))) {
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 int index = line.indexOf("</head>");
 
@@ -99,31 +108,38 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                     Matcher m = hrefPattern.matcher(line);
 
                     while (m.find()) {
-                        // Check if this file already exists; if so, do nothing
-                        String file = m.group(1);
-
-                        File reference = new File(settings.getTarget().getParentFile(), file);
-
-                        if (!reference.exists()) {
-                            // Grab the file name
-                            String fileName = reference.getName();
-
-                            // See if there is a file with this name in data
-                            File dataDir = new File(DEFAULT_BASEJS_LOCATION).getParentFile();
-                            
-                            for (File f : dataDir.listFiles()) {
-                                if (f.isFile() && f.getName().equals(fileName)) {
-                                    // Copy this file to the target directory
-                                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(reference))) {
-                                        copyFile(f, writer);
-                                    }
-                                    
-                                    break;
-                                }
-                            }
-                        }
+                        ensureReferencedFileExists(m.group(1));
                     }
                 }
+            }
+        }
+    }
+
+    private void ensureReferencedFileExists(String file) throws IOException {
+        // Check if this file already exists; if so, do nothing
+        Path path = settings.getTarget().resolveSibling(file);
+
+        if (Files.notExists(path)) {
+            // Grab the file name
+            Path fileName = path.getFileName();
+
+            // See if there is a file with this name in data
+            boolean found = false;
+            Path dataDir = ResourceLocator.getBaseDirectory().resolve(DEFAULT_BASEJS_LOCATION).getParent();
+            
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(dataDir)) {
+                for (Path dataFile : stream) {
+                    if (Files.isRegularFile(dataFile) && fileName.equals(dataFile.getFileName())) {
+                        // Copy this file to the target directory
+                        Files.copy(dataFile, path);
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            
+            if (!found) {
+                Console.log("Warning: Referenced file \"%s\" not found at \"%s\".", file, path);
             }
         }
     }
@@ -214,22 +230,22 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void writeJavascript(BufferedWriter out) throws IOException {
-        File baseJs = new File(DEFAULT_BASEJS_LOCATION);
+        Path baseJs = ResourceLocator.getBaseDirectory().resolve(DEFAULT_BASEJS_LOCATION);
 
-        if (baseJs.exists()) {
+        if (Files.exists(baseJs)) {
             copyFile(baseJs, out);
         } else {
-            publistgenerator.Console.error("Cannot find base javascript file \"%s\".", baseJs.getPath());
+            publistgenerator.Console.error("Cannot find base javascript file \"%s\".", baseJs);
         }
 
         // Google Analytics code
         if (settings.getGoogleAnalyticsUser() != null && !settings.getGoogleAnalyticsUser().isEmpty()) {
-            File gaJs = new File(DEFAULT_GAJS_LOCATION);
+            Path gaJs = ResourceLocator.getBaseDirectory().resolve(DEFAULT_GAJS_LOCATION);
 
-            if (gaJs.exists()) {
+            if (Files.exists(gaJs)) {
                 out.newLine();
-                
-                try (BufferedReader reader = new BufferedReader(new FileReader(gaJs))) {
+
+                try (BufferedReader reader = Files.newBufferedReader(gaJs, Charset.forName("UTF-8"))) {
                     for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                         if (line.contains("~GAUSERACCOUNT~")) {
                             // Replace the user account place-holder with the actual value
@@ -242,7 +258,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                     }
                 }
             } else {
-                publistgenerator.Console.error("Cannot find Google Analytics javascript file \"%s\".", gaJs.getPath());
+                publistgenerator.Console.error("Cannot find Google Analytics javascript file \"%s\".", gaJs);
             }
         }
     }

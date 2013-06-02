@@ -2,7 +2,6 @@
  */
 package publistgenerator.io;
 
-import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,7 +23,7 @@ public class ResourceLocator {
             // - path/build/classes - when run from within NetBeans
             // - path/PubListGenerator.jar - when run from a jar archive
             workingDir = Paths.get(ResourceLocator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-            
+
             if (workingDir.endsWith(Paths.get("build", "classes"))) {
                 // Running in NetBeans, remove "build/classes"
                 workingDir = workingDir.getParent().getParent();
@@ -36,7 +35,7 @@ public class ResourceLocator {
                 | SecurityException // Can be thrown from getProtectionDomain(), if a SecurityManager is enabled
                 | URISyntaxException ex) {
             Console.except(ex, "Exception while initializing base directory:");
-            workingDir = (new File(System.getProperty("user.dir"))).toPath();
+            workingDir = Paths.get(System.getProperty("user.dir"));
             Console.log("Reverted to working directory \"%s\".", workingDir.toString());
         }
 
@@ -57,35 +56,30 @@ public class ResourceLocator {
      * When the file is
      * <code>null</code>, an empty path is returned instead.
      *
-     * @param file
+     * @param path
      * @return
      */
-    public static String getRelativePath(File file) {
-        if (file == null) {
+    public static String getRelativePath(Path path) {
+        if (path == null) {
             return "";
         } else {
-            return baseDirectory.relativize(file.toPath()).toString();
+            return baseDirectory.relativize(path).toString();
         }
     }
 
     /**
-     * Resolves the given path against the base directory and returns the
-     * corresponding File. When the path is
+     * Resolves the given path against the base directory. When the path is
      * <code>null</code> or empty,
      * <code>null</code> is returned instead.
      *
      * @param relativePath
      * @return
      */
-    public static File getFile(String relativePath) {
+    public static Path getFullPath(String relativePath) {
         if (relativePath == null || relativePath.isEmpty()) {
             return null;
         } else {
-             return baseDirectory.resolve(relativePath).toFile();
+            return baseDirectory.resolve(relativePath);
         }
-    }
-
-    public static void main(String[] args) {
-        getFile("a");
     }
 }
