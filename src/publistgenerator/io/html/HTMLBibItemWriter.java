@@ -403,42 +403,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         // Other user-specified links
+        writeCustomLink(item, -1); // link
+
         for (int i = 0; i < 20; i++) {
-            if (item.anyNonEmpty("link" + i)) {
-                String link = item.get("link" + i);
-                int divider = link.indexOf('|');
-
-                if (divider == -1) {
-                    Console.error("No divider \"|\" found in link %d of item \"%s\". Links should be formatted as%n  link%d={<Link text>|<Link target>}", i, item.getId(), i);
-                } else {
-                    String text = link.substring(0, divider);
-                    String target = link.substring(divider + 1);
-
-                    if (target.startsWith("#")) {
-                        // Link to another paper, good as-is
-                    } else if (target.contains(":")) {
-                        // Most file systems prohibit colons in file names, so
-                        // it seems safe to assume that this indicates an
-                        // absolute URI and as such, should be fine.
-                    } else {
-                        // Most likely link to a file on disk. Encode correctly.
-                        try {
-                            checkExistance(target);
-                            target = (new URI(null, null, target, null)).toString();
-                        } catch (URISyntaxException ex) {
-                            Console.except(ex, "Could not parse the target of link%d of item \"%s\":", target, i, item.getId());
-                        }
-                    }
-
-                    out.write(indent);
-                    out.write("[<a href=\"");
-                    out.write(target);
-                    out.write("\">");
-                    out.write(text);
-                    out.write("</a>]");
-                    out.newLine();
-                }
-            }
+            writeCustomLink(item, i); // link<i>
         }
 
         // BibTeX link
@@ -446,6 +414,46 @@ public class HTMLBibItemWriter extends BibItemWriter {
             writeBibTeXHTML(item);
         } else if (includeArxivBibtex) {
             writeArXivBibTeXHTML(item);
+        }
+    }
+
+    private void writeCustomLink(BibItem item, int i) throws IOException {
+        String attribute = (i == -1 ? "link" : "link" + i);
+
+        if (item.anyNonEmpty(attribute)) {
+            String link = item.get(attribute);
+            int divider = link.indexOf('|');
+
+            if (divider == -1) {
+                Console.error("No divider \"|\" found in %s of item \"%s\". Links should be formatted as%n  %s={<Link text>|<Link target>}", attribute, item.getId(), attribute);
+            } else {
+                String text = link.substring(0, divider);
+                String target = link.substring(divider + 1);
+
+                if (target.startsWith("#")) {
+                    // Link to another paper, good as-is
+                } else if (target.contains(":")) {
+                    // Most file systems prohibit colons in file names, so
+                    // it seems safe to assume that this indicates an
+                    // absolute URI and as such, should be fine.
+                } else {
+                    // Most likely link to a file on disk. Encode correctly.
+                    try {
+                        checkExistance(target);
+                        target = (new URI(null, null, target, null)).toString();
+                    } catch (URISyntaxException ex) {
+                        Console.except(ex, "Could not parse the target of %s of item \"%s\":", attribute, item.getId());
+                    }
+                }
+
+                out.write(indent);
+                out.write("[<a href=\"");
+                out.write(target);
+                out.write("\">");
+                out.write(text);
+                out.write("</a>]");
+                out.newLine();
+            }
         }
     }
 
