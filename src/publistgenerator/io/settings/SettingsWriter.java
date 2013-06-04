@@ -200,6 +200,6 @@ public class SettingsWriter {
     }
 
     private static String makeCData(String content) {
-        return "<![CDATA[" + content + "]]>";
+        return "<![CDATA[" + (content == null ? "" : content) + "]]>";
     }
 }
