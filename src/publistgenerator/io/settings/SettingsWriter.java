@@ -5,9 +5,9 @@
 package publistgenerator.io.settings;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 import publistgenerator.data.category.CategoryIdentifier;
@@ -22,15 +22,18 @@ import publistgenerator.io.ResourceLocator;
 public class SettingsWriter {
 
     public static void writeSettings(Settings settings) throws IOException {
-        File parentDir = new File(SettingsReader.DEFAULT_SETTINGS_LOCATION).getParentFile();
+        Path settingsFile = ResourceLocator.getFullPath(SettingsReader.DEFAULT_SETTINGS_LOCATION);
+        Path dataDir = settingsFile.getParent();
 
-        if (!parentDir.exists()) {
-            if (!parentDir.mkdirs()) {
-                throw new IOException("Could not create the directory \"" + parentDir.getPath() + "\" to store the settings.");
+        if (Files.notExists(dataDir)) {
+            try {
+                Files.createDirectories(dataDir);
+            } catch (Exception ex) {
+                throw new IOException("Could not create the directory \"" + dataDir + "\" to store the settings.", ex);
             }
         }
 
-        try (BufferedWriter out = new BufferedWriter(new FileWriter(SettingsReader.DEFAULT_SETTINGS_LOCATION))) {
+        try (BufferedWriter out = Files.newBufferedWriter(settingsFile, Charset.forName("UTF-8"))) {
             // Write header
             out.write("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
             out.newLine();
