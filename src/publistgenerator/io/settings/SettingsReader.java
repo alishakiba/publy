@@ -4,8 +4,9 @@
  */
 package publistgenerator.io.settings;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -35,10 +36,10 @@ public class SettingsReader extends DefaultHandler {
     }
 
     public static Settings parseSettings() throws ParserConfigurationException, SAXException, IOException {
-        File settingsFile = new File(DEFAULT_SETTINGS_LOCATION);
+        Path settingsFile = ResourceLocator.getFullPath(DEFAULT_SETTINGS_LOCATION);
         Settings settings = null;
 
-        if (settingsFile.exists()) {
+        if (Files.exists(settingsFile)) {
             settings = new Settings();
 
             // Clear the default categories
@@ -51,7 +52,7 @@ public class SettingsReader extends DefaultHandler {
         return settings;
     }
 
-    private static void parseSettings(Settings settings, File inputFile) throws ParserConfigurationException, SAXException, IOException {
+    private static void parseSettings(Settings settings, Path inputFile) throws ParserConfigurationException, SAXException, IOException {
         // Use the default (non-validating) parser
         SAXParserFactory factory = SAXParserFactory.newInstance();
         // Create a new instance of this class as handler
@@ -59,7 +60,7 @@ public class SettingsReader extends DefaultHandler {
 
         // Parse the input
         SAXParser saxParser = factory.newSAXParser();
-        saxParser.parse(inputFile, handler);
+        saxParser.parse(inputFile.toFile(), handler);
     }
 
     @Override
