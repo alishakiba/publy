@@ -5,6 +5,7 @@
 package publistgenerator.data.settings;
 
 import java.nio.file.Path;
+import publistgenerator.data.PublicationType;
 import publistgenerator.io.ResourceLocator;
 import publistgenerator.io.html.HTMLPublicationListWriter;
 
@@ -13,29 +14,6 @@ import publistgenerator.io.html.HTMLPublicationListWriter;
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
 public class HTMLSettings extends FormatSettings {
-
-    public enum PublicationType {
-
-        NONE, PUBLISHED, ACCEPTED, ARXIV, ALL;
-
-        @Override
-        public String toString() {
-            switch (this) {
-                case NONE:
-                    return "No papers";
-                case PUBLISHED:
-                    return "Published papers";
-                case ACCEPTED:
-                    return "Accepted papers";
-                case ARXIV:
-                    return "Accepted or arXiv papers";
-                case ALL:
-                    return "All papers";
-                default:
-                    throw new AssertionError("Unrecognized PublicationType: " + this);
-            }
-        }
-    }
     
     private boolean linkToTextVersion = false;
     private PublicationType includeAbstract = PublicationType.ALL;
