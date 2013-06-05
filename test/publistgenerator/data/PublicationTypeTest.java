@@ -1,6 +1,6 @@
 /*
  */
-package publistgenerator.io.html;
+package publistgenerator.data;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -10,21 +10,14 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import publistgenerator.data.bibitem.Article;
 import publistgenerator.data.bibitem.BibItem;
-import publistgenerator.data.bibitem.InCollection;
-import publistgenerator.data.bibitem.InProceedings;
-import publistgenerator.data.bibitem.InvitedTalk;
-import publistgenerator.data.bibitem.MastersThesis;
-import publistgenerator.data.bibitem.PhDThesis;
-import publistgenerator.data.bibitem.Unpublished;
-import publistgenerator.data.settings.HTMLSettings;
 
 /**
  *
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
-public class HTMLBibItemWriterTest {
+public class PublicationTypeTest {
     
-    public HTMLBibItemWriterTest() {
+    public PublicationTypeTest() {
     }
     
     @BeforeClass
@@ -44,13 +37,13 @@ public class HTMLBibItemWriterTest {
     }
 
     /**
-     * Test of matches method, of class HTMLBibItemWriter.
+     * Test of matches method, of class PublicationType.
      */
     @Test
-    public void testMatches() {
+    public void testMatches_BibItem() {
         System.out.println("matches");
         
-        HTMLSettings.PublicationType[] types = new HTMLSettings.PublicationType[]{HTMLSettings.PublicationType.NONE, HTMLSettings.PublicationType.PUBLISHED, HTMLSettings.PublicationType.ACCEPTED, HTMLSettings.PublicationType.ARXIV, HTMLSettings.PublicationType.ALL};
+        PublicationType[] types = new PublicationType[]{PublicationType.NONE, PublicationType.PUBLISHED, PublicationType.ACCEPTED, PublicationType.ARXIV, PublicationType.ALL};
         
         // ALL
         BibItem submitted = new Article();
@@ -115,10 +108,28 @@ public class HTMLBibItemWriterTest {
         
         BibItem items[] = new BibItem[] {submitted, submittedArxiv, accepted, acceptedrev, acceptedArxiv, published, publishedArxiv};
         
+        // Static method
         for (BibItem item : items) {
             for (int i = 0; i < types.length; i++) {
                 boolean expResult = Integer.parseInt(item.get("--test--")) <= i;
-                boolean result = HTMLBibItemWriter.matches(types[i], item);
+                boolean result = PublicationType.matches(types[i], item);
+                
+                if (expResult != result) {
+                    System.out.println("Wrong match!");
+                    System.out.println("TYPE: " + types[i]);
+                    System.out.println("ITEM:");
+                    System.out.println(item.toString());
+                }
+                
+                assertEquals(expResult, result);
+            }
+        }
+        
+        // Non-static method
+        for (BibItem item : items) {
+            for (int i = 0; i < types.length; i++) {
+                boolean expResult = Integer.parseInt(item.get("--test--")) <= i;
+                boolean result = types[i].matches(item);
                 
                 if (expResult != result) {
                     System.out.println("Wrong match!");

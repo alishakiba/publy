@@ -8,6 +8,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import publistgenerator.data.PublicationType;
 import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.io.ResourceLocator;
 
@@ -173,7 +174,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
 
         abstractLabel.setText("Include the abstract for:");
 
-        abstractComboBox.setModel(new DefaultComboBoxModel(HTMLSettings.PublicationType.values()));
+        abstractComboBox.setModel(new DefaultComboBoxModel(PublicationType.values()));
         abstractComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 abstractComboBoxActionPerformed(evt);
@@ -184,14 +185,14 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
 
         paperLabel.setText("Include the paper for:");
 
-        bibtexComboBox.setModel(new DefaultComboBoxModel(Arrays.copyOfRange(HTMLSettings.PublicationType.values(), 0, 4)));
+        bibtexComboBox.setModel(new DefaultComboBoxModel(Arrays.copyOfRange(PublicationType.values(), 0, 4)));
         bibtexComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bibtexComboBoxActionPerformed(evt);
             }
         });
 
-        paperComboBox.setModel(new DefaultComboBoxModel(HTMLSettings.PublicationType.values()));
+        paperComboBox.setModel(new DefaultComboBoxModel(PublicationType.values()));
         paperComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 paperComboBoxActionPerformed(evt);
@@ -353,15 +354,15 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_linkToTextCheckBoxActionPerformed
 
     private void abstractComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abstractComboBoxActionPerformed
-        settings.setIncludeAbstract((HTMLSettings.PublicationType) abstractComboBox.getSelectedItem());
+        settings.setIncludeAbstract((PublicationType) abstractComboBox.getSelectedItem());
     }//GEN-LAST:event_abstractComboBoxActionPerformed
 
     private void bibtexComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bibtexComboBoxActionPerformed
-        settings.setIncludeBibtex((HTMLSettings.PublicationType) bibtexComboBox.getSelectedItem());
+        settings.setIncludeBibtex((PublicationType) bibtexComboBox.getSelectedItem());
     }//GEN-LAST:event_bibtexComboBoxActionPerformed
 
     private void paperComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paperComboBoxActionPerformed
-        settings.setIncludePaper((HTMLSettings.PublicationType) paperComboBox.getSelectedItem());
+        settings.setIncludePaper((PublicationType) paperComboBox.getSelectedItem());
     }//GEN-LAST:event_paperComboBoxActionPerformed
 
     private void analyticsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyticsCheckBoxActionPerformed

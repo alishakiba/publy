@@ -13,6 +13,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import publistgenerator.data.PublicationType;
 import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.data.settings.HTMLSettings;
@@ -126,13 +127,13 @@ public class SettingsReader extends DefaultHandler {
                     ((HTMLSettings) format).setLinkToTextVersion(Boolean.parseBoolean(text));
                     break;
                 case "includeabstract":
-                    ((HTMLSettings) format).setIncludeAbstract(HTMLSettings.PublicationType.valueOf(text));
+                    ((HTMLSettings) format).setIncludeAbstract(PublicationType.valueOf(text));
                     break;
                 case "includebibtex":
-                    ((HTMLSettings) format).setIncludeBibtex(HTMLSettings.PublicationType.valueOf(text));
+                    ((HTMLSettings) format).setIncludeBibtex(PublicationType.valueOf(text));
                     break;
                 case "includepdf":
-                    ((HTMLSettings) format).setIncludePaper(HTMLSettings.PublicationType.valueOf(text));
+                    ((HTMLSettings) format).setIncludePaper(PublicationType.valueOf(text));
                     break;
                 case "header":
                     ((HTMLSettings) format).setHeader(ResourceLocator.getFullPath(text));

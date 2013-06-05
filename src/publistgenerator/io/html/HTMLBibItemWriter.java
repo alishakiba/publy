@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import publistgenerator.Console;
+import publistgenerator.data.PublicationType;
 import publistgenerator.data.bibitem.Article;
 import publistgenerator.data.bibitem.Author;
 import publistgenerator.data.bibitem.BibItem;
@@ -336,7 +337,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private void writeLinks(BibItem item) throws IOException {
         if (includeBibtex(item)) {
-            if (matches(HTMLSettings.PublicationType.ACCEPTED, item)) {
+            if (PublicationType.ACCEPTED.matches(item)) {
                 writeLinks(item, true, false);
             } else if (item.anyNonEmpty("arxiv")) {
                 writeLinks(item, false, true);
@@ -641,42 +642,15 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private boolean includeAbstract(BibItem item) {
-        return matches(htmlSettings.getIncludeAbstract(), item);
+        return htmlSettings.getIncludeAbstract().matches(item);
     }
 
     private boolean includeBibtex(BibItem item) {
-        return matches(htmlSettings.getIncludeBibtex(), item);
+        return htmlSettings.getIncludeBibtex().matches(item);
     }
 
     private boolean includePaper(BibItem item) {
-        return matches(htmlSettings.getIncludePaper(), item);
-    }
-
-    public static boolean matches(HTMLSettings.PublicationType type, BibItem item) {
-        if (type == HTMLSettings.PublicationType.ALL) {
-            return true;
-        } else if (type == HTMLSettings.PublicationType.NONE) {
-            return false;
-        } else {
-            if (item.anyNonEmpty("status")) {
-                if (type == HTMLSettings.PublicationType.PUBLISHED) {
-                    return false;
-                } else {
-                    if (item.get("status").startsWith("accepted")) {
-                        return true;
-                    } else {
-                        if (type == HTMLSettings.PublicationType.ACCEPTED) {
-                            return false;
-                        } else {
-                            // Type is ARXIV
-                            return item.anyNonEmpty("arxiv");
-                        }
-                    }
-                }
-            } else {
-                return true;
-            }
-        }
+        return htmlSettings.getIncludePaper().matches(item);
     }
 
     private void checkExistance(String path) {
