@@ -20,11 +20,7 @@ public class JournalCategory extends OutputCategory {
     @Override
     public boolean fitsCategory(BibItem item) {
         if ("article".equals(item.getType())) {
-            if (item.anyNonEmpty("status") && !item.get("status").startsWith("accepted")) {
-                return false;
-            } else {
-                return true;
-            }
+            return !item.anyNonEmpty("status") || item.get("status").startsWith("accepted");
         } else {
             return false;
         }
