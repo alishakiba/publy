@@ -192,7 +192,8 @@ public class SettingsWriter {
     }
 
     private static String makeString(Path p) {
-        return ResourceLocator.getRelativePath(p);
+        // Store all paths in Unix notation
+        return ResourceLocator.getRelativePath(p).replaceAll("\\\\", "/");
     }
 
     private static String makeString(Enum e) {
