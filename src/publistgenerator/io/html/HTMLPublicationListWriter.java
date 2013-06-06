@@ -7,12 +7,20 @@ package publistgenerator.io.html;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import publistgenerator.Console;
@@ -115,7 +123,8 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
     private void ensureReferencedFileExists(String file) throws IOException {
         // Check if this file already exists; if so, do nothing
-        Path path = settings.getTarget().resolveSibling(file);
+        // Resolve this via URI, to properly handle escaped characters like %20
+        Path path = Paths.get(settings.getTarget().getParent().toUri().resolve(file));
 
         if (Files.notExists(path)) {
             // Grab the file name
@@ -124,7 +133,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             // See if there is a file with this name in data
             boolean found = false;
             Path dataDir = ResourceLocator.getBaseDirectory().resolve(DEFAULT_BASEJS_LOCATION).getParent();
-            
+
             try (DirectoryStream<Path> stream = Files.newDirectoryStream(dataDir)) {
                 for (Path dataFile : stream) {
                     if (Files.isRegularFile(dataFile) && fileName.equals(dataFile.getFileName())) {
@@ -135,7 +144,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                     }
                 }
             }
-            
+
             if (!found) {
                 Console.log("Warning: Referenced file \"%s\" not found at \"%s\".", file, path);
             }
