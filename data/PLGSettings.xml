@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <plgsettings>
   <!-- Relative path to a BibTeX file with the publication list -->
-  <publications>testPub.bib</publications>
+  <publications>../PLGTest/publications.bib</publications>
 
   <!-- Settings for plain-text output -->
   <generateplaintext>false</generateplaintext>
   <plaintextsettings>
-    <target>publications.txt</target>
+    <target>interactive.txt</target>
     <listallauthors>true</listallauthors>
     <presentedtext><![CDATA[]]></presentedtext>
     <numbering>NONE</numbering>
     <categories>
+      <category>JOURNAL</category>
+      <category>CONFERENCE</category>
+      <category>CHAPTER</category>
+      <category>THESIS</category>
     </categories>
     <categorynotes>
     </categorynotes>
@@ -19,25 +23,26 @@
   <!-- Settings for HTML output -->
   <generatehtml>true</generatehtml>
   <htmlsettings>
-    <target>testPub.html</target>
+    <target>interactive.html</target>
     <listallauthors>true</listallauthors>
-    <presentedtext><![CDATA[<img src="fubar.png" alt="Nope">]]></presentedtext>
+    <presentedtext><![CDATA[]]></presentedtext>
     <numbering>NONE</numbering>
     <categories>
       <category>JOURNAL</category>
       <category>CONFERENCE</category>
+      <category>CHAPTER</category>
+      <category>THESIS</category>
     </categories>
     <categorynotes>
-      <note category="CONFERENCE"><![CDATA[I have a line-end here:<br>]]></note>
     </categorynotes>
     <!-- HTML-specific settings -->
     <linktotextversion>false</linktotextversion>
     <includeabstract>ALL</includeabstract>
     <includebibtex>ARXIV</includebibtex>
     <includepdf>ARXIV</includepdf>
-    <header>data\defaultHeader.html</header>
-    <footer>data\defaultFooter.html</footer>
-    <googleanalyticsuser><![CDATA[null]]></googleanalyticsuser>
+    <header>data/defaultFooter.html</header>
+    <footer>data/defaultFooter.html</footer>
+    <googleanalyticsuser><![CDATA[]]></googleanalyticsuser>
   </htmlsettings>
 
 </plgsettings>
