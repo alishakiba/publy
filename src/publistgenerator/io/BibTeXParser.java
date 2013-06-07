@@ -17,6 +17,7 @@ import publistgenerator.data.Pair;
 import publistgenerator.data.bibitem.Article;
 import publistgenerator.data.bibitem.Author;
 import publistgenerator.data.bibitem.BibItem;
+import publistgenerator.data.bibitem.Book;
 import publistgenerator.data.bibitem.InCollection;
 import publistgenerator.data.bibitem.InProceedings;
 import publistgenerator.data.bibitem.InvitedTalk;
@@ -195,6 +196,8 @@ public class BibTeXParser {
                 return new Unpublished();
             case "talk":
                 return new InvitedTalk();
+            case "book":
+                return new Book();
             default:
                 Console.error("Unrecognized publication type \"%s\".", type);
                 return null;
