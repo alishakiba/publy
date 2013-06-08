@@ -19,7 +19,7 @@ public abstract class OutputCategory {
         // Submitted items first
         CategoryIdentifier.SUBMITTED,
         // Then everything that only takes accepted items
-        CategoryIdentifier.CHAPTER, CategoryIdentifier.CONFERENCE, CategoryIdentifier.JOURNAL, CategoryIdentifier.THESIS,
+        CategoryIdentifier.BOOK, CategoryIdentifier.CHAPTER, CategoryIdentifier.CONFERENCE, CategoryIdentifier.JOURNAL, CategoryIdentifier.THESIS,
         // Then items for which it is unlikely that their status will ever matter
         CategoryIdentifier.TALK, CategoryIdentifier.UNPUBLISHED,
         // Finally all items that do not fit these categories
@@ -39,6 +39,8 @@ public abstract class OutputCategory {
     
     public static OutputCategory fromIdentifier(CategoryIdentifier id) {
         switch (id) {
+            case BOOK:
+                return new BookCategory();
             case CHAPTER:
                 return new BookChapterCategory();
             case CONFERENCE:
