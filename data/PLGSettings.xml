@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <plgsettings>
   <!-- Relative path to a BibTeX file with the publication list -->
-  <publications>../PLGTest/publications.bib</publications>
+  <publications>misc/route.bib</publications>
 
   <!-- Settings for plain-text output -->
-  <generateplaintext>false</generateplaintext>
+  <generateplaintext>true</generateplaintext>
   <plaintextsettings>
-    <target>interactive.txt</target>
+    <target>misc/test.txt</target>
     <listallauthors>true</listallauthors>
     <presentedtext><![CDATA[]]></presentedtext>
     <numbering>NONE</numbering>
@@ -15,6 +15,7 @@
       <category>CONFERENCE</category>
       <category>CHAPTER</category>
       <category>THESIS</category>
+      <category>OTHER</category>
     </categories>
     <categorynotes>
     </categorynotes>
@@ -23,7 +24,7 @@
   <!-- Settings for HTML output -->
   <generatehtml>true</generatehtml>
   <htmlsettings>
-    <target>interactive.html</target>
+    <target>misc/test.html</target>
     <listallauthors>true</listallauthors>
     <presentedtext><![CDATA[]]></presentedtext>
     <numbering>NONE</numbering>
@@ -32,6 +33,7 @@
       <category>CONFERENCE</category>
       <category>CHAPTER</category>
       <category>THESIS</category>
+      <category>OTHER</category>
     </categories>
     <categorynotes>
     </categorynotes>
@@ -40,7 +42,7 @@
     <includeabstract>ALL</includeabstract>
     <includebibtex>ARXIV</includebibtex>
     <includepdf>ARXIV</includepdf>
-    <header>data/defaultFooter.html</header>
+    <header>data/defaultHeader.html</header>
     <footer>data/defaultFooter.html</footer>
     <googleanalyticsuser><![CDATA[]]></googleanalyticsuser>
   </htmlsettings>
