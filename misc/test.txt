@@ -107,11 +107,14 @@ Other.
 
 Guide to wireless sensor networks.
 S. Mishra, I. Woungang, and S. Misra.
+Springer, 2009.
 
 Guide to wireless sensor networks.
 S. Misra, S. Misra, and I. Woungang.
+Springer London, Limited, 2009.
 
 The discrepancy method: randomness and complexity.
 B. Chazelle.
+Cambridge University Press, 2000.
 
 
