@@ -12,6 +12,7 @@ import publistgenerator.Console;
 import publistgenerator.data.bibitem.Article;
 import publistgenerator.data.bibitem.Author;
 import publistgenerator.data.bibitem.BibItem;
+import publistgenerator.data.bibitem.Book;
 import publistgenerator.data.bibitem.InCollection;
 import publistgenerator.data.bibitem.InProceedings;
 import publistgenerator.data.bibitem.InvitedTalk;
@@ -35,38 +36,51 @@ public abstract class BibItemWriter {
     }
 
     public void write(BibItem item, int number) throws IOException {
-        if (item instanceof Article) {
-            write((Article) item, number);
-        } else if (item instanceof InProceedings) {
-            write((InProceedings) item, number);
-        } else if (item instanceof MastersThesis) {
-            write((MastersThesis) item, number);
-        } else if (item instanceof PhDThesis) {
-            write((PhDThesis) item, number);
-        } else if (item instanceof InCollection) {
-            write((InCollection) item, number);
-        } else if (item instanceof InvitedTalk) {
-            write((InvitedTalk) item, number);
-        } else if (item instanceof Unpublished) {
-            write((Unpublished) item, number);
-        } else {
-            throw new AssertionError("Unrecognized BibItem type: " + item.getType());
+        switch (item.getType()) {
+            case "article":
+                writeArticle((Article) item, number);
+                break;
+            case "book":
+                writeBook((Book) item, number);
+                break;
+            case "inproceedings":
+                writeInProceedings((InProceedings) item, number);
+                break;
+            case "mastersthesis":
+                writeMastersThesis((MastersThesis) item, number);
+                break;
+            case "phdthesis":
+                writePhDThesis((PhDThesis) item, number);
+                break;
+            case "incollection":
+                writeInCollection((InCollection) item, number);
+                break;
+            case "talk":
+                writeInvitedTalk((InvitedTalk) item, number);
+                break;
+            case "unpublished":
+                writeUnpublished((Unpublished) item, number);
+                break;
+            default:
+                throw new AssertionError("Unrecognized BibItem type: " + item.getType());
         }
     }
 
-    public abstract void write(Article item, int number) throws IOException;
+    protected abstract void writeArticle(Article item, int number) throws IOException;
 
-    public abstract void write(InProceedings item, int number) throws IOException;
+    protected abstract void writeBook(Book item, int number) throws IOException;
 
-    public abstract void write(MastersThesis item, int number) throws IOException;
+    protected abstract void writeInProceedings(InProceedings item, int number) throws IOException;
 
-    public abstract void write(PhDThesis item, int number) throws IOException;
+    protected abstract void writeMastersThesis(MastersThesis item, int number) throws IOException;
 
-    public abstract void write(InCollection item, int number) throws IOException;
+    protected abstract void writePhDThesis(PhDThesis item, int number) throws IOException;
 
-    public abstract void write(InvitedTalk item, int number) throws IOException;
+    protected abstract void writeInCollection(InCollection item, int number) throws IOException;
 
-    public abstract void write(Unpublished item, int number) throws IOException;
+    protected abstract void writeInvitedTalk(InvitedTalk item, int number) throws IOException;
+
+    protected abstract void writeUnpublished(Unpublished item, int number) throws IOException;
 
     protected String formatTitle(BibItem item) {
         String title = item.get("title");

@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import publistgenerator.data.bibitem.Article;
 import publistgenerator.data.bibitem.BibItem;
+import publistgenerator.data.bibitem.Book;
 import publistgenerator.data.bibitem.InCollection;
 import publistgenerator.data.bibitem.InProceedings;
 import publistgenerator.data.bibitem.InvitedTalk;
@@ -28,7 +29,7 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(Article item, int number) throws IOException {
+    protected void writeArticle(Article item, int number) throws IOException {
         writeNumber(number);
         writeTitleAndAuthors(item);
 
@@ -66,12 +67,18 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(InProceedings item, int number) throws IOException {
+    protected void writeBook(Book item, int number) throws IOException {
+        writeTitleAndAuthors(item);
+        // TODO: more
+    }
+
+    @Override
+    protected void writeInProceedings(InProceedings item, int number) throws IOException {
         writePart(item, number);
     }
 
     @Override
-    public void write(InCollection item, int number) throws IOException {
+    protected void writeInCollection(InCollection item, int number) throws IOException {
         writePart(item, number);
     }
 
@@ -98,7 +105,7 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(MastersThesis item, int number) throws IOException {
+    protected void writeMastersThesis(MastersThesis item, int number) throws IOException {
         writeNumber(number);
         writeTitleAndAuthors(item);
 
@@ -113,7 +120,7 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(PhDThesis item, int number) throws IOException {
+    protected void writePhDThesis(PhDThesis item, int number) throws IOException {
         writeNumber(number);
         writeTitleAndAuthors(item);
 
@@ -128,7 +135,7 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(InvitedTalk item, int number) throws IOException {
+    protected void writeInvitedTalk(InvitedTalk item, int number) throws IOException {
         writeNumber(number);
         out.write(formatTitle(item));
         out.write(".");
@@ -141,7 +148,7 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(Unpublished item, int number) throws IOException {
+    protected void writeUnpublished(Unpublished item, int number) throws IOException {
         writeNumber(number);
         writeTitleAndAuthors(item);
 
