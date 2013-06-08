@@ -7,11 +7,12 @@ package publistgenerator.data.category;
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
 public enum CategoryIdentifier {
-    CHAPTER, CONFERENCE, JOURNAL, OTHER, SUBMITTED, TALK, THESIS, UNPUBLISHED;
+    BOOK, CHAPTER, CONFERENCE, JOURNAL, OTHER, SUBMITTED, TALK, THESIS, UNPUBLISHED;
 
     @Override
     public String toString() {
         switch (this) {
+            case BOOK: return "Books";
             case CHAPTER: return "Chapters in Books";
             case CONFERENCE: return "Conference papers";
             case JOURNAL: return "Journal papers";
