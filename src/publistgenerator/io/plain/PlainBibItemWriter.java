@@ -69,7 +69,12 @@ public class PlainBibItemWriter extends BibItemWriter {
     @Override
     protected void writeBook(Book item, int number) throws IOException {
         writeTitleAndAuthors(item);
-        // TODO: more
+        
+        out.write(item.get("publisher"));
+        out.write(", ");
+        out.write(item.get("year"));
+        out.write(".");
+        out.newLine();
     }
 
     @Override

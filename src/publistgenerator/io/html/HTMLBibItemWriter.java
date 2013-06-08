@@ -85,7 +85,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
     @Override
     protected void writeBook(Book item, int number) throws IOException {
         writeTitleAndAuthorsHTML(item, number);
-        // TODO: more
+        
+        out.write(indent);
+        out.write(item.get("publisher"));
+        out.write(", ");
+        out.write(item.get("year"));
+        out.write(".<br>");
+        out.newLine();
+        
         output(indent, item.get("note"), ".<br>", true);
         writeLinks(item);
     }
