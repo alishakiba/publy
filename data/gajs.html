@@ -28,7 +28,11 @@
                 return false;
               }
             });
-          }
+          } else if (href && jQuery(this).attr('id') != undefined && jQuery(this).attr('id').match(/_plus/i)) {
+		    jQuery(this).click(function() {
+		      _gaq.push(['_trackEvent', 'Expand', 'Click', jQuery(this).attr('id')]);
+			});
+		  }
         });
       });
     }
