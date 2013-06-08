@@ -18,7 +18,7 @@ public class PhDThesis extends BibItem {
 
     @Override
     public String getType() {
-        return "mastersthesis";
+        return "phdthesis";
     }
 
 }

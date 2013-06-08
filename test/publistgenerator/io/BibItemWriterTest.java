@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import publistgenerator.data.bibitem.Article;
+import publistgenerator.data.bibitem.Book;
 import publistgenerator.data.bibitem.InCollection;
 import publistgenerator.data.bibitem.InProceedings;
 import publistgenerator.data.bibitem.InvitedTalk;
@@ -75,6 +76,7 @@ public class BibItemWriterTest {
         // Escapes
         expected.put("m\\{Yt\\}ItLe RO\\{C\\}KS", "M{yt}itle ro{c}ks");
         expected.put("m\\\\{Yt}ItLe RO\\\\{C}KS", "M\\Ytitle ro\\Cks");
+        expected.put("m{Yt\\}ItLe RO{C}KS", "MYt\\itle roCks");
         
         // Mixed
         expected.put("Konvexe {F}{\\\"u}nfecke in ebenen {P}unktmengen", "Konvexe F\\\"unfecke in ebenen Punktmengen");
@@ -94,37 +96,42 @@ public class BibItemWriterTest {
         }
 
         @Override
-        public void write(Article item, int number) throws IOException {
+        protected void writeArticle(Article item, int number) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void write(InProceedings item, int number) throws IOException {
+        protected void writeBook(Book item, int number) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void write(MastersThesis item, int number) throws IOException {
+        protected void writeInProceedings(InProceedings item, int number) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void write(PhDThesis item, int number) throws IOException {
+        protected void writeMastersThesis(MastersThesis item, int number) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void write(InCollection item, int number) throws IOException {
+        protected void writePhDThesis(PhDThesis item, int number) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void write(InvitedTalk item, int number) throws IOException {
+        protected void writeInCollection(InCollection item, int number) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void write(Unpublished item, int number) throws IOException {
+        protected void writeInvitedTalk(InvitedTalk item, int number) throws IOException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        protected void writeUnpublished(Unpublished item, int number) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
         
