@@ -20,19 +20,17 @@ import publistgenerator.io.PublicationListWriter;
 public class PlainPublicationListWriter extends PublicationListWriter {
 
     private PlainBibItemWriter itemWriter;
-    private FormatSettings settings;
     private int count;
 
     public PlainPublicationListWriter(FormatSettings settings) {
         super(settings);
-        this.settings = settings;
     }
 
     @Override
     protected void writePublicationList(BufferedWriter out) throws IOException {
-        itemWriter = new PlainBibItemWriter(out, settings);
+        itemWriter = new PlainBibItemWriter(out, getSettings());
 
-        if (settings.getNumbering() == FormatSettings.Numbering.NONE) {
+        if (getSettings().getNumbering() == FormatSettings.Numbering.NONE) {
             count = -1;
         } else {
             count = 0;
@@ -44,7 +42,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         out.newLine();
         out.newLine();
 
-        for (OutputCategory c : categories) {
+        for (OutputCategory c : getCategories()) {
             writeCategory(c, out);
         }
     }
@@ -54,7 +52,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         out.newLine();
         out.newLine();
 
-        String note = settings.getCategoryNotes().get(c.getId());
+        String note = getSettings().getCategoryNotes().get(c.getId());
 
         if (note != null && !note.isEmpty()) {
             out.write(note);
@@ -63,7 +61,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         }
 
         for (BibItem item : c.getItems()) {
-            if (settings.getNumbering() != FormatSettings.Numbering.NONE) {
+            if (getSettings().getNumbering() != FormatSettings.Numbering.NONE) {
                 count++;
             }
 
@@ -74,7 +72,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         out.newLine();
 
         // Reset the count if necessary
-        if (settings.getNumbering() == FormatSettings.Numbering.LOCAL) {
+        if (getSettings().getNumbering() == FormatSettings.Numbering.LOCAL) {
             count = 0;
         }
     }

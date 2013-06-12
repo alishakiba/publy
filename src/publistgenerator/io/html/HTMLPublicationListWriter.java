@@ -34,17 +34,17 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     public static final String DEFAULT_HEADER_LOCATION = "data/defaultHeader.html";
     public static final String DEFAULT_FOOTER_LOCATION = "data/defaultFooter.html";
     private HTMLBibItemWriter itemWriter;
-    private HTMLSettings settings;
     private int globalCount;
     private Pattern hrefPattern = Pattern.compile("href\\s*=\\s*\"([^\"]*)\"");
 
     public HTMLPublicationListWriter(HTMLSettings settings) {
         super(settings);
-        this.settings = settings;
     }
 
     @Override
     protected void writePublicationList(BufferedWriter out) throws IOException {
+        HTMLSettings settings = (HTMLSettings) getSettings();
+        
         itemWriter = new HTMLBibItemWriter(out, settings);
         globalCount = 0;
 
@@ -70,7 +70,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.write("</p>");
         out.newLine();
 
-        for (OutputCategory c : categories) {
+        for (OutputCategory c : getCategories()) {
             writeCategory(c, out);
         }
 
@@ -117,7 +117,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     private void ensureReferencedFileExists(String file) throws IOException {
         // Check if this file already exists; if so, do nothing
         // Resolve this via URI, to properly handle escaped characters like %20
-        Path path = Paths.get(settings.getTarget().getParent().toUri().resolve(file));
+        Path path = Paths.get(getSettings().getTarget().getParent().toUri().resolve(file));
 
         if (Files.notExists(path)) {
             // Grab the file name
@@ -152,7 +152,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.newLine();
         writeNavigation(c, out);
 
-        String note = settings.getCategoryNotes().get(c.getId());
+        String note = getSettings().getCategoryNotes().get(c.getId());
 
         if (note != null && !note.isEmpty()) {
             out.write("      <p class=\"indent\">");
@@ -169,7 +169,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             out.write("      <div class=\"bibentry\">");
             out.newLine();
 
-            switch (settings.getNumbering()) {
+            switch (getSettings().getNumbering()) {
                 case NONE:
                     itemWriter.write(item, -1);
                     break;
@@ -195,8 +195,8 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.write("      <p class=\"pubnav\">");
         out.newLine();
 
-        for (int i = 0; i < categories.size(); i++) {
-            OutputCategory c = categories.get(i);
+        for (int i = 0; i < getCategories().size(); i++) {
+            OutputCategory c = getCategories().get(i);
 
             out.write("        <a href=\"#");
             out.write(c.getShortName().toLowerCase());
@@ -217,7 +217,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             out.write(c.getShortName());
             out.write("</a>");
 
-            if (i < categories.size() - 1) {
+            if (i < getCategories().size() - 1) {
                 out.write(" -");
             }
 
@@ -230,6 +230,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void writeJavascript(BufferedWriter out) throws IOException {
+        HTMLSettings settings = (HTMLSettings) getSettings();
         Path baseJs = ResourceLocator.getBaseDirectory().resolve(DEFAULT_BASEJS_LOCATION);
 
         if (Files.exists(baseJs)) {
