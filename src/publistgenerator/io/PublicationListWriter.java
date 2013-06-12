@@ -36,7 +36,7 @@ public abstract class PublicationListWriter {
     }
 
     public void writePublicationList(List<BibItem> items) throws IOException {
-        categorizePapers(items, settings);
+        categorizePapers(items);
 
         try (BufferedWriter out = Files.newBufferedWriter(settings.getTarget(), Charset.forName("UTF-8"))) {
             writePublicationList(out);
@@ -45,7 +45,7 @@ public abstract class PublicationListWriter {
 
     protected abstract void writePublicationList(BufferedWriter out) throws IOException;
 
-    private void categorizePapers(List<BibItem> items, FormatSettings settings) {
+    private void categorizePapers(List<BibItem> items) {
         // Make a copy so the population can remove items without removing them from the main list
         List<BibItem> tempItems = new ArrayList<>(items);
 
