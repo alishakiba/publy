@@ -1,0 +1,20 @@
+/* Start off hidden */
+.collapsible {
+ display: none;
+}
+
+noscript>div {
+ display: inline;
+}
+
+.hidden {
+ display: none;
+}
+
+div.shown {
+ display: block;
+}
+
+a.shown {
+ display: inline;
+}

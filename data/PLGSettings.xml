@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<plgsettings>
+  <!-- Relative path to a BibTeX file with the publication list -->
+  <publications>misc/route.bib</publications>
+
+  <!-- Settings for plain-text output -->
+  <generateplaintext>true</generateplaintext>
+  <plaintextsettings>
+    <target>misc/test.txt</target>
+    <listallauthors>true</listallauthors>
+    <presentedtext><![CDATA[]]></presentedtext>
+    <numbering>NONE</numbering>
+    <categories>
+      <category>JOURNAL</category>
+      <category>CONFERENCE</category>
+      <category>CHAPTER</category>
+      <category>THESIS</category>
+      <category>OTHER</category>
+    </categories>
+    <categorynotes>
+    </categorynotes>
+  </plaintextsettings>
+
+  <!-- Settings for HTML output -->
+  <generatehtml>true</generatehtml>
+  <htmlsettings>
+    <target>misc/test.html</target>
+    <listallauthors>true</listallauthors>
+    <presentedtext><![CDATA[]]></presentedtext>
+    <numbering>NONE</numbering>
+    <categories>
+      <category>BOOK</category>
+      <category>JOURNAL</category>
+      <category>CONFERENCE</category>
+      <category>CHAPTER</category>
+      <category>THESIS</category>
+      <category>OTHER</category>
+    </categories>
+    <categorynotes>
+    </categorynotes>
+    <!-- HTML-specific settings -->
+    <linktotextversion>false</linktotextversion>
+    <includeabstract>ALL</includeabstract>
+    <includebibtex>ARXIV</includebibtex>
+    <includepdf>ARXIV</includepdf>
+    <header>data/defaultHeader.html</header>
+    <footer>data/defaultFooter.html</footer>
+    <googleanalyticsuser><![CDATA[]]></googleanalyticsuser>
+  </htmlsettings>
+
+</plgsettings>
