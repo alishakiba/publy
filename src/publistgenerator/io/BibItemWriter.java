@@ -7,7 +7,11 @@ package publistgenerator.io;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import publistgenerator.Console;
 import publistgenerator.data.bibitem.Article;
 import publistgenerator.data.bibitem.Author;
@@ -184,9 +188,7 @@ public abstract class BibItemWriter {
     }
 
     protected void output(String string) throws IOException {
-        if (string != null) {
-            out.write(string);
-        }
+        output("", string, "", false);
     }
 
     protected void output(String string, String connective) throws IOException {
@@ -194,14 +196,7 @@ public abstract class BibItemWriter {
     }
 
     protected void output(String string, String connective, boolean newLine) throws IOException {
-        if (string != null && !string.isEmpty()) {
-            out.write(string);
-            out.write(connective);
-
-            if (newLine) {
-                out.newLine();
-            }
-        }
+        output("", string, connective, newLine);
     }
 
     protected void output(String prefix, String string, String connective, boolean newLine) throws IOException {
@@ -214,30 +209,6 @@ public abstract class BibItemWriter {
                 out.newLine();
             }
         }
-    }
-
-    protected String convertToUnicode(String s) {
-        StringBuilder sb = new StringBuilder();
-        boolean command = false;
-
-        for (char c : s.toCharArray()) {
-            if (command) {
-                // TODO
-                
-                command = false;
-            } else {
-                if (c == '\\') {
-                    command = true;
-                } else {
-                    // TODO
-                }
-            }
-            
-            // FIXME
-            sb.append(c);
-        }
-
-        return sb.toString();
     }
 
     protected String changeCaseT(String s) {
@@ -261,6 +232,7 @@ public abstract class BibItemWriter {
                     case '\\':
                         if (level == 0) {
                             escape = true;
+                            sb.append(c);
                         } else {
                             sb.append(c);
                         }

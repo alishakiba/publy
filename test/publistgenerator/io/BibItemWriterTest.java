@@ -74,8 +74,8 @@ public class BibItemWriterTest {
         expected.put("Diagonal flips in {H}amiltonian triangulations on the sphere", "Diagonal flips in Hamiltonian triangulations on the sphere");
         
         // Escapes
-        expected.put("m\\{Yt\\}ItLe RO\\{C\\}KS", "M{yt}itle ro{c}ks");
-        expected.put("m\\\\{Yt}ItLe RO\\\\{C}KS", "M\\Ytitle ro\\Cks");
+        expected.put("m\\{Yt\\}ItLe RO\\{C\\}KS", "M\\{yt\\}itle ro\\{c\\}ks");
+        expected.put("m\\\\{Yt}ItLe RO\\\\{C}KS", "M\\\\Ytitle ro\\\\Cks");
         expected.put("m{Yt\\}ItLe RO{C}KS", "MYt\\itle roCks");
         
         // Mixed
@@ -86,35 +86,6 @@ public class BibItemWriterTest {
         for (String inputTitle : expected.keySet()) {
             String expectedResult = expected.get(inputTitle);
             String result = testInstance.changeCaseT(inputTitle);
-            
-            assertEquals(expectedResult, result);
-        }
-    }
-    
-    /**
-     * Test of convertToUnicode method, of class BibItemWriter.
-     */
-    @Test
-    public void testConvertToUnicode() {
-        System.out.println("convertToUnicode");
-        
-        HashMap<String, String> expected = new LinkedHashMap<>();
-        
-        // Simple ones
-        expected.put("\\`{o}","ò");
-        expected.put("\\'{o}","ó");
-        expected.put("\\\"{o}","ö");
-        expected.put("\\.{o}","ȯ");
-        expected.put("\\^{o}","ô");
-        expected.put("\\H{o}","ő");
-        expected.put("\\~{o}","õ");
-        expected.put("\\={o}","ō");
-        
-        BibItemWriter testInstance = new TestBibItemWriter(null, null);
-        
-        for (String input : expected.keySet()) {
-            String expectedResult = expected.get(input);
-            String result = testInstance.convertToUnicode(input);
             
             assertEquals(expectedResult, result);
         }
