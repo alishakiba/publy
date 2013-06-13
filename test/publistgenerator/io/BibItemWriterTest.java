@@ -6,6 +6,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -13,6 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import publistgenerator.data.bibitem.Article;
+import publistgenerator.data.bibitem.BibItem;
 import publistgenerator.data.bibitem.Book;
 import publistgenerator.data.bibitem.InCollection;
 import publistgenerator.data.bibitem.InProceedings;
@@ -54,8 +56,6 @@ public class BibItemWriterTest {
     public void testChangeCaseT() {
         System.out.println("changeCaseT");
         
-        BibItemWriter testInstance = new TestBibItemWriter(null, null);
-        
         HashMap<String, String> expected = new LinkedHashMap<>();
         
         // Simple titles
@@ -81,9 +81,40 @@ public class BibItemWriterTest {
         // Mixed
         expected.put("Konvexe {F}{\\\"u}nfecke in ebenen {P}unktmengen", "Konvexe F\\\"unfecke in ebenen Punktmengen");
         
+        BibItemWriter testInstance = new TestBibItemWriter(null, null);
+        
         for (String inputTitle : expected.keySet()) {
             String expectedResult = expected.get(inputTitle);
             String result = testInstance.changeCaseT(inputTitle);
+            
+            assertEquals(expectedResult, result);
+        }
+    }
+    
+    /**
+     * Test of convertToUnicode method, of class BibItemWriter.
+     */
+    @Test
+    public void testConvertToUnicode() {
+        System.out.println("convertToUnicode");
+        
+        HashMap<String, String> expected = new LinkedHashMap<>();
+        
+        // Simple ones
+        expected.put("\\`{o}","ò");
+        expected.put("\\'{o}","ó");
+        expected.put("\\\"{o}","ö");
+        expected.put("\\.{o}","ȯ");
+        expected.put("\\^{o}","ô");
+        expected.put("\\H{o}","ő");
+        expected.put("\\~{o}","õ");
+        expected.put("\\={o}","ō");
+        
+        BibItemWriter testInstance = new TestBibItemWriter(null, null);
+        
+        for (String input : expected.keySet()) {
+            String expectedResult = expected.get(input);
+            String result = testInstance.convertToUnicode(input);
             
             assertEquals(expectedResult, result);
         }
