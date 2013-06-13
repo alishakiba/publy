@@ -216,6 +216,30 @@ public abstract class BibItemWriter {
         }
     }
 
+    protected String convertToUnicode(String s) {
+        StringBuilder sb = new StringBuilder();
+        boolean command = false;
+
+        for (char c : s.toCharArray()) {
+            if (command) {
+                // TODO
+                
+                command = false;
+            } else {
+                if (c == '\\') {
+                    command = true;
+                } else {
+                    // TODO
+                }
+            }
+            
+            // FIXME
+            sb.append(c);
+        }
+
+        return sb.toString();
+    }
+
     protected String changeCaseT(String s) {
         StringBuilder sb = new StringBuilder();
         int level = 0;
