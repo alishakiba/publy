@@ -2267,11 +2267,4 @@ public class LatexToUnicode {
 
         return Collections.unmodifiableMap(characters);
     }
-
-    public static void main(String[] args) {
-        char a = 'ó';
-        char b = 0x00F3;
-
-        System.out.println("a: " + a + " b: " + b);
-    }
 }
