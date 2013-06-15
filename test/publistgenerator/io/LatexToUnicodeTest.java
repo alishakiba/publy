@@ -62,8 +62,12 @@ public class LatexToUnicodeTest {
                      "Testòtestótestôtestötestõtestōtestȯtest");
         expected.put("Test\\`{o}test\\'{o}test\\^{o}test\\\"{o}test\\~{o}test\\={o}test\\.{o}test",
                      "Testòtestótestôtestötestõtestōtestȯtest");
-        expected.put("Test\\u{o}test\\v{o}test\\H{o}test\\c{o}test\\d{o}test\\b{o}test",
-                     "Testòtestótestôtestötestõtestōtestȯtest");
+        //expected.put("Test\\u{o}test\\v{o}test\\H{o}test\\c{o}test\\d{o}test\\b{o}test",
+        //             "Testòtestótestôtestötestõtestōtestȯtest"); // TODO
+        
+        // Don't touch things in math-mode
+        expected.put("Test$\\'{o}$test", "Test$\\'{o}$test");
+        expected.put("Test$\\'{o}$test\\'{o}test", "Test$\\'{o}$testótest");
         
         for (String input : expected.keySet()) {
             String expectedResult = expected.get(input);
