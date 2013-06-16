@@ -26,6 +26,7 @@ import publistgenerator.data.bibitem.PhDThesis;
 import publistgenerator.data.bibitem.Unpublished;
 import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.io.BibItemWriter;
+import publistgenerator.io.LatexToUnicode;
 
 /**
  *
@@ -49,32 +50,18 @@ public class HTMLBibItemWriter extends BibItemWriter {
         if (item.anyNonEmpty("status")) {
             writeStatus(item, item.get("journal"));
         } else {
-            out.write(indent);
-            out.write("<span class=\"booktitle\">");
-            out.write(item.get("journal"));
-            out.write("</span>, ");
+            output(indent + "<span class=\"booktitle\">", item.get("journal"), "</span>, ");
 
-            output(item.get("volume"));
-
-            if (item.anyNonEmpty("number")) {
-                out.write("(");
-                out.write(item.get("number"));
-                out.write(")");
+            if (item.anyNonEmpty("volume", "number")) {
+                output(item.get("volume"));
+                output("(", item.get("number"), ")");
+                output(":", formatPages(item), "");
+                out.write(", ");
+            } else {
+                output(formatPages(item), ", ");
             }
 
-            if (item.anyNonEmpty("pages")) {
-                if (item.anyNonEmpty("volume", "number")) {
-                    out.write(":");
-                    out.write(item.get("pages").replaceAll("-+", "&ndash;"));
-                    out.write(", ");
-                } else {
-                    output(formatPages(item), ", ");
-                }
-            }
-
-            out.write(item.get("year"));
-            out.write(".<br>");
-            out.newLine();
+            output(item.get("year"), ".<br>", true);
         }
 
         output(indent, item.get("note"), ".<br>", true);
@@ -85,13 +72,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
     @Override
     protected void writeBook(Book item, int number) throws IOException {
         writeTitleAndAuthorsHTML(item, number);
-        
-        out.write(indent);
-        out.write(item.get("publisher"));
-        out.write(", ");
-        out.write(item.get("year"));
-        out.write(".<br>");
-        out.newLine();
+
+        output(indent, item.get("publisher"), ", ");
+        output(item.get("year"), ".<br>", true);
         
         output(indent, item.get("note"), ".<br>", true);
         writeLinks(item);
@@ -119,17 +102,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
         if (item.anyNonEmpty("status")) {
             writeStatus(item, item.get("booktitle"));
         } else {
-            out.write(indent);
-            out.write("In <span class=\"booktitle\">");
-            out.write(item.get("booktitle"));
-            out.write("</span>, ");
+            output(indent + "In <span class=\"booktitle\">", item.get("booktitle"), "</span>, ");
 
             writeVolume(item, ", ");
+            
             output(formatPages(item), ", ");
-
-            out.write(item.get("year"));
-            out.write(".<br>");
-            out.newLine();
+            output(item.get("year"), ".<br>", true);
         }
 
         output(indent, item.get("note"), ".<br>", true);
@@ -141,13 +119,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
     protected void writeMastersThesis(MastersThesis item, int number) throws IOException {
         writeTitleAndAuthorsHTML(item, number);
 
-        out.write(indent);
-        out.write("Master's thesis, ");
-        out.write(item.get("school"));
-        out.write(", ");
-        out.write(item.get("year"));
-        out.write(".<br>");
-        out.newLine();
+        output(indent + "Master's thesis, ", item.get("school"), ", ");
+        output(item.get("year"), ".<br>", true);
 
         output(indent, item.get("note"), ".<br>", true);
 
@@ -158,13 +131,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
     protected void writePhDThesis(PhDThesis item, int number) throws IOException {
         writeTitleAndAuthorsHTML(item, number);
 
-        out.write(indent);
-        out.write("PhD thesis, ");
-        out.write(item.get("school"));
-        out.write(", ");
-        out.write(item.get("year"));
-        out.write(".<br>");
-        out.newLine();
+        output(indent + "PhD thesis, ", item.get("school"), ", ");
+        output(item.get("year"), ".<br>", true);
 
         output(indent, item.get("note"), ".<br>", true);
 
@@ -199,10 +167,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Don't add an authors line if it's just me and I just want to list co-authors
         if (settings.isListAllAuthors() || item.getAuthors().size() > 1) {
-            out.write(indent);
-            out.write(formatAuthors(item));
-            out.write(".<br>");
-            out.newLine();
+            output(indent, formatAuthors(item), ".<br>", true);
         }
     }
 
@@ -211,22 +176,15 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Number
         if (number >= 0) {
-            out.write("<span class=\"number\">");
-            out.write(Integer.toString(number));
-            out.write(".<span> ");
+            output("<span class=\"number\">", Integer.toString(number), ".<span> ");
         }
 
         // Title
-        out.write("<a id=\"");
-        out.write(item.getId());
-        out.write("\"><h2 class=\"title\">");
-        out.write(formatTitle(item));
-        out.write("</h2></a>");
+        output("<a id=\"" + item.getId() + "\"><h2 class=\"title\">", formatTitle(item), "</h2></a>");
 
         // Add text if I presented this paper
-        if ("yes".equals(item.get("presented")) && settings.getPresentedText() != null && !settings.getPresentedText().isEmpty()) {
-            out.write(" ");
-            out.write(settings.getPresentedText());
+        if ("yes".equals(item.get("presented"))) {
+            output(" ", settings.getPresentedText(), "");
         }
 
         // Abstract if included
@@ -241,11 +199,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.newLine();
 
             // Actual abstract
-            out.write(indent);
-            out.write("<div id=\"");
-            out.write(item.getId());
-            out.write("_abstract\" class=\"collapsible\"><div class=\"abstract\"><span class=\"abstractword\">Abstract: </span>");
-            out.write(abstr);
+            out.write(indent + "<div id=\"" + item.getId() + "_abstract\" class=\"collapsible\">");
+            out.write("<div class=\"abstract\">");
+            out.write("<span class=\"abstractword\">Abstract: </span>");
+            output(abstr);
             out.write("</div></div>");
             out.newLine();
         } else {
@@ -286,30 +243,15 @@ public class HTMLBibItemWriter extends BibItemWriter {
         if (volume != null && !volume.isEmpty()) {
             out.write("volume ");
             out.write(volume);
-
-            if (series != null && !series.isEmpty()) {
-                out.write(" of <span class=\"series\">");
-                out.write(series);
-                out.write("</span>");
-            }
-
+            output(" of <span class=\"series\">", series, "</span>");
             out.write(connective);
         } else if (number != null && !number.isEmpty()) {
             out.write("number ");
             out.write(number);
-
-            if (series != null && !series.isEmpty()) {
-                out.write(" in <span class=\"series\">");
-                out.write(series);
-                out.write("</span>");
-            }
-
+            output(" in <span class=\"series\">", series, "</span>");
             out.write(connective);
-        } else if (series != null && !series.isEmpty()) {
-            out.write("<span class=\"series\">");
-            out.write(series);
-            out.write("</span>");
-            out.write(connective);
+        } else {
+            output("<span class=\"series\">", series, "</span>" + connective);
         }
     }
 
@@ -324,22 +266,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         switch (item.get("status")) {
             case "submitted":
-                out.write("Submitted to <span class=\"booktitle\">");
-                out.write(title);
-                out.write("</span>.<br>");
-                out.newLine();
+                output("Submitted to <span class=\"booktitle\">", title, "</span>.<br>", true);
                 break;
             case "accepted":
-                out.write("Accepted to <span class=\"booktitle\">");
-                out.write(title);
-                out.write("</span>.<br>");
-                out.newLine();
+                output("Accepted to <span class=\"booktitle\">", title, "</span>.<br>", true);
                 break;
             case "acceptedrev":
-                out.write("Accepted, pending minor revisions, to <span class=\"booktitle\">");
-                out.write(title);
-                out.write("</span>.<br>");
-                out.newLine();
+                output("Accepted, pending minor revisions, to <span class=\"booktitle\">", title, "</span>.<br>", true);
                 break;
             default:
                 throw new AssertionError("Unrecognized status: \"" + item.get("status") + "\"");
@@ -386,13 +319,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 } else {
                     text = "Paper";
                 }
-
-                out.write(indent);
-                out.write("[<a href=\"");
-                out.write(link);
-                out.write("\">");
-                out.write(text);
-                out.write("</a>]");
+                
+                out.write(indent + "[<a href=\"" + link + "\">" + text + "</a>]");
                 out.newLine();
 
                 checkExistance(item.get("paper"));
@@ -403,19 +331,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // arXiv link
         if (item.anyNonEmpty("arxiv")) {
-            out.write(indent);
-            out.write("[<a href=\"http://arxiv.org/abs/");
-            out.write(item.get("arxiv"));
-            out.write("\">arXiv</a>]");
+            out.write(indent + "[<a href=\"http://arxiv.org/abs/" + item.get("arxiv") + "\">arXiv</a>]");
             out.newLine();
         }
 
         // DOI link
         if (item.anyNonEmpty("doi")) {
-            out.write(indent);
-            out.write("[<a href=\"http://dx.doi.org/");
-            out.write(item.get("doi"));
-            out.write("\">DOI</a>]");
+            out.write(indent + "[<a href=\"http://dx.doi.org/" + item.get("doi") + "\">DOI</a>]");
             out.newLine();
         }
 
@@ -463,12 +385,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     }
                 }
 
-                out.write(indent);
-                out.write("[<a href=\"");
-                out.write(target);
-                out.write("\">");
-                out.write(text);
-                out.write("</a>]");
+                out.write(indent + "[<a href=\"" + target + "\">" + text + "</a>]");
                 out.newLine();
             }
         }
@@ -479,18 +396,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
         writeToggleLink(item.getId() + "_bibtex", "BibTeX");
 
         // Actual bibtex
-        out.write(indent);
-        out.write("<div id=\"");
-        out.write(item.getId());
-        out.write("_bibtex\" class=\"collapsible\"><pre class=\"bibtex\">");
+        out.write(indent + "<div id=\"" + item.getId() + "_bibtex\" class=\"collapsible\">");
+        out.write("<pre class=\"bibtex\">");
         out.newLine();
 
         // Item type
-        out.write("@");
-        out.write(item.getType());
-        out.write("{");
-        out.write(item.getId());
-        out.write(",");
+        out.write("@" + item.getType() + "{" + item.getId() + ",");
         out.newLine();
 
         // The first field should omit the connecting ",".
@@ -522,11 +433,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     out.newLine();
                 }
 
-                out.write("  ");
-                out.write(field);
-                out.write("={");
-                out.write(latexify(item.get(field)));
-                out.write("}");
+                out.write("  " + field + "={" + item.get(field) + "}");
             }
         }
 
@@ -541,11 +448,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     out.newLine();
                 }
 
-                out.write("  ");
-                out.write(field);
-                out.write("={");
-                out.write(latexify(item.get(field)));
-                out.write("}");
+                out.write("  " + field + "={" + item.get(field) + "}");
             }
         }
 
@@ -553,22 +456,18 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("}</pre></div>");
         out.newLine();
     }
-
+    
     private void writeArXivBibTeXHTML(BibItem item) throws IOException {
         // Show / hide links
         writeToggleLink(item.getId() + "_bibtex", "BibTeX");
 
         // Actual bibtex
-        out.write(indent);
-        out.write("<div id=\"");
-        out.write(item.getId());
-        out.write("_bibtex\" class=\"collapsible\"><pre class=\"bibtex\">");
+        out.write(indent + "<div id=\"" + item.getId() + "_bibtex\" class=\"collapsible\">");
+        out.write("<pre class=\"bibtex\">");
         out.newLine();
 
         // Item type
-        out.write("@article{");
-        out.write(item.getId());
-        out.write(",");
+        out.write("@article{" + item.getId() + ",");
         out.newLine();
 
         // The first field should omit the connecting ",".
@@ -598,25 +497,17 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 out.write(",");
                 out.newLine();
             }
-
-            out.write("  ");
-            out.write(field);
-            out.write("={");
-            out.write(latexify(item.get(field)));
-            out.write("}");
+            
+            out.write("  " + field + "={" + item.get(field) + "}");
         }
 
         out.write(",");
         out.newLine();
         out.write("  journal={CoRR},");
         out.newLine();
-        out.write("  volume={abs/");
-        out.write(item.get("arxiv"));
-        out.write("},");
+        out.write("  volume={abs/" + item.get("arxiv") + "},");
         out.newLine();
-        out.write("  ee={http://arxiv.org/abs/");
-        out.write(item.get("arxiv"));
-        out.write("}");
+        out.write("  ee={http://arxiv.org/abs/" + item.get("arxiv") + "}");
 
         out.newLine(); // No comma after the last element
         out.write("}</pre></div>");
@@ -629,32 +520,22 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("<span class=\"interactive\">");
 
         // Link to reveal
-        out.write("[<a href=\"javascript:toggle('");
-        out.write(id);
-        out.write("');\" id=\"");
-        out.write(id);
-        out.write("_plus\" class=\"shown\">");
+        out.write("[<a href=\"javascript:toggle('" + id + "');\" id=\"" + id + "_plus\" class=\"shown\">");
         out.write(linkText);
         out.write("</a>");
 
         // Link to hide
-        out.write("<a href=\"javascript:toggle('");
-        out.write(id);
-        out.write("');\" id=\"");
-        out.write(id);
-        out.write("_minus\" class=\"hidden\">");
+        out.write("<a href=\"javascript:toggle('" + id + "');\" id=\"" + id + "_minus\" class=\"hidden\">");
         out.write("Hide " + linkText);
-        out.write("</a>]</span>");
+        out.write("</a>]");
+        
+        out.write("</span>");
 
         // Disabled link for users without JS
         out.write("<noscript><div>[");
         out.write(linkText);
         out.write("]</div></noscript>");
         out.newLine();
-    }
-
-    private String latexify(String string) {
-        return string.replaceAll("&", "{\\\\&amp;}");
     }
 
     private boolean includeAbstract(BibItem item) {
