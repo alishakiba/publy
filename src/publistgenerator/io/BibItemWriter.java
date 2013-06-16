@@ -7,11 +7,7 @@ package publistgenerator.io;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import publistgenerator.Console;
 import publistgenerator.data.bibitem.Article;
 import publistgenerator.data.bibitem.Author;
@@ -192,9 +188,13 @@ public abstract class BibItemWriter {
     }
 
     protected void output(String string, String connective) throws IOException {
-        output(string, connective, false);
+        output("", string, connective, false);
     }
 
+    protected void output(String prefix, String string, String connective) throws IOException {
+        output(prefix, string, connective, false);
+    }
+    
     protected void output(String string, String connective, boolean newLine) throws IOException {
         output("", string, connective, newLine);
     }
@@ -202,7 +202,7 @@ public abstract class BibItemWriter {
     protected void output(String prefix, String string, String connective, boolean newLine) throws IOException {
         if (string != null && !string.isEmpty()) {
             out.write(prefix);
-            out.write(string);
+            out.write(LatexToUnicode.convertToUnicode(string));
             out.write(connective);
 
             if (newLine) {
