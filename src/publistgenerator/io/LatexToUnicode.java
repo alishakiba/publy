@@ -19,10 +19,10 @@ public class LatexToUnicode {
     /**
      * A generic LaTeX command:
      * * A backslash - \\\\
-     * * One or more non-terminating characters - [^ {]+
-     * * Either a space, or a (possibly empty) argument enclosed in braces - ( |\\{[^}]*\\})
+     * * One or more non-terminating characters - [^ {}]+
+     * * Either a space, or a closing brace, or a (possibly empty) argument enclosed in braces - ( |\\}|\\{[^}]*\\})
      */
-    private static final Pattern LATEX_COMMAND_1 = Pattern.compile("\\\\[^ {]+( |\\{[^}]*\\})");
+    private static final Pattern LATEX_COMMAND_1 = Pattern.compile("(\\\\[^ {}]+)( |\\}|\\{[^}]*\\})");
     /**
      * Special syntax for LaTeX commands that operate on a single character:
      * * A backslash - \\\\
@@ -34,7 +34,11 @@ public class LatexToUnicode {
 
     private LatexToUnicode() {
     }
-
+    public static void main(String[] args) {
+        String cmd = " {\\&} ";
+        
+        System.out.println(convertNonMathToUnicode(cmd));
+    }
     public static String convertToUnicode(String s) {
         // Split into parts that are not in math-mode and treat each seperately
         StringBuilder result = new StringBuilder();
@@ -111,7 +115,7 @@ public class LatexToUnicode {
 
         return result.toString();
     }
-
+    
     private static String convertNonMathToUnicode(String s) {
         String result = replaceCommands(s, LATEX_COMMAND_1);
         return replaceCommands(result, LATEX_COMMAND_2);
@@ -123,14 +127,29 @@ public class LatexToUnicode {
         
         while (m.find()) {
             // Convert the argument-less version (\'o) to the version with argument (\'{o}) if necessary
-            String command = (commandPattern == LATEX_COMMAND_1 ? m.group() : '\\' + m.group(1) + '{' + m.group(2) + '}');
+            String command;
+            String tail = "";
+            
+            if (commandPattern == LATEX_COMMAND_1) {
+                if (m.group().endsWith("}") && m.group().contains("{")) {
+                    command = m.group();
+                } else {
+                    // Do not take the closing character into account
+                    command = m.group(1);
+                    tail = m.group(2);
+                }
+            } else if (commandPattern == LATEX_COMMAND_2) {
+                command = '\\' + m.group(1) + '{' + m.group(2) + '}';
+            } else {
+                throw new AssertionError("Unexpected command pattern: " + commandPattern);
+            }
             
             if (LATEX_TO_UNICODE.containsKey(command)) {
                 // Replace the command with the corresponding Unicode character
-                m.appendReplacement(result, Character.toString(LATEX_TO_UNICODE.get(command)));
+                m.appendReplacement(result, Character.toString(LATEX_TO_UNICODE.get(command)) + tail);
             } else {
-                // Keep the command in
-                m.appendReplacement(result, m.group());
+                // Keep the command in ($0 is the entire matched string)
+                m.appendReplacement(result, "$0");
             }
         }
         
