@@ -4,12 +4,11 @@
  */
 package publistgenerator.io;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -17,26 +16,127 @@ import java.util.Set;
  */
 public class LatexToUnicode {
 
-    private static final Set<Character> ONE_CHAR_COMMANDS =
-            Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(
-            '\'', // Acute
-            '`', // Grave
-            '^', // Circumflex (hat)
-            '"', // Diaeresis (trema)
-            '~', // Tilde
-            '=', // Macron (bar above)
-            '.' // Dot above
-            )));
-    private static final Map<String, Character> specialCharacters = populateSpecialCharacters();
+    /**
+     * A generic LaTeX command:
+     * * A backslash - \\\\
+     * * One or more non-terminating characters - [^ {]+
+     * * Either a space, or a (possibly empty) argument enclosed in braces - ( |\\{[^}]*\\})
+     */
+    private static final Pattern LATEX_COMMAND_1 = Pattern.compile("\\\\[^ {]+( |\\{[^}]*\\})");
+    /**
+     * Special syntax for LaTeX commands that operate on a single character:
+     * * A backslash - \\\\
+     * * One symbol among the following: ', `, ^, ", ~, ., =  - (['`\\^\"~=.])
+     * * A one-character argument - (.)
+     */
+    private static final Pattern LATEX_COMMAND_2 = Pattern.compile("\\\\(['`\\^\"~=.])(.)");
+    private static final Map<String, Character> LATEX_TO_UNICODE = populateSpecialCharacters();
 
     private LatexToUnicode() {
     }
-    
-    public static String convertToUnicode(String s) {
-        // Find all occurrences of commands via a regex.
-        // Look them up in the specialCharacters map and if found, replace them.
 
-        return s;
+    public static String convertToUnicode(String s) {
+        // Split into parts that are not in math-mode and treat each seperately
+        StringBuilder result = new StringBuilder();
+        StringBuilder part = new StringBuilder();
+
+        boolean math = false;
+        boolean escape = false;
+
+        for (char c : s.toCharArray()) {
+            if (!math) {
+                if (!escape) {
+                    switch (c) {
+                        case '$':
+                            math = true;
+                            break;
+                        case '\\':
+                            escape = true;
+                            break;
+                        default:
+                            part.append(c);
+                            break;
+                    }
+                } else {
+                    switch (c) {
+                        case '(':
+                            math = true;
+                            break;
+                        default:
+                            part.append('\\');
+                            part.append(c);
+                            break;
+                    }
+
+                    escape = false;
+                }
+
+                if (math) {
+                    // Math mode was just entered; process the previous non-math block
+                    if (part.length() > 0) {
+                        result.append(convertNonMathToUnicode(part.toString()));
+                        part.setLength(0);
+                    }
+
+                    // Add the command sequence that started the current math block
+                    if (c == '(') {
+                        result.append('\\');
+                    }
+
+                    result.append(c);
+                }
+            } else { // math
+                if (!escape) {
+                    if (c == '$') {
+                        math = false;
+                    } else if (c == '\\') {
+                        escape = true;
+                    }
+                } else {
+                    if (c == ')') {
+                        math = false;
+                    }
+
+                    escape = false;
+                }
+
+                result.append(c);
+            }
+        }
+
+        // Add the remaining non-math part
+        if (part.length() > 0) {
+            result.append(convertNonMathToUnicode(part.toString()));
+        }
+
+        return result.toString();
+    }
+
+    private static String convertNonMathToUnicode(String s) {
+        String result = replaceCommands(s, LATEX_COMMAND_1);
+        return replaceCommands(result, LATEX_COMMAND_2);
+    }
+    
+    private static String replaceCommands(String input, Pattern commandPattern) {
+        StringBuffer result = new StringBuffer();
+        Matcher m = commandPattern.matcher(input);
+        
+        while (m.find()) {
+            // Convert the argument-less version (\'o) to the version with argument (\'{o}) if necessary
+            String command = (commandPattern == LATEX_COMMAND_1 ? m.group() : '\\' + m.group(1) + '{' + m.group(2) + '}');
+            
+            if (LATEX_TO_UNICODE.containsKey(command)) {
+                // Replace the command with the corresponding Unicode character
+                m.appendReplacement(result, Character.toString(LATEX_TO_UNICODE.get(command)));
+            } else {
+                // Keep the command in
+                m.appendReplacement(result, m.group());
+            }
+        }
+        
+        m.appendTail(result);
+        
+        return result.toString();
     }
 
     private static Map<String, Character> populateSpecialCharacters() {
@@ -96,6 +196,7 @@ public class LatexToUnicode {
         characters.put("\\.{e}", '\u0117');
         characters.put("\\.{g}", '\u0121');
         characters.put("\\.{z}", '\u017C');
+        characters.put("\\.{o}", '\u022F');
         //"\\;":"U+2009-0200A-0200A",
         characters.put("\\=", '\u0304');
         characters.put("\\={A}", '\u0100');
