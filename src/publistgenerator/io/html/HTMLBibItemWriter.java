@@ -55,10 +55,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
             if (item.anyNonEmpty("volume", "number")) {
                 output(item.get("volume"));
                 output("(", item.get("number"), ")");
-                output(":", formatPages(item), "");
+                output(":", formatPages(item, false), "");
                 out.write(", ");
             } else {
-                output(formatPages(item), ", ");
+                output(formatPages(item, false), ", ");
             }
 
             output(item.get("year"), ".<br>", true);
@@ -106,7 +106,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
             writeVolume(item, ", ");
             
-            output(formatPages(item), ", ");
+            output(formatPages(item, true), ", ");
             output(item.get("year"), ".<br>", true);
         }
 
@@ -158,7 +158,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         output(indent, item.get("note"), ".<br>", true);
 
-        // links (only bibtex if it's on the arXiv)
+        // links (bibtex only if it's on the arXiv)
         writeLinks(item, false, item.anyNonEmpty("arxiv") && includeBibtex(item));
     }
 
@@ -241,13 +241,11 @@ public class HTMLBibItemWriter extends BibItemWriter {
         String number = item.get("number");
 
         if (volume != null && !volume.isEmpty()) {
-            out.write("volume ");
-            out.write(volume);
+            output("volume ", volume, "");
             output(" of <span class=\"series\">", series, "</span>");
             out.write(connective);
         } else if (number != null && !number.isEmpty()) {
-            out.write("number ");
-            out.write(number);
+            output("number ", number, "");
             output(" in <span class=\"series\">", series, "</span>");
             out.write(connective);
         } else {
@@ -279,9 +277,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
     }
 
-    @Override
-    protected String formatPages(BibItem item) {
-        return super.formatPages(item).replaceAll("-+", "&ndash;");
+    protected String formatPages(BibItem item, boolean verbose) {
+        String pages = (verbose ? super.formatPages(item) : item.get("pages"));
+        
+        if (pages == null) {
+            pages = "";
+        }
+        
+        return pages.replaceAll("-+", "&ndash;");
     }
 
     private void writeLinks(BibItem item) throws IOException {
