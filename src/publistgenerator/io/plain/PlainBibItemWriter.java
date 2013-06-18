@@ -37,30 +37,18 @@ public class PlainBibItemWriter extends BibItemWriter {
         if (item.anyNonEmpty("status")) {
             writeStatus(item, item.get("journal"));
         } else {
-            out.write(item.get("journal"));
-            out.write(", ");
-
-            output(item.get("volume"));
-
-            if (item.anyNonEmpty("number")) {
-                out.write("(");
-                out.write(item.get("number"));
-                out.write(")");
+            output(item.get("journal"), ", ");
+            
+            if (item.anyNonEmpty("volume", "number")) {
+                output(item.get("volume"));
+                output("(", item.get("number"), ")");
+                output(":", formatPages(item, false), "");
+                out.write(", ");
+            } else {
+                output(formatPages(item, false), ", ");
             }
 
-            if (item.anyNonEmpty("pages")) {
-                if (item.anyNonEmpty("volume", "number")) {
-                    out.write(":");
-                    out.write(item.get("pages").replaceAll("-+", "-"));
-                    out.write(", ");
-                } else {
-                    output(formatPages(item).replaceAll("-+", "-"), ", ");
-                }
-            }
-
-            out.write(item.get("year"));
-            out.write(".");
-            out.newLine();
+            output(item.get("year"), ".", true);
         }
 
         output(item.get("note"), ".", true);
@@ -70,11 +58,10 @@ public class PlainBibItemWriter extends BibItemWriter {
     protected void writeBook(Book item, int number) throws IOException {
         writeTitleAndAuthors(item);
         
-        out.write(item.get("publisher"));
-        out.write(", ");
-        out.write(item.get("year"));
-        out.write(".");
-        out.newLine();
+        output(item.get("publisher"), ", ");
+        output(item.get("year"), ".", true);
+        
+        output(item.get("note"), ".", true);
     }
 
     @Override
@@ -94,16 +81,12 @@ public class PlainBibItemWriter extends BibItemWriter {
         if (item.anyNonEmpty("status")) {
             writeStatus(item, item.get("booktitle"));
         } else {
-            out.write("In ");
-            out.write(item.get("booktitle"));
-            out.write(", ");
+            output("In ", item.get("booktitle"), ", ");
 
             writeVolume(item, ", ");
-            output(formatPages(item).replaceAll("-+", "-"), ", ");
+            output(formatPages(item, true), ", ");
 
-            out.write(item.get("year"));
-            out.write(".");
-            out.newLine();
+            output(item.get("year"), ".", true);
         }
 
         output(item.get("note"), ".", true);
@@ -114,12 +97,8 @@ public class PlainBibItemWriter extends BibItemWriter {
         writeNumber(number);
         writeTitleAndAuthors(item);
 
-        out.write("Master's thesis, ");
-        out.write(item.get("school"));
-        out.write(", ");
-        out.write(item.get("year"));
-        out.write(".");
-        out.newLine();
+        output("Master's thesis, ", item.get("school"), ", ");
+        output(item.get("year"), ".", true);
 
         output(item.get("note"), ".", true);
     }
@@ -129,12 +108,8 @@ public class PlainBibItemWriter extends BibItemWriter {
         writeNumber(number);
         writeTitleAndAuthors(item);
 
-        out.write("PhD thesis, ");
-        out.write(item.get("school"));
-        out.write(", ");
-        out.write(item.get("year"));
-        out.write(".");
-        out.newLine();
+        output("PhD thesis, ", item.get("school"), ", ");
+        output(item.get("year"), ".", true);
 
         output(item.get("note"), ".", true);
     }
@@ -142,9 +117,7 @@ public class PlainBibItemWriter extends BibItemWriter {
     @Override
     protected void writeInvitedTalk(InvitedTalk item, int number) throws IOException {
         writeNumber(number);
-        out.write(formatTitle(item));
-        out.write(".");
-        out.newLine();
+        output(formatTitle(item), ".", true);
 
         output(item.get("address"), ", ");
         output(formatDate(item), ".", true);
@@ -168,22 +141,18 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     private void writeTitleAndAuthors(BibItem item) throws IOException {
-        out.write(formatTitle(item));
-        out.write(".");
+        output(formatTitle(item), ".");
 
-        if ("yes".equals(item.get("presented")) && settings.getPresentedText() != null && !settings.getPresentedText().isEmpty()) {
-            out.write(" ");
-            out.write(settings.getPresentedText());
-        }
-
-        // Don't add an authors line if it's just me and I just want to list co-authors
-        if (settings.isListAllAuthors() || item.getAuthors().size() > 1) {
-            out.newLine();
-            out.write(formatAuthors(item));
-            out.write(".");
+        if ("yes".equals(item.get("presented"))) {
+            output(" ", settings.getPresentedText(), "");
         }
         
         out.newLine();
+
+        // Don't add an authors line if it's just me and I just want to list co-authors
+        if (settings.isListAllAuthors() || item.getAuthors().size() > 1) {
+            output(formatAuthors(item), ".", true);
+        }
     }
 
     private void writeVolume(BibItem item, String connective) throws IOException {
@@ -192,28 +161,15 @@ public class PlainBibItemWriter extends BibItemWriter {
         String number = item.get("number");
 
         if (volume != null && !volume.isEmpty()) {
-            out.write("volume ");
-            out.write(volume);
-
-            if (series != null && !series.isEmpty()) {
-                out.write(" of ");
-                out.write(series);
-            }
-
+            output("volume ", volume, "");
+            output(" of ", series, "");
             out.write(connective);
         } else if (number != null && !number.isEmpty()) {
-            out.write("number ");
-            out.write(number);
-
-            if (series != null && !series.isEmpty()) {
-                out.write(" in ");
-                out.write(series);
-            }
-
+            output("number ", number, "");
+            output(" in ", series, "");
             out.write(connective);
-        } else if (series != null && !series.isEmpty()) {
-            out.write(series);
-            out.write(connective);
+        } else {
+            output(series, connective);
         }
     }
 
@@ -226,25 +182,26 @@ public class PlainBibItemWriter extends BibItemWriter {
 
         switch (item.get("status")) {
             case "submitted":
-                out.write("Submitted to ");
-                out.write(title);
-                out.write(".");
-                out.newLine();
+                output("Submitted to ", title, ".", true);
                 break;
             case "accepted":
-                out.write("Accepted to ");
-                out.write(title);
-                out.write(".");
-                out.newLine();
+                output("Accepted to ", title, ".", true);
                 break;
             case "acceptedrev":
-                out.write("Accepted, pending minor revisions, to ");
-                out.write(title);
-                out.write(".");
-                out.newLine();
+                output("Accepted, pending minor revisions, to ", title, ".", true);
                 break;
             default:
                 throw new AssertionError("Unrecognized status: \"" + item.get("status") + "\"");
         }
+    }
+
+    protected String formatPages(BibItem item, boolean verbose) {
+        String pages = (verbose ? super.formatPages(item) : item.get("pages"));
+        
+        if (pages == null) {
+            pages = "";
+        }
+        
+        return pages.replaceAll("-+", "-");
     }
 }
