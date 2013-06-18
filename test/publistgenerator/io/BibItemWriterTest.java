@@ -91,6 +91,38 @@ public class BibItemWriterTest {
         }
     }
     
+    @Test
+    public void testRemoveBraces() {
+        System.out.println("removeBraces");
+        
+        HashMap<String, String> expected = new LinkedHashMap<>();
+        
+        // Simple tests
+        expected.put("{mYtItLe}", "mYtItLe");
+        expected.put("{mYtItLe ROCKS}", "mYtItLe ROCKS");
+        expected.put("mYtItLe {ROCKS}", "mYtItLe ROCKS");
+        expected.put("mYtItLe {RO{C}KS}", "mYtItLe ROCKS");
+        expected.put("m{Yt}ItLe RO{C}KS", "mYtItLe ROCKS");
+        expected.put("Diagonal flips in {H}amiltonian triangulations on the sphere", "Diagonal flips in Hamiltonian triangulations on the sphere");
+        
+        // Escapes
+        expected.put("m{\\{Yt}ItLe RO\\{C\\}KS", "m{YtItLe RO{C}KS");
+        expected.put("m\\{Yt}ItLe RO\\{C}KS", "m{YtItLe RO{CKS");
+        expected.put("m{Yt\\\\}ItLe RO{C}KS", "mYt\\\\ItLe ROCKS");
+        
+        // Mixed
+        expected.put("Konvexe {F}{\\\"u}nfecke in ebenen {P}unktmengen", "Konvexe F\\\"unfecke in ebenen Punktmengen");
+        
+        BibItemWriter testInstance = new TestBibItemWriter(null, null);
+        
+        for (String inputTitle : expected.keySet()) {
+            String expectedResult = expected.get(inputTitle);
+            String result = testInstance.removeBraces(inputTitle);
+            
+            assertEquals(expectedResult, result);
+        }
+    }
+    
     private class TestBibItemWriter extends BibItemWriter {
 
         private TestBibItemWriter(BufferedWriter out, FormatSettings settings) {
