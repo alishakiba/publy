@@ -194,7 +194,7 @@ public abstract class BibItemWriter {
     protected void output(String prefix, String string, String connective) throws IOException {
         output(prefix, string, connective, false);
     }
-    
+
     protected void output(String string, String connective, boolean newLine) throws IOException {
         output("", string, connective, newLine);
     }
@@ -202,7 +202,7 @@ public abstract class BibItemWriter {
     protected void output(String prefix, String string, String connective, boolean newLine) throws IOException {
         if (string != null && !string.isEmpty()) {
             out.write(prefix);
-            out.write(LatexToUnicode.convertToUnicode(string));
+            out.write(removeBraces(LatexToUnicode.convertToUnicode(string)));
             out.write(connective);
 
             if (newLine) {
@@ -232,10 +232,9 @@ public abstract class BibItemWriter {
                     case '\\':
                         if (level == 0) {
                             escape = true;
-                            sb.append(c);
-                        } else {
-                            sb.append(c);
                         }
+                        
+                        sb.append(c);
                         break;
                     default:
                         if (level == 0) {
@@ -256,5 +255,37 @@ public abstract class BibItemWriter {
         }
 
         return sb.toString();
+    }
+
+    protected String removeBraces(String field) {
+        StringBuilder result = new StringBuilder(field.length());
+        boolean escape = false;
+        
+        for (char c : field.toCharArray()) {
+            if (!escape) {
+                switch (c) {
+                    case '{': // Remove
+                        break;
+                    case '}': // Remove
+                        break;
+                    case '\\':
+                        escape = true;
+                        break;
+                    default:
+                        result.append(c);
+                        break;
+                }
+            } else {
+                if (c != '{' && c != '}') {
+                    // Only add the escaping slash for non-braces
+                    result.append('\\');
+                }
+                
+                result.append(c);
+                escape = false;
+            }
+        }
+        
+        return result.toString();
     }
 }
