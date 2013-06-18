@@ -1,4 +1,4 @@
-My publications as of 18 June 2013.
+My publications as of 19 June 2013.
 
 
 Journal papers.
@@ -17,7 +17,7 @@ Information Processing Letters, 33(6):283-287, 1990.
 
 Classes of graphs which approximate the complete Euclidean graph.
 J. Keil and C. Gutwin.
-Discrete {\&} Computational Geometry, 7(1):13-28, 1992.
+Discrete & Computational Geometry, 7(1):13-28, 1992.
 
 There are planar graphs almost as good as the complete graph.
 P. Chew.
@@ -25,7 +25,7 @@ Journal of Computer and System Sciences, 39(2):205-219, 1989.
 
 Some results on greedy embeddings in metric spaces.
 T. Leighton and A. Moitra.
-Discrete {\&} Computational Geometry, 44(3):686-705, 2010.
+Discrete & Computational Geometry, 44(3):686-705, 2010.
 
 An algorithm to construct greedy drawings of triangulations.
 P. Angelini, F. Frati, and L. Grilli.
@@ -33,11 +33,11 @@ Journal of Graph Algorithms and Applications, 14(1):19-51, 2010.
 
 Greedy drawings of triangulations.
 R. Dhandapani.
-Discrete {\&} Computational Geometry, 43(2):375-392, 2010.
+Discrete & Computational Geometry, 43(2):375-392, 2010.
 
 Online routing in convex subdivisions.
-P. Bose, A. Brodnik, S. Carlsson, E. Demaine, R. Fleischer, A. L{\'o}pez-Ortiz, P. Morin, and J. Munro.
-International Journal of Computational Geometry {\&} Applications, 12(4):283-296, 2002.
+P. Bose, A. Brodnik, S. Carlsson, E. Demaine, R. Fleischer, A. López-Ortiz, P. Morin, and J. Munro.
+International Journal of Computational Geometry & Applications, 12(4):283-296, 2002.
 
 Online routing in triangulations.
 P. Bose and P. Morin.
@@ -52,8 +52,8 @@ R. Baeza-Yates, J. Culberson, and G. Rawlins.
 Information and Computation, 106(2):234-252, 1993.
 
 $\pi/2$-angle Yao graphs are spanners.
-P. Bose, M. Damian, K. Dou{\"{\i}}eb, J. O'Rourke, B. Seamone, M. Smid, and S. Wuhrer.
-CoRR, abs/1001.29132010.
+P. Bose, M. Damian, K. Douïeb, J. O'Rourke, B. Seamone, M. Smid, and S. Wuhrer.
+CoRR, abs/1001.2913, 2010.
 
 
 Conference papers.
@@ -64,23 +64,23 @@ In Proceedings of the 36th International Conference on Graph Theoretic Concepts 
 
 Embedding planar graphs on the grid.
 W. Schnyder.
-In Proceedings of the 1st {A}nnual {ACM}-{SIAM} {S}ymposium on {D}iscrete {A}lgorithms (SODA 1990), pages 138-148, 1990.
+In Proceedings of the 1st Annual ACM-SIAM Symposium on Discrete Algorithms (SODA 1990), pages 138-148, 1990.
 
 Plane spanners of maximum degree six.
 N. Bonichon, C. Gavoille, N. Hanusse, and L. Perkovic.
 In Proceedings of the 37th International Colloquium on Automata, Languages and Programming (ICALP 2010 (1)), volume 6198 of Lecture Notes in Computer Science, pages 19-30, 2010.
 
 Survey on oblivious routing strategies.
-H. R{\"a}cke.
-In Mathematical {T}heory and {C}omputational {P}ractice, volume 5635 of Lecture Notes in Computer Science, pages 419-429, 2009.
+H. Räcke.
+In Mathematical Theory and Computational Practice, volume 5635 of Lecture Notes in Computer Science, pages 419-429, 2009.
 
 On succinct convex greedy drawing of 3-connected plane graphs.
 X. He and H. Zhang.
-In Proceedings of the 22nd {A}nnual {ACM}-{SIAM} {S}ymposium on {D}iscrete {A}lgorithms (SODA 2011), pages 1477-1486, 2011.
+In Proceedings of the 22nd Annual ACM-SIAM Symposium on Discrete Algorithms (SODA 2011), pages 1477-1486, 2011.
 
 Schnyder greedy routing algorithm.
 X. He and H. Zhang.
-In Theory and {A}pplications of {M}odels of {C}omputation, volume 6108 of Lecture Notes in Computer Science, pages 271-283, 2010.
+In Theory and Applications of Models of Computation, volume 6108 of Lecture Notes in Computer Science, pages 271-283, 2010.
 
 Succinct greedy geometric routing in the Euclidean plane.
 M. Goodrich and D. Strash.
@@ -88,7 +88,7 @@ In Algorithms and computation, volume 5878 of Lecture Notes in Computer Science,
 
 An optimal generalization of the centerpoint theorem, and its extensions.
 N. Mustafa and S. Ray.
-In Proceedings of the Twenty-Third Annual Symposium on Computational Geometry ({SCG} '07), pages 138-141, 2007.
+In Proceedings of the Twenty-Third Annual Symposium on Computational Geometry (SCG '07), pages 138-141, 2007.
 
 On plane constrained bounded-degree spanners.
 P. Bose, R. Fagerberg, A. van Renssen, and S. Verdonschot.
