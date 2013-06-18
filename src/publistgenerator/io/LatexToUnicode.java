@@ -34,11 +34,7 @@ public class LatexToUnicode {
 
     private LatexToUnicode() {
     }
-    public static void main(String[] args) {
-        String cmd = " {\\&} ";
-        
-        System.out.println(convertNonMathToUnicode(cmd));
-    }
+    
     public static String convertToUnicode(String s) {
         // Split into parts that are not in math-mode and treat each seperately
         StringBuilder result = new StringBuilder();
