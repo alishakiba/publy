@@ -39,12 +39,6 @@ public class MainFrame extends javax.swing.JFrame {
             pubTextField.setText(ResourceLocator.getRelativePath(settings.getPublications()));
             pubFileChooser.setCurrentDirectory(settings.getPublications().getParent().toFile());
         }
-
-        htmlCheckBox.setSelected(settings.generateHTML());
-        setHtmlEnabled(settings.generateHTML());
-
-        plainCheckBox.setSelected(settings.generateText());
-        plainSettingsPanel.setEnabled(settings.generateText());
     }
 
     /**
@@ -64,15 +58,12 @@ public class MainFrame extends javax.swing.JFrame {
         pubTextField = new javax.swing.JTextField();
         pubBrowseButton = new javax.swing.JButton();
         settingsTabbedPane = new javax.swing.JTabbedPane();
+        generalScrollPane = new javax.swing.JScrollPane();
+        generalPanel = new javax.swing.JPanel();
+        generalSettingsPanel = new publistgenerator.gui.GeneralSettingsPanel(settings.getGeneralSettings());
         htmlScrollPane = new javax.swing.JScrollPane();
         htmlPanel = new javax.swing.JPanel();
-        htmlCheckBox = new javax.swing.JCheckBox();
-        htmlGeneralSettingsPanel = new publistgenerator.gui.GeneralSettingsPanel(settings.getHtmlSettings());
         htmlSettingsPanel = new publistgenerator.gui.HTMLSettingsPanel(settings.getHtmlSettings());
-        plainScrollPane = new javax.swing.JScrollPane();
-        plainPanel = new javax.swing.JPanel();
-        plainCheckBox = new javax.swing.JCheckBox();
-        plainSettingsPanel = new publistgenerator.gui.GeneralSettingsPanel(settings.getPlainSettings());
         bottomPanel = new javax.swing.JPanel();
         buttonPanel = new javax.swing.JPanel();
         generateButton = new javax.swing.JButton();
@@ -110,7 +101,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(pubLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pubTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE)
+                .addComponent(pubTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pubBrowseButton)
                 .addContainerGap())
@@ -128,13 +119,26 @@ public class MainFrame extends javax.swing.JFrame {
 
         topPanel.add(publicationsPanel, java.awt.BorderLayout.NORTH);
 
-        htmlCheckBox.setSelected(true);
-        htmlCheckBox.setText("Generate an HTML publication list");
-        htmlCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                htmlCheckBoxActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout generalPanelLayout = new javax.swing.GroupLayout(generalPanel);
+        generalPanel.setLayout(generalPanelLayout);
+        generalPanelLayout.setHorizontalGroup(
+            generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(generalPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(generalSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
+        );
+        generalPanelLayout.setVerticalGroup(
+            generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(generalPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(generalSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        generalScrollPane.setViewportView(generalPanel);
+
+        settingsTabbedPane.addTab("General", generalScrollPane);
 
         javax.swing.GroupLayout htmlPanelLayout = new javax.swing.GroupLayout(htmlPanel);
         htmlPanel.setLayout(htmlPanelLayout);
@@ -142,62 +146,20 @@ public class MainFrame extends javax.swing.JFrame {
             htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(htmlPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(htmlCheckBox)
-                    .addGroup(htmlPanelLayout.createSequentialGroup()
-                        .addComponent(htmlGeneralSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(htmlSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(htmlSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(64, Short.MAX_VALUE))
         );
         htmlPanelLayout.setVerticalGroup(
             htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(htmlPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(htmlCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(htmlGeneralSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(htmlSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addComponent(htmlSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         htmlScrollPane.setViewportView(htmlPanel);
 
         settingsTabbedPane.addTab("HTML", htmlScrollPane);
-
-        plainCheckBox.setSelected(true);
-        plainCheckBox.setText("Generate a plain text publication list");
-        plainCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                plainCheckBoxActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout plainPanelLayout = new javax.swing.GroupLayout(plainPanel);
-        plainPanel.setLayout(plainPanelLayout);
-        plainPanelLayout.setHorizontalGroup(
-            plainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(plainPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(plainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(plainCheckBox)
-                    .addComponent(plainSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(369, Short.MAX_VALUE))
-        );
-        plainPanelLayout.setVerticalGroup(
-            plainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(plainPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(plainCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(plainSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
-        );
-
-        plainScrollPane.setViewportView(plainPanel);
-
-        settingsTabbedPane.addTab("Text", plainScrollPane);
 
         topPanel.add(settingsTabbedPane, java.awt.BorderLayout.CENTER);
 
@@ -269,7 +231,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         // Clear the console before generating
         consoleTextPane.setText("");
-        
+
         GeneratorMain.generatePublicationList(settings);
     }//GEN-LAST:event_generateButtonActionPerformed
 
@@ -294,54 +256,23 @@ public class MainFrame extends javax.swing.JFrame {
             pubTextField.setText(ResourceLocator.getRelativePath(selected));
             settings.setPublications(selected);
 
-            if (settings.getHtmlSettings().getTarget() == null || settings.getGeneralSettings().getTarget() == null) {
-                // Set initial targets
+            if (settings.getGeneralSettings().getTarget() == null) {
+                // Set initial target
                 String baseName = pubFileChooser.getSelectedFile().getName();
                 int extension = baseName.lastIndexOf('.');
-                
+
                 if (extension > -1) {
                     baseName = baseName.substring(0, extension);
                 }
 
-                if (settings.getHtmlSettings().getTarget() == null) {
-                    // Set an initial target
-                    settings.getHtmlSettings().setTarget(selected.resolveSibling(baseName + ".html"));
-                    
-                    // Update the GUI
-                    htmlGeneralSettingsPanel.updateTarget();
-                }
+                // Set an initial target
+                settings.getGeneralSettings().setTarget(selected.resolveSibling(baseName + ".txt"));
 
-                if (settings.getGeneralSettings().getTarget() == null) {
-                    // Set an initial target
-                    settings.getGeneralSettings().setTarget(selected.resolveSibling(baseName + ".txt"));
-                    
-                    // Update the GUI
-                    plainSettingsPanel.updateTarget();
-                }
+                // Update the GUI
+                generalSettingsPanel.updateTarget();
             }
         }
     }//GEN-LAST:event_pubBrowseButtonActionPerformed
-
-    private void htmlCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_htmlCheckBoxActionPerformed
-        // Update the settings
-        settings.setGenerateHTML(htmlCheckBox.isSelected());
-
-        // Update the UI
-        setHtmlEnabled(htmlCheckBox.isSelected());
-    }//GEN-LAST:event_htmlCheckBoxActionPerformed
-
-    private void setHtmlEnabled(boolean enabled) {
-        htmlGeneralSettingsPanel.setEnabled(enabled);
-        htmlSettingsPanel.setEnabled(enabled);
-    }
-
-    private void plainCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plainCheckBoxActionPerformed
-        // Update the settings
-        settings.setGenerateText(plainCheckBox.isSelected());
-
-        // Update the UI
-        plainSettingsPanel.setEnabled(plainCheckBox.isSelected());
-    }//GEN-LAST:event_plainCheckBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -361,17 +292,14 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton cancelButton;
     private javax.swing.JScrollPane consoleScrollPane;
     private javax.swing.JTextPane consoleTextPane;
+    private javax.swing.JPanel generalPanel;
+    private javax.swing.JScrollPane generalScrollPane;
+    private publistgenerator.gui.GeneralSettingsPanel generalSettingsPanel;
     private javax.swing.JButton generateButton;
-    private javax.swing.JCheckBox htmlCheckBox;
-    private publistgenerator.gui.GeneralSettingsPanel htmlGeneralSettingsPanel;
     private javax.swing.JPanel htmlPanel;
     private javax.swing.JScrollPane htmlScrollPane;
     private publistgenerator.gui.HTMLSettingsPanel htmlSettingsPanel;
     private javax.swing.JSplitPane mainSplitPane;
-    private javax.swing.JCheckBox plainCheckBox;
-    private javax.swing.JPanel plainPanel;
-    private javax.swing.JScrollPane plainScrollPane;
-    private publistgenerator.gui.GeneralSettingsPanel plainSettingsPanel;
     private javax.swing.JButton pubBrowseButton;
     private javax.swing.JFileChooser pubFileChooser;
     private javax.swing.JLabel pubLabel;

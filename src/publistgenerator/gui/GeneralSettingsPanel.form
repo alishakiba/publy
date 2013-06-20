@@ -44,12 +44,6 @@
                       <Component id="numSeparator" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="presentedLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="presentedSeparator" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
@@ -90,34 +84,28 @@
                   <Group type="102" attributes="0">
                       <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="presentedTextField" pref="0" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="numNoneRadioButton" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="numLocalRadioButton" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="numGlobalRadioButton" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="inCatScrollPane" linkSize="1" min="-2" pref="120" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="inButton" max="32767" attributes="0"/>
-                                          <Component id="outButton" max="32767" attributes="0"/>
-                                          <Component id="upButton" max="32767" attributes="0"/>
-                                          <Component id="downButton" max="32767" attributes="0"/>
-                                          <Component id="catButtonSeparator" min="-2" pref="43" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="outCatScrollPane" linkSize="1" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                              <Component id="numNoneRadioButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="numLocalRadioButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="numGlobalRadioButton" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="inCatScrollPane" linkSize="1" min="-2" pref="120" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="inButton" max="32767" attributes="0"/>
+                                  <Component id="outButton" max="32767" attributes="0"/>
+                                  <Component id="upButton" max="32767" attributes="0"/>
+                                  <Component id="downButton" max="32767" attributes="0"/>
+                                  <Component id="catButtonSeparator" min="-2" pref="43" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="outCatScrollPane" linkSize="1" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace pref="10" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -148,13 +136,6 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="presentedLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="presentedSeparator" min="-2" pref="10" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="presentedTextField" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="numLabel" min="-2" max="-2" attributes="0"/>
                   <Component id="numSeparator" min="-2" pref="10" max="-2" attributes="0"/>
               </Group>
@@ -171,7 +152,7 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Component id="inButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="outButton" min="-2" max="-2" attributes="0"/>
@@ -183,11 +164,11 @@
                       <Component id="downButton" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="inCatScrollPane" pref="0" max="32767" attributes="0"/>
-                  <Component id="outCatScrollPane" pref="0" max="32767" attributes="0"/>
+                  <Component id="outCatScrollPane" min="-2" pref="118" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="catPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -209,19 +190,6 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="targetBrowseButtonActionPerformed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JLabel" name="presentedLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Text added after papers I presented"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="presentedTextField">
-      <Properties>
-        <Property name="columns" type="int" value="40"/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="presentedTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        presentedTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        presentedTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
-      </AuxValues>
     </Component>
     <Component class="javax.swing.JRadioButton" name="numNoneRadioButton">
       <Properties>
@@ -272,8 +240,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JSeparator" name="authorSeparator">
-    </Component>
-    <Component class="javax.swing.JSeparator" name="presentedSeparator">
     </Component>
     <Component class="javax.swing.JRadioButton" name="listAllRadioButton">
       <Properties>

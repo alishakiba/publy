@@ -52,13 +52,6 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             listOtherRadioButton.setSelected(true);
         }
 
-        // PresentedText
-        if (settings.getPresentedText() == null) {
-            presentedTextField.setText("");
-        } else {
-            presentedTextField.setText(settings.getPresentedText());
-        }
-
         // Numbering
         switch (settings.getNumbering()) {
             case NONE:
@@ -159,8 +152,6 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         targetFileChooser = new javax.swing.JFileChooser();
         targetTextField = new javax.swing.JTextField();
         targetBrowseButton = new javax.swing.JButton();
-        presentedLabel = new javax.swing.JLabel();
-        presentedTextField = new javax.swing.JTextField();
         numNoneRadioButton = new javax.swing.JRadioButton();
         numGlobalRadioButton = new javax.swing.JRadioButton();
         numLocalRadioButton = new javax.swing.JRadioButton();
@@ -168,7 +159,6 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         targetSeparator = new javax.swing.JSeparator();
         authorLabel = new javax.swing.JLabel();
         authorSeparator = new javax.swing.JSeparator();
-        presentedSeparator = new javax.swing.JSeparator();
         listAllRadioButton = new javax.swing.JRadioButton();
         listOtherRadioButton = new javax.swing.JRadioButton();
         numLabel = new javax.swing.JLabel();
@@ -211,21 +201,6 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                 targetBrowseButtonActionPerformed(evt);
             }
         });
-
-        presentedLabel.setText("Text added after papers I presented");
-
-        presentedTextField.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {
-                presentedTextFieldTextChanged(e);
-            }
-            public void removeUpdate(DocumentEvent e) {
-                presentedTextFieldTextChanged(e);
-            }
-            public void changedUpdate(DocumentEvent e) {
-                //Plain text components do not fire these events
-            }
-        });
-        presentedTextField.setColumns(40);
 
         numGroup.add(numNoneRadioButton);
         numNoneRadioButton.setText("None");
@@ -403,11 +378,6 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                         .addComponent(numSeparator)
                         .addGap(10, 10, 10))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(presentedLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(presentedSeparator)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(authorLabel)
@@ -438,28 +408,24 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(presentedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(numNoneRadioButton)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(numLocalRadioButton)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(numGlobalRadioButton))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(inCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(inButton)
-                                            .addComponent(outButton)
-                                            .addComponent(upButton)
-                                            .addComponent(downButton)
-                                            .addComponent(catButtonSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                                .addComponent(numNoneRadioButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(numLocalRadioButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(numGlobalRadioButton))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(inCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(inButton)
+                                    .addComponent(outButton)
+                                    .addComponent(upButton)
+                                    .addComponent(downButton)
+                                    .addComponent(catButtonSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(10, Short.MAX_VALUE))))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {inCatScrollPane, outCatScrollPane});
@@ -483,12 +449,6 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(listAllRadioButton)
                     .addComponent(listOtherRadioButton))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(presentedLabel)
-                    .addComponent(presentedSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(presentedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(numLabel)
@@ -515,10 +475,10 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(downButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(inCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(catPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -533,11 +493,6 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     private void targetTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
         settings.setTarget(ResourceLocator.getFullPath(targetTextField.getText()));
-    }
-
-    private void presentedTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
-        // Update the settings
-        settings.setPresentedText(presentedTextField.getText());
     }
 
     private void noteTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
@@ -714,9 +669,6 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JButton outButton;
     private javax.swing.JList outCatList;
     private javax.swing.JScrollPane outCatScrollPane;
-    private javax.swing.JLabel presentedLabel;
-    private javax.swing.JSeparator presentedSeparator;
-    private javax.swing.JTextField presentedTextField;
     private javax.swing.JButton targetBrowseButton;
     private javax.swing.JFileChooser targetFileChooser;
     private javax.swing.JLabel targetLabel;
