@@ -21,36 +21,68 @@ public class FormatSettings {
 
         NONE, LOCAL, GLOBAL;
     }
-    // Link to parent, to access the settings of other formats
-    private Settings settings;
     // General
     private Path target;
     // Author info
     private boolean listAllAuthors = true;
-    // Presented
-    private String presentedText = null;
     // Numbering
     private Numbering numbering = Numbering.NONE;
     // Categories
     private List<CategoryIdentifier> categories = new ArrayList<>();
     private Map<CategoryIdentifier, String> categoryNotes = new EnumMap<>(CategoryIdentifier.class);
 
-    public FormatSettings(Settings settings) {
-        this.settings = settings;
-        
-        // Default categories
-        categories.add(CategoryIdentifier.JOURNAL);
-        categories.add(CategoryIdentifier.CONFERENCE);
-        categories.add(CategoryIdentifier.CHAPTER);
-        categories.add(CategoryIdentifier.THESIS);
-    }
+    public static FormatSettings defaultSettings() {
+        FormatSettings result = new FormatSettings();
 
-    public Settings getSettings() {
-        return settings;
+        // Default categories
+        result.addCategory(CategoryIdentifier.JOURNAL);
+        result.addCategory(CategoryIdentifier.CONFERENCE);
+        result.addCategory(CategoryIdentifier.CHAPTER);
+        result.addCategory(CategoryIdentifier.THESIS);
+
+        return result;
     }
 
     public Path getTarget() {
         return target;
+    }
+
+    /**
+     * Returns the path to the location where the plain text version of the
+     * publication list will be written to, if any. Returns
+     * <code>null</code> if no such version will be written. The target is
+     * guaranteed to be in the same directory as the HTML target.
+     *
+     * @return
+     */
+    public Path getPlainTextTarget() {
+        String baseName = target.getFileName().toString();
+        int extension = baseName.lastIndexOf('.');
+
+        if (extension > -1) {
+            baseName = baseName.substring(0, extension);
+        }
+
+        return target.resolveSibling(baseName + ".txt");
+    }
+
+    /**
+     * Returns the path to the location where the bibtex version of the
+     * publication list will be written to, if any. Returns
+     * <code>null</code> if no such version will be written. The target is
+     * guaranteed to be in the same directory as the HTML target.
+     *
+     * @return
+     */
+    public Path getBibtexTarget() {
+        String baseName = target.getFileName().toString();
+        int extension = baseName.lastIndexOf('.');
+
+        if (extension > -1) {
+            baseName = baseName.substring(0, extension);
+        }
+
+        return target.resolveSibling(baseName + ".bib");
     }
 
     public void setTarget(Path target) {
@@ -63,14 +95,6 @@ public class FormatSettings {
 
     public void setListAllAuthors(boolean listAllAuthors) {
         this.listAllAuthors = listAllAuthors;
-    }
-
-    public String getPresentedText() {
-        return presentedText;
-    }
-
-    public void setPresentedText(String presentedText) {
-        this.presentedText = presentedText;
     }
 
     public Numbering getNumbering() {

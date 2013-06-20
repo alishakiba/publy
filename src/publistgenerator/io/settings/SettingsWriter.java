@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.util.Map;
 import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
+import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.data.settings.Settings;
 import publistgenerator.io.ResourceLocator;
 
@@ -41,8 +42,8 @@ public class SettingsWriter {
             out.newLine();
 
             writeGeneralSettings(settings, out);
-            writePlainTextSettings(settings, out);
-            writeHTMLSettings(settings, out);
+            writeFormatSettings(settings.getGeneralSettings(), out);
+            writeHTMLSettings(settings.getHtmlSettings(), out);
 
             // Write footer
             out.write("</plgsettings>");
@@ -57,51 +58,15 @@ public class SettingsWriter {
         out.newLine();
     }
 
-    private static void writePlainTextSettings(Settings settings, BufferedWriter out) throws IOException {
-        out.write("  <!-- Settings for plain-text output -->");
-        out.newLine();
-
-        output(out, 2, "generateplaintext", makeString(settings.generateText()));
-        out.write("  <plaintextsettings>");
-        out.newLine();
-
-        writeFormatSettings(settings.getPlainSettings(), out);
-
-        out.write("  </plaintextsettings>");
-        out.newLine();
-        out.newLine();
-    }
-
-    private static void writeHTMLSettings(Settings settings, BufferedWriter out) throws IOException {
-        out.write("  <!-- Settings for HTML output -->");
-        out.newLine();
-
-        output(out, 2, "generatehtml", makeString(settings.generateHTML()));
-        out.write("  <htmlsettings>");
-        out.newLine();
-
-        writeFormatSettings(settings.getHtmlSettings(), out);
-
-        out.write("    <!-- HTML-specific settings -->");
-        out.newLine();
-
-        output(out, 4, "linktotextversion", makeString(settings.getHtmlSettings().linkToTextVersion()));
-        output(out, 4, "includeabstract", makeString(settings.getHtmlSettings().getIncludeAbstract()));
-        output(out, 4, "includebibtex", makeString(settings.getHtmlSettings().getIncludeBibtex()));
-        output(out, 4, "includepdf", makeString(settings.getHtmlSettings().getIncludePaper()));
-        output(out, 4, "header", makeString(settings.getHtmlSettings().getHeader()));
-        output(out, 4, "footer", makeString(settings.getHtmlSettings().getFooter()));
-        output(out, 4, "googleanalyticsuser", makeCData(settings.getHtmlSettings().getGoogleAnalyticsUser()));
-
-        out.write("  </htmlsettings>");
-        out.newLine();
-        out.newLine();
-    }
-
     private static void writeFormatSettings(FormatSettings format, BufferedWriter out) throws IOException {
+        out.write("  <!-- General settings -->");
+        out.newLine();
+
+        out.write("  <generalsettings>");
+        out.newLine();
+
         output(out, 4, "target", makeString(format.getTarget()));
         output(out, 4, "listallauthors", makeString(format.isListAllAuthors()));
-        output(out, 4, "presentedtext", makeCData(format.getPresentedText()));
         output(out, 4, "numbering", makeString(format.getNumbering()));
 
         // Categories
@@ -124,6 +89,31 @@ public class SettingsWriter {
         }
 
         out.write("    </categorynotes>");
+        out.newLine();
+
+        out.write("  </generalsettings>");
+        out.newLine();
+        out.newLine();
+    }
+
+    private static void writeHTMLSettings(HTMLSettings settings, BufferedWriter out) throws IOException {
+        out.write("  <!-- HTML-specific settings -->");
+        out.newLine();
+
+        out.write("  <htmlsettings>");
+        out.newLine();
+
+        output(out, 4, "linktotextversion", makeString(settings.linkToTextVersion()));
+        output(out, 4, "includeabstract", makeString(settings.getIncludeAbstract()));
+        output(out, 4, "includebibtex", makeString(settings.getIncludeBibtex()));
+        output(out, 4, "includepaper", makeString(settings.getIncludePaper()));
+        output(out, 4, "header", makeString(settings.getHeader()));
+        output(out, 4, "footer", makeString(settings.getFooter()));
+        output(out, 4, "googleanalyticsuser", makeCData(settings.getGoogleAnalyticsUser()));
+        output(out, 4, "presentedtext", makeCData(settings.getPresentedText()));
+
+        out.write("  </htmlsettings>");
+        out.newLine();
         out.newLine();
     }
 

@@ -13,64 +13,45 @@ import java.nio.file.Path;
 public class Settings {
 
     private Path publications;
-    private boolean generateHTML;
     private HTMLSettings htmlSettings;
-    private boolean generateText;
-    private FormatSettings plainSettings;
+    private FormatSettings generalSettings;
 
     /**
-     * Creates a new Settings object with default html and plain settings.
+     * Creates a new empty Settings object.
      *
      * @param publications
      */
     public Settings() {
         publications = null;
-        generateHTML = true;
-        htmlSettings = new HTMLSettings(this);
-        generateText = false;
-        plainSettings = new FormatSettings(this);
+        htmlSettings = new HTMLSettings();
+        generalSettings = new FormatSettings();
+    }
+    
+    /**
+     * Returns a new Settings object with default settings.
+     * @return 
+     */
+    public static Settings defaultSettings() {
+        Settings result = new Settings();
+        
+        result.generalSettings = FormatSettings.defaultSettings();
+        
+        return result;
     }
 
     public Path getPublications() {
         return publications;
     }
 
-    public boolean generateHTML() {
-        return generateHTML;
-    }
-
     public HTMLSettings getHtmlSettings() {
         return htmlSettings;
     }
 
-    public boolean generateText() {
-        return generateText;
-    }
-
-    public FormatSettings getPlainSettings() {
-        return plainSettings;
+    public FormatSettings getGeneralSettings() {
+        return generalSettings;
     }
 
     public void setPublications(Path publications) {
         this.publications = publications;
-    }
-
-    public void setGenerateHTML(boolean generateHTML) {
-        this.generateHTML = generateHTML;
-    }
-
-    public void setGenerateText(boolean generateText) {
-        this.generateText = generateText;
-    }
-
-    /**
-     * Populates this object with the default values. The publications file
-     * remains the same.
-     */
-    public void resetToDefault() {
-        generateHTML = true;
-        htmlSettings = new HTMLSettings(this);
-        generateText = false;
-        plainSettings = new FormatSettings(this);
     }
 }

@@ -24,9 +24,9 @@ import publistgenerator.data.bibitem.InvitedTalk;
 import publistgenerator.data.bibitem.MastersThesis;
 import publistgenerator.data.bibitem.PhDThesis;
 import publistgenerator.data.bibitem.Unpublished;
+import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.io.BibItemWriter;
-import publistgenerator.io.LatexToUnicode;
 
 /**
  *
@@ -37,9 +37,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
     private HTMLSettings htmlSettings;
     private static final String indent = "        ";
 
-    public HTMLBibItemWriter(BufferedWriter out, HTMLSettings settings) {
+    public HTMLBibItemWriter(BufferedWriter out, FormatSettings settings, HTMLSettings htmlSettings) {
         super(out, settings);
-        this.htmlSettings = settings;
+        this.htmlSettings = htmlSettings;
     }
 
     @Override
@@ -184,7 +184,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Add text if I presented this paper
         if ("yes".equals(item.get("presented"))) {
-            output(" ", settings.getPresentedText(), "");
+            output(" ", htmlSettings.getPresentedText(), "");
         }
 
         // Abstract if included

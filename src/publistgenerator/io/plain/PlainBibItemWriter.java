@@ -141,13 +141,7 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     private void writeTitleAndAuthors(BibItem item) throws IOException {
-        output(formatTitle(item), ".");
-
-        if ("yes".equals(item.get("presented"))) {
-            output(" ", settings.getPresentedText(), "");
-        }
-        
-        out.newLine();
+        output(formatTitle(item), ".", true);
 
         // Don't add an authors line if it's just me and I just want to list co-authors
         if (settings.isListAllAuthors() || item.getAuthors().size() > 1) {

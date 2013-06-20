@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 import publistgenerator.Console;
 import publistgenerator.data.bibitem.BibItem;
 import publistgenerator.data.category.OutputCategory;
+import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.io.PublicationListWriter;
 import publistgenerator.io.ResourceLocator;
@@ -36,35 +37,48 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     private HTMLBibItemWriter itemWriter;
     private int globalCount;
     private Pattern hrefPattern = Pattern.compile("href\\s*=\\s*\"([^\"]*)\"");
+    private HTMLSettings htmlSettings;
 
-    public HTMLPublicationListWriter(HTMLSettings settings) {
-        super(settings);
+    public HTMLPublicationListWriter(FormatSettings generalSettings, HTMLSettings htmlSettings) {
+        super(generalSettings);
+        this.htmlSettings = htmlSettings;
     }
 
     @Override
     protected void writePublicationList(BufferedWriter out) throws IOException {
-        HTMLSettings settings = (HTMLSettings) getSettings();
-        
-        itemWriter = new HTMLBibItemWriter(out, settings);
+        itemWriter = new HTMLBibItemWriter(out, getSettings(), htmlSettings);
         globalCount = 0;
 
-        if (settings.getHeader() == null) {
+        if (htmlSettings.getHeader() == null) {
             publistgenerator.Console.error("No header found. The generated HTML file will not be valid.");
         } else {
             // Copy the header from the header file
-            copyFile(settings.getHeader(), out);
+            copyFile(htmlSettings.getHeader(), out);
         }
 
         // Write the body
         out.write("    <p>My publications as of " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".");
 
-        if (settings.linkToTextVersion() && settings.getSettings().generateText() && settings.getSettings().getPlainSettings().getTarget() != null) {
-            Path htmlPage = settings.getTarget().getParent();
-            Path plainText = settings.getSettings().getPlainSettings().getTarget();
-
+        if (htmlSettings.linkToTextVersion() || htmlSettings.linkToBibtexVersion()) {
+            Path htmlDir = getSettings().getTarget().getParent();
+            
             out.write(" Also available as <a href=\"");
-            out.write(htmlPage.relativize(plainText).toString());
-            out.write("\" rel=\"alternate\">plain text</a>.");
+
+            if (htmlSettings.linkToTextVersion()) {
+                out.write(htmlDir.relativize(getSettings().getPlainTextTarget()).toString());
+                out.write("\" rel=\"alternate\">plain text</a>");
+
+                if (htmlSettings.linkToBibtexVersion()) {
+                    out.write(" or <a href=\"");
+                    out.write(htmlDir.relativize(getSettings().getBibtexTarget()).toString());
+                    out.write("\" rel=\"alternate\">BibTeX</a>.");
+                } else {
+                    out.write(".");
+                }
+            } else {
+                out.write(htmlDir.relativize(getSettings().getBibtexTarget()).toString());
+                out.write("\" rel=\"alternate\">BibTeX</a>.");
+            }
         }
 
         out.write("</p>");
@@ -74,11 +88,11 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             writeCategory(c, out);
         }
 
-        if (settings.getFooter() == null) {
+        if (htmlSettings.getFooter() == null) {
             publistgenerator.Console.error("No footer found. The generated HTML file will not be valid.");
         } else {
             // Copy the footer from the footer file
-            copyFile(settings.getFooter(), out);
+            copyFile(htmlSettings.getFooter(), out);
         }
     }
 
@@ -230,7 +244,6 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void writeJavascript(BufferedWriter out) throws IOException {
-        HTMLSettings settings = (HTMLSettings) getSettings();
         Path baseJs = ResourceLocator.getBaseDirectory().resolve(DEFAULT_BASEJS_LOCATION);
 
         if (Files.exists(baseJs)) {
@@ -240,7 +253,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
 
         // Google Analytics code
-        if (settings.getGoogleAnalyticsUser() != null && !settings.getGoogleAnalyticsUser().isEmpty()) {
+        if (htmlSettings.getGoogleAnalyticsUser() != null && !htmlSettings.getGoogleAnalyticsUser().isEmpty()) {
             Path gaJs = ResourceLocator.getBaseDirectory().resolve(DEFAULT_GAJS_LOCATION);
 
             if (Files.exists(gaJs)) {
@@ -250,7 +263,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                     for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                         if (line.contains("~GAUSERACCOUNT~")) {
                             // Replace the user account place-holder with the actual value
-                            out.write(line.replaceAll("~GAUSERACCOUNT~", settings.getGoogleAnalyticsUser()));
+                            out.write(line.replaceAll("~GAUSERACCOUNT~", htmlSettings.getGoogleAnalyticsUser()));
                             out.newLine();
                         } else {
                             out.write(line);

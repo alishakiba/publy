@@ -16,7 +16,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import publistgenerator.data.PublicationType;
 import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
-import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.data.settings.Settings;
 import publistgenerator.io.ResourceLocator;
 
@@ -29,7 +28,6 @@ public class SettingsReader extends DefaultHandler {
     static final String DEFAULT_SETTINGS_LOCATION = "data/PLGSettings.xml";
     private StringBuilder textBuffer; // Contains the characters that are read between start and end elements (e.g. <item>Text</item>)
     private Settings settings; // Contains the read settings after parsing.
-    private FormatSettings format = null;
     private CategoryIdentifier noteFor = null; // The category the current note is for. (null if there is none)
 
     private SettingsReader(Settings settings) {
@@ -42,11 +40,6 @@ public class SettingsReader extends DefaultHandler {
 
         if (Files.exists(settingsFile)) {
             settings = new Settings();
-
-            // Clear the default categories
-            settings.getHtmlSettings().getCategories().clear();
-            settings.getPlainSettings().getCategories().clear();
-
             parseSettings(settings, settingsFile);
         }
 
@@ -67,12 +60,6 @@ public class SettingsReader extends DefaultHandler {
     @Override
     public void startElement(String namespaceURI, String sName, String qName, Attributes attrs) throws SAXException {
         switch (qName) {
-            case "plaintextsettings":
-                format = settings.getPlainSettings();
-                break;
-            case "htmlsettings":
-                format = settings.getHtmlSettings();
-                break;
             case "note":
                 noteFor = CategoryIdentifier.valueOf(attrs.getValue("category"));
                 break;
@@ -93,56 +80,53 @@ public class SettingsReader extends DefaultHandler {
 
         if (text != null && !text.isEmpty()) {
             switch (qName) {
-                // General settings
+                // Publications settings
                 case "publications":
                     settings.setPublications(ResourceLocator.getFullPath(text));
                     break;
-                case "generateplaintext":
-                    settings.setGenerateText(Boolean.parseBoolean(text));
-                    break;
-                case "generatehtml":
-                    settings.setGenerateHTML(Boolean.parseBoolean(text));
-                    break;
-                // Format settings
+                // General settings
                 case "target":
-                    format.setTarget(ResourceLocator.getFullPath(text));
+                    settings.getGeneralSettings().setTarget(ResourceLocator.getFullPath(text));
                     break;
                 case "listallauthors":
-                    format.setListAllAuthors(Boolean.parseBoolean(text));
-                    break;
-                case "presentedtext":
-                    format.setPresentedText(text);
+                    settings.getGeneralSettings().setListAllAuthors(Boolean.parseBoolean(text));
                     break;
                 case "numbering":
-                    format.setNumbering(FormatSettings.Numbering.valueOf(text));
+                    settings.getGeneralSettings().setNumbering(FormatSettings.Numbering.valueOf(text));
                     break;
                 case "category":
-                    format.addCategory(CategoryIdentifier.valueOf(text));
+                    settings.getGeneralSettings().addCategory(CategoryIdentifier.valueOf(text));
                     break;
                 case "note":
-                    format.setNote(noteFor, text);
+                    settings.getGeneralSettings().setNote(noteFor, text);
                     break;
                 // HTML-specific settings
                 case "linktotextversion":
-                    ((HTMLSettings) format).setLinkToTextVersion(Boolean.parseBoolean(text));
+                    settings.getHtmlSettings().setLinkToTextVersion(Boolean.parseBoolean(text));
+                    break;
+                case "linktobibtexversion":
+                    settings.getHtmlSettings().setLinkToBibtexVersion(Boolean.parseBoolean(text));
                     break;
                 case "includeabstract":
-                    ((HTMLSettings) format).setIncludeAbstract(PublicationType.valueOf(text));
+                    settings.getHtmlSettings().setIncludeAbstract(PublicationType.valueOf(text));
                     break;
                 case "includebibtex":
-                    ((HTMLSettings) format).setIncludeBibtex(PublicationType.valueOf(text));
+                    settings.getHtmlSettings().setIncludeBibtex(PublicationType.valueOf(text));
                     break;
-                case "includepdf":
-                    ((HTMLSettings) format).setIncludePaper(PublicationType.valueOf(text));
+                case "includepaper":
+                    settings.getHtmlSettings().setIncludePaper(PublicationType.valueOf(text));
                     break;
                 case "header":
-                    ((HTMLSettings) format).setHeader(ResourceLocator.getFullPath(text));
+                    settings.getHtmlSettings().setHeader(ResourceLocator.getFullPath(text));
                     break;
                 case "footer":
-                    ((HTMLSettings) format).setFooter(ResourceLocator.getFullPath(text));
+                    settings.getHtmlSettings().setFooter(ResourceLocator.getFullPath(text));
                     break;
                 case "googleanalyticsuser":
-                    ((HTMLSettings) format).setGoogleAnalyticsUser(text);
+                    settings.getHtmlSettings().setGoogleAnalyticsUser(text);
+                    break;
+                case "presentedtext":
+                    settings.getHtmlSettings().setPresentedText(text);
                     break;
                 default:
                     break;
@@ -150,12 +134,6 @@ public class SettingsReader extends DefaultHandler {
         }
 
         switch (qName) {
-            // General settings
-            case "plaintextsettings":
-            // Fall through
-            case "htmlsettings":
-                format = null;
-                break;
             // Format settings
             case "note":
                 noteFor = null;
