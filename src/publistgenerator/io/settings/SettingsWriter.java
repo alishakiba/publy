@@ -104,6 +104,7 @@ public class SettingsWriter {
         out.newLine();
 
         output(out, 4, "linktotextversion", makeString(settings.linkToTextVersion()));
+        output(out, 4, "linktobibtexversion", makeString(settings.linkToBibtexVersion()));
         output(out, 4, "includeabstract", makeString(settings.getIncludeAbstract()));
         output(out, 4, "includebibtex", makeString(settings.getIncludeBibtex()));
         output(out, 4, "includepaper", makeString(settings.getIncludePaper()));

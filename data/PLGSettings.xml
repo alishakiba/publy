@@ -19,18 +19,18 @@
     <categorynotes>
     </categorynotes>
   </generalsettings>
-  
+
   <!-- HTML-specific settings -->
   <htmlsettings>
     <linktotextversion>true</linktotextversion>
-	<linktobibtexversion>true</linktobibtexversion>
+    <linktobibtexversion>true</linktobibtexversion>
     <includeabstract>ALL</includeabstract>
     <includebibtex>ARXIV</includebibtex>
     <includepaper>ARXIV</includepaper>
     <header>data/defaultHeader.html</header>
     <footer>data/defaultFooter.html</footer>
     <googleanalyticsuser><![CDATA[]]></googleanalyticsuser>
-	<presentedtext><![CDATA[]]></presentedtext>
+    <presentedtext><![CDATA[]]></presentedtext>
   </htmlsettings>
 
 </plgsettings>
