@@ -29,7 +29,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
@@ -48,11 +48,16 @@
                       <Component id="linksSeparator" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
+                      <Component id="presentedLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="presentedSeparator" pref="102" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
                       <Component id="analyticsLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="analyticsSeparator" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
@@ -71,18 +76,6 @@
                               <Component id="abstractComboBox" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="analyticsUserLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="analyticsUserTextField" pref="0" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="linkToTextCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="analyticsCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="0" pref="50" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="bibtexLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="paperLabel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -92,6 +85,20 @@
                                   <Component id="paperComboBox" max="32767" attributes="0"/>
                                   <Component id="bibtexComboBox" max="32767" attributes="0"/>
                               </Group>
+                          </Group>
+                          <Component id="presentedTextField" alignment="0" pref="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="analyticsUserLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="analyticsUserTextField" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="linkToTextCheckBox" min="-2" max="-2" attributes="0"/>
+                                  <Component id="linkToBibtexCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="analyticsCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -125,6 +132,8 @@
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="linkToTextCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="linkToBibtexCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="linksLabel" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -145,6 +154,13 @@
                   <Component id="paperLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="paperComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="presentedLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="presentedSeparator" alignment="1" min="-2" pref="10" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="presentedTextField" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="analyticsLabel" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -206,17 +222,25 @@
     </Component>
     <Component class="javax.swing.JLabel" name="linkToTextLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Link to plain text"/>
+        <Property name="text" type="java.lang.String" value="Alternative versions"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JSeparator" name="linkToTextSeparator">
     </Component>
     <Component class="javax.swing.JCheckBox" name="linkToTextCheckBox">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Include a link to the plaintext publication list"/>
+        <Property name="text" type="java.lang.String" value="Generate a plain text version"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="linkToTextCheckBoxActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="linkToBibtexCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Generate a BibTeX version"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="linkToBibtexCheckBoxActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="linksLabel">
@@ -299,6 +323,21 @@
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="analyticsUserTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        analyticsUserTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        analyticsUserTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="presentedLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Text added after papers I presented"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="presentedSeparator">
+    </Component>
+    <Component class="javax.swing.JTextField" name="presentedTextField">
+      <Properties>
+        <Property name="columns" type="int" value="40"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="presentedTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        presentedTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        presentedTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
       </AuxValues>
     </Component>
   </SubComponents>
