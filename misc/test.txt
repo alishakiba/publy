@@ -1,4 +1,19 @@
-My publications as of 19 June 2013.
+My publications as of 20 June 2013.
+
+
+Books.
+
+Guide to wireless sensor networks.
+S. Mishra, I. Woungang, and S. Misra.
+Springer, 2009.
+
+Guide to wireless sensor networks.
+S. Misra, S. Misra, and I. Woungang.
+Springer London, Limited, 2009.
+
+The discrepancy method: randomness and complexity.
+B. Chazelle.
+Cambridge University Press, 2000.
 
 
 Journal papers.
@@ -101,20 +116,5 @@ In Proceedings of the 24th Canadian Conference on Computational Geometry (CCCG 2
 Approximating the d-dimensional complete Euclidean graph.
 J. Ruppert and R. Seidel.
 In Proceedings of the 3rd Canadian Conference on Computational Geometry (CCCG 1991), pages 207-210, 1991.
-
-
-Other.
-
-Guide to wireless sensor networks.
-S. Mishra, I. Woungang, and S. Misra.
-Springer, 2009.
-
-Guide to wireless sensor networks.
-S. Misra, S. Misra, and I. Woungang.
-Springer London, Limited, 2009.
-
-The discrepancy method: randomness and complexity.
-B. Chazelle.
-Cambridge University Press, 2000.
 
 
