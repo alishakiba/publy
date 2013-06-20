@@ -15,6 +15,8 @@ import publistgenerator.data.bibitem.BibItem;
 import publistgenerator.data.settings.Settings;
 import publistgenerator.gui.MainFrame;
 import publistgenerator.io.BibTeXParser;
+import publistgenerator.io.PublicationListWriter;
+import publistgenerator.io.bibtex.BibtexPublicationListWriter;
 import publistgenerator.io.html.HTMLPublicationListWriter;
 import publistgenerator.io.plain.PlainPublicationListWriter;
 import publistgenerator.io.settings.SettingsReader;
@@ -44,7 +46,7 @@ public class GeneratorMain {
             JOptionPane.showMessageDialog(null, "No configuration information was found. Please set up your preferences.", "Publication List Generator - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
 
             // Launch the GUI
-            MainFrame mf = new MainFrame(new Settings());
+            MainFrame mf = new MainFrame(Settings.defaultSettings());
 
             // Report an Exception, if one occurred
             if (exception != null) {
@@ -79,23 +81,33 @@ public class GeneratorMain {
                 Console.except(ex, "Exception while parsing publications list:");
             }
 
-            if (items != null && settings.generateHTML()) {
+            if (items != null) {
                 try {
-                    HTMLPublicationListWriter writer = new HTMLPublicationListWriter(settings.getHtmlSettings());
-                    writer.writePublicationList(items);
+                    PublicationListWriter writer = new HTMLPublicationListWriter(settings.getGeneralSettings(), settings.getHtmlSettings());
+                    writer.writePublicationList(items, settings.getGeneralSettings().getTarget());
                     Console.log("HTML publication list written successfully.");
                 } catch (Exception | AssertionError ex) {
                     Console.except(ex, "Exception while writing HTML publication list:");
                 }
             }
 
-            if (items != null && settings.generateText()) {
+            if (items != null && settings.getHtmlSettings().linkToTextVersion()) {
                 try {
-                    PlainPublicationListWriter plainWriter = new PlainPublicationListWriter(settings.getPlainSettings());
-                    plainWriter.writePublicationList(items);
+                    PublicationListWriter writer = new PlainPublicationListWriter(settings.getGeneralSettings());
+                    writer.writePublicationList(items, settings.getGeneralSettings().getPlainTextTarget());
                     Console.log("Plain text publication list written successfully.");
                 } catch (Exception | AssertionError ex) {
                     Console.except(ex, "Exception while writing plain text publication list:");
+                }
+            }
+            
+            if (items != null && settings.getHtmlSettings().linkToBibtexVersion()) {
+                try {
+                    PublicationListWriter writer = new BibtexPublicationListWriter(settings.getGeneralSettings());
+                    writer.writePublicationList(items, settings.getGeneralSettings().getBibtexTarget());
+                    Console.log("BibTeX publication list written successfully.");
+                } catch (Exception | AssertionError ex) {
+                    Console.except(ex, "Exception while writing BibTeX publication list:");
                 }
             }
             

@@ -294,7 +294,7 @@ public class MainFrame extends javax.swing.JFrame {
             pubTextField.setText(ResourceLocator.getRelativePath(selected));
             settings.setPublications(selected);
 
-            if (settings.getHtmlSettings().getTarget() == null || settings.getPlainSettings().getTarget() == null) {
+            if (settings.getHtmlSettings().getTarget() == null || settings.getGeneralSettings().getTarget() == null) {
                 // Set initial targets
                 String baseName = pubFileChooser.getSelectedFile().getName();
                 int extension = baseName.lastIndexOf('.');
@@ -311,9 +311,9 @@ public class MainFrame extends javax.swing.JFrame {
                     htmlGeneralSettingsPanel.updateTarget();
                 }
 
-                if (settings.getPlainSettings().getTarget() == null) {
+                if (settings.getGeneralSettings().getTarget() == null) {
                     // Set an initial target
-                    settings.getPlainSettings().setTarget(selected.resolveSibling(baseName + ".txt"));
+                    settings.getGeneralSettings().setTarget(selected.resolveSibling(baseName + ".txt"));
                     
                     // Update the GUI
                     plainSettingsPanel.updateTarget();
@@ -351,7 +351,7 @@ public class MainFrame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new MainFrame(new Settings()).setVisible(true);
+                new MainFrame(Settings.defaultSettings()).setVisible(true);
             }
         });
     }

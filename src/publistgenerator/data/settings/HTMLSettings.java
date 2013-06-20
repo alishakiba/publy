@@ -13,18 +13,24 @@ import publistgenerator.io.html.HTMLPublicationListWriter;
  *
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
-public class HTMLSettings extends FormatSettings {
-    
+public class HTMLSettings {
+
     private boolean linkToTextVersion = false;
+    private boolean linkToBibtexVersion = false;
     private PublicationType includeAbstract = PublicationType.ALL;
     private PublicationType includeBibtex = PublicationType.ARXIV; // ALL should not be an option here.
     private PublicationType includePaper = PublicationType.ARXIV;
     private Path header = ResourceLocator.getFullPath(HTMLPublicationListWriter.DEFAULT_HEADER_LOCATION);
     private Path footer = ResourceLocator.getFullPath(HTMLPublicationListWriter.DEFAULT_FOOTER_LOCATION);
     private String googleAnalyticsUser = null;
+    private String presentedText = null;
 
-    public HTMLSettings(Settings settings) {
-        super(settings);
+    public boolean linkToBibtexVersion() {
+        return linkToBibtexVersion;
+    }
+
+    public void setLinkToBibtexVersion(boolean linkToBibtexVersion) {
+        this.linkToBibtexVersion = linkToBibtexVersion;
     }
 
     public boolean linkToTextVersion() {
@@ -81,5 +87,13 @@ public class HTMLSettings extends FormatSettings {
 
     public void setGoogleAnalyticsUser(String googleAnalyticsUser) {
         this.googleAnalyticsUser = googleAnalyticsUser;
+    }
+    
+    public String getPresentedText() {
+        return presentedText;
+    }
+
+    public void setPresentedText(String presentedText) {
+        this.presentedText = presentedText;
     }
 }

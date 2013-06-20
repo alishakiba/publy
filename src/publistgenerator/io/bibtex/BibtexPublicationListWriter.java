@@ -138,5 +138,9 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
                 out.write("}");
             }
         }
+        
+        out.newLine();
+        out.write("}");
+        out.newLine();
     }
 }

@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -35,10 +36,10 @@ public abstract class PublicationListWriter {
         }
     }
 
-    public void writePublicationList(List<BibItem> items) throws IOException {
+    public void writePublicationList(List<BibItem> items, Path target) throws IOException {
         categorizePapers(items);
 
-        try (BufferedWriter out = Files.newBufferedWriter(settings.getTarget(), Charset.forName("UTF-8"))) {
+        try (BufferedWriter out = Files.newBufferedWriter(target, Charset.forName("UTF-8"))) {
             writePublicationList(out);
         }
     }
