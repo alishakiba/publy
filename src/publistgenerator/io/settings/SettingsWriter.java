@@ -108,6 +108,7 @@ public class SettingsWriter {
         output(out, 4, "includeabstract", makeString(settings.getIncludeAbstract()));
         output(out, 4, "includebibtex", makeString(settings.getIncludeBibtex()));
         output(out, 4, "includepaper", makeString(settings.getIncludePaper()));
+        output(out, 4, "titletarget", makeString(settings.getTitleTarget()));
         output(out, 4, "header", makeString(settings.getHeader()));
         output(out, 4, "footer", makeString(settings.getFooter()));
         output(out, 4, "googleanalyticsuser", makeCData(settings.getGoogleAnalyticsUser()));

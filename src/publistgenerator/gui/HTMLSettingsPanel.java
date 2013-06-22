@@ -62,6 +62,9 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         abstractComboBox.setSelectedItem(settings.getIncludeAbstract());
         bibtexComboBox.setSelectedItem(settings.getIncludeBibtex());
         paperComboBox.setSelectedItem(settings.getIncludePaper());
+        
+        // Title link
+        titleLinkComboBox.setSelectedItem(settings.getTitleTarget());
 
         // Google analytics
         String user = settings.getGoogleAnalyticsUser();
@@ -126,6 +129,10 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         presentedLabel = new javax.swing.JLabel();
         presentedSeparator = new javax.swing.JSeparator();
         presentedTextField = new javax.swing.JTextField();
+        titleLinkLabel = new javax.swing.JLabel();
+        titleLinksSeparator = new javax.swing.JSeparator();
+        titleLinkComboText = new javax.swing.JLabel();
+        titleLinkComboBox = new javax.swing.JComboBox();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("HTML-Only Settings"));
 
@@ -259,6 +266,17 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         });
         presentedTextField.setColumns(40);
 
+        titleLinkLabel.setText("Title link");
+
+        titleLinkComboText.setText("Use the title as link for:");
+
+        titleLinkComboBox.setModel(new DefaultComboBoxModel(HTMLSettings.TitleLinkTarget.values()));
+        titleLinkComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                titleLinkComboBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -278,6 +296,10 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                         .addComponent(linksLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(linksSeparator))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(titleLinkLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(titleLinksSeparator))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(presentedLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -309,16 +331,22 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(paperComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(bibtexComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(titleLinkComboText)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(titleLinkComboBox, 0, 152, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(linkToTextCheckBox)
+                                    .addComponent(linkToBibtexCheckBox))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(presentedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(analyticsUserLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(analyticsUserTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(linkToTextCheckBox)
-                                    .addComponent(linkToBibtexCheckBox)
-                                    .addComponent(analyticsCheckBox))
+                                .addComponent(analyticsCheckBox)
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
@@ -361,6 +389,14 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(paperLabel)
                     .addComponent(paperComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(titleLinkLabel)
+                    .addComponent(titleLinksSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(titleLinkComboText)
+                    .addComponent(titleLinkComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(presentedLabel)
@@ -432,6 +468,10 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     private void linkToBibtexCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkToBibtexCheckBoxActionPerformed
         settings.setLinkToBibtexVersion(linkToBibtexCheckBox.isSelected());
     }//GEN-LAST:event_linkToBibtexCheckBoxActionPerformed
+
+    private void titleLinkComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_titleLinkComboBoxActionPerformed
+        settings.setTitleTarget((HTMLSettings.TitleLinkTarget) titleLinkComboBox.getSelectedItem());
+    }//GEN-LAST:event_titleLinkComboBoxActionPerformed
     
     private void analyticsUserTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
@@ -482,5 +522,9 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel presentedLabel;
     private javax.swing.JSeparator presentedSeparator;
     private javax.swing.JTextField presentedTextField;
+    private javax.swing.JComboBox titleLinkComboBox;
+    private javax.swing.JLabel titleLinkComboText;
+    private javax.swing.JLabel titleLinkLabel;
+    private javax.swing.JSeparator titleLinksSeparator;
     // End of variables declaration//GEN-END:variables
 }

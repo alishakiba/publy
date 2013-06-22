@@ -18,3 +18,8 @@ div.shown {
 a.shown {
  display: inline;
 }
+
+/* Show a hand pointer to indicate a link */
+.link {
+ cursor: pointer;
+}

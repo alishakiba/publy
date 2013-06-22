@@ -15,11 +15,30 @@ import publistgenerator.io.html.HTMLPublicationListWriter;
  */
 public class HTMLSettings {
 
+    public enum TitleLinkTarget {
+
+        NONE, ABSTRACT, PAPER;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case NONE:
+                    return "Nothing";
+                case ABSTRACT:
+                    return "The abstract";
+                case PAPER:
+                    return "The paper";
+                default:
+                    throw new AssertionError("Unexpected TitleLinkTarget: " + this);
+            }
+        }
+    }
     private boolean linkToTextVersion = false;
     private boolean linkToBibtexVersion = false;
     private PublicationType includeAbstract = PublicationType.ALL;
     private PublicationType includeBibtex = PublicationType.ARXIV; // ALL should not be an option here.
     private PublicationType includePaper = PublicationType.ARXIV;
+    private TitleLinkTarget titleTarget = TitleLinkTarget.NONE;
     private Path header = ResourceLocator.getFullPath(HTMLPublicationListWriter.DEFAULT_HEADER_LOCATION);
     private Path footer = ResourceLocator.getFullPath(HTMLPublicationListWriter.DEFAULT_FOOTER_LOCATION);
     private String googleAnalyticsUser = null;
@@ -61,6 +80,14 @@ public class HTMLSettings {
         return googleAnalyticsUser;
     }
 
+    public TitleLinkTarget getTitleTarget() {
+        return titleTarget;
+    }
+
+    public void setTitleTarget(TitleLinkTarget titleTarget) {
+        this.titleTarget = titleTarget;
+    }
+
     public void setLinkToTextVersion(boolean linkToTextVersion) {
         this.linkToTextVersion = linkToTextVersion;
     }
@@ -88,7 +115,7 @@ public class HTMLSettings {
     public void setGoogleAnalyticsUser(String googleAnalyticsUser) {
         this.googleAnalyticsUser = googleAnalyticsUser;
     }
-    
+
     public String getPresentedText() {
         return presentedText;
     }
