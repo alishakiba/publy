@@ -16,6 +16,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import publistgenerator.data.PublicationType;
 import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
+import publistgenerator.data.settings.HTMLSettings;
 import publistgenerator.data.settings.Settings;
 import publistgenerator.io.ResourceLocator;
 
@@ -115,6 +116,9 @@ public class SettingsReader extends DefaultHandler {
                     break;
                 case "includepaper":
                     settings.getHtmlSettings().setIncludePaper(PublicationType.valueOf(text));
+                    break;
+                case "titletarget":
+                    settings.getHtmlSettings().setTitleTarget(HTMLSettings.TitleLinkTarget.valueOf(text));
                     break;
                 case "header":
                     settings.getHtmlSettings().setHeader(ResourceLocator.getFullPath(text));

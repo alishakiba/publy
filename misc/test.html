@@ -64,6 +64,15 @@
       toggle(divID);
      }
     </script>
+	
+	<!-- Functions that add toggle links to all titles -->
+	<script type="text/javascript">
+     function makeTitlesToggleAbstracts() {
+      $(".title").click(function() {
+        $("#" + $(this).attr('id') + "_abstract").slideToggle(500);
+      });
+     }
+    </script>
 
     <!-- Include MathJax to convert LaTeX formulas to HTML on the fly -->
     <script type="text/x-mathjax-config">
@@ -79,7 +88,7 @@
   <body>
     <noscript><p>Some elements on this site require JavaScript. Enable it for the best experience.</p></noscript>
 	
-    <p>My publications as of 21 June 2013. Also available as <a href="test.txt" rel="alternate">plain text</a> or <a href="test.bib" rel="alternate">BibTeX</a>.</p>
+    <p>My publications as of 22 June 2013. Also available as <a href="test.txt" rel="alternate">plain text</a> or <a href="test.bib" rel="alternate">BibTeX</a>.</p>
     <div class="section"><h1 class="sectiontitle"><a id="books">Books</a></h1>
 
       <p class="pubnav">
@@ -89,9 +98,13 @@
       </p>
 
       <div class="bibentry">
-        <a id="G09"><h2 class="title">Guide to wireless sensor networks</h2></a><br>
+        <h2 id="G09" class="title">Guide to wireless sensor networks</h2>
+        <span class="interactive">[<a href="javascript:toggle('G09_abstract');" id="G09_abstract_plus" class="shown">Abstract</a><a href="javascript:toggle('G09_abstract');" id="G09_abstract_minus" class="hidden">Hide Abstract</a>]</span><noscript><div>[Abstract]</div></noscript>
+<br>
+        <div id="G09_abstract" class="collapsible"><div class="abstract"><span class="abstractword">Abstract: </span>Test Abstract</div></div>
         <span class="author">S. Mishra</span>, <span class="author">I. Woungang</span>, and <span class="author">S. Misra</span>.<br>
         Springer, 2009.<br>
+        [<a href="test.txt">txt</a>]
         <span class="interactive">[<a href="javascript:toggle('G09_bibtex');" id="G09_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('G09_bibtex');" id="G09_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
         <div id="G09_bibtex" class="collapsible"><pre class="bibtex">
 @book{G09,
@@ -103,9 +116,13 @@
       </div>
 
       <div class="bibentry">
-        <a id="misra2009guide"><h2 class="title">Guide to wireless sensor networks</h2></a><br>
+        <h2 id="misra2009guide" class="title">Guide to wireless sensor networks</h2>
+        <span class="interactive">[<a href="javascript:toggle('misra2009guide_abstract');" id="misra2009guide_abstract_plus" class="shown">Abstract</a><a href="javascript:toggle('misra2009guide_abstract');" id="misra2009guide_abstract_minus" class="hidden">Hide Abstract</a>]</span><noscript><div>[Abstract]</div></noscript>
+<br>
+        <div id="misra2009guide_abstract" class="collapsible"><div class="abstract"><span class="abstractword">Abstract: </span>Test Abstract 2</div></div>
         <span class="author">S. Misra</span>, <span class="author">S. Misra</span>, and <span class="author">I. Woungang</span>.<br>
         Springer London, Limited, 2009.<br>
+        [<a href="test.bib">bib</a>]
         [<a href="http://books.google.ca/books?id=lz8gm2BQO1IC">Google Books</a>]
         <span class="interactive">[<a href="javascript:toggle('misra2009guide_bibtex');" id="misra2009guide_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('misra2009guide_bibtex');" id="misra2009guide_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
         <div id="misra2009guide_bibtex" class="collapsible"><pre class="bibtex">
@@ -121,7 +138,10 @@
       </div>
 
       <div class="bibentry">
-        <a id="Ch"><h2 class="title">The discrepancy method: randomness and complexity</h2></a><br>
+        <h2 id="Ch" class="title">The discrepancy method: randomness and complexity</h2>
+        <span class="interactive">[<a href="javascript:toggle('Ch_abstract');" id="Ch_abstract_plus" class="shown">Abstract</a><a href="javascript:toggle('Ch_abstract');" id="Ch_abstract_minus" class="hidden">Hide Abstract</a>]</span><noscript><div>[Abstract]</div></noscript>
+<br>
+        <div id="Ch_abstract" class="collapsible"><div class="abstract"><span class="abstractword">Abstract: </span>Test Abstract 3</div></div>
         <span class="author">B. Chazelle</span>.<br>
         Cambridge University Press, 2000.<br>
         <span class="interactive">[<a href="javascript:toggle('Ch_bibtex');" id="Ch_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('Ch_bibtex');" id="Ch_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -147,7 +167,7 @@
       </p>
 
       <div class="bibentry">
-        <a id="Y82"><h2 class="title">On constructing minimum spanning trees in $k$-dimensional spaces and related problems</h2></a><br>
+        <h2 id="Y82" class="title">On constructing minimum spanning trees in $k$-dimensional spaces and related problems</h2><br>
         <span class="author">A. Yao</span>.<br>
         <span class="booktitle">SIAM Journal on Computing</span>, 11(4):721&ndash;736, 1982.<br>
         <span class="interactive">[<a href="javascript:toggle('Y82_bibtex');" id="Y82_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('Y82_bibtex');" id="Y82_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -164,7 +184,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="D87"><h2 class="title">A non-Hamiltonian, nondegenerate Delaunay triangulation</h2></a><br>
+        <h2 id="D87" class="title">A non-Hamiltonian, nondegenerate Delaunay triangulation</h2><br>
         <span class="author">M. Dillencourt</span>.<br>
         <span class="booktitle">Information Processing Letters</span>, 25(3):149&ndash;151, 1987.<br>
         <span class="interactive">[<a href="javascript:toggle('D87_bibtex');" id="D87_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('D87_bibtex');" id="D87_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -181,7 +201,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="D90"><h2 class="title">Realizability of Delaunay triangulations</h2></a><br>
+        <h2 id="D90" class="title">Realizability of Delaunay triangulations</h2><br>
         <span class="author">M. Dillencourt</span>.<br>
         <span class="booktitle">Information Processing Letters</span>, 33(6):283&ndash;287, 1990.<br>
         <span class="interactive">[<a href="javascript:toggle('D90_bibtex');" id="D90_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('D90_bibtex');" id="D90_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -198,7 +218,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="KG92"><h2 class="title">Classes of graphs which approximate the complete Euclidean graph</h2></a><br>
+        <h2 id="KG92" class="title">Classes of graphs which approximate the complete Euclidean graph</h2><br>
         <span class="author">J. Keil</span> and <span class="author">C. Gutwin</span>.<br>
         <span class="booktitle">Discrete & Computational Geometry</span>, 7(1):13&ndash;28, 1992.<br>
         <span class="interactive">[<a href="javascript:toggle('KG92_bibtex');" id="KG92_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('KG92_bibtex');" id="KG92_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -215,7 +235,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="Chew89"><h2 class="title">There are planar graphs almost as good as the complete graph</h2></a><br>
+        <h2 id="Chew89" class="title">There are planar graphs almost as good as the complete graph</h2><br>
         <span class="author">P. Chew</span>.<br>
         <span class="booktitle">Journal of Computer and System Sciences</span>, 39(2):205&ndash;219, 1989.<br>
         <span class="interactive">[<a href="javascript:toggle('Chew89_bibtex');" id="Chew89_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('Chew89_bibtex');" id="Chew89_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -232,7 +252,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="LM10"><h2 class="title">Some results on greedy embeddings in metric spaces</h2></a><br>
+        <h2 id="LM10" class="title">Some results on greedy embeddings in metric spaces</h2><br>
         <span class="author">T. Leighton</span> and <span class="author">A. Moitra</span>.<br>
         <span class="booktitle">Discrete & Computational Geometry</span>, 44(3):686&ndash;705, 2010.<br>
         <span class="interactive">[<a href="javascript:toggle('LM10_bibtex');" id="LM10_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('LM10_bibtex');" id="LM10_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -249,7 +269,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="AFG10"><h2 class="title">An algorithm to construct greedy drawings of triangulations</h2></a><br>
+        <h2 id="AFG10" class="title">An algorithm to construct greedy drawings of triangulations</h2><br>
         <span class="author">P. Angelini</span>, <span class="author">F. Frati</span>, and <span class="author">L. Grilli</span>.<br>
         <span class="booktitle">Journal of Graph Algorithms and Applications</span>, 14(1):19&ndash;51, 2010.<br>
         <span class="interactive">[<a href="javascript:toggle('AFG10_bibtex');" id="AFG10_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('AFG10_bibtex');" id="AFG10_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -266,7 +286,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="D10"><h2 class="title">Greedy drawings of triangulations</h2></a><br>
+        <h2 id="D10" class="title">Greedy drawings of triangulations</h2><br>
         <span class="author">R. Dhandapani</span>.<br>
         <span class="booktitle">Discrete & Computational Geometry</span>, 43(2):375&ndash;392, 2010.<br>
         <span class="interactive">[<a href="javascript:toggle('D10_bibtex');" id="D10_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('D10_bibtex');" id="D10_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -283,7 +303,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="Betal02"><h2 class="title">Online routing in convex subdivisions</h2></a><br>
+        <h2 id="Betal02" class="title">Online routing in convex subdivisions</h2><br>
         <span class="author">P. Bose</span>, <span class="author">A. Brodnik</span>, <span class="author">S. Carlsson</span>, <span class="author">E. Demaine</span>, <span class="author">R. Fleischer</span>, <span class="author">A. López-Ortiz</span>, <span class="author">P. Morin</span>, and <span class="author">J. Munro</span>.<br>
         <span class="booktitle">International Journal of Computational Geometry & Applications</span>, 12(4):283&ndash;296, 2002.<br>
         <span class="interactive">[<a href="javascript:toggle('Betal02_bibtex');" id="Betal02_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('Betal02_bibtex');" id="Betal02_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -300,7 +320,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="BM04"><h2 class="title">Online routing in triangulations</h2></a><br>
+        <h2 id="BM04" class="title">Online routing in triangulations</h2><br>
         <span class="author">P. Bose</span> and <span class="author">P. Morin</span>.<br>
         <span class="booktitle">SIAM Journal on Computing</span>, 33(4):937&ndash;951, 2004.<br>
         <span class="interactive">[<a href="javascript:toggle('BM04_bibtex');" id="BM04_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('BM04_bibtex');" id="BM04_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -317,7 +337,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="PR05"><h2 class="title">On a conjecture related to geometric routing</h2></a><br>
+        <h2 id="PR05" class="title">On a conjecture related to geometric routing</h2><br>
         <span class="author">C. Papadimitriou</span> and <span class="author">D. Ratajczak</span>.<br>
         <span class="booktitle">Theoretical Computer Science</span>, 344(1):3&ndash;14, 2005.<br>
         <span class="interactive">[<a href="javascript:toggle('PR05_bibtex');" id="PR05_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('PR05_bibtex');" id="PR05_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -334,7 +354,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="MR1241311"><h2 class="title">Searching in the plane</h2></a><br>
+        <h2 id="MR1241311" class="title">Searching in the plane</h2><br>
         <span class="author">R. Baeza-Yates</span>, <span class="author">J. Culberson</span>, and <span class="author">G. Rawlins</span>.<br>
         <span class="booktitle">Information and Computation</span>, 106(2):234&ndash;252, 1993.<br>
         <span class="interactive">[<a href="javascript:toggle('MR1241311_bibtex');" id="MR1241311_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('MR1241311_bibtex');" id="MR1241311_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -351,7 +371,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="bose2012piArxiv"><h2 class="title">$\pi/2$-angle Yao graphs are spanners</h2></a><br>
+        <h2 id="bose2012piArxiv" class="title">$\pi/2$-angle Yao graphs are spanners</h2><br>
         <span class="author">P. Bose</span>, <span class="author">M. Damian</span>, <span class="author">K. Douïeb</span>, <span class="author">J. O'Rourke</span>, <span class="author">B. Seamone</span>, <span class="author">M. Smid</span>, and <span class="author">S. Wuhrer</span>.<br>
         <span class="booktitle">CoRR</span>, abs/1001.2913, 2010.<br>
         <span class="interactive">[<a href="javascript:toggle('bose2012piArxiv_bibtex');" id="bose2012piArxiv_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('bose2012piArxiv_bibtex');" id="bose2012piArxiv_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -376,7 +396,7 @@
       </p>
 
       <div class="bibentry">
-        <a id="BGHI10"><h2 class="title">Connections between theta-graphs, Delaunay triangulations, and orthogonal surfaces</h2></a><br>
+        <h2 id="BGHI10" class="title">Connections between theta-graphs, Delaunay triangulations, and orthogonal surfaces</h2><br>
         <span class="author">N. Bonichon</span>, <span class="author">C. Gavoille</span>, <span class="author">N. Hanusse</span>, and <span class="author">D. Ilcinkas</span>.<br>
         In <span class="booktitle">Proceedings of the 36th International Conference on Graph Theoretic Concepts in Computer Science (WG 2010)</span>, pages 266&ndash;278, 2010.<br>
         <span class="interactive">[<a href="javascript:toggle('BGHI10_bibtex');" id="BGHI10_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('BGHI10_bibtex');" id="BGHI10_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -391,7 +411,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="S90"><h2 class="title">Embedding planar graphs on the grid</h2></a><br>
+        <h2 id="S90" class="title">Embedding planar graphs on the grid</h2><br>
         <span class="author">W. Schnyder</span>.<br>
         In <span class="booktitle">Proceedings of the 1st Annual ACM-SIAM Symposium on Discrete Algorithms (SODA 1990)</span>, pages 138&ndash;148, 1990.<br>
         <span class="interactive">[<a href="javascript:toggle('S90_bibtex');" id="S90_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('S90_bibtex');" id="S90_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -406,7 +426,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="BGHP10"><h2 class="title">Plane spanners of maximum degree six</h2></a><br>
+        <h2 id="BGHP10" class="title">Plane spanners of maximum degree six</h2><br>
         <span class="author">N. Bonichon</span>, <span class="author">C. Gavoille</span>, <span class="author">N. Hanusse</span>, and <span class="author">L. Perkovic</span>.<br>
         In <span class="booktitle">Proceedings of the 37th International Colloquium on Automata, Languages and Programming (ICALP 2010 (1))</span>, volume 6198 of <span class="series">Lecture Notes in Computer Science</span>, pages 19&ndash;30, 2010.<br>
         <span class="interactive">[<a href="javascript:toggle('BGHP10_bibtex');" id="BGHP10_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('BGHP10_bibtex');" id="BGHP10_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -423,7 +443,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="R09"><h2 class="title">Survey on oblivious routing strategies</h2></a><br>
+        <h2 id="R09" class="title">Survey on oblivious routing strategies</h2><br>
         <span class="author">H. Räcke</span>.<br>
         In <span class="booktitle">Mathematical Theory and Computational Practice</span>, volume 5635 of <span class="series">Lecture Notes in Computer Science</span>, pages 419&ndash;429, 2009.<br>
         <span class="interactive">[<a href="javascript:toggle('R09_bibtex');" id="R09_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('R09_bibtex');" id="R09_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -440,7 +460,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="HZ11"><h2 class="title">On succinct convex greedy drawing of 3-connected plane graphs</h2></a><br>
+        <h2 id="HZ11" class="title">On succinct convex greedy drawing of 3-connected plane graphs</h2><br>
         <span class="author">X. He</span> and <span class="author">H. Zhang</span>.<br>
         In <span class="booktitle">Proceedings of the 22nd Annual ACM-SIAM Symposium on Discrete Algorithms (SODA 2011)</span>, pages 1477&ndash;1486, 2011.<br>
         <span class="interactive">[<a href="javascript:toggle('HZ11_bibtex');" id="HZ11_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('HZ11_bibtex');" id="HZ11_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -455,7 +475,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="HZ10"><h2 class="title">Schnyder greedy routing algorithm</h2></a><br>
+        <h2 id="HZ10" class="title">Schnyder greedy routing algorithm</h2><br>
         <span class="author">X. He</span> and <span class="author">H. Zhang</span>.<br>
         In <span class="booktitle">Theory and Applications of Models of Computation</span>, volume 6108 of <span class="series">Lecture Notes in Computer Science</span>, pages 271&ndash;283, 2010.<br>
         <span class="interactive">[<a href="javascript:toggle('HZ10_bibtex');" id="HZ10_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('HZ10_bibtex');" id="HZ10_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -472,7 +492,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="GS08"><h2 class="title">Succinct greedy geometric routing in the Euclidean plane</h2></a><br>
+        <h2 id="GS08" class="title">Succinct greedy geometric routing in the Euclidean plane</h2><br>
         <span class="author">M. Goodrich</span> and <span class="author">D. Strash</span>.<br>
         In <span class="booktitle">Algorithms and computation</span>, volume 5878 of <span class="series">Lecture Notes in Computer Science</span>, pages 781&ndash;791, 2009.<br>
         <span class="interactive">[<a href="javascript:toggle('GS08_bibtex');" id="GS08_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('GS08_bibtex');" id="GS08_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -489,7 +509,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="rm07"><h2 class="title">An optimal generalization of the centerpoint theorem, and its extensions</h2></a><br>
+        <h2 id="rm07" class="title">An optimal generalization of the centerpoint theorem, and its extensions</h2><br>
         <span class="author">N. Mustafa</span> and <span class="author">S. Ray</span>.<br>
         In <span class="booktitle">Proceedings of the Twenty-Third Annual Symposium on Computational Geometry (SCG '07)</span>, pages 138&ndash;141, 2007.<br>
         <span class="interactive">[<a href="javascript:toggle('rm07_bibtex');" id="rm07_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('rm07_bibtex');" id="rm07_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -504,7 +524,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="bose2012plane"><h2 class="title">On plane constrained bounded-degree spanners</h2></a><br>
+        <h2 id="bose2012plane" class="title">On plane constrained bounded-degree spanners</h2><br>
         <span class="author">P. Bose</span>, <span class="author">R. Fagerberg</span>, <span class="author">A. van Renssen</span>, and <span class="author">S. Verdonschot</span>.<br>
         In <span class="booktitle">Proceedings of the 10th Latin American Symposium on Theoretical Informatics (LATIN 2012)</span>, volume 7256 of <span class="series">Lecture Notes in Computer Science</span>, pages 85&ndash;96, 2012.<br>
         <span class="interactive">[<a href="javascript:toggle('bose2012plane_bibtex');" id="bose2012plane_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('bose2012plane_bibtex');" id="bose2012plane_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -521,7 +541,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="bose2012optimal"><h2 class="title">Optimal bounds on theta-graphs: more is not always better</h2></a><br>
+        <h2 id="bose2012optimal" class="title">Optimal bounds on theta-graphs: more is not always better</h2><br>
         <span class="author">P. Bose</span>, <span class="author">J. De Carufel</span>, <span class="author">P. Morin</span>, <span class="author">A. van Renssen</span>, and <span class="author">S. Verdonschot</span>.<br>
         In <span class="booktitle">Proceedings of the 24th Canadian Conference on Computational Geometry (CCCG 2012)</span>, pages 305&ndash;310, 2012.<br>
         <span class="interactive">[<a href="javascript:toggle('bose2012optimal_bibtex');" id="bose2012optimal_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('bose2012optimal_bibtex');" id="bose2012optimal_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>
@@ -536,7 +556,7 @@
       </div>
 
       <div class="bibentry">
-        <a id="ruppert1991approximating"><h2 class="title">Approximating the d-dimensional complete Euclidean graph</h2></a><br>
+        <h2 id="ruppert1991approximating" class="title">Approximating the d-dimensional complete Euclidean graph</h2><br>
         <span class="author">J. Ruppert</span> and <span class="author">R. Seidel</span>.<br>
         In <span class="booktitle">Proceedings of the 3rd Canadian Conference on Computational Geometry (CCCG 1991)</span>, pages 207&ndash;210, 1991.<br>
         <span class="interactive">[<a href="javascript:toggle('ruppert1991approximating_bibtex');" id="ruppert1991approximating_bibtex_plus" class="shown">BibTeX</a><a href="javascript:toggle('ruppert1991approximating_bibtex');" id="ruppert1991approximating_bibtex_minus" class="hidden">Hide BibTeX</a>]</span><noscript><div>[BibTeX]</div></noscript>

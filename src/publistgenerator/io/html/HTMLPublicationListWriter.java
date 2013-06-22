@@ -61,7 +61,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
         if (htmlSettings.linkToTextVersion() || htmlSettings.linkToBibtexVersion()) {
             Path htmlDir = getSettings().getTarget().getParent();
-            
+
             out.write(" Also available as <a href=\"");
 
             if (htmlSettings.linkToTextVersion()) {
@@ -248,6 +248,19 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
         if (Files.exists(baseJs)) {
             copyFile(baseJs, out);
+
+            if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT) {
+                out.write("    <!-- Functions to run once at document load -->\n"
+                        + "    <script type=\"text/javascript\">\n"
+                        + "      $(document).ready(function() {");
+                out.newLine();
+
+                out.write("        makeTitlesToggleAbstracts()");
+
+                out.write("      });\n"
+                        + "    </script>");
+                out.newLine();
+            }
         } else {
             publistgenerator.Console.error("Cannot find base javascript file \"%s\".", baseJs);
         }

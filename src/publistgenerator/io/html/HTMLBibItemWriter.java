@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import publistgenerator.Console;
 import publistgenerator.data.PublicationType;
 import publistgenerator.data.bibitem.Article;
@@ -75,7 +77,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         output(indent, item.get("publisher"), ", ");
         output(item.get("year"), ".<br>", true);
-        
+
         output(indent, item.get("note"), ".<br>", true);
         writeLinks(item);
     }
@@ -105,7 +107,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             output(indent + "In <span class=\"booktitle\">", item.get("booktitle"), "</span>, ");
 
             writeVolume(item, ", ");
-            
+
             output(formatPages(item, true), ", ");
             output(item.get("year"), ".<br>", true);
         }
@@ -180,7 +182,22 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         // Title
-        output("<a id=\"" + item.getId() + "\"><h2 class=\"title\">", formatTitle(item), "</h2></a>");
+        if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
+            output("<h2 id=\"" + item.getId() + "\" class=\"title link\">", formatTitle(item), "</h2>");
+        } else if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && includePaper(item)) {
+            try {
+                String href = (new URI(null, null, item.get("paper"), null)).toString();
+
+                out.write("<a href=\"" + href + "\">");
+                output("<h2 id=\"" + item.getId() + "\" class=\"title\">", formatTitle(item), "</h2>");
+                out.write("</a>");
+                checkExistance(item.get("paper"));
+            } catch (URISyntaxException ex) {
+                Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
+            }
+        } else {
+            output("<h2 id=\"" + item.getId() + "\" class=\"title\">", formatTitle(item), "</h2>");
+        }
 
         // Add text if I presented this paper
         if ("yes".equals(item.get("presented"))) {
@@ -188,13 +205,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         // Abstract if included
-        String abstr = item.get("abstract");
-
-        if (abstr != null && !abstr.isEmpty() && includeAbstract(item)) {
+        if (includeAbstract(item)) {
             out.newLine();
 
             // Show \ hide link for the abstract
-            writeToggleLink(item.getId() + "_abstract", "Abstract");
+            if (htmlSettings.getTitleTarget() != HTMLSettings.TitleLinkTarget.ABSTRACT) {
+                writeToggleLink(item.getId() + "_abstract", "Abstract");
+            }
+
             out.write("<br>");
             out.newLine();
 
@@ -202,7 +220,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write(indent + "<div id=\"" + item.getId() + "_abstract\" class=\"collapsible\">");
             out.write("<div class=\"abstract\">");
             out.write("<span class=\"abstractword\">Abstract: </span>");
-            output(abstr);
+            output(item.get("abstract"));
             out.write("</div></div>");
             out.newLine();
         } else {
@@ -279,11 +297,11 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     protected String formatPages(BibItem item, boolean verbose) {
         String pages = (verbose ? super.formatPages(item) : item.get("pages"));
-        
+
         if (pages == null) {
             pages = "";
         }
-        
+
         return pages.replaceAll("-+", "&ndash;");
     }
 
@@ -304,7 +322,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private void writeLinks(BibItem item, boolean includeBibtex, boolean includeArxivBibtex) throws IOException {
         // Paper link
-        if (item.anyNonEmpty("paper") && includePaper(item)) {
+        if (includePaper(item) && htmlSettings.getTitleTarget() != HTMLSettings.TitleLinkTarget.PAPER) {
             try {
                 String link = (new URI(null, null, item.get("paper"), null)).toString();
                 String text;
@@ -322,7 +340,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 } else {
                     text = "Paper";
                 }
-                
+
                 out.write(indent + "[<a href=\"" + link + "\">" + text + "</a>]");
                 out.newLine();
 
@@ -459,7 +477,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("}</pre></div>");
         out.newLine();
     }
-    
+
     private void writeArXivBibTeXHTML(BibItem item) throws IOException {
         // Show / hide links
         writeToggleLink(item.getId() + "_bibtex", "BibTeX");
@@ -500,7 +518,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 out.write(",");
                 out.newLine();
             }
-            
+
             out.write("  " + field + "={" + item.get(field) + "}");
         }
 
@@ -531,7 +549,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("<a href=\"javascript:toggle('" + id + "');\" id=\"" + id + "_minus\" class=\"hidden\">");
         out.write("Hide " + linkText);
         out.write("</a>]");
-        
+
         out.write("</span>");
 
         // Disabled link for users without JS
@@ -542,7 +560,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private boolean includeAbstract(BibItem item) {
-        return htmlSettings.getIncludeAbstract().matches(item);
+        return item.anyNonEmpty("abstract") && htmlSettings.getIncludeAbstract().matches(item);
     }
 
     private boolean includeBibtex(BibItem item) {
@@ -550,7 +568,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private boolean includePaper(BibItem item) {
-        return htmlSettings.getIncludePaper().matches(item);
+        return item.anyNonEmpty("paper") && htmlSettings.getIncludePaper().matches(item);
     }
 
     private void checkExistance(String path) {

@@ -48,6 +48,11 @@
                       <Component id="linksSeparator" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
+                      <Component id="titleLinkLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="titleLinksSeparator" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
                       <Component id="presentedLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="presentedSeparator" pref="102" max="32767" attributes="0"/>
@@ -86,18 +91,26 @@
                                   <Component id="bibtexComboBox" max="32767" attributes="0"/>
                               </Group>
                           </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="titleLinkComboText" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="titleLinkComboBox" pref="152" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="linkToTextCheckBox" min="-2" max="-2" attributes="0"/>
+                                  <Component id="linkToBibtexCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
                           <Component id="presentedTextField" alignment="0" pref="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="analyticsUserLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="analyticsUserTextField" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="linkToTextCheckBox" min="-2" max="-2" attributes="0"/>
-                                  <Component id="linkToBibtexCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="analyticsCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="analyticsCheckBox" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -153,6 +166,16 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="paperLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="paperComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="titleLinkLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="titleLinksSeparator" alignment="1" min="-2" pref="10" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="titleLinkComboText" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="titleLinkComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
@@ -339,6 +362,28 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="presentedTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        presentedTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        presentedTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="titleLinkLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Title link"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="titleLinksSeparator">
+    </Component>
+    <Component class="javax.swing.JLabel" name="titleLinkComboText">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Use the title as link for:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="titleLinkComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new DefaultComboBoxModel(HTMLSettings.TitleLinkTarget.values())" type="code"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="titleLinkComboBoxActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
