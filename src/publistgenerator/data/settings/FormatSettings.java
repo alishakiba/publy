@@ -63,7 +63,10 @@ public class FormatSettings {
             baseName = baseName.substring(0, extension);
         }
 
-        return target.resolveSibling(baseName + ".txt");
+        return target.resolveSibling(baseName + ".utf8.txt");
+        // Add .utf8 to indicate to the web serer that this file should be 
+        // served with an UTF-8 header. This won't always work (it depends on 
+        // the server settings), but it is the best we can do for a plain text file.
     }
 
     /**
