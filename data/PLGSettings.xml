@@ -7,6 +7,7 @@
   <generalsettings>
     <target>misc/test.html</target>
     <listallauthors>true</listallauthors>
+    <titlefirst>true</titlefirst>
     <numbering>NONE</numbering>
     <categories>
       <category>BOOK</category>

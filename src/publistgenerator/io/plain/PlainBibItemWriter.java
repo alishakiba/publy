@@ -38,7 +38,7 @@ public class PlainBibItemWriter extends BibItemWriter {
             writeStatus(item, item.get("journal"));
         } else {
             output(item.get("journal"), ", ");
-            
+
             if (item.anyNonEmpty("volume", "number")) {
                 output(item.get("volume"));
                 output("(", item.get("number"), ")");
@@ -56,11 +56,12 @@ public class PlainBibItemWriter extends BibItemWriter {
 
     @Override
     protected void writeBook(Book item, int number) throws IOException {
+        writeNumber(number);
         writeTitleAndAuthors(item);
-        
+
         output(item.get("publisher"), ", ");
         output(item.get("year"), ".", true);
-        
+
         output(item.get("note"), ".", true);
     }
 
@@ -141,11 +142,17 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     private void writeTitleAndAuthors(BibItem item) throws IOException {
-        output(formatTitle(item), ".", true);
+        if (settings.isTitleFirst()) {
+            output(formatTitle(item), ".", true);
+        }
 
         // Don't add an authors line if it's just me and I just want to list co-authors
         if (settings.isListAllAuthors() || item.getAuthors().size() > 1) {
             output(formatAuthors(item), ".", true);
+        }
+
+        if (!settings.isTitleFirst()) {
+            output(formatTitle(item), ".", true);
         }
     }
 
@@ -191,11 +198,11 @@ public class PlainBibItemWriter extends BibItemWriter {
 
     protected String formatPages(BibItem item, boolean verbose) {
         String pages = (verbose ? super.formatPages(item) : item.get("pages"));
-        
+
         if (pages == null) {
             pages = "";
         }
-        
+
         return pages.replaceAll("-+", "-");
     }
 }
