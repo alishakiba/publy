@@ -25,6 +25,8 @@ public class FormatSettings {
     private Path target;
     // Author info
     private boolean listAllAuthors = true;
+    // Structure
+    private boolean titleFirst = true;
     // Numbering
     private Numbering numbering = Numbering.NONE;
     // Categories
@@ -98,6 +100,14 @@ public class FormatSettings {
 
     public void setListAllAuthors(boolean listAllAuthors) {
         this.listAllAuthors = listAllAuthors;
+    }
+
+    public boolean isTitleFirst() {
+        return titleFirst;
+    }
+
+    public void setTitleFirst(boolean titleFirst) {
+        this.titleFirst = titleFirst;
     }
 
     public Numbering getNumbering() {

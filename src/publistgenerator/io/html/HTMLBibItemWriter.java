@@ -12,8 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import publistgenerator.Console;
 import publistgenerator.data.PublicationType;
 import publistgenerator.data.bibitem.Article;
@@ -143,7 +141,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     @Override
     protected void writeInvitedTalk(InvitedTalk item, int number) throws IOException {
-        writeTitleAndAbstractHTML(item, number);
+        writeNumber(number);
+        writeTitleAndAbstractHTML(item);
 
         output(indent, item.get("address"), ", ", false);
         output(formatDate(item), ".<br>", true);
@@ -165,22 +164,32 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeTitleAndAuthorsHTML(BibItem item, int number) throws IOException {
-        writeTitleAndAbstractHTML(item, number);
+        writeNumber(number);
+        
+        if (settings.isTitleFirst()) {
+            writeTitleAndAbstractHTML(item);
+        }
 
         // Don't add an authors line if it's just me and I just want to list co-authors
         if (settings.isListAllAuthors() || item.getAuthors().size() > 1) {
             output(indent, formatAuthors(item), ".<br>", true);
         }
+        
+        if (!settings.isTitleFirst()) {
+            writeTitleAndAbstractHTML(item);
+        }
     }
 
-    protected void writeTitleAndAbstractHTML(BibItem item, int number) throws IOException {
+    private void writeNumber(int number) throws IOException {
         out.write(indent);
 
         // Number
         if (number >= 0) {
             output("<span class=\"number\">", Integer.toString(number), ".<span> ");
         }
-
+    }
+    
+    protected void writeTitleAndAbstractHTML(BibItem item) throws IOException {
         // Title
         if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
             output("<h2 id=\"" + item.getId() + "\" class=\"title link\">", formatTitle(item), "</h2>");

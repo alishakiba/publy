@@ -92,6 +92,9 @@ public class SettingsReader extends DefaultHandler {
                 case "listallauthors":
                     settings.getGeneralSettings().setListAllAuthors(Boolean.parseBoolean(text));
                     break;
+                case "titlefirst":
+                    settings.getGeneralSettings().setTitleFirst(Boolean.parseBoolean(text));
+                    break;
                 case "numbering":
                     settings.getGeneralSettings().setNumbering(FormatSettings.Numbering.valueOf(text));
                     break;
