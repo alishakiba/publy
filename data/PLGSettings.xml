@@ -29,7 +29,7 @@
     <includebibtex>ARXIV</includebibtex>
     <includepaper>ARXIV</includepaper>
     <titletarget>NONE</titletarget>
-    <header>data/defaultHeader.html</header>
+    <header>misc/AWESOMEHeader.html</header>
     <footer>data/defaultFooter.html</footer>
     <googleanalyticsuser><![CDATA[]]></googleanalyticsuser>
     <presentedtext><![CDATA[]]></presentedtext>
