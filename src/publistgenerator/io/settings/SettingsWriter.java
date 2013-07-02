@@ -10,6 +10,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import publistgenerator.GeneratorMain;
 import publistgenerator.data.category.CategoryIdentifier;
 import publistgenerator.data.settings.FormatSettings;
 import publistgenerator.data.settings.HTMLSettings;
@@ -36,9 +37,9 @@ public class SettingsWriter {
 
         try (BufferedWriter out = Files.newBufferedWriter(settingsFile, Charset.forName("UTF-8"))) {
             // Write header
-            out.write("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+            out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             out.newLine();
-            out.write("<plgsettings>");
+            out.write("<plgsettings majorversion=\"" + GeneratorMain.MAJOR_VERSION + "\" minorversion=\"" + GeneratorMain.MINOR_VERSION + "\">");
             out.newLine();
 
             writeGeneralSettings(settings, out);
