@@ -141,7 +141,6 @@ public class SettingsReader extends DefaultHandler {
         }
 
         switch (qName) {
-            // Format settings
             case "note":
                 noteFor = null;
                 break;
