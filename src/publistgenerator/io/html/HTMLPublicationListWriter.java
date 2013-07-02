@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import publistgenerator.Console;
+import publistgenerator.GeneratorMain;
 import publistgenerator.data.bibitem.BibItem;
 import publistgenerator.data.category.OutputCategory;
 import publistgenerator.data.settings.FormatSettings;
@@ -88,6 +89,10 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             writeCategory(c, out);
         }
 
+        // Credit line
+        out.write("<p>Generated from a BibTeX file by Publy " + GeneratorMain.MAJOR_VERSION + "." + GeneratorMain.MINOR_VERSION + ".</p>");
+        out.newLine();
+        
         if (htmlSettings.getFooter() == null) {
             publistgenerator.Console.error("No footer found. The generated HTML file will not be valid.");
         } else {

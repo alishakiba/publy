@@ -27,6 +27,9 @@ import publistgenerator.io.settings.SettingsReader;
  */
 public class GeneratorMain {
 
+    public static final int MAJOR_VERSION = 0;
+    public static final int MINOR_VERSION = 2;
+    
     /**
      * @param args the command line arguments
      */
