@@ -200,7 +200,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 out.write("<a href=\"" + href + "\">");
                 output("<h2 id=\"" + item.getId() + "\" class=\"title\">", formatTitle(item), "</h2>");
                 out.write("</a>");
-                checkExistance(item.get("paper"));
+                checkExistance(item.get("paper"), "paper", item);
             } catch (URISyntaxException ex) {
                 Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
             }
@@ -353,7 +353,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 out.write(indent + "[<a href=\"" + link + "\">" + text + "</a>]");
                 out.newLine();
 
-                checkExistance(item.get("paper"));
+                checkExistance(item.get("paper"), "paper", item);
             } catch (URISyntaxException ex) {
                 Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
             }
@@ -408,8 +408,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 } else {
                     // Most likely link to a file on disk. Encode correctly.
                     try {
-                        checkExistance(target);
                         target = (new URI(null, null, target, null)).toString();
+                        checkExistance(target, attribute, item);
                     } catch (URISyntaxException ex) {
                         Console.except(ex, "Could not parse the target of %s of item \"%s\":", attribute, item.getId());
                     }
@@ -580,11 +580,11 @@ public class HTMLBibItemWriter extends BibItemWriter {
         return item.anyNonEmpty("paper") && htmlSettings.getIncludePaper().matches(item);
     }
 
-    private void checkExistance(String path) {
+    private void checkExistance(String path, String attr, BibItem item) {
         Path file = settings.getTarget().resolveSibling(path);
 
         if (Files.notExists(file)) {
-            Console.log("Warning: linked file \"%s\" cannot be found at \"%s\".", path, file);
+            Console.log("Warning: the file \"%s\" that is linked in attribute \"%s\" of publication \"%s\" cannot be found at \"%s\".", path, attr, item.getId(), file);
         }
     }
 }
