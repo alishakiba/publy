@@ -55,6 +55,15 @@
       toggle(divID);
      }
     </script>
+	
+	<!-- Functions that add toggle links to all titles -->
+	<script type="text/javascript">
+     function makeTitlesToggleAbstracts() {
+      $(".title").click(function() {
+        $("#" + $(this).attr('id') + "_abstract").slideToggle(500);
+      });
+     }
+    </script>
 
     <!-- Include MathJax to convert LaTeX formulas to HTML on the fly -->
     <script type="text/x-mathjax-config">
