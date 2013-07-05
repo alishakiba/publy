@@ -19,17 +19,19 @@ public class ResourceLocator {
         Path workingDir;
 
         try {
-            // Location of the publistgenerator package. Can be of one of two forms:
+            // Location of the publy package. Can be of one of two forms:
             // - path/build/classes - when run from within NetBeans
-            // - path/PubListGenerator.jar - when run from a jar archive
+            // - path/Publy.jar - when run from a jar archive
             workingDir = Paths.get(ResourceLocator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
             if (workingDir.endsWith(Paths.get("build", "classes"))) {
                 // Running in NetBeans, remove "build/classes"
                 workingDir = workingDir.getParent().getParent();
-            } else if (workingDir.endsWith("PubListGenerator.jar")) {
+            } else if (workingDir.endsWith("Publy.jar")) {
                 // Running from a jar
                 workingDir = workingDir.getParent();
+            } else {
+                Console.log("WARNING: Working directory is of an unknown form:%n%s", workingDir.toString());
             }
         } catch (NullPointerException // From the long chain of initializers
                 | SecurityException // Can be thrown from getProtectionDomain(), if a SecurityManager is enabled
