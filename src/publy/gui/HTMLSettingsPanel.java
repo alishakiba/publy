@@ -134,7 +134,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         titleLinkComboText = new javax.swing.JLabel();
         titleLinkComboBox = new javax.swing.JComboBox();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder("HTML-Only Settings"));
+        setBorder(javax.swing.BorderFactory.createTitledBorder("HTML Settings"));
 
         headerLabel.setText("Header & Footer");
 
