@@ -54,8 +54,6 @@ public class GeneratorMain {
             // Report an Exception, if one occurred
             if (exception != null) {
                 Console.except(exception, "Exception occurred while parsing the configuration:");
-            } else {
-                Console.log("Configuration parsed successfully.");
             }
 
             mf.setVisible(true);
