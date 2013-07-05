@@ -2,6 +2,7 @@
  */
 package publy.gui;
 
+import java.awt.Cursor;
 import java.nio.file.Path;
 import javax.swing.JFileChooser;
 import publy.Console;
@@ -229,10 +230,16 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
+        // Change cursor to hourglass
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        
         // Clear the console before generating
         consoleTextPane.setText("");
 
         GeneratorMain.generatePublicationList(settings);
+        
+        // Change cursor back
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
