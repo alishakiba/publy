@@ -2,6 +2,7 @@
  */
 package publy.gui;
 
+import java.awt.Cursor;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
@@ -104,6 +105,9 @@ public class ConsoleFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
+        // Change cursor to hourglass
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        
         // Clear the console before generating
         consoleTextPane.setText("");
         
@@ -119,6 +123,9 @@ public class ConsoleFrame extends javax.swing.JFrame {
         if (settings != null) {
             GeneratorMain.generatePublicationList(settings);
         }
+        
+        // Change cursor back
+        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void settingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsButtonActionPerformed
