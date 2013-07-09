@@ -21,11 +21,18 @@ public class FormatSettings {
 
         NONE, LOCAL, GLOBAL;
     }
+
+    public enum NameDisplay {
+
+        FULL, ABBREVIATED, NONE;
+    }
     // General
     private Path target;
     // Author info
     private boolean listAllAuthors = true;
-    // Structure
+    private NameDisplay nameDisplay = NameDisplay.ABBREVIATED;
+    private boolean reverseNames = false;
+    // Publication Structure
     private boolean titleFirst = true;
     // Numbering
     private Numbering numbering = Numbering.NONE;
@@ -100,6 +107,22 @@ public class FormatSettings {
 
     public void setListAllAuthors(boolean listAllAuthors) {
         this.listAllAuthors = listAllAuthors;
+    }
+
+    public NameDisplay getNameDisplay() {
+        return nameDisplay;
+    }
+
+    public void setNameDisplay(NameDisplay nameDisplay) {
+        this.nameDisplay = nameDisplay;
+    }
+
+    public boolean isReverseNames() {
+        return reverseNames;
+    }
+
+    public void setReverseNames(boolean reverseNames) {
+        this.reverseNames = reverseNames;
     }
 
     public boolean isTitleFirst() {
