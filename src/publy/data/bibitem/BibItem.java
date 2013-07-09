@@ -4,6 +4,8 @@
  */
 package publy.data.bibitem;
 
+import publy.data.Venue;
+import publy.data.Author;
 import java.util.*;
 import java.util.Map.Entry;
 import publy.Console;

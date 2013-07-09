@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 import publy.Console;
 import publy.data.Pair;
 import publy.data.bibitem.Article;
-import publy.data.bibitem.Author;
+import publy.data.Author;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.Book;
 import publy.data.bibitem.InCollection;
@@ -24,7 +24,7 @@ import publy.data.bibitem.InvitedTalk;
 import publy.data.bibitem.MastersThesis;
 import publy.data.bibitem.PhDThesis;
 import publy.data.bibitem.Unpublished;
-import publy.data.bibitem.Venue;
+import publy.data.Venue;
 
 /**
  *

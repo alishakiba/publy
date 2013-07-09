@@ -1,4 +1,4 @@
-package publy.data.bibitem;
+package publy.data;
 
 /**
  *

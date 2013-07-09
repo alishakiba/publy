@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import publy.Console;
 import publy.data.bibitem.Article;
-import publy.data.bibitem.Author;
+import publy.data.Author;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.Book;
 import publy.data.bibitem.InCollection;
