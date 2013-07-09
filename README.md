@@ -10,7 +10,7 @@ Publy turns a BibTeX file with a list of your publications into a HTML page, per
  * Automatically translates LaTeX-encoded special characters to Unicode
  * Nicely renders mathematics with [MathJax](http://www.mathjax.org/)
  * Abstracts and BibTeX citation information can be displayed for each paper
- * Extremely customizable using your own CSS file
+ * Easy to customize with CSS
 
 ## Researchers using Publy
 
