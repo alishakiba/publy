@@ -164,9 +164,9 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
-        int localCount = 0;
-
-        out.write("    <div class=\"section\"><h1 class=\"sectiontitle\"><a id=\"" + c.getShortName().toLowerCase() + "\">" + c.getName() + "</a></h1>");
+        out.write("    <div id=\"" + c.getShortName().toLowerCase() + "\" class=\"section\">");
+        out.newLine();
+        out.write("      <h1 class=\"sectiontitle\">" + c.getName() + "</h1>");
         out.newLine();
         out.newLine();
         writeNavigation(c, out);
@@ -181,30 +181,39 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             out.newLine();
         }
 
+        // Start the list for this section
+        if (getSettings().getNumbering() == FormatSettings.Numbering.NONE) {
+            out.write("      <ul class=\"sectionlist\">");
+        } else if (getSettings().getNumbering() == FormatSettings.Numbering.LOCAL) {
+            out.write("      <ol class=\"sectionlist\">");
+        } else { // GLOBAL
+            assert getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL;
+            out.write("      <ol class=\"sectionlist\" start=\"" + (globalCount + 1) + "\">");
+        }
+        out.newLine();
+        
         for (BibItem item : c.getItems()) {
             globalCount++;
-            localCount++;
 
-            out.write("      <div id=\"" + item.getId() + "\" class=\"bibentry\">");
+            out.write("        <li id=\"" + item.getId() + "\" class=\"bibentry\">");
             out.newLine();
-
-            switch (getSettings().getNumbering()) {
-                case NONE:
-                    itemWriter.write(item, -1);
-                    break;
-                case LOCAL:
-                    itemWriter.write(item, localCount);
-                    break;
-                case GLOBAL:
-                    itemWriter.write(item, globalCount);
-                    break;
-            }
-
-            out.write("      </div>");
+            
+            itemWriter.write(item, -1);
+            
+            out.write("        </li>");
             out.newLine();
             out.newLine();
         }
 
+        // Close the list
+        if (getSettings().getNumbering() == FormatSettings.Numbering.NONE) {
+            out.write("      </ul>");
+        } else { // LOCAL or GLOBAL
+            assert (getSettings().getNumbering() == FormatSettings.Numbering.LOCAL || getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL);
+            out.write("      </ol>");
+        }
+        out.newLine();
+        
         out.write("    </div>");
         out.newLine();
         out.newLine();

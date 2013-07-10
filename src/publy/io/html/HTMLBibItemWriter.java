@@ -35,7 +35,7 @@ import publy.io.BibItemWriter;
 public class HTMLBibItemWriter extends BibItemWriter {
 
     private HTMLSettings htmlSettings;
-    private static final String indent = "        ";
+    private static final String indent = "          ";
 
     public HTMLBibItemWriter(BufferedWriter out, FormatSettings settings, HTMLSettings htmlSettings) {
         super(out, settings);
@@ -44,7 +44,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     @Override
     protected void writeArticle(Article item, int number) throws IOException {
-        writeTitleAndAuthorsHTML(item, number);
+        writeTitleAndAuthorsHTML(item);
 
         // Handle submitted / accepted
         if (item.anyNonEmpty("status")) {
@@ -71,7 +71,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     @Override
     protected void writeBook(Book item, int number) throws IOException {
-        writeTitleAndAuthorsHTML(item, number);
+        writeTitleAndAuthorsHTML(item);
 
         output(indent, item.get("publisher"), ", ");
         output(item.get("year"), ".<br>", true);
@@ -97,7 +97,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
      * @throws IOException
      */
     private void writePart(BibItem item, int number) throws IOException {
-        writeTitleAndAuthorsHTML(item, number);
+        writeTitleAndAuthorsHTML(item);
 
         if (item.anyNonEmpty("status")) {
             writeStatus(item, item.get("booktitle"));
@@ -117,7 +117,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     @Override
     protected void writeMastersThesis(MastersThesis item, int number) throws IOException {
-        writeTitleAndAuthorsHTML(item, number);
+        writeTitleAndAuthorsHTML(item);
 
         output(indent + "Master's thesis, ", item.get("school"), ", ");
         output(item.get("year"), ".<br>", true);
@@ -129,7 +129,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     @Override
     protected void writePhDThesis(PhDThesis item, int number) throws IOException {
-        writeTitleAndAuthorsHTML(item, number);
+        writeTitleAndAuthorsHTML(item);
 
         output(indent + "PhD thesis, ", item.get("school"), ", ");
         output(item.get("year"), ".<br>", true);
@@ -141,7 +141,6 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     @Override
     protected void writeInvitedTalk(InvitedTalk item, int number) throws IOException {
-        writeNumber(number);
         writeTitleAndAbstractHTML(item);
 
         output(indent, item.get("address"), ", ", false);
@@ -155,7 +154,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     @Override
     protected void writeUnpublished(Unpublished item, int number) throws IOException {
-        writeTitleAndAuthorsHTML(item, number);
+        writeTitleAndAuthorsHTML(item);
 
         output(indent, item.get("note"), ".<br>", true);
 
@@ -163,9 +162,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         writeLinks(item, false, item.anyNonEmpty("arxiv") && includeBibtex(item));
     }
 
-    protected void writeTitleAndAuthorsHTML(BibItem item, int number) throws IOException {
-        writeNumber(number);
-        
+    protected void writeTitleAndAuthorsHTML(BibItem item) throws IOException {
         if (settings.isTitleFirst()) {
             writeTitleAndAbstractHTML(item);
         }
@@ -179,17 +176,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
             writeTitleAndAbstractHTML(item);
         }
     }
-
-    private void writeNumber(int number) throws IOException {
-        out.write(indent);
-
-        // Number
-        if (number >= 0) {
-            output("<span class=\"number\">", Integer.toString(number), ".<span> ");
-        }
-    }
     
     protected void writeTitleAndAbstractHTML(BibItem item) throws IOException {
+        out.write(indent);
+        
         // Title
         if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
             output("<h2 class=\"title link\">", formatTitle(item), "</h2>");
