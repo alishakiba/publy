@@ -1,119 +1,119 @@
-My publications as of 5 July 2013.
+My publications as of 10 July 2013.
 
 
 Books.
 
-Guide to wireless sensor networks.
+1. Guide to wireless sensor networks.
 S. Mishra, I. Woungang, and S. Misra.
 Springer, 2009.
 
-Guide to wireless sensor networks.
+2. Guide to wireless sensor networks.
 S. Misra, S. Misra, and I. Woungang.
 Springer London, Limited, 2009.
 
-The discrepancy method: randomness and complexity.
+3. The discrepancy method: randomness and complexity.
 B. Chazelle.
 Cambridge University Press, 2000.
 
 
 Journal papers.
 
-On constructing minimum spanning trees in $k$-dimensional spaces and related problems.
+4. On constructing minimum spanning trees in $k$-dimensional spaces and related problems.
 A. Yao.
 SIAM Journal on Computing, 11(4):721-736, 1982.
 
-A non-Hamiltonian, nondegenerate Delaunay triangulation.
+5. A non-Hamiltonian, nondegenerate Delaunay triangulation.
 M. Dillencourt.
 Information Processing Letters, 25(3):149-151, 1987.
 
-Realizability of Delaunay triangulations.
+6. Realizability of Delaunay triangulations.
 M. Dillencourt.
 Information Processing Letters, 33(6):283-287, 1990.
 
-Classes of graphs which approximate the complete Euclidean graph.
+7. Classes of graphs which approximate the complete Euclidean graph.
 J. Keil and C. Gutwin.
 Discrete & Computational Geometry, 7(1):13-28, 1992.
 
-There are planar graphs almost as good as the complete graph.
+8. There are planar graphs almost as good as the complete graph.
 P. Chew.
 Journal of Computer and System Sciences, 39(2):205-219, 1989.
 
-Some results on greedy embeddings in metric spaces.
+9. Some results on greedy embeddings in metric spaces.
 T. Leighton and A. Moitra.
 Discrete & Computational Geometry, 44(3):686-705, 2010.
 
-An algorithm to construct greedy drawings of triangulations.
+10. An algorithm to construct greedy drawings of triangulations.
 P. Angelini, F. Frati, and L. Grilli.
 Journal of Graph Algorithms and Applications, 14(1):19-51, 2010.
 
-Greedy drawings of triangulations.
+11. Greedy drawings of triangulations.
 R. Dhandapani.
 Discrete & Computational Geometry, 43(2):375-392, 2010.
 
-Online routing in convex subdivisions.
+12. Online routing in convex subdivisions.
 P. Bose, A. Brodnik, S. Carlsson, E. Demaine, R. Fleischer, A. López-Ortiz, P. Morin, and J. Munro.
 International Journal of Computational Geometry & Applications, 12(4):283-296, 2002.
 
-Online routing in triangulations.
+13. Online routing in triangulations.
 P. Bose and P. Morin.
 SIAM Journal on Computing, 33(4):937-951, 2004.
 
-On a conjecture related to geometric routing.
+14. On a conjecture related to geometric routing.
 C. Papadimitriou and D. Ratajczak.
 Theoretical Computer Science, 344(1):3-14, 2005.
 
-Searching in the plane.
+15. Searching in the plane.
 R. Baeza-Yates, J. Culberson, and G. Rawlins.
 Information and Computation, 106(2):234-252, 1993.
 
-$\pi/2$-angle Yao graphs are spanners.
+16. $\pi/2$-angle Yao graphs are spanners.
 P. Bose, M. Damian, K. Douïeb, J. O'Rourke, B. Seamone, M. Smid, and S. Wuhrer.
 CoRR, abs/1001.2913, 2010.
 
 
 Conference papers.
 
-Connections between theta-graphs, Delaunay triangulations, and orthogonal surfaces.
+17. Connections between theta-graphs, Delaunay triangulations, and orthogonal surfaces.
 N. Bonichon, C. Gavoille, N. Hanusse, and D. Ilcinkas.
 In Proceedings of the 36th International Conference on Graph Theoretic Concepts in Computer Science (WG 2010), pages 266-278, 2010.
 
-Embedding planar graphs on the grid.
+18. Embedding planar graphs on the grid.
 W. Schnyder.
 In Proceedings of the 1st Annual ACM-SIAM Symposium on Discrete Algorithms (SODA 1990), pages 138-148, 1990.
 
-Plane spanners of maximum degree six.
+19. Plane spanners of maximum degree six.
 N. Bonichon, C. Gavoille, N. Hanusse, and L. Perkovic.
 In Proceedings of the 37th International Colloquium on Automata, Languages and Programming (ICALP 2010 (1)), volume 6198 of Lecture Notes in Computer Science, pages 19-30, 2010.
 
-Survey on oblivious routing strategies.
+20. Survey on oblivious routing strategies.
 H. Räcke.
 In Mathematical Theory and Computational Practice, volume 5635 of Lecture Notes in Computer Science, pages 419-429, 2009.
 
-On succinct convex greedy drawing of 3-connected plane graphs.
+21. On succinct convex greedy drawing of 3-connected plane graphs.
 X. He and H. Zhang.
 In Proceedings of the 22nd Annual ACM-SIAM Symposium on Discrete Algorithms (SODA 2011), pages 1477-1486, 2011.
 
-Schnyder greedy routing algorithm.
+22. Schnyder greedy routing algorithm.
 X. He and H. Zhang.
 In Theory and Applications of Models of Computation, volume 6108 of Lecture Notes in Computer Science, pages 271-283, 2010.
 
-Succinct greedy geometric routing in the Euclidean plane.
+23. Succinct greedy geometric routing in the Euclidean plane.
 M. Goodrich and D. Strash.
 In Algorithms and computation, volume 5878 of Lecture Notes in Computer Science, pages 781-791, 2009.
 
-An optimal generalization of the centerpoint theorem, and its extensions.
+24. An optimal generalization of the centerpoint theorem, and its extensions.
 N. Mustafa and S. Ray.
 In Proceedings of the Twenty-Third Annual Symposium on Computational Geometry (SCG '07), pages 138-141, 2007.
 
-On plane constrained bounded-degree spanners.
+25. On plane constrained bounded-degree spanners.
 P. Bose, R. Fagerberg, A. van Renssen, and S. Verdonschot.
 In Proceedings of the 10th Latin American Symposium on Theoretical Informatics (LATIN 2012), volume 7256 of Lecture Notes in Computer Science, pages 85-96, 2012.
 
-Optimal bounds on theta-graphs: more is not always better.
+26. Optimal bounds on theta-graphs: more is not always better.
 P. Bose, J. De Carufel, P. Morin, A. van Renssen, and S. Verdonschot.
 In Proceedings of the 24th Canadian Conference on Computational Geometry (CCCG 2012), pages 305-310, 2012.
 
-Approximating the d-dimensional complete Euclidean graph.
+27. Approximating the d-dimensional complete Euclidean graph.
 J. Ruppert and R. Seidel.
 In Proceedings of the 3rd Canadian Conference on Computational Geometry (CCCG 1991), pages 207-210, 1991.
 
