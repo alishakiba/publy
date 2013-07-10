@@ -185,7 +185,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             globalCount++;
             localCount++;
 
-            out.write("      <div class=\"bibentry\">");
+            out.write("      <div id=\"" + item.getId() + "\" class=\"bibentry\">");
             out.newLine();
 
             switch (getSettings().getNumbering()) {
