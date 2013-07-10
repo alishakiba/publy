@@ -8,7 +8,7 @@
     <target>misc/test.html</target>
     <listallauthors>true</listallauthors>
     <titlefirst>true</titlefirst>
-    <numbering>NONE</numbering>
+    <numbering>GLOBAL</numbering>
     <categories>
       <category>BOOK</category>
       <category>JOURNAL</category>
