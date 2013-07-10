@@ -17,12 +17,12 @@
       // Run once, for page reloads
       var hash = window.location.hash;
       if (hash) {
-       showOnly(hash.substring(1) + "_abstract");
+       showPaper(hash.substring(1));
       }
      
       // Run every time the hash changes
       $(window).on('hashchange', function() {
-       showOnly(document.location.hash.substring(1) + "_abstract");
+       showPaper(document.location.hash.substring(1));
       });
      });
     </script>
@@ -47,12 +47,14 @@
       $("#" + divID).hide();
      }
      
-     function showOnly(divID) {
-      $(".collapsible").hide();
-      $(".hidden").hide();
-      $(".shown").show();
-      
-      toggle(divID);
+     function showPaper(divID) {
+      $(".linkTarget").removeClass("linkTarget");
+      $("#" + divID).addClass("linkTarget");
+
+      // Expand the abstract if it is currently hidden, otherwise leave it expanded
+      if ($("#" + divID + "_abstract").is(":hidden")) {
+       toggle(divID + "_abstract");
+      }
      }
     </script>
 	

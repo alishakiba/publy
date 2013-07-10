@@ -20,6 +20,10 @@ body {
  margin-top: 1em;
 }
 
+.abstractword {
+ font-weight: bold;
+}
+
 /* TODO: Prune to minimal style */
 /*.section {
  margin-top: 2em;
