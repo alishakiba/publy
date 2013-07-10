@@ -29,12 +29,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
     @Override
     protected void writePublicationList(BufferedWriter out) throws IOException {
         itemWriter = new PlainBibItemWriter(out, getSettings());
-
-        if (getSettings().getNumbering() == FormatSettings.Numbering.NONE) {
-            count = -1;
-        } else {
-            count = 0;
-        }
+        count = 0;
 
         // Write the body
         out.write("My publications as of " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".");
@@ -63,9 +58,11 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         for (BibItem item : c.getItems()) {
             if (getSettings().getNumbering() != FormatSettings.Numbering.NONE) {
                 count++;
+                out.write(count + ".");
+                out.newLine();
             }
 
-            itemWriter.write(item, count);
+            itemWriter.write(item);
             out.newLine();
         }
 

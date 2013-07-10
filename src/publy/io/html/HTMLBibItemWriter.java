@@ -43,7 +43,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void writeArticle(Article item, int number) throws IOException {
+    protected void writeArticle(Article item) throws IOException {
         writeTitleAndAuthorsHTML(item);
 
         // Handle submitted / accepted
@@ -70,7 +70,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void writeBook(Book item, int number) throws IOException {
+    protected void writeBook(Book item) throws IOException {
         writeTitleAndAuthorsHTML(item);
 
         output(indent, item.get("publisher"), ", ");
@@ -81,13 +81,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void writeInProceedings(InProceedings item, int number) throws IOException {
-        writePart(item, number);
+    protected void writeInProceedings(InProceedings item) throws IOException {
+        writePart(item);
     }
 
     @Override
-    protected void writeInCollection(InCollection item, int number) throws IOException {
-        writePart(item, number);
+    protected void writeInCollection(InCollection item) throws IOException {
+        writePart(item);
     }
 
     /**
@@ -96,7 +96,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
      * @param item
      * @throws IOException
      */
-    private void writePart(BibItem item, int number) throws IOException {
+    private void writePart(BibItem item) throws IOException {
         writeTitleAndAuthorsHTML(item);
 
         if (item.anyNonEmpty("status")) {
@@ -116,7 +116,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void writeMastersThesis(MastersThesis item, int number) throws IOException {
+    protected void writeMastersThesis(MastersThesis item) throws IOException {
         writeTitleAndAuthorsHTML(item);
 
         output(indent + "Master's thesis, ", item.get("school"), ", ");
@@ -128,7 +128,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void writePhDThesis(PhDThesis item, int number) throws IOException {
+    protected void writePhDThesis(PhDThesis item) throws IOException {
         writeTitleAndAuthorsHTML(item);
 
         output(indent + "PhD thesis, ", item.get("school"), ", ");
@@ -140,7 +140,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void writeInvitedTalk(InvitedTalk item, int number) throws IOException {
+    protected void writeInvitedTalk(InvitedTalk item) throws IOException {
         writeTitleAndAbstractHTML(item);
 
         output(indent, item.get("address"), ", ", false);
@@ -153,7 +153,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void writeUnpublished(Unpublished item, int number) throws IOException {
+    protected void writeUnpublished(Unpublished item) throws IOException {
         writeTitleAndAuthorsHTML(item);
 
         output(indent, item.get("note"), ".<br>", true);
