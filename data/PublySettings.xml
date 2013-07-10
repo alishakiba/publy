@@ -8,7 +8,8 @@
     <target>misc/test.html</target>
     <listallauthors>true</listallauthors>
     <titlefirst>false</titlefirst>
-    <numbering>LOCAL</numbering>
+    <numbering>GLOBAL</numbering>
+    <reversenumbering>true</reversenumbering>
     <categories>
       <category>BOOK</category>
       <category>JOURNAL</category>

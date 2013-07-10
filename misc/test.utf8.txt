@@ -3,14 +3,17 @@ My publications as of 10 July 2013.
 
 Books.
 
+27.
 S. Mishra, I. Woungang, and S. Misra.
 Guide to wireless sensor networks.
 Springer, 2009.
 
+26.
 S. Misra, S. Misra, and I. Woungang.
 Guide to wireless sensor networks.
 Springer London, Limited, 2009.
 
+25.
 B. Chazelle.
 The discrepancy method: randomness and complexity.
 Cambridge University Press, 2000.
@@ -18,54 +21,67 @@ Cambridge University Press, 2000.
 
 Journal papers.
 
+24.
 A. Yao.
 On constructing minimum spanning trees in $k$-dimensional spaces and related problems.
 SIAM Journal on Computing, 11(4):721-736, 1982.
 
+23.
 M. Dillencourt.
 A non-Hamiltonian, nondegenerate Delaunay triangulation.
 Information Processing Letters, 25(3):149-151, 1987.
 
+22.
 M. Dillencourt.
 Realizability of Delaunay triangulations.
 Information Processing Letters, 33(6):283-287, 1990.
 
+21.
 J. Keil and C. Gutwin.
 Classes of graphs which approximate the complete Euclidean graph.
 Discrete & Computational Geometry, 7(1):13-28, 1992.
 
+20.
 P. Chew.
 There are planar graphs almost as good as the complete graph.
 Journal of Computer and System Sciences, 39(2):205-219, 1989.
 
+19.
 T. Leighton and A. Moitra.
 Some results on greedy embeddings in metric spaces.
 Discrete & Computational Geometry, 44(3):686-705, 2010.
 
+18.
 P. Angelini, F. Frati, and L. Grilli.
 An algorithm to construct greedy drawings of triangulations.
 Journal of Graph Algorithms and Applications, 14(1):19-51, 2010.
 
+17.
 R. Dhandapani.
 Greedy drawings of triangulations.
 Discrete & Computational Geometry, 43(2):375-392, 2010.
 
+16.
 P. Bose, A. Brodnik, S. Carlsson, E. Demaine, R. Fleischer, A. López-Ortiz, P. Morin, and J. Munro.
 Online routing in convex subdivisions.
 International Journal of Computational Geometry & Applications, 12(4):283-296, 2002.
 
+15.
 P. Bose and P. Morin.
 Online routing in triangulations.
 SIAM Journal on Computing, 33(4):937-951, 2004.
 
+14.
 C. Papadimitriou and D. Ratajczak.
 On a conjecture related to geometric routing.
 Theoretical Computer Science, 344(1):3-14, 2005.
 
+13.
 R. Baeza-Yates, J. Culberson, and G. Rawlins.
 Searching in the plane.
 Information and Computation, 106(2):234-252, 1993.
 
+12.
 P. Bose, M. Damian, K. Douïeb, J. O'Rourke, B. Seamone, M. Smid, and S. Wuhrer.
 $\pi/2$-angle Yao graphs are spanners.
 CoRR, abs/1001.2913, 2010.
@@ -73,46 +89,57 @@ CoRR, abs/1001.2913, 2010.
 
 Conference papers.
 
+11.
 N. Bonichon, C. Gavoille, N. Hanusse, and D. Ilcinkas.
 Connections between theta-graphs, Delaunay triangulations, and orthogonal surfaces.
 In Proceedings of the 36th International Conference on Graph Theoretic Concepts in Computer Science (WG 2010), pages 266-278, 2010.
 
+10.
 W. Schnyder.
 Embedding planar graphs on the grid.
 In Proceedings of the 1st Annual ACM-SIAM Symposium on Discrete Algorithms (SODA 1990), pages 138-148, 1990.
 
+9.
 N. Bonichon, C. Gavoille, N. Hanusse, and L. Perkovic.
 Plane spanners of maximum degree six.
 In Proceedings of the 37th International Colloquium on Automata, Languages and Programming (ICALP 2010 (1)), volume 6198 of Lecture Notes in Computer Science, pages 19-30, 2010.
 
+8.
 H. Räcke.
 Survey on oblivious routing strategies.
 In Mathematical Theory and Computational Practice, volume 5635 of Lecture Notes in Computer Science, pages 419-429, 2009.
 
+7.
 X. He and H. Zhang.
 On succinct convex greedy drawing of 3-connected plane graphs.
 In Proceedings of the 22nd Annual ACM-SIAM Symposium on Discrete Algorithms (SODA 2011), pages 1477-1486, 2011.
 
+6.
 X. He and H. Zhang.
 Schnyder greedy routing algorithm.
 In Theory and Applications of Models of Computation, volume 6108 of Lecture Notes in Computer Science, pages 271-283, 2010.
 
+5.
 M. Goodrich and D. Strash.
 Succinct greedy geometric routing in the Euclidean plane.
 In Algorithms and computation, volume 5878 of Lecture Notes in Computer Science, pages 781-791, 2009.
 
+4.
 N. Mustafa and S. Ray.
 An optimal generalization of the centerpoint theorem, and its extensions.
 In Proceedings of the Twenty-Third Annual Symposium on Computational Geometry (SCG '07), pages 138-141, 2007.
 
+3.
 P. Bose, R. Fagerberg, A. van Renssen, and S. Verdonschot.
 On plane constrained bounded-degree spanners.
 In Proceedings of the 10th Latin American Symposium on Theoretical Informatics (LATIN 2012), volume 7256 of Lecture Notes in Computer Science, pages 85-96, 2012.
 
+2.
 P. Bose, J. De Carufel, P. Morin, A. van Renssen, and S. Verdonschot.
 Optimal bounds on theta-graphs: more is not always better.
 In Proceedings of the 24th Canadian Conference on Computational Geometry (CCCG 2012), pages 305-310, 2012.
 
+1.
 J. Ruppert and R. Seidel.
 Approximating the d-dimensional complete Euclidean graph.
 In Proceedings of the 3rd Canadian Conference on Computational Geometry (CCCG 1991), pages 207-210, 1991.
