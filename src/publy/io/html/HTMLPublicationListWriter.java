@@ -198,7 +198,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             out.write("        <li id=\"" + item.getId() + "\" class=\"bibentry\">");
             out.newLine();
             
-            itemWriter.write(item, -1);
+            itemWriter.write(item);
             
             out.write("        </li>");
             out.newLine();

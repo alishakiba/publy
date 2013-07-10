@@ -35,52 +35,52 @@ public abstract class BibItemWriter {
         this.settings = settings;
     }
 
-    public void write(BibItem item, int number) throws IOException {
+    public void write(BibItem item) throws IOException {
         switch (item.getType()) {
             case "article":
-                writeArticle((Article) item, number);
+                writeArticle((Article) item);
                 break;
             case "book":
-                writeBook((Book) item, number);
+                writeBook((Book) item);
                 break;
             case "inproceedings":
-                writeInProceedings((InProceedings) item, number);
+                writeInProceedings((InProceedings) item);
                 break;
             case "mastersthesis":
-                writeMastersThesis((MastersThesis) item, number);
+                writeMastersThesis((MastersThesis) item);
                 break;
             case "phdthesis":
-                writePhDThesis((PhDThesis) item, number);
+                writePhDThesis((PhDThesis) item);
                 break;
             case "incollection":
-                writeInCollection((InCollection) item, number);
+                writeInCollection((InCollection) item);
                 break;
             case "talk":
-                writeInvitedTalk((InvitedTalk) item, number);
+                writeInvitedTalk((InvitedTalk) item);
                 break;
             case "unpublished":
-                writeUnpublished((Unpublished) item, number);
+                writeUnpublished((Unpublished) item);
                 break;
             default:
                 throw new AssertionError("Unrecognized BibItem type: " + item.getType());
         }
     }
 
-    protected abstract void writeArticle(Article item, int number) throws IOException;
+    protected abstract void writeArticle(Article item) throws IOException;
 
-    protected abstract void writeBook(Book item, int number) throws IOException;
+    protected abstract void writeBook(Book item) throws IOException;
 
-    protected abstract void writeInProceedings(InProceedings item, int number) throws IOException;
+    protected abstract void writeInProceedings(InProceedings item) throws IOException;
 
-    protected abstract void writeMastersThesis(MastersThesis item, int number) throws IOException;
+    protected abstract void writeMastersThesis(MastersThesis item) throws IOException;
 
-    protected abstract void writePhDThesis(PhDThesis item, int number) throws IOException;
+    protected abstract void writePhDThesis(PhDThesis item) throws IOException;
 
-    protected abstract void writeInCollection(InCollection item, int number) throws IOException;
+    protected abstract void writeInCollection(InCollection item) throws IOException;
 
-    protected abstract void writeInvitedTalk(InvitedTalk item, int number) throws IOException;
+    protected abstract void writeInvitedTalk(InvitedTalk item) throws IOException;
 
-    protected abstract void writeUnpublished(Unpublished item, int number) throws IOException;
+    protected abstract void writeUnpublished(Unpublished item) throws IOException;
 
     protected String formatTitle(BibItem item) {
         String title = item.get("title");
