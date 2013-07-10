@@ -7,8 +7,8 @@
   <generalsettings>
     <target>misc/test.html</target>
     <listallauthors>true</listallauthors>
-    <titlefirst>true</titlefirst>
-    <numbering>GLOBAL</numbering>
+    <titlefirst>false</titlefirst>
+    <numbering>LOCAL</numbering>
     <categories>
       <category>BOOK</category>
       <category>JOURNAL</category>
