@@ -36,7 +36,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     public static final String DEFAULT_HEADER_LOCATION = "data/defaultHeader.html";
     public static final String DEFAULT_FOOTER_LOCATION = "data/defaultFooter.html";
     private HTMLBibItemWriter itemWriter;
-    private int globalCount;
+    private int count;
     private Pattern hrefPattern = Pattern.compile("href\\s*=\\s*\"([^\"]*)\"");
     private HTMLSettings htmlSettings;
 
@@ -48,7 +48,17 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     @Override
     protected void writePublicationList(BufferedWriter out) throws IOException {
         itemWriter = new HTMLBibItemWriter(out, getSettings(), htmlSettings);
-        globalCount = 0;
+
+        // Initialize the count
+        if (getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL) {
+            count = 0;
+
+            if (getSettings().isReverseNumbering()) {
+                for (OutputCategory c : getCategories()) {
+                    count += c.getItems().size();
+                }
+            }
+        }
 
         if (htmlSettings.getHeader() == null) {
             publy.Console.error("No header found. The generated HTML file will not be valid.");
@@ -92,7 +102,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         // Credit line
         out.write("<p>Generated from a BibTeX file by Publy " + GeneratorMain.MAJOR_VERSION + "." + GeneratorMain.MINOR_VERSION + ".</p>");
         out.newLine();
-        
+
         if (htmlSettings.getFooter() == null) {
             publy.Console.error("No footer found. The generated HTML file will not be valid.");
         } else {
@@ -164,9 +174,9 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
-        int localCount = 0;
-
-        out.write("    <div class=\"section\"><h1 class=\"sectiontitle\"><a id=\"" + c.getShortName().toLowerCase() + "\">" + c.getName() + "</a></h1>");
+        out.write("    <div id=\"" + c.getShortName().toLowerCase() + "\" class=\"section\">");
+        out.newLine();
+        out.write("      <h1 class=\"sectiontitle\">" + c.getName() + "</h1>");
         out.newLine();
         out.newLine();
         writeNavigation(c, out);
@@ -181,29 +191,50 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             out.newLine();
         }
 
+        // Start the list for this section
+        if (getSettings().getNumbering() == FormatSettings.Numbering.NONE) {
+            out.write("      <ul class=\"sectionlist\">");
+        } else if (getSettings().getNumbering() == FormatSettings.Numbering.LOCAL) {
+            if (getSettings().isReverseNumbering()) {
+                out.write("      <ol class=\"sectionlist\" reversed>");
+            } else {
+                out.write("      <ol class=\"sectionlist\">");
+            }
+        } else { // GLOBAL
+            assert getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL;
+            if (getSettings().isReverseNumbering()) {
+                out.write("      <ol class=\"sectionlist\" start=\"" + count + "\" reversed>");
+            } else {
+                out.write("      <ol class=\"sectionlist\" start=\"" + (count + 1) + "\">");
+            }
+        }
+        out.newLine();
+
         for (BibItem item : c.getItems()) {
-            globalCount++;
-            localCount++;
-
-            out.write("      <div class=\"bibentry\">");
-            out.newLine();
-
-            switch (getSettings().getNumbering()) {
-                case NONE:
-                    itemWriter.write(item, -1);
-                    break;
-                case LOCAL:
-                    itemWriter.write(item, localCount);
-                    break;
-                case GLOBAL:
-                    itemWriter.write(item, globalCount);
-                    break;
+            if (getSettings().isReverseNumbering()) {
+                count--;
+            } else {
+                count++;
             }
 
-            out.write("      </div>");
+            out.write("        <li id=\"" + item.getId() + "\" class=\"bibentry\">");
+            out.newLine();
+
+            itemWriter.write(item);
+
+            out.write("        </li>");
             out.newLine();
             out.newLine();
         }
+
+        // Close the list
+        if (getSettings().getNumbering() == FormatSettings.Numbering.NONE) {
+            out.write("      </ul>");
+        } else { // LOCAL or GLOBAL
+            assert (getSettings().getNumbering() == FormatSettings.Numbering.LOCAL || getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL);
+            out.write("      </ol>");
+        }
+        out.newLine();
 
         out.write("    </div>");
         out.newLine();

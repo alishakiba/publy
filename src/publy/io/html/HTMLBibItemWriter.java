@@ -35,7 +35,7 @@ import publy.io.BibItemWriter;
 public class HTMLBibItemWriter extends BibItemWriter {
 
     private HTMLSettings htmlSettings;
-    private static final String indent = "        ";
+    private static final String indent = "          ";
 
     public HTMLBibItemWriter(BufferedWriter out, FormatSettings settings, HTMLSettings htmlSettings) {
         super(out, settings);
@@ -43,8 +43,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void writeArticle(Article item, int number) throws IOException {
-        writeTitleAndAuthorsHTML(item, number);
+    protected void writeArticle(Article item) throws IOException {
+        writeTitleAndAuthorsHTML(item);
 
         // Handle submitted / accepted
         if (item.anyNonEmpty("status")) {
@@ -70,8 +70,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void writeBook(Book item, int number) throws IOException {
-        writeTitleAndAuthorsHTML(item, number);
+    protected void writeBook(Book item) throws IOException {
+        writeTitleAndAuthorsHTML(item);
 
         output(indent, item.get("publisher"), ", ");
         output(item.get("year"), ".<br>", true);
@@ -81,13 +81,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void writeInProceedings(InProceedings item, int number) throws IOException {
-        writePart(item, number);
+    protected void writeInProceedings(InProceedings item) throws IOException {
+        writePart(item);
     }
 
     @Override
-    protected void writeInCollection(InCollection item, int number) throws IOException {
-        writePart(item, number);
+    protected void writeInCollection(InCollection item) throws IOException {
+        writePart(item);
     }
 
     /**
@@ -96,8 +96,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
      * @param item
      * @throws IOException
      */
-    private void writePart(BibItem item, int number) throws IOException {
-        writeTitleAndAuthorsHTML(item, number);
+    private void writePart(BibItem item) throws IOException {
+        writeTitleAndAuthorsHTML(item);
 
         if (item.anyNonEmpty("status")) {
             writeStatus(item, item.get("booktitle"));
@@ -116,8 +116,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void writeMastersThesis(MastersThesis item, int number) throws IOException {
-        writeTitleAndAuthorsHTML(item, number);
+    protected void writeMastersThesis(MastersThesis item) throws IOException {
+        writeTitleAndAuthorsHTML(item);
 
         output(indent + "Master's thesis, ", item.get("school"), ", ");
         output(item.get("year"), ".<br>", true);
@@ -128,8 +128,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void writePhDThesis(PhDThesis item, int number) throws IOException {
-        writeTitleAndAuthorsHTML(item, number);
+    protected void writePhDThesis(PhDThesis item) throws IOException {
+        writeTitleAndAuthorsHTML(item);
 
         output(indent + "PhD thesis, ", item.get("school"), ", ");
         output(item.get("year"), ".<br>", true);
@@ -140,8 +140,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void writeInvitedTalk(InvitedTalk item, int number) throws IOException {
-        writeNumber(number);
+    protected void writeInvitedTalk(InvitedTalk item) throws IOException {
         writeTitleAndAbstractHTML(item);
 
         output(indent, item.get("address"), ", ", false);
@@ -154,8 +153,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void writeUnpublished(Unpublished item, int number) throws IOException {
-        writeTitleAndAuthorsHTML(item, number);
+    protected void writeUnpublished(Unpublished item) throws IOException {
+        writeTitleAndAuthorsHTML(item);
 
         output(indent, item.get("note"), ".<br>", true);
 
@@ -163,9 +162,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         writeLinks(item, false, item.anyNonEmpty("arxiv") && includeBibtex(item));
     }
 
-    protected void writeTitleAndAuthorsHTML(BibItem item, int number) throws IOException {
-        writeNumber(number);
-        
+    protected void writeTitleAndAuthorsHTML(BibItem item) throws IOException {
         if (settings.isTitleFirst()) {
             writeTitleAndAbstractHTML(item);
         }
@@ -179,33 +176,26 @@ public class HTMLBibItemWriter extends BibItemWriter {
             writeTitleAndAbstractHTML(item);
         }
     }
-
-    private void writeNumber(int number) throws IOException {
-        out.write(indent);
-
-        // Number
-        if (number >= 0) {
-            output("<span class=\"number\">", Integer.toString(number), ".<span> ");
-        }
-    }
     
     protected void writeTitleAndAbstractHTML(BibItem item) throws IOException {
+        out.write(indent);
+        
         // Title
         if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
-            output("<h2 id=\"" + item.getId() + "\" class=\"title link\">", formatTitle(item), "</h2>");
+            output("<h2 class=\"title link\">", formatTitle(item), "</h2>");
         } else if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && includePaper(item)) {
             try {
                 String href = (new URI(null, null, item.get("paper"), null)).toString();
 
                 out.write("<a href=\"" + href + "\">");
-                output("<h2 id=\"" + item.getId() + "\" class=\"title\">", formatTitle(item), "</h2>");
+                output("<h2 class=\"title\">", formatTitle(item), "</h2>");
                 out.write("</a>");
                 checkExistance(item.get("paper"), "paper", item);
             } catch (URISyntaxException ex) {
                 Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
             }
         } else {
-            output("<h2 id=\"" + item.getId() + "\" class=\"title\">", formatTitle(item), "</h2>");
+            output("<h2 class=\"title\">", formatTitle(item), "</h2>");
         }
 
         // Add text if I presented this paper
