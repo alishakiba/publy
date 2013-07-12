@@ -11,19 +11,72 @@
     <!-- jQuery framework -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-    <!-- Detection for links to specific articles -->
+    <!-- Scripts that run when the page DOM is done loading -->
     <script type="text/javascript">
      $(document).ready(function() {
+      // Detection for links to specific articles
       // Run once, for page reloads
       var hash = window.location.hash;
       if (hash) {
-       showOnly(hash.substring(1) + "_abstract");
+       showPaper(hash.substring(1));
       }
      
       // Run every time the hash changes
       $(window).on('hashchange', function() {
-       showOnly(document.location.hash.substring(1) + "_abstract");
+       showPaper(document.location.hash.substring(1));
       });
+
+      // Enable reversed ordered lists on browsers that do not natively support it
+      if (!('reversed' in document.createElement('ol'))) {
+          (function () {
+
+              // run the code on each ordered list with a 'reversed' attribute.
+              var myLists = $('ol[reversed]'),
+                  currCount = null,
+                  currChildren = null,
+                  val;
+
+              myLists.each(function () {
+
+                  // check the existence of the start attribute
+                  if ($(this).attr('start')) {
+
+                      // if it exists, convert it to an integer; also ensures even decimal values work
+                      currCount = parseInt($(this).attr('start'), 10);
+
+                      // If it wasn't a number, it will return 'NaN'; if so, use the number of list items instead
+                      if (isNaN(currCount)) {
+                          currCount = $(this).children().length;
+                      }
+
+                  // do this if the start attribute is not present
+                  // the first number is derived from the number of list items
+                  } else {
+                      currCount = $(this).children().length;
+                  }
+
+                  // grab all the child list items
+                  currChildren = $(this).children();
+
+                  // go through each list item, adding the 'value' attribute plus currCount number
+                  // then subract one from currCount so we're ready for the next one
+                  currChildren.each(function () {
+
+                      val = $(this).attr('value');
+
+                      // here we check if a value attribute is set in the html
+                      // and we change the count accordingly
+                      if (val && !isNaN(val)) {
+                          $(this).attr('value', val);
+                          currCount = val;
+                      }
+
+                      $(this).attr('value', currCount);
+                      currCount = currCount - 1;
+                  });
+              });
+          }());
+      }
      });
     </script>
 
@@ -47,12 +100,14 @@
       $("#" + divID).hide();
      }
      
-     function showOnly(divID) {
-      $(".collapsible").hide();
-      $(".hidden").hide();
-      $(".shown").show();
-      
-      toggle(divID);
+     function showPaper(divID) {
+      $(".linkTarget").removeClass("linkTarget");
+      $("#" + divID).addClass("linkTarget");
+
+      // Expand the abstract if it is currently hidden, otherwise leave it expanded
+      if ($("#" + divID + "_abstract").is(":hidden")) {
+       toggle(divID + "_abstract");
+      }
      }
     </script>
 	

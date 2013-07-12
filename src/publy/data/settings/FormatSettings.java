@@ -36,6 +36,7 @@ public class FormatSettings {
     private boolean titleFirst = true;
     // Numbering
     private Numbering numbering = Numbering.NONE;
+    private boolean reverseNumbering = false;
     // Categories
     private List<CategoryIdentifier> categories = new ArrayList<>();
     private Map<CategoryIdentifier, String> categoryNotes = new EnumMap<>(CategoryIdentifier.class);
@@ -139,6 +140,14 @@ public class FormatSettings {
 
     public void setNumbering(Numbering numbering) {
         this.numbering = numbering;
+    }
+
+    public boolean isReverseNumbering() {
+        return reverseNumbering;
+    }
+
+    public void setReverseNumbering(boolean reverseNumbering) {
+        this.reverseNumbering = reverseNumbering;
     }
 
     public List<CategoryIdentifier> getCategories() {

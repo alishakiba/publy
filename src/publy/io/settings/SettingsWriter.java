@@ -70,6 +70,7 @@ public class SettingsWriter {
         output(out, 4, "listallauthors", makeString(format.isListAllAuthors()));
         output(out, 4, "titlefirst", makeString(format.isTitleFirst()));
         output(out, 4, "numbering", makeString(format.getNumbering()));
+        output(out, 4, "reversenumbering", makeString(format.isReverseNumbering()));
 
         // Categories
         out.write("    <categories>");

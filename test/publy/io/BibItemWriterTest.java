@@ -129,42 +129,42 @@ public class BibItemWriterTest {
         }
 
         @Override
-        protected void writeArticle(Article item, int number) throws IOException {
+        protected void writeArticle(Article item) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        protected void writeBook(Book item, int number) throws IOException {
+        protected void writeBook(Book item) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        protected void writeInProceedings(InProceedings item, int number) throws IOException {
+        protected void writeInProceedings(InProceedings item) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        protected void writeMastersThesis(MastersThesis item, int number) throws IOException {
+        protected void writeMastersThesis(MastersThesis item) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        protected void writePhDThesis(PhDThesis item, int number) throws IOException {
+        protected void writePhDThesis(PhDThesis item) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        protected void writeInCollection(InCollection item, int number) throws IOException {
+        protected void writeInCollection(InCollection item) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        protected void writeInvitedTalk(InvitedTalk item, int number) throws IOException {
+        protected void writeInvitedTalk(InvitedTalk item) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        protected void writeUnpublished(Unpublished item, int number) throws IOException {
+        protected void writeUnpublished(Unpublished item) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
         

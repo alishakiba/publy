@@ -30,10 +30,15 @@ public class PlainPublicationListWriter extends PublicationListWriter {
     protected void writePublicationList(BufferedWriter out) throws IOException {
         itemWriter = new PlainBibItemWriter(out, getSettings());
 
-        if (getSettings().getNumbering() == FormatSettings.Numbering.NONE) {
-            count = -1;
-        } else {
+        // Initialize the count
+        if (getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL) {
             count = 0;
+            
+            if (getSettings().isReverseNumbering()) {
+                for (OutputCategory c : getCategories()) {
+                    count += c.getItems().size();
+                }
+            }
         }
 
         // Write the body
@@ -48,6 +53,15 @@ public class PlainPublicationListWriter extends PublicationListWriter {
     }
 
     private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
+        // Reset the count if necessary
+        if (getSettings().getNumbering() == FormatSettings.Numbering.LOCAL) {
+            if (getSettings().isReverseNumbering()) {
+                count = c.getItems().size();
+            } else {
+                count = 1;
+            }
+        }
+
         out.write(c.getName() + ".");
         out.newLine();
         out.newLine();
@@ -61,19 +75,22 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         }
 
         for (BibItem item : c.getItems()) {
+            // Write the appropriate number
             if (getSettings().getNumbering() != FormatSettings.Numbering.NONE) {
-                count++;
+                out.write(count + ".");
+                out.newLine();
+
+                if (getSettings().isReverseNumbering()) {
+                    count--;
+                } else {
+                    count++;
+                }
             }
 
-            itemWriter.write(item, count);
+            itemWriter.write(item);
             out.newLine();
         }
 
         out.newLine();
-
-        // Reset the count if necessary
-        if (getSettings().getNumbering() == FormatSettings.Numbering.LOCAL) {
-            count = 0;
-        }
     }
 }

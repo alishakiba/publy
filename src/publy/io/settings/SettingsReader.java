@@ -98,6 +98,9 @@ public class SettingsReader extends DefaultHandler {
                 case "numbering":
                     settings.getGeneralSettings().setNumbering(FormatSettings.Numbering.valueOf(text));
                     break;
+                case "reversenumbering":
+                    settings.getGeneralSettings().setReverseNumbering(Boolean.parseBoolean(text));
+                    break;
                 case "category":
                     settings.getGeneralSettings().addCategory(CategoryIdentifier.valueOf(text));
                     break;

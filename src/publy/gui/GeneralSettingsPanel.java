@@ -70,6 +70,8 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             default:
                 throw new AssertionError("Unknown numbering: " + settings.getNumbering());
         }
+        
+        reverseCheckBox.setSelected(settings.isReverseNumbering());
 
         // Categories
         inListModel = new DefaultListModel<>();
@@ -185,6 +187,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         titleFirstSeparator = new javax.swing.JSeparator();
         titleFirstLabel = new javax.swing.JLabel();
         titleFirstCheckBox = new javax.swing.JCheckBox();
+        reverseCheckBox = new javax.swing.JCheckBox();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("General Settings"));
 
@@ -378,6 +381,13 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        reverseCheckBox.setText("Reverse numbering");
+        reverseCheckBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                reverseCheckBoxItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -389,28 +399,17 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(titleFirstCheckBox)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(numNoneRadioButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(numLocalRadioButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(numGlobalRadioButton)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(numNoneRadioButton)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(numLocalRadioButton)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(numGlobalRadioButton))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(inCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(inButton)
-                                            .addComponent(outButton)
-                                            .addComponent(upButton)
-                                            .addComponent(downButton)
-                                            .addComponent(catButtonSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(24, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(titleFirstCheckBox)
+                                    .addComponent(reverseCheckBox))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(catPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -431,21 +430,34 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(targetSeparator))
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(titleFirstLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(titleFirstSeparator))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(listAllRadioButton)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(listOtherRadioButton)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
                                         .addComponent(targetTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(targetBrowseButton))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(titleFirstLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(titleFirstSeparator)))
+                                        .addComponent(targetBrowseButton))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(listAllRadioButton)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(listOtherRadioButton))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(inCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(inButton)
+                                                    .addComponent(outButton)
+                                                    .addComponent(upButton)
+                                                    .addComponent(downButton)
+                                                    .addComponent(catButtonSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
                         .addContainerGap())))
         );
 
@@ -485,6 +497,8 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                     .addComponent(numNoneRadioButton)
                     .addComponent(numLocalRadioButton)
                     .addComponent(numGlobalRadioButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(reverseCheckBox)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(catSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -502,7 +516,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(downButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(inCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(catPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -678,6 +692,14 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_titleFirstCheckBoxItemStateChanged
 
+    private void reverseCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_reverseCheckBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            settings.setReverseNumbering(false);
+        } else if (evt.getStateChange() == ItemEvent.SELECTED) {
+            settings.setReverseNumbering(true);
+        }
+    }//GEN-LAST:event_reverseCheckBoxItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel authorLabel;
     private javax.swing.JSeparator authorSeparator;
@@ -704,6 +726,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JButton outButton;
     private javax.swing.JList outCatList;
     private javax.swing.JScrollPane outCatScrollPane;
+    private javax.swing.JCheckBox reverseCheckBox;
     private javax.swing.JButton targetBrowseButton;
     private javax.swing.JFileChooser targetFileChooser;
     private javax.swing.JLabel targetLabel;
