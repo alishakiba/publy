@@ -193,31 +193,35 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
         // Start the list for this section
         if (getSettings().getNumbering() == FormatSettings.Numbering.NONE) {
-            out.write("      <ul class=\"sectionlist\">");
+            out.write("      <ul class=\"sectionlist\">"); // Unordered list
         } else if (getSettings().getNumbering() == FormatSettings.Numbering.LOCAL) {
+            out.write("      <ol class=\"sectionlist\">");
+            // There is limited browser support for the reversed attribute, so we'll add values manually
+
+            // Reset the count
             if (getSettings().isReverseNumbering()) {
-                out.write("      <ol class=\"sectionlist\" reversed>");
+                count = c.getItems().size() + 1;
             } else {
-                out.write("      <ol class=\"sectionlist\">");
+                count = 0;
             }
-        } else { // GLOBAL
-            assert getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL;
-            if (getSettings().isReverseNumbering()) {
-                out.write("      <ol class=\"sectionlist\" start=\"" + count + "\" reversed>");
-            } else {
-                out.write("      <ol class=\"sectionlist\" start=\"" + (count + 1) + "\">");
-            }
+        } else if (getSettings().isReverseNumbering()) { // GLOBAL reversed
+            assert getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL && getSettings().isReverseNumbering();
+            out.write("      <ol class=\"sectionlist\">");
+        } else { // GLOBAL, not reversed
+            assert getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL && !getSettings().isReverseNumbering();
+            out.write("      <ol class=\"sectionlist\" start=\"" + (count + 1) + "\">");
         }
         out.newLine();
 
         for (BibItem item : c.getItems()) {
             if (getSettings().isReverseNumbering()) {
                 count--;
+                out.write("        <li id=\"" + item.getId() + "\" value=\"" + count + "\" class=\"bibentry\">");
             } else {
                 count++;
+                out.write("        <li id=\"" + item.getId() + "\" class=\"bibentry\">");
             }
 
-            out.write("        <li id=\"" + item.getId() + "\" class=\"bibentry\">");
             out.newLine();
 
             itemWriter.write(item);
