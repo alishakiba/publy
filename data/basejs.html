@@ -49,9 +49,6 @@
       }
      
       function showPaper(divID) {
-        $(".linkTarget").removeClass("linkTarget");
-        $("#" + divID).addClass("linkTarget");
-
         // Expand the abstract if it is currently hidden, otherwise leave it expanded
         if ($("#" + divID + "_abstract").is(":hidden")) {
           toggle(divID + "_abstract");
