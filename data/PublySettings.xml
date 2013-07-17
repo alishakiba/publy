@@ -7,9 +7,11 @@
   <generalsettings>
     <target>misc/test.html</target>
     <listallauthors>true</listallauthors>
+    <namedisplay>FULL</namedisplay>
+    <reversenames>true</reversenames>
     <titlefirst>false</titlefirst>
-    <numbering>NONE</numbering>
-    <reversenumbering>false</reversenumbering>
+    <numbering>GLOBAL</numbering>
+    <reversenumbering>true</reversenumbering>
     <categories>
       <category>BOOK</category>
       <category>JOURNAL</category>
