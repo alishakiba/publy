@@ -29,12 +29,14 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
     protected void writePublicationList(BufferedWriter out) throws IOException {
         // Initialize the count
         if (getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL) {
-            count = 0;
-            
             if (getSettings().isReverseNumbering()) {
+                count = 0;
+
                 for (OutputCategory c : getCategories()) {
                     count += c.getItems().size();
                 }
+            } else {
+                count = 1;
             }
         }
 
@@ -58,7 +60,7 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
                 count = 1;
             }
         }
-        
+
         out.write("-- " + c.getName() + ".");
         out.newLine();
         out.newLine();
@@ -157,7 +159,7 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
                 out.write("}");
             }
         }
-        
+
         out.newLine();
         out.write("}");
         out.newLine();

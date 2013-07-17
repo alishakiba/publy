@@ -51,12 +51,14 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
         // Initialize the count
         if (getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL) {
-            count = 0;
-
             if (getSettings().isReverseNumbering()) {
+                count = 0;
+
                 for (OutputCategory c : getCategories()) {
                     count += c.getItems().size();
                 }
+            } else {
+                count = 1;
             }
         }
 
@@ -200,7 +202,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
             // Reset the count
             if (getSettings().isReverseNumbering()) {
-                count = c.getItems().size() + 1;
+                count = c.getItems().size();
             } else {
                 count = 0;
             }
@@ -209,17 +211,17 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             out.write("      <ol class=\"sectionlist\">");
         } else { // GLOBAL, not reversed
             assert getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL && !getSettings().isReverseNumbering();
-            out.write("      <ol class=\"sectionlist\" start=\"" + (count + 1) + "\">");
+            out.write("      <ol class=\"sectionlist\" start=\"" + count + "\">");
         }
         out.newLine();
 
         for (BibItem item : c.getItems()) {
             if (getSettings().isReverseNumbering()) {
-                count--;
                 out.write("        <li id=\"" + item.getId() + "\" value=\"" + count + "\" class=\"bibentry\">");
+                count--;
             } else {
-                count++;
                 out.write("        <li id=\"" + item.getId() + "\" class=\"bibentry\">");
+                count++;
             }
 
             out.newLine();
