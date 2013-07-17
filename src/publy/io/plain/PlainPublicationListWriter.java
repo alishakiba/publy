@@ -32,12 +32,14 @@ public class PlainPublicationListWriter extends PublicationListWriter {
 
         // Initialize the count
         if (getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL) {
-            count = 0;
-            
             if (getSettings().isReverseNumbering()) {
+                count = 0;
+
                 for (OutputCategory c : getCategories()) {
                     count += c.getItems().size();
                 }
+            } else {
+                count = 1;
             }
         }
 
