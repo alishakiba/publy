@@ -169,7 +169,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Don't add an authors line if it's just me and I just want to list co-authors
         if (settings.isListAllAuthors() || item.getAuthors().size() > 1) {
-            output(indent, formatAuthors(item), ".<br>", true);
+            String authors = formatAuthors(item);
+
+            if (authors.endsWith(".</span>") || authors.endsWith(".</a>")) {
+                // Don't double up on periods when author names are abbreviated and reversed
+                output(indent, authors, "<br>", true);
+            } else {
+                output(indent, authors, ".<br>", true);
+            }
         }
         
         if (!settings.isTitleFirst()) {
