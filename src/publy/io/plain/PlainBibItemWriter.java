@@ -134,7 +134,14 @@ public class PlainBibItemWriter extends BibItemWriter {
 
         // Don't add an authors line if it's just me and I just want to list co-authors
         if (settings.isListAllAuthors() || item.getAuthors().size() > 1) {
-            output(formatAuthors(item), ".", true);
+            String authors = formatAuthors(item);
+
+            if (authors.endsWith(".")) {
+                // Don't double up on periods when author names are abbreviated and reversed
+                output(authors, "", true);
+            } else {
+                output(authors, ".", true);
+            }
         }
 
         if (!settings.isTitleFirst()) {
