@@ -7,6 +7,7 @@ package publy.data;
 import java.util.ArrayList;
 import java.util.List;
 import publy.Console;
+import publy.data.settings.FormatSettings;
 
 /**
  *
@@ -16,7 +17,8 @@ public class Author {
 
     private String abbreviation; // The abbreviation associated with this author in the bibtex file
     private String firstName = "", lastName = "", vonPart = "", juniorPart = ""; // The four parts of this name
-    private String plaintextName, latexName, htmlName; // Possible name overrides from the bibtex file
+    private String latexName; // Name as given in the input bibtex file
+    private String plaintextName, htmlName; // Possible name overrides from the bibtex file
     private String url; // The url associated with this author
 
     public Author(String name) {
@@ -25,7 +27,7 @@ public class Author {
 
     public Author(String abbreviation, String name) {
         this.abbreviation = abbreviation;
-
+        this.latexName = name;
         splitName(name);
     }
 
@@ -49,48 +51,82 @@ public class Author {
         return juniorPart;
     }
 
-    public String getPlaintextName() {
-        return plaintextName;
+    public String getName() {
+        return latexName;
     }
 
-    public String getFormattedPlaintextName() {
-        return formatName(plaintextName);
+    public String getFormattedName(FormatSettings.NameDisplay display, boolean reversed) {
+        // First von Last, Jr OR von Last, First, Jr
+        String name = "";
+
+        if (!reversed && display != FormatSettings.NameDisplay.NONE && !firstName.isEmpty()) {
+            name = formatFirstName(display) + " ";
+        }
+
+        // von Last
+        if (!vonPart.isEmpty()) {
+            name += vonPart + " ";
+        }
+        name += lastName;
+
+        // Junior
+        if (!juniorPart.isEmpty()) {
+            name += ", " + juniorPart;
+        }
+
+        if (reversed && display != FormatSettings.NameDisplay.NONE && !firstName.isEmpty()) {
+            name += ", " + formatFirstName(display);
+        }
+
+        return name;
+    }
+
+    public String getPlaintextName() {
+        return plaintextName;
     }
 
     public void setPlaintextName(String plaintextName) {
         this.plaintextName = plaintextName;
     }
 
+    public String getFormattedPlaintextName(FormatSettings.NameDisplay display, boolean reversed) {
+        if (plaintextName == null) {
+            return getFormattedName(display, reversed);
+        } else {
+            if (plaintextName.contains("%%NAME%%")) {
+                return plaintextName.replaceAll("%%NAME%%", getFormattedName(display, reversed));
+            } else {
+                return plaintextName;
+            }
+        }
+    }
+
     public String getHtmlName() {
         return htmlName;
-    }
-
-    public String getFormattedHtmlName() {
-        return formatName(htmlName);
-    }
-
-    public String getLinkedHtmlName() {
-        if (url != null && !url.isEmpty()) {
-            return "<a href=\"" + url + "\" class=\"author\">" + formatName(htmlName) + "</a>";
-        } else {
-            return "<span class=\"author\">" + formatName(htmlName) + "</span>";
-        }
     }
 
     public void setHtmlName(String htmlName) {
         this.htmlName = htmlName;
     }
 
-    public String getLatexName() {
-        return latexName;
+    public String getFormattedHtmlName(FormatSettings.NameDisplay display, boolean reversed) {
+        if (htmlName == null) {
+            return getFormattedName(display, reversed);
+        } else {
+            if (htmlName.contains("%%NAME%%")) {
+                return htmlName.replaceAll("%%NAME%%", getFormattedName(display, reversed));
+            } else {
+                return htmlName;
+            }
+        }
     }
 
-    public String getFormattedLatexName() {
-        return formatName(latexName);
-    }
-
-    public void setLatexName(String latexName) {
-        this.latexName = latexName;
+    public String getLinkedAndFormattedHtmlName(FormatSettings.NameDisplay display, boolean reversed) {
+        if (url != null && !url.isEmpty()) {
+            return "<a href=\"" + url + "\" class=\"author\">" + getFormattedHtmlName(display, reversed) + "</a>";
+        } else {
+            return "<span class=\"author\">" + getFormattedHtmlName(display, reversed) + "</span>";
+        }
     }
 
     public String getUrl() {
@@ -105,25 +141,75 @@ public class Author {
         return "me".equals(abbreviation);
     }
 
-    private String formatName(String name) {
-        String first, last;
-        int comma = name.indexOf(',');
-        int space = name.lastIndexOf(' ');
+    private String formatFirstName(FormatSettings.NameDisplay display) {
+        switch (display) {
+            case NONE:
+                return "";
+            case FULL:
+                return firstName;
+            case ABBREVIATED:
+                return abbreviate(firstName);
+            default:
+                throw new AssertionError("Unexpected NameDisplay value: " + display);
+        }
+    }
 
-        if (comma != -1) {
-            // Convert a name in format <Last name(s)>, <First name(s)> to <First letter of first name(s)> <Last name(s)>
-            last = name.substring(0, comma).trim();
-            first = name.substring(comma + 1).trim();
-        } else if (space != -1) {
-            // Assume the format is "<First name(s)> <Last name>"
-            first = name.substring(0, space).trim();
-            last = name.substring(space + 1).trim();
-        } else {
-            // Unknown format, or just the last name
-            return name;
+    private String abbreviate(String name) {
+        List<String> parts = getParts(name, ' ');
+        StringBuilder sb = new StringBuilder(parts.size() * 3);
+
+        for (int i = 0; i < parts.size(); i++) {
+            if (i > 0) {
+                sb.append(' ');
+            }
+
+            List<String> dashParts = getParts(parts.get(i), '-');
+
+            for (int j = 0; j < dashParts.size(); j++) {
+                if (j > 0) {
+                    sb.append('-');
+                }
+
+                sb.append(getFirstLetter(dashParts.get(j)));
+                sb.append('.');
+            }
         }
 
-        return Character.toUpperCase(first.charAt(0)) + ". " + last;
+        return sb.toString();
+    }
+
+    private String getFirstLetter(String part) {
+        StringBuilder sb = new StringBuilder();
+        int braceLevel = 0;
+
+        for (char c : part.toCharArray()) {
+            switch (c) {
+                case '{':
+                    braceLevel++;
+                    sb.append('{');
+                    break;
+                case '}':
+                    braceLevel--;
+                    sb.append('}');
+                    break;
+                default:
+                    if (braceLevel > 0 || Character.isLetter(c)) {
+                        sb.append(c);
+                    }
+
+                    if (Character.isLetter(c)) {
+                        // We're done
+                        for (int i = 0; i < braceLevel; i++) {
+                            sb.append('}');
+                        }
+
+                        return sb.toString();
+                    }
+                    break;
+            }
+        }
+
+        return sb.toString();
     }
 
     private void splitName(String name) {
@@ -185,7 +271,7 @@ public class Author {
         }
     }
 
-    private List<String> getParts(String name, char separator) {
+    private List<String> getParts(String name, char... separator) {
         List<String> parts = new ArrayList<>(4);
         StringBuilder sb = new StringBuilder(name.length());
         boolean escape = false;
@@ -210,7 +296,7 @@ public class Author {
                         escape = true;
                         break;
                     default:
-                        if (braceLevel == 0 && c == separator) {
+                        if (braceLevel == 0 && contained(c, separator)) {
                             parts.add(sb.toString());
                             sb.delete(0, sb.length());
                         } else {
@@ -227,6 +313,7 @@ public class Author {
 
     private boolean startsWithLowercaseLetter(String word) {
         boolean escape = false;
+        boolean command = false;
         int braceLevel = 0;
 
         for (char c : word.toCharArray()) {
@@ -245,12 +332,14 @@ public class Author {
                         break;
                     case '}':
                         braceLevel--;
+                        command = false;
                         break;
                     case '\\':
                         escape = true;
+                        command = true;
                         break;
                     default:
-                        if (braceLevel == 0 && Character.isLetter(c)) {
+                        if ((braceLevel == 0 || command) && Character.isLetter(c)) {
                             if (Character.isLowerCase(c)) {
                                 return true;
                             } else if (Character.isUpperCase(c)) {
@@ -262,6 +351,16 @@ public class Author {
         }
 
         return false; // caseless
+    }
+
+    private boolean contained(char c, char[] separator) {
+        for (char s : separator) {
+            if (c == s) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

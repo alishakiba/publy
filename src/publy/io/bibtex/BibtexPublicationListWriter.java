@@ -110,7 +110,7 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
             out.write("  author={");
 
             for (int i = 0; i < item.getAuthors().size(); i++) {
-                out.write(item.getAuthors().get(i).getLatexName());
+                out.write(item.getAuthors().get(i).getName());
 
                 if (i < item.getAuthors().size() - 1) {
                     out.write(" and ");
