@@ -46,13 +46,26 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         // Target
         updateTarget();
 
-        // List all authors
-        if (settings.isListAllAuthors()) {
-            listAllRadioButton.setSelected(true);
-        } else {
-            listOtherRadioButton.setSelected(true);
+        // Author info
+        switch (settings.getNameDisplay()) {
+            case FULL:
+                fullFirstNameRadioButton.setSelected(true);
+                break;
+            case ABBREVIATED:
+                abbrFirstNameRadioButton.setSelected(true);
+                break;
+            case NONE:
+                noFirstNameRadioButton.setSelected(true);
+                break;
+            default:
+                throw new AssertionError("Unknown name display: " + settings.getNameDisplay());
         }
+
+        reverseNamesCheckBox.setSelected(settings.isReverseNames());
+        reverseNamesCheckBox.setEnabled(settings.getNameDisplay() != FormatSettings.NameDisplay.NONE);
         
+        listAllCheckBox.setSelected(settings.isListAllAuthors());
+
         // Title first
         titleFirstCheckBox.setSelected(settings.isTitleFirst());
 
@@ -70,13 +83,14 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             default:
                 throw new AssertionError("Unknown numbering: " + settings.getNumbering());
         }
-        
-        reverseCheckBox.setSelected(settings.isReverseNumbering());
+
+        reverseNumberingCheckBox.setSelected(settings.isReverseNumbering());
+        reverseNumberingCheckBox.setEnabled(settings.getNumbering() != FormatSettings.Numbering.NONE);
 
         // Categories
         inListModel = new DefaultListModel<>();
         outListModel = new DefaultListModel<>();
-        
+
         Set<CategoryIdentifier> out = EnumSet.allOf(CategoryIdentifier.class);
 
         for (CategoryIdentifier c : settings.getCategories()) {
@@ -93,8 +107,8 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     }
 
     /**
-     * Refreshes the target from the current settings. This method is
-     * sometimes called by the MainFrame.
+     * Refreshes the target from the current settings. This method is sometimes
+     * called by the MainFrame.
      */
     void updateTarget() {
         if (settings.getTarget() == null) {
@@ -122,8 +136,13 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         noteLabel.setEnabled(enabled);
         noteTextField.setEnabled(enabled && selectedCategory != null);
 
-        // Handle the buttons correctly
+        // Handle elements whose enabled status depends on other elements
         if (enabled) {
+            // Reverse checkboxes
+            reverseNamesCheckBox.setEnabled(settings.getNameDisplay() != FormatSettings.NameDisplay.NONE);
+            reverseNumberingCheckBox.setEnabled(settings.getNumbering() != FormatSettings.Numbering.NONE);
+            
+            // Handle the buttons correctly
             if (inCatList.getSelectedIndex() > -1) {
                 inButton.setEnabled(false);
                 outButton.setEnabled(true);
@@ -153,9 +172,9 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        listGroup = new javax.swing.ButtonGroup();
         numGroup = new javax.swing.ButtonGroup();
         targetFileChooser = new javax.swing.JFileChooser();
+        firstNameGroup = new javax.swing.ButtonGroup();
         targetTextField = new javax.swing.JTextField();
         targetBrowseButton = new javax.swing.JButton();
         numNoneRadioButton = new javax.swing.JRadioButton();
@@ -165,8 +184,6 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         targetSeparator = new javax.swing.JSeparator();
         authorLabel = new javax.swing.JLabel();
         authorSeparator = new javax.swing.JSeparator();
-        listAllRadioButton = new javax.swing.JRadioButton();
-        listOtherRadioButton = new javax.swing.JRadioButton();
         numLabel = new javax.swing.JLabel();
         numSeparator = new javax.swing.JSeparator();
         catLabel = new javax.swing.JLabel();
@@ -187,7 +204,13 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         titleFirstSeparator = new javax.swing.JSeparator();
         titleFirstLabel = new javax.swing.JLabel();
         titleFirstCheckBox = new javax.swing.JCheckBox();
-        reverseCheckBox = new javax.swing.JCheckBox();
+        reverseNumberingCheckBox = new javax.swing.JCheckBox();
+        listAllCheckBox = new javax.swing.JCheckBox();
+        firstNameLabel = new javax.swing.JLabel();
+        fullFirstNameRadioButton = new javax.swing.JRadioButton();
+        abbrFirstNameRadioButton = new javax.swing.JRadioButton();
+        noFirstNameRadioButton = new javax.swing.JRadioButton();
+        reverseNamesCheckBox = new javax.swing.JCheckBox();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("General Settings"));
 
@@ -243,29 +266,13 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         authorLabel.setText("Author information");
 
-        listGroup.add(listAllRadioButton);
-        listAllRadioButton.setText("List all authors");
-        listAllRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                listAllRadioButtonActionPerformed(evt);
-            }
-        });
-
-        listGroup.add(listOtherRadioButton);
-        listOtherRadioButton.setText("List only my co-authors");
-        listOtherRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                listOtherRadioButtonActionPerformed(evt);
-            }
-        });
-
         numLabel.setText("Publication numbering");
 
         catLabel.setText("Category selection");
 
         catPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Category Settings"));
 
-        noteLabel.setText("Text at the start");
+        noteLabel.setText("Note");
 
         noteTextField.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
@@ -287,15 +294,13 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         catPanelLayout.setHorizontalGroup(
             catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(catPanelLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(catPanelLayout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(noteLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(4, 4, 4)
                         .addComponent(noteSeparator))
-                    .addGroup(catPanelLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(noteTextField)))
+                    .addComponent(noteTextField))
                 .addContainerGap())
         );
         catPanelLayout.setVerticalGroup(
@@ -374,17 +379,58 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         titleFirstLabel.setText("Title placement");
 
-        titleFirstCheckBox.setText("Place title before authors");
+        titleFirstCheckBox.setText("Title before authors");
         titleFirstCheckBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 titleFirstCheckBoxItemStateChanged(evt);
             }
         });
 
-        reverseCheckBox.setText("Reverse numbering");
-        reverseCheckBox.addItemListener(new java.awt.event.ItemListener() {
+        reverseNumberingCheckBox.setText("Reverse numbering");
+        reverseNumberingCheckBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                reverseCheckBoxItemStateChanged(evt);
+                reverseNumberingCheckBoxItemStateChanged(evt);
+            }
+        });
+
+        listAllCheckBox.setText("List only my co-authors");
+        listAllCheckBox.setToolTipText("The authors will be displayed as \"With\", followed by a list of the other authors on the paper. If you are the only author, no author information is displayed.");
+        listAllCheckBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                listAllCheckBoxItemStateChanged(evt);
+            }
+        });
+
+        firstNameLabel.setText("First names:");
+
+        firstNameGroup.add(fullFirstNameRadioButton);
+        fullFirstNameRadioButton.setText("Full");
+        fullFirstNameRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fullFirstNameRadioButtonActionPerformed(evt);
+            }
+        });
+
+        firstNameGroup.add(abbrFirstNameRadioButton);
+        abbrFirstNameRadioButton.setText("Abbreviated");
+        abbrFirstNameRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abbrFirstNameRadioButtonActionPerformed(evt);
+            }
+        });
+
+        firstNameGroup.add(noFirstNameRadioButton);
+        noFirstNameRadioButton.setText("None");
+        noFirstNameRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                noFirstNameRadioButtonActionPerformed(evt);
+            }
+        });
+
+        reverseNamesCheckBox.setText("Last names first (Last name, First name)");
+        reverseNamesCheckBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                reverseNamesCheckBoxItemStateChanged(evt);
             }
         });
 
@@ -408,8 +454,22 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(titleFirstCheckBox)
-                                    .addComponent(reverseCheckBox))
+                                    .addComponent(reverseNumberingCheckBox))
                                 .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(reverseNamesCheckBox)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(firstNameLabel)
+                                .addGap(18, 18, 18)
+                                .addComponent(fullFirstNameRadioButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(abbrFirstNameRadioButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(noFirstNameRadioButton))
+                            .addComponent(listAllCheckBox))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(catPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -441,28 +501,19 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(targetBrowseButton))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(listAllRadioButton)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(listOtherRadioButton))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(inCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(inButton)
-                                                    .addComponent(outButton)
-                                                    .addComponent(upButton)
-                                                    .addComponent(downButton)
-                                                    .addComponent(catButtonSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(inCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(inButton)
+                                            .addComponent(outButton)
+                                            .addComponent(upButton)
+                                            .addComponent(downButton)
+                                            .addComponent(catButtonSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, Short.MAX_VALUE)))))
                         .addContainerGap())))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {inCatScrollPane, outCatScrollPane});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -480,8 +531,14 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                     .addComponent(authorLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(listAllRadioButton)
-                    .addComponent(listOtherRadioButton))
+                    .addComponent(firstNameLabel)
+                    .addComponent(fullFirstNameRadioButton)
+                    .addComponent(abbrFirstNameRadioButton)
+                    .addComponent(noFirstNameRadioButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(reverseNamesCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(listAllCheckBox)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(titleFirstSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -498,7 +555,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                     .addComponent(numLocalRadioButton)
                     .addComponent(numGlobalRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(reverseCheckBox)
+                .addComponent(reverseNumberingCheckBox)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(catSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -516,7 +573,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(downButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(inCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(catPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -664,24 +721,19 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_outCatListValueChanged
 
-    private void listAllRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listAllRadioButtonActionPerformed
-        settings.setListAllAuthors(true);
-    }//GEN-LAST:event_listAllRadioButtonActionPerformed
-
-    private void listOtherRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listOtherRadioButtonActionPerformed
-        settings.setListAllAuthors(false);
-    }//GEN-LAST:event_listOtherRadioButtonActionPerformed
-
     private void numNoneRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numNoneRadioButtonActionPerformed
         settings.setNumbering(FormatSettings.Numbering.NONE);
+        reverseNumberingCheckBox.setEnabled(false);
     }//GEN-LAST:event_numNoneRadioButtonActionPerformed
 
     private void numLocalRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numLocalRadioButtonActionPerformed
         settings.setNumbering(FormatSettings.Numbering.LOCAL);
+        reverseNumberingCheckBox.setEnabled(true);
     }//GEN-LAST:event_numLocalRadioButtonActionPerformed
 
     private void numGlobalRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numGlobalRadioButtonActionPerformed
         settings.setNumbering(FormatSettings.Numbering.GLOBAL);
+        reverseNumberingCheckBox.setEnabled(true);
     }//GEN-LAST:event_numGlobalRadioButtonActionPerformed
 
     private void titleFirstCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_titleFirstCheckBoxItemStateChanged
@@ -692,15 +744,47 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_titleFirstCheckBoxItemStateChanged
 
-    private void reverseCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_reverseCheckBoxItemStateChanged
+    private void reverseNumberingCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_reverseNumberingCheckBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.DESELECTED) {
             settings.setReverseNumbering(false);
         } else if (evt.getStateChange() == ItemEvent.SELECTED) {
             settings.setReverseNumbering(true);
         }
-    }//GEN-LAST:event_reverseCheckBoxItemStateChanged
+    }//GEN-LAST:event_reverseNumberingCheckBoxItemStateChanged
+
+    private void listAllCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_listAllCheckBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            settings.setListAllAuthors(false);
+        } else if (evt.getStateChange() == ItemEvent.SELECTED) {
+            settings.setListAllAuthors(true);
+        }
+    }//GEN-LAST:event_listAllCheckBoxItemStateChanged
+
+    private void fullFirstNameRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fullFirstNameRadioButtonActionPerformed
+        settings.setNameDisplay(FormatSettings.NameDisplay.FULL);
+        reverseNamesCheckBox.setEnabled(true);
+    }//GEN-LAST:event_fullFirstNameRadioButtonActionPerformed
+
+    private void abbrFirstNameRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abbrFirstNameRadioButtonActionPerformed
+        settings.setNameDisplay(FormatSettings.NameDisplay.ABBREVIATED);
+        reverseNamesCheckBox.setEnabled(true);
+    }//GEN-LAST:event_abbrFirstNameRadioButtonActionPerformed
+
+    private void noFirstNameRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noFirstNameRadioButtonActionPerformed
+        settings.setNameDisplay(FormatSettings.NameDisplay.NONE);
+        reverseNamesCheckBox.setEnabled(false);
+    }//GEN-LAST:event_noFirstNameRadioButtonActionPerformed
+
+    private void reverseNamesCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_reverseNamesCheckBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            settings.setReverseNames(false);
+        } else if (evt.getStateChange() == ItemEvent.SELECTED) {
+            settings.setReverseNames(true);
+        }
+    }//GEN-LAST:event_reverseNamesCheckBoxItemStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton abbrFirstNameRadioButton;
     private javax.swing.JLabel authorLabel;
     private javax.swing.JSeparator authorSeparator;
     private javax.swing.JSeparator catButtonSeparator;
@@ -708,12 +792,14 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JPanel catPanel;
     private javax.swing.JSeparator catSeparator;
     private javax.swing.JButton downButton;
+    private javax.swing.ButtonGroup firstNameGroup;
+    private javax.swing.JLabel firstNameLabel;
+    private javax.swing.JRadioButton fullFirstNameRadioButton;
     private javax.swing.JButton inButton;
     private javax.swing.JList inCatList;
     private javax.swing.JScrollPane inCatScrollPane;
-    private javax.swing.JRadioButton listAllRadioButton;
-    private javax.swing.ButtonGroup listGroup;
-    private javax.swing.JRadioButton listOtherRadioButton;
+    private javax.swing.JCheckBox listAllCheckBox;
+    private javax.swing.JRadioButton noFirstNameRadioButton;
     private javax.swing.JLabel noteLabel;
     private javax.swing.JSeparator noteSeparator;
     private javax.swing.JTextField noteTextField;
@@ -726,7 +812,8 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JButton outButton;
     private javax.swing.JList outCatList;
     private javax.swing.JScrollPane outCatScrollPane;
-    private javax.swing.JCheckBox reverseCheckBox;
+    private javax.swing.JCheckBox reverseNamesCheckBox;
+    private javax.swing.JCheckBox reverseNumberingCheckBox;
     private javax.swing.JButton targetBrowseButton;
     private javax.swing.JFileChooser targetFileChooser;
     private javax.swing.JLabel targetLabel;

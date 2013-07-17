@@ -68,6 +68,8 @@ public class SettingsWriter {
 
         output(out, 4, "target", makeString(format.getTarget()));
         output(out, 4, "listallauthors", makeString(format.isListAllAuthors()));
+        output(out, 4, "namedisplay", makeString(format.getNameDisplay()));
+        output(out, 4, "reversenames", makeString(format.isReverseNames()));
         output(out, 4, "titlefirst", makeString(format.isTitleFirst()));
         output(out, 4, "numbering", makeString(format.getNumbering()));
         output(out, 4, "reversenumbering", makeString(format.isReverseNumbering()));

@@ -92,6 +92,12 @@ public class SettingsReader extends DefaultHandler {
                 case "listallauthors":
                     settings.getGeneralSettings().setListAllAuthors(Boolean.parseBoolean(text));
                     break;
+                case "namedisplay":
+                    settings.getGeneralSettings().setNameDisplay(FormatSettings.NameDisplay.valueOf(text));
+                    break;
+                case "reversenames":
+                    settings.getGeneralSettings().setReverseNames(Boolean.parseBoolean(text));
+                    break;
                 case "titlefirst":
                     settings.getGeneralSettings().setTitleFirst(Boolean.parseBoolean(text));
                     break;
