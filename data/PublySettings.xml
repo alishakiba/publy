@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plgsettings majorversion="0" minorversion="2">
+  <!-- Relative path to a BibTeX file with the publication list -->
+  <publications>misc/route.bib</publications>
+
+  <!-- General settings -->
+  <generalsettings>
+    <target>misc/test.html</target>
+    <listallauthors>true</listallauthors>
+    <titlefirst>false</titlefirst>
+    <numbering>NONE</numbering>
+    <reversenumbering>false</reversenumbering>
+    <categories>
+      <category>BOOK</category>
+      <category>JOURNAL</category>
+      <category>CONFERENCE</category>
+      <category>CHAPTER</category>
+      <category>THESIS</category>
+      <category>OTHER</category>
+    </categories>
+    <categorynotes>
+    </categorynotes>
+  </generalsettings>
+
+  <!-- HTML-specific settings -->
+  <htmlsettings>
+    <linktotextversion>true</linktotextversion>
+    <linktobibtexversion>true</linktobibtexversion>
+    <includeabstract>ALL</includeabstract>
+    <includebibtex>ARXIV</includebibtex>
+    <includepaper>ARXIV</includepaper>
+    <titletarget>NONE</titletarget>
+    <header>data/defaultHeader.html</header>
+    <footer>data/defaultFooter.html</footer>
+    <googleanalyticsuser><![CDATA[]]></googleanalyticsuser>
+    <presentedtext><![CDATA[]]></presentedtext>
+  </htmlsettings>
+
+</plgsettings>
