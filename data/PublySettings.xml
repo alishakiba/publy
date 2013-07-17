@@ -8,8 +8,8 @@
     <target>misc/test.html</target>
     <listallauthors>true</listallauthors>
     <titlefirst>false</titlefirst>
-    <numbering>GLOBAL</numbering>
-    <reversenumbering>true</reversenumbering>
+    <numbering>NONE</numbering>
+    <reversenumbering>false</reversenumbering>
     <categories>
       <category>BOOK</category>
       <category>JOURNAL</category>
