@@ -243,7 +243,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     Console.error("Null author found for %s.%n(Authors: %s)", item.getId(), item.getAuthors().toString());
                 } else {
                     if (settings.isListAllAuthors() || !a.isMe()) {
-                        authorLinks.add(a.getLinkedHtmlName());
+                        authorLinks.add(a.getLinkedAndFormattedHtmlName(settings.getNameDisplay(), settings.isReverseNames()));
                     }
                 }
             }
@@ -432,7 +432,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write("  author={");
 
             for (int i = 0; i < item.getAuthors().size(); i++) {
-                out.write(item.getAuthors().get(i).getLatexName());
+                out.write(item.getAuthors().get(i).getName());
 
                 if (i < item.getAuthors().size() - 1) {
                     out.write(" and ");
@@ -498,7 +498,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write("  author={");
 
             for (int i = 0; i < item.getAuthors().size(); i++) {
-                out.write(item.getAuthors().get(i).getLatexName());
+                out.write(item.getAuthors().get(i).getName());
 
                 if (i < item.getAuthors().size() - 1) {
                     out.write(" and ");
