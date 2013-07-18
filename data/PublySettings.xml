@@ -7,7 +7,7 @@
   <generalsettings>
     <target>misc/test.html</target>
     <listallauthors>true</listallauthors>
-    <namedisplay>ABBREVIATED</namedisplay>
+    <namedisplay>FULL</namedisplay>
     <reversenames>true</reversenames>
     <titlefirst>false</titlefirst>
     <numbering>GLOBAL</numbering>
