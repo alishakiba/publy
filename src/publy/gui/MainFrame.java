@@ -264,7 +264,7 @@ public class MainFrame extends javax.swing.JFrame {
             settings.setPublications(selected);
 
             if (settings.getGeneralSettings().getTarget() == null) {
-                // Set initial target
+                // Extract the base name
                 String baseName = pubFileChooser.getSelectedFile().getName();
                 int extension = baseName.lastIndexOf('.');
 
@@ -273,7 +273,7 @@ public class MainFrame extends javax.swing.JFrame {
                 }
 
                 // Set an initial target
-                settings.getGeneralSettings().setTarget(selected.resolveSibling(baseName + ".txt"));
+                settings.getGeneralSettings().setTarget(selected.resolveSibling(baseName + ".html"));
 
                 // Update the GUI
                 generalSettingsPanel.updateTarget();
