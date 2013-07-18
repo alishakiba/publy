@@ -292,12 +292,14 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             copyFile(baseJs, out);
 
             if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT) {
+                out.newLine();
                 out.write("    <!-- Functions to run once at document load -->\n"
                         + "    <script type=\"text/javascript\">\n"
                         + "      $(document).ready(function() {");
                 out.newLine();
 
-                out.write("        makeTitlesToggleAbstracts()");
+                out.write("        makeTitlesToggleAbstracts();");
+                out.newLine();
 
                 out.write("      });\n"
                         + "    </script>");

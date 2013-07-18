@@ -60,7 +60,7 @@
     <script type="text/javascript">
       function makeTitlesToggleAbstracts() {
         $(".title").click(function() {
-           $("#" + $(this).attr('id') + "_abstract").slideToggle(500);
+           $("#" + $(this).parent().attr('id') + "_abstract").slideToggle(500);
         });
       }
     </script>
