@@ -64,7 +64,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         reverseNamesCheckBox.setSelected(settings.isReverseNames());
         reverseNamesCheckBox.setEnabled(settings.getNameDisplay() != FormatSettings.NameDisplay.NONE);
         
-        listAllCheckBox.setSelected(settings.isListAllAuthors());
+        listOnlyCoauthorsCheckBox.setSelected(!settings.isListAllAuthors()); // Negation, since the meaning is opposite
 
         // Title first
         titleFirstCheckBox.setSelected(settings.isTitleFirst());
@@ -205,7 +205,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         titleFirstLabel = new javax.swing.JLabel();
         titleFirstCheckBox = new javax.swing.JCheckBox();
         reverseNumberingCheckBox = new javax.swing.JCheckBox();
-        listAllCheckBox = new javax.swing.JCheckBox();
+        listOnlyCoauthorsCheckBox = new javax.swing.JCheckBox();
         firstNameLabel = new javax.swing.JLabel();
         fullFirstNameRadioButton = new javax.swing.JRadioButton();
         abbrFirstNameRadioButton = new javax.swing.JRadioButton();
@@ -393,11 +393,11 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             }
         });
 
-        listAllCheckBox.setText("List only my co-authors");
-        listAllCheckBox.setToolTipText("The authors will be displayed as \"With\", followed by a list of the other authors on the paper. If you are the only author, no author information is displayed.");
-        listAllCheckBox.addItemListener(new java.awt.event.ItemListener() {
+        listOnlyCoauthorsCheckBox.setText("List only my co-authors");
+        listOnlyCoauthorsCheckBox.setToolTipText("The authors will be displayed as \"With\", followed by a list of the other authors on the paper. If you are the only author, no author information is displayed.");
+        listOnlyCoauthorsCheckBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                listAllCheckBoxItemStateChanged(evt);
+                listOnlyCoauthorsCheckBoxItemStateChanged(evt);
             }
         });
 
@@ -468,7 +468,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                                 .addComponent(abbrFirstNameRadioButton)
                                 .addGap(18, 18, 18)
                                 .addComponent(noFirstNameRadioButton))
-                            .addComponent(listAllCheckBox))
+                            .addComponent(listOnlyCoauthorsCheckBox))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -538,7 +538,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(reverseNamesCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(listAllCheckBox)
+                .addComponent(listOnlyCoauthorsCheckBox)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(titleFirstSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -752,13 +752,14 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_reverseNumberingCheckBoxItemStateChanged
 
-    private void listAllCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_listAllCheckBoxItemStateChanged
+    private void listOnlyCoauthorsCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_listOnlyCoauthorsCheckBoxItemStateChanged
+        // Negation of usual logic, as the meaning of the two options is opposite
         if (evt.getStateChange() == ItemEvent.DESELECTED) {
-            settings.setListAllAuthors(false);
-        } else if (evt.getStateChange() == ItemEvent.SELECTED) {
             settings.setListAllAuthors(true);
+        } else if (evt.getStateChange() == ItemEvent.SELECTED) {
+            settings.setListAllAuthors(false);
         }
-    }//GEN-LAST:event_listAllCheckBoxItemStateChanged
+    }//GEN-LAST:event_listOnlyCoauthorsCheckBoxItemStateChanged
 
     private void fullFirstNameRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fullFirstNameRadioButtonActionPerformed
         settings.setNameDisplay(FormatSettings.NameDisplay.FULL);
@@ -798,7 +799,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JButton inButton;
     private javax.swing.JList inCatList;
     private javax.swing.JScrollPane inCatScrollPane;
-    private javax.swing.JCheckBox listAllCheckBox;
+    private javax.swing.JCheckBox listOnlyCoauthorsCheckBox;
     private javax.swing.JRadioButton noFirstNameRadioButton;
     private javax.swing.JLabel noteLabel;
     private javax.swing.JSeparator noteSeparator;
