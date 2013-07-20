@@ -212,10 +212,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Abstract if included
         if (includeAbstract(item)) {
-            out.newLine();
-
             // Show \ hide link for the abstract
             if (htmlSettings.getTitleTarget() != HTMLSettings.TitleLinkTarget.ABSTRACT) {
+                out.newLine();
                 writeToggleLink(item.getId() + "_abstract", "Abstract");
             }
 
@@ -225,9 +224,11 @@ public class HTMLBibItemWriter extends BibItemWriter {
             // Actual abstract
             out.write(indent + "<div id=\"" + item.getId() + "_abstract\" class=\"collapsible\">");
             out.write("<div class=\"abstract\">");
-            out.write("<span class=\"abstractword\">Abstract: </span>");
+            out.newLine();
+            out.write(indent + "  <span class=\"abstractword\">Abstract: </span>");
             output(item.get("abstract"));
-            out.write("</div></div>");
+            out.newLine();
+            out.write(indent + "</div></div>");
             out.newLine();
         } else {
             out.write("<br>");
@@ -424,7 +425,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Actual bibtex
         out.write(indent + "<div id=\"" + item.getId() + "_bibtex\" class=\"collapsible\">");
-        out.write("<pre class=\"bibtex\">");
+        out.newLine();
+        out.write(indent + "  <pre class=\"bibtex\">");
         out.newLine();
 
         // Item type
@@ -480,7 +482,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         out.newLine(); // No comma after the last element
-        out.write("}</pre></div>");
+        out.write("}</pre>");
+        out.newLine();
+        
+        out.write(indent + "</div>");
         out.newLine();
     }
 
@@ -490,7 +495,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Actual bibtex
         out.write(indent + "<div id=\"" + item.getId() + "_bibtex\" class=\"collapsible\">");
-        out.write("<pre class=\"bibtex\">");
+        out.newLine();
+        out.write(indent + "  <pre class=\"bibtex\">");
         out.newLine();
 
         // Item type
@@ -537,7 +543,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("  ee={http://arxiv.org/abs/" + item.get("arxiv") + "}");
 
         out.newLine(); // No comma after the last element
-        out.write("}</pre></div>");
+        out.write("}</pre>");
+        out.newLine();
+        
+        out.write(indent + "</div>");
         out.newLine();
     }
 
