@@ -566,11 +566,6 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("</a>]");
 
         out.write("</span>");
-
-        // Disabled link for users without JS
-        out.write("<noscript><div>[");
-        out.write(linkText);
-        out.write("]</div></noscript>");
         out.newLine();
     }
 
