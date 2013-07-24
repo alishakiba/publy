@@ -4,65 +4,79 @@
     <!-- Hide interactive elements for users who have JavaScript disabled -->
     <noscript>
       <style type="text/css">
-        .interactive { display:none; }
+        button.abstract-toggle, button.bibtex-toggle { display: none; }
+		h2.abstract-toggle { cursor: auto; }
       </style>
     </noscript>
 
     <!-- jQuery framework -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-    <!-- Scripts that run when the page DOM is done loading -->
     <script type="text/javascript">
+	  // Function that is called when a link to a specific paper is clicked
+	  function showPaper(divID) {
+        // Expand the abstract if it is currently hidden, otherwise leave it expanded
+		var bibitem = $("#" + divID);
+		var abs = bibitem.children('.abstract-container');
+		
+        if (abs.length && abs.is(":hidden")) {
+		  abs.slideToggle(500);
+		  
+		  // Update the button text to reflect that the abstract expanded
+		  var button = bibitem.children('button.abstract-toggle');
+		  
+		  if (button.length && button.text() == "Abstract") {
+		    var width = button.width();
+            button.text("Hide");
+            button.width(width);
+		  }
+        }
+      }
+	
+	  // Functions that run the first time the document loads
       $(document).ready(function() {
-        // Detection for links to specific articles
+        // Abstracts start hidden for JS-enabled users
+		$('.abstract-container').hide();
+		
+		// Detection for links to specific articles
         // Run once, for page reloads
         var hash = window.location.hash;
         if (hash) {
           showPaper(hash.substring(1));
         }
      
-        // Run every time the hash changes
+        // Register an event listener, to run every time the hash changes
         $(window).on('hashchange', function() {
           showPaper(document.location.hash.substring(1));
         });
-      });
-    </script>
-
-    <!-- Function for toggling visibility of abstracts and BibTeX etc. -->
-    <script type="text/javascript">
-      function toggle(divID) {
-        $("#" + divID + "_plus").toggle();
-        $("#" + divID + "_minus").toggle();
-        $("#" + divID).slideToggle(500);
-      }
-     
-      function show(divID) {
-        $("#" + divID + "_plus").hide();
-        $("#" + divID + "_minus").show();
-        $("#" + divID).show();
-      }
-     
-      function hide(divID) {
-        $("#" + divID + "_plus").show();
-        $("#" + divID + "_minus").hide();
-        $("#" + divID).hide();
-      }
-     
-      function showPaper(divID) {
-        // Expand the abstract if it is currently hidden, otherwise leave it expanded
-        if ($("#" + divID + "_abstract").is(":hidden")) {
-          toggle(divID + "_abstract");
-        }
-      }
-    </script>
-	
-    <!-- Functions that add toggle links to all titles -->
-    <script type="text/javascript">
-      function makeTitlesToggleAbstracts() {
-        $(".title").click(function() {
-           $("#" + $(this).parent().attr('id') + "_abstract").slideToggle(500);
+		
+		// Add click-behaviour to toggle elements
+		$('.abstract-toggle').click(function () {
+          $(this).parent().children('.abstract-container').slideToggle(500);
         });
-      }
+        $('button.abstract-toggle').click(function () {
+          if ($(this).text() == "Abstract") {
+            var width = $(this).width();
+            $(this).text("Hide");
+            $(this).width(width);
+          } else {
+            $(this).text("Abstract");
+          }
+        });
+
+        $('.bibtex-toggle').click(function () {
+          $(this).parent().children('.bibtex-container').slideToggle(500);
+        });
+        $('button.bibtex-toggle').click(function () {
+          if ($(this).text() == "BibTeX") {
+            var width = $(this).width();
+            $(this).text("Hide");
+            $(this).width(width);
+          } else {
+            $(this).text("BibTeX");
+          }
+        });
+      });
     </script>
 
     <!-- Include MathJax to convert LaTeX formulas to HTML on the fly -->
