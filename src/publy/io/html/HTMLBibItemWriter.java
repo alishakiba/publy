@@ -168,11 +168,11 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         // Don't add an authors line if it's just me and I just want to list co-authors
-        if (settings.isListAllAuthors() || item.getAuthors().size() > 1) {
+        if (settings.isListAllAuthors() || item.getAuthors().size() > 1 || (item.getAuthors().size() == 1 && !item.getAuthors().get(0).isMe())) {
             String authors = formatAuthors(item);
 
             if (authors.endsWith(".</span>") || authors.endsWith(".</a>")) {
-                // Don't double up on periods when author names are abbreviated and reversed
+                // Don't double up on periods (occurs when author names are abbreviated and reversed)
                 output(indent, authors, "<br>", true);
             } else {
                 output(indent, authors, ".<br>", true);
@@ -189,7 +189,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         
         // Title
         if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
-            output("<h2 class=\"title link\">", formatTitle(item), "</h2>");
+            output("<h2 class=\"title abstract-toggle\">", formatTitle(item), "</h2>");
         } else if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && includePaper(item)) {
             try {
                 String href = (new URI(null, null, item.get("paper"), null)).toString();
@@ -215,14 +215,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
             // Show \ hide link for the abstract
             if (htmlSettings.getTitleTarget() != HTMLSettings.TitleLinkTarget.ABSTRACT) {
                 out.newLine();
-                writeToggleLink(item.getId() + "_abstract", "Abstract");
+                writeToggleLink("abstract", "Abstract");
             }
 
             out.write("<br>");
             out.newLine();
 
             // Actual abstract
-            out.write(indent + "<div id=\"" + item.getId() + "_abstract\" class=\"collapsible\">");
+            out.write(indent + "<div class=\"abstract-container\">");
             out.write("<div class=\"abstract\">");
             out.newLine();
             out.write(indent + "  <span class=\"abstractword\">Abstract: </span>");
@@ -421,10 +421,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private void writeBibTeXHTML(BibItem item) throws IOException {
         // Show / hide links
-        writeToggleLink(item.getId() + "_bibtex", "BibTeX");
+        writeToggleLink("bibtex", "BibTeX");
 
         // Actual bibtex
-        out.write(indent + "<div id=\"" + item.getId() + "_bibtex\" class=\"collapsible\">");
+        out.write(indent + "<div class=\"bibtex-container\">");
         out.newLine();
         out.write(indent + "  <pre class=\"bibtex\">");
         out.newLine();
@@ -491,10 +491,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private void writeArXivBibTeXHTML(BibItem item) throws IOException {
         // Show / hide links
-        writeToggleLink(item.getId() + "_bibtex", "BibTeX");
+        writeToggleLink("bibtex", "BibTeX");
 
         // Actual bibtex
-        out.write(indent + "<div id=\"" + item.getId() + "_bibtex\" class=\"collapsible\">");
+        out.write(indent + "<div class=\"bibtex-container\">");
         out.newLine();
         out.write(indent + "  <pre class=\"bibtex\">");
         out.newLine();
@@ -550,22 +550,11 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.newLine();
     }
 
-    private void writeToggleLink(String id, String linkText) throws IOException {
-        // Mark as interactive so users with JS disabled do not see links that do nothing
+    private void writeToggleLink(String type, String text) throws IOException {
         out.write(indent);
-        out.write("<span class=\"interactive\">");
-
-        // Link to reveal
-        out.write("[<a href=\"javascript:toggle('" + id + "');\" id=\"" + id + "_plus\" class=\"shown\">");
-        out.write(linkText);
-        out.write("</a>");
-
-        // Link to hide
-        out.write("<a href=\"javascript:toggle('" + id + "');\" id=\"" + id + "_minus\" class=\"hidden\">");
-        out.write("Hide " + linkText);
-        out.write("</a>]");
-
-        out.write("</span>");
+        out.write("<button class=\"" + type + "-toggle\">");
+        out.write(text);
+        out.write("</button>");
         out.newLine();
     }
 

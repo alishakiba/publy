@@ -96,13 +96,14 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
         out.write("</p>");
         out.newLine();
+        out.newLine();
 
         for (OutputCategory c : getCategories()) {
             writeCategory(c, out);
         }
 
         // Credit line
-        out.write("<p>Generated from a BibTeX file by Publy " + GeneratorMain.MAJOR_VERSION + "." + GeneratorMain.MINOR_VERSION + ".</p>");
+        out.write("    <p>Generated from a BibTeX file by Publy " + GeneratorMain.MAJOR_VERSION + "." + GeneratorMain.MINOR_VERSION + ".</p>");
         out.newLine();
 
         if (htmlSettings.getFooter() == null) {
@@ -178,7 +179,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
         out.write("    <div id=\"" + c.getShortName().toLowerCase() + "\" class=\"section\">");
         out.newLine();
-        out.write("      <h1 class=\"sectiontitle\">" + c.getName() + "</h1>");
+        out.write("      <h1 class=\"section-title\">" + c.getName() + "</h1>");
         out.newLine();
         out.newLine();
         writeNavigation(c, out);
@@ -186,7 +187,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         String note = getSettings().getCategoryNotes().get(c.getId());
 
         if (note != null && !note.isEmpty()) {
-            out.write("      <p class=\"indent\">");
+            out.write("      <p class=\"section-note\">");
             out.write(note);
             out.write("</p>");
             out.newLine();
@@ -195,9 +196,9 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
         // Start the list for this section
         if (getSettings().getNumbering() == FormatSettings.Numbering.NONE) {
-            out.write("      <ul class=\"sectionlist\">"); // Unordered list
+            out.write("      <ul class=\"section-list\">"); // Unordered list
         } else if (getSettings().getNumbering() == FormatSettings.Numbering.LOCAL) {
-            out.write("      <ol class=\"sectionlist\">");
+            out.write("      <ol class=\"section-list\">");
             // There is limited browser support for the reversed attribute, so we'll add values manually
 
             // Reset the count
@@ -208,10 +209,10 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             }
         } else if (getSettings().isReverseNumbering()) { // GLOBAL reversed
             assert getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL && getSettings().isReverseNumbering();
-            out.write("      <ol class=\"sectionlist\">");
+            out.write("      <ol class=\"section-list\">");
         } else { // GLOBAL, not reversed
             assert getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL && !getSettings().isReverseNumbering();
-            out.write("      <ol class=\"sectionlist\" start=\"" + count + "\">");
+            out.write("      <ol class=\"section-list\" start=\"" + count + "\">");
         }
         out.newLine();
 
@@ -248,27 +249,19 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void writeNavigation(OutputCategory current, BufferedWriter out) throws IOException {
-        out.write("      <p class=\"pubnav\">");
+        out.write("      <p class=\"navigation\">");
         out.newLine();
 
         for (int i = 0; i < getCategories().size(); i++) {
             OutputCategory c = getCategories().get(i);
 
-            out.write("        <a href=\"#");
-            out.write(c.getShortName().toLowerCase());
-            out.write("\" class=\"");
+            out.write("        <a href=\"#" + c.getShortName().toLowerCase() + "\"");
 
             if (c == current) {
-                out.write("navcurrent\"");
-            } else {
-                out.write("nav\"");
+                out.write(" class=\"current\"");
             }
 
-            out.write(" id=\"nav_");
-            out.write(current.getShortName());
-            out.write("To");
-            out.write(c.getShortName());
-            out.write("\">");
+            out.write(">");
 
             out.write(c.getShortName());
             out.write("</a>");
@@ -290,21 +283,6 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
         if (Files.exists(baseJs)) {
             copyFile(baseJs, out);
-
-            if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT) {
-                out.newLine();
-                out.write("    <!-- Functions to run once at document load -->\n"
-                        + "    <script type=\"text/javascript\">\n"
-                        + "      $(document).ready(function() {");
-                out.newLine();
-
-                out.write("        makeTitlesToggleAbstracts();");
-                out.newLine();
-
-                out.write("      });\n"
-                        + "    </script>");
-                out.newLine();
-            }
         } else {
             publy.Console.error("Cannot find base javascript file \"%s\".", baseJs);
         }
