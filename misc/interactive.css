@@ -1,25 +1,9 @@
-/* Start off hidden */
-.collapsible {
- display: none;
+/* Start off hidden, and hide for non-JS users */
+.bibtex-container {
+    display:none;
 }
 
-noscript>div {
- display: inline;
-}
-
-.hidden {
- display: none;
-}
-
-div.shown {
- display: block;
-}
-
-a.shown {
- display: inline;
-}
-
-/* Show a hand pointer to indicate a link */
-.link {
- cursor: pointer;
+/* Show a hand pointer to indicate a button */
+.abstract-toggle, .bibtex-toggle {
+    cursor:pointer;
 }
