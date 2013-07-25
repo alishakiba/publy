@@ -22,6 +22,7 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame(Settings settings) {
         this.settings = settings;
         initComponents();
+        setLocationRelativeTo(null); // Center
 
         // Make sure all console output from the generation is redirected to the text area.
         Console.setOutputTarget(consoleTextPane);
