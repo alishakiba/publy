@@ -23,6 +23,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
      */
     public ConsoleFrame() {
         initComponents();
+        setLocationRelativeTo(null); // Center
         Console.setOutputTarget(consoleTextPane);
     }
 

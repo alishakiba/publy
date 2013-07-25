@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import publy.data.bibitem.BibItem;
@@ -29,7 +31,7 @@ public class GeneratorMain {
 
     public static final int MAJOR_VERSION = 0;
     public static final int MINOR_VERSION = 4;
-    
+
     /**
      * @param args the command line arguments
      */
@@ -44,25 +46,43 @@ public class GeneratorMain {
             exception = ex;
         }
 
+        try {
+            // Set System L&F
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            // Unavailable: use default L&F
+        }
+
         if (settings == null) {
-            // Notify the user
-            JOptionPane.showMessageDialog(null, "No configuration information was found. Please set up your preferences.", "Publy - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
-
             // Launch the GUI
-            MainFrame mf = new MainFrame(Settings.defaultSettings());
+            final Throwable ex = exception;
 
-            // Report an Exception, if one occurred
-            if (exception != null) {
-                Console.except(exception, "Exception occurred while parsing the configuration:");
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    MainFrame mf = new MainFrame(Settings.defaultSettings());
+
+                    // Report an Exception, if one occurred
+                    if (ex != null) {
+                        Console.except(ex, "Exception occurred while parsing the configuration:");
+                    }
+
+                    mf.setVisible(true);
+                }
+            });
+
+            // Notify the user
+            if (ex == null) {
+                JOptionPane.showMessageDialog(null, "No configuration information was found. Please set up your preferences.", "Publy - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "An exception occurred while parsing the configuration. Loading the default configuration.", "Publy - Launching Settings Window", JOptionPane.ERROR_MESSAGE);
             }
-
-            mf.setVisible(true);
         } else {
             Console.log("Configuration parsed successfully.");
             generatePublicationList(settings);
         }
     }
-    
+
     public static void generatePublicationList(Settings settings) {
         // Check if the publication list is set and exists
         Path pubList = settings.getPublications();
@@ -74,7 +94,7 @@ public class GeneratorMain {
         } else {
             // Parse all publications
             List<BibItem> items = null;
-            
+
             try {
                 items = BibTeXParser.parseFile(settings.getPublications());
                 Console.log("Publications list \"%s\" parsed successfully.", settings.getPublications().getFileName());
@@ -101,7 +121,7 @@ public class GeneratorMain {
                     Console.except(ex, "Exception while writing plain text publication list:");
                 }
             }
-            
+
             if (items != null && settings.getHtmlSettings().linkToBibtexVersion()) {
                 try {
                     PublicationListWriter writer = new BibtexPublicationListWriter(settings.getGeneralSettings());
@@ -111,7 +131,7 @@ public class GeneratorMain {
                     Console.except(ex, "Exception while writing BibTeX publication list:");
                 }
             }
-            
+
             Console.log("Done.");
         }
     }
