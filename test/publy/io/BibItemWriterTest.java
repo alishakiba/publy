@@ -112,6 +112,9 @@ public class BibItemWriterTest {
         // Mixed
         expected.put("Konvexe {F}{\\\"u}nfecke in ebenen {P}unktmengen", "Konvexe F\\\"unfecke in ebenen Punktmengen");
         
+        // LaTeX commands
+        expected.put("a given region in $\\mathbb{R}^2$ realizing", "a given region in $\\mathbb{R}^2$ realizing");
+        
         BibItemWriter testInstance = new TestBibItemWriter(null, null);
         
         for (String inputTitle : expected.keySet()) {
