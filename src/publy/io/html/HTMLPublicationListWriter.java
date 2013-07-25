@@ -31,13 +31,13 @@ import publy.io.ResourceLocator;
  */
 public class HTMLPublicationListWriter extends PublicationListWriter {
 
-    public static final String DEFAULT_BASEJS_LOCATION = "data/basejs.html";
-    public static final String DEFAULT_GAJS_LOCATION = "data/gajs.html";
+    public static final String DEFAULT_BASEJS_LOCATION = "data/base.js";
+    public static final String DEFAULT_GAJS_LOCATION = "data/ga.js";
     public static final String DEFAULT_HEADER_LOCATION = "data/defaultHeader.html";
     public static final String DEFAULT_FOOTER_LOCATION = "data/defaultFooter.html";
     private HTMLBibItemWriter itemWriter;
     private int count;
-    private Pattern hrefPattern = Pattern.compile("href\\s*=\\s*\"([^\"]*)\"");
+    private Pattern linkPattern = Pattern.compile("(href|src)\\s*=\\s*\"([^\"]*)\"");
     private HTMLSettings htmlSettings;
 
     public HTMLPublicationListWriter(FormatSettings generalSettings, HTMLSettings htmlSettings) {
@@ -134,12 +134,16 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                 }
 
                 // Copy referenced files from the data directory to the output directory
-                if (line.contains("href")) {
+                if (line.contains("href") || line.contains("src")) {
                     // See if this is a reference to a file in the data directory
-                    Matcher m = hrefPattern.matcher(line);
+                    Matcher m = linkPattern.matcher(line);
 
                     while (m.find()) {
-                        ensureReferencedFileExists(m.group(1));
+                        String path = m.group(2);
+
+                        if (!path.startsWith("http")) {
+                            ensureReferencedFileExists(m.group(2));
+                        }
                     }
                 }
             }
@@ -279,35 +283,30 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void writeJavascript(BufferedWriter out) throws IOException {
-        Path baseJs = ResourceLocator.getBaseDirectory().resolve(DEFAULT_BASEJS_LOCATION);
-
-        if (Files.exists(baseJs)) {
-            copyFile(baseJs, out);
-        } else {
-            publy.Console.error("Cannot find base javascript file \"%s\".", baseJs);
-        }
-
         // Google Analytics code
         if (htmlSettings.getGoogleAnalyticsUser() != null && !htmlSettings.getGoogleAnalyticsUser().isEmpty()) {
             Path gaJs = ResourceLocator.getBaseDirectory().resolve(DEFAULT_GAJS_LOCATION);
 
             if (Files.exists(gaJs)) {
+                // Include the JavaScript file
+                out.newLine();
+                out.write("    <!-- Google Analytics JavaScript file -->");
+                out.newLine();
+                out.write("    <script src=\"" + gaJs.getFileName() + "\"></script>");
                 out.newLine();
 
-                try (BufferedReader reader = Files.newBufferedReader(gaJs, Charset.forName("UTF-8"))) {
+                // Copy the JavaScript file, substituting the user account placeholder
+                Path gaJsTarget = getSettings().getTarget().getParent().resolve(gaJs.getFileName());
+
+                try (BufferedReader reader = Files.newBufferedReader(gaJs, Charset.forName("UTF-8"));
+                        BufferedWriter writer = Files.newBufferedWriter(gaJsTarget, Charset.forName("UTF-8"))) {
                     for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                        if (line.contains("~GAUSERACCOUNT~")) {
-                            // Replace the user account place-holder with the actual value
-                            out.write(line.replaceAll("~GAUSERACCOUNT~", htmlSettings.getGoogleAnalyticsUser()));
-                            out.newLine();
-                        } else {
-                            out.write(line);
-                            out.newLine();
-                        }
+                        writer.write(line.replaceAll("%%GAUSERACCOUNT%%", htmlSettings.getGoogleAnalyticsUser()));
+                        writer.newLine();
                     }
                 }
             } else {
-                publy.Console.error("Cannot find Google Analytics javascript file \"%s\".", gaJs);
+                publy.Console.error("Cannot find Google Analytics JavaScript file \"%s\".", gaJs);
             }
         }
     }
