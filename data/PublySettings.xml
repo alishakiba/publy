@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plgsettings majorversion="0" minorversion="3">
+<plgsettings majorversion="0" minorversion="4">
   <!-- Relative path to a BibTeX file with the publication list -->
-  <publications>misc/route.bib</publications>
+  <publications>misc/testdata/route.bib</publications>
 
   <!-- General settings -->
   <generalsettings>
-    <target>misc/test.html</target>
+    <target>misc/test/test.html</target>
     <listallauthors>true</listallauthors>
     <namedisplay>FULL</namedisplay>
     <reversenames>true</reversenames>
