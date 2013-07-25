@@ -200,6 +200,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 checkExistance(item.get("paper"), "paper", item);
             } catch (URISyntaxException ex) {
                 Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
+                output("<h2 class=\"title\">", formatTitle(item), "</h2>");
             }
         } else {
             output("<h2 class=\"title\">", formatTitle(item), "</h2>");
