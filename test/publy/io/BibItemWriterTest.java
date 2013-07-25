@@ -2,7 +2,6 @@
  */
 package publy.io;
 
-import publy.io.BibItemWriter;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -114,6 +113,12 @@ public class BibItemWriterTest {
         
         // LaTeX commands
         expected.put("a given region in $\\mathbb{R}^2$ realizing", "a given region in $\\mathbb{R}^2$ realizing");
+        expected.put("Mori~\\etal\\ showed", "Mori~\\etal\\ showed");
+        expected.put("The \\item{}s that", "The \\item{}s that");
+        expected.put("The \\item{}ca{tego}ries that", "The \\item{}categories that");
+        expected.put("It is of the \\emph[very]{utmost} importance", "It is of the \\emph[very]{utmost} importance");
+        expected.put("It is of \\emph[a little]{great} importance", "It is of \\emph[a little]{great} importance");
+        expected.put("It is of \\emph[less]{not too much} importance", "It is of \\emph[less]{not too much} importance");
         
         BibItemWriter testInstance = new TestBibItemWriter(null, null);
         

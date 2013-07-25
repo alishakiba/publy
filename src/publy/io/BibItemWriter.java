@@ -233,7 +233,7 @@ public abstract class BibItemWriter {
                         if (level == 0) {
                             escape = true;
                         }
-                        
+
                         sb.append(c);
                         break;
                     default:
@@ -257,35 +257,69 @@ public abstract class BibItemWriter {
         return sb.toString();
     }
 
+    private enum RemoveBracesState {
+
+        DEFAULT, ESCAPE, COMMAND_NAME, OPTIONAL_ARGUMENT, ARGUMENT, BEFORE_POSSIBLE_ARGUMENT;
+    }
+
     protected String removeBraces(String field) {
         StringBuilder result = new StringBuilder(field.length());
-        boolean escape = false;
-        
+        RemoveBracesState state = RemoveBracesState.DEFAULT;
+
         for (char c : field.toCharArray()) {
-            if (!escape) {
+            if (state == RemoveBracesState.DEFAULT) {
                 switch (c) {
                     case '{': // Remove
                         break;
                     case '}': // Remove
                         break;
                     case '\\':
-                        escape = true;
+                        state = RemoveBracesState.ESCAPE;
                         break;
                     default:
                         result.append(c);
                         break;
                 }
-            } else {
+            } else if (state == RemoveBracesState.ESCAPE) {
+                if (Character.isLetter(c)) {
+                    state = RemoveBracesState.COMMAND_NAME;
+                } else {
+                    state = RemoveBracesState.DEFAULT;
+                }
+
+                // Discard the slash before braces
                 if (c != '{' && c != '}') {
-                    // Only add the escaping slash for non-braces
                     result.append('\\');
+                }
+
+                result.append(c);
+            } else if (state == RemoveBracesState.COMMAND_NAME) {
+                if (c == '[') {
+                    state = RemoveBracesState.OPTIONAL_ARGUMENT;
+                } else if (c == '{') {
+                    state = RemoveBracesState.ARGUMENT;
+                } else if (!Character.isLetter(c)) {
+                    state = RemoveBracesState.DEFAULT;
+                }
+
+                result.append(c);
+            } else if (state == RemoveBracesState.OPTIONAL_ARGUMENT || state == RemoveBracesState.ARGUMENT) {
+                if ((state == RemoveBracesState.OPTIONAL_ARGUMENT && c == ']') ||(state == RemoveBracesState.ARGUMENT && c == '}')) {
+                    state = RemoveBracesState.BEFORE_POSSIBLE_ARGUMENT;
+                }
+
+                result.append(c);
+            } else if (state == RemoveBracesState.BEFORE_POSSIBLE_ARGUMENT) {
+                if (c == '{') {
+                    state = RemoveBracesState.ARGUMENT;
+                } else {
+                    state = RemoveBracesState.DEFAULT;
                 }
                 
                 result.append(c);
-                escape = false;
             }
         }
-        
+
         return result.toString();
     }
 }
