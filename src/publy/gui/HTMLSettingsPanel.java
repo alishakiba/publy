@@ -5,12 +5,10 @@ package publy.gui;
 import java.awt.Component;
 import java.util.Arrays;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFileChooser;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import publy.data.PublicationType;
 import publy.data.settings.HTMLSettings;
-import publy.io.ResourceLocator;
 
 /**
  *
@@ -37,23 +35,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     }
     
     private void populateValues() {
-        // Header & Footer
-        if (settings.getHeader() == null) {
-            headerTextField.setText("");
-            headerFileChooser.setCurrentDirectory(ResourceLocator.getBaseDirectory().toFile());
-        } else {
-            headerTextField.setText(ResourceLocator.getRelativePath(settings.getHeader()));
-            headerFileChooser.setCurrentDirectory(settings.getHeader().getParent().toFile());
-        }
-        
-        if (settings.getFooter()== null) {
-            footerTextField.setText("");
-            footerFileChooser.setCurrentDirectory(ResourceLocator.getBaseDirectory().toFile());
-        } else {
-            footerTextField.setText(ResourceLocator.getRelativePath(settings.getFooter()));
-            footerFileChooser.setCurrentDirectory(settings.getFooter().getParent().toFile());
-        }
-
         // Links
         linkToTextCheckBox.setSelected(settings.linkToTextVersion());
         linkToBibtexCheckBox.setSelected(settings.linkToBibtexVersion());
@@ -78,19 +59,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             presentedTextField.setText(settings.getPresentedText());
         }
     }
-    
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-
-        // Dis/enable all components
-        for (Component c : getComponents()) {
-            c.setEnabled(enabled);
-        }
-
-        // Handle troublesome components
-        analyticsUserTextField.setEnabled(enabled && analyticsCheckBox.isSelected());
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -101,14 +69,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        headerFileChooser = new javax.swing.JFileChooser();
-        footerFileChooser = new javax.swing.JFileChooser();
-        headerLabel = new javax.swing.JLabel();
-        headerSeparator = new javax.swing.JSeparator();
-        headerTextField = new javax.swing.JTextField();
-        headerBrowseButton = new javax.swing.JButton();
-        footerTextField = new javax.swing.JTextField();
-        footerBrowseButton = new javax.swing.JButton();
         linkToTextLabel = new javax.swing.JLabel();
         linkToTextSeparator = new javax.swing.JSeparator();
         linkToTextCheckBox = new javax.swing.JCheckBox();
@@ -135,50 +95,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         titleLinkComboBox = new javax.swing.JComboBox();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("HTML Settings"));
-
-        headerLabel.setText("Header & Footer");
-
-        headerTextField.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {
-                headerTextFieldTextChanged(e);
-            }
-            public void removeUpdate(DocumentEvent e) {
-                headerTextFieldTextChanged(e);
-            }
-            public void changedUpdate(DocumentEvent e) {
-                //Plain text components do not fire these events
-            }
-        });
-        headerTextField.setColumns(29);
-        headerTextField.setToolTipText("The contents of this file will be copied to your publication list before the publications themselves are listed. See the provided default header for an example.");
-
-        headerBrowseButton.setText("Browse...");
-        headerBrowseButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                headerBrowseButtonActionPerformed(evt);
-            }
-        });
-
-        footerTextField.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {
-                footerTextFieldTextChanged(e);
-            }
-            public void removeUpdate(DocumentEvent e) {
-                footerTextFieldTextChanged(e);
-            }
-            public void changedUpdate(DocumentEvent e) {
-                //Plain text components do not fire these events
-            }
-        });
-        footerTextField.setColumns(29);
-        footerTextField.setToolTipText("The contents of this file will be copied to your publication list after the publications themselves are listed. See the provided default footer for an example.");
-
-        footerBrowseButton.setText("Browse...");
-        footerBrowseButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                footerBrowseButtonActionPerformed(evt);
-            }
-        });
 
         linkToTextLabel.setText("Alternative versions");
 
@@ -285,10 +201,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(headerLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(headerSeparator))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(linkToTextLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(linkToTextSeparator))
@@ -303,7 +215,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(presentedLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(presentedSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                        .addComponent(presentedSeparator))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(analyticsLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -311,59 +223,40 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(footerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(footerBrowseButton))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(headerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(headerBrowseButton))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(abstractLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(abstractComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(bibtexLabel)
-                                    .addComponent(paperLabel))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(paperComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(bibtexComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(titleLinkComboText)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(titleLinkComboBox, 0, 200, Short.MAX_VALUE))
+                                .addComponent(titleLinkComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(presentedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(analyticsUserLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(analyticsUserTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(linkToTextCheckBox)
-                                    .addComponent(linkToBibtexCheckBox)
-                                    .addComponent(analyticsCheckBox))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(abstractLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(abstractComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(bibtexLabel)
+                                        .addComponent(paperLabel))
+                                    .addGap(18, 18, 18)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(paperComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(bibtexComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(linkToTextCheckBox)
+                                .addComponent(linkToBibtexCheckBox)
+                                .addComponent(analyticsCheckBox)))))
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {abstractComboBox, bibtexComboBox, paperComboBox});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(headerSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(headerLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(headerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(headerBrowseButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(footerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(footerBrowseButton))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(linkToTextLabel)
                     .addComponent(linkToTextSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -415,22 +308,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void headerBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_headerBrowseButtonActionPerformed
-        int opened = headerFileChooser.showOpenDialog(this);
-
-        if (opened == JFileChooser.APPROVE_OPTION) {
-            headerTextField.setText(ResourceLocator.getRelativePath(headerFileChooser.getSelectedFile().toPath()));
-        }
-    }//GEN-LAST:event_headerBrowseButtonActionPerformed
-
-    private void footerBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_footerBrowseButtonActionPerformed
-        int opened = footerFileChooser.showOpenDialog(this);
-
-        if (opened == JFileChooser.APPROVE_OPTION) {
-            footerTextField.setText(ResourceLocator.getRelativePath(footerFileChooser.getSelectedFile().toPath()));
-        }
-    }//GEN-LAST:event_footerBrowseButtonActionPerformed
-
     private void linkToTextCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkToTextCheckBoxActionPerformed
         settings.setLinkToTextVersion(linkToTextCheckBox.isSelected());
     }//GEN-LAST:event_linkToTextCheckBoxActionPerformed
@@ -475,16 +352,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         // Update the settings
         settings.setGoogleAnalyticsUser(analyticsUserTextField.getText());
     }
-
-    private void headerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
-        // Update the settings
-        settings.setHeader(ResourceLocator.getFullPath(headerTextField.getText()));
-    }
-
-    private void footerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
-        // Update the settings
-        settings.setFooter(ResourceLocator.getFullPath(footerTextField.getText()));
-    }
     
     private void presentedTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
@@ -501,14 +368,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JTextField analyticsUserTextField;
     private javax.swing.JComboBox bibtexComboBox;
     private javax.swing.JLabel bibtexLabel;
-    private javax.swing.JButton footerBrowseButton;
-    private javax.swing.JFileChooser footerFileChooser;
-    private javax.swing.JTextField footerTextField;
-    private javax.swing.JButton headerBrowseButton;
-    private javax.swing.JFileChooser headerFileChooser;
-    private javax.swing.JLabel headerLabel;
-    private javax.swing.JSeparator headerSeparator;
-    private javax.swing.JTextField headerTextField;
     private javax.swing.JCheckBox linkToBibtexCheckBox;
     private javax.swing.JCheckBox linkToTextCheckBox;
     private javax.swing.JLabel linkToTextLabel;

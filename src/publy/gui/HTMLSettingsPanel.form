@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
-  <NonVisualComponents>
-    <Component class="javax.swing.JFileChooser" name="headerFileChooser">
-    </Component>
-    <Component class="javax.swing.JFileChooser" name="footerFileChooser">
-    </Component>
-  </NonVisualComponents>
   <Properties>
     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
       <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -33,11 +27,6 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="headerLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="headerSeparator" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
                       <Component id="linkToTextLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="linkToTextSeparator" max="32767" attributes="0"/>
@@ -55,7 +44,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="presentedLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="presentedSeparator" pref="150" max="32767" attributes="0"/>
+                      <Component id="presentedSeparator" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="analyticsLabel" min="-2" max="-2" attributes="0"/>
@@ -65,20 +54,21 @@
                   <Group type="102" attributes="0">
                       <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="footerTextField" pref="0" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="footerBrowseButton" min="-2" max="-2" attributes="0"/>
-                          </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="headerTextField" pref="0" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="headerBrowseButton" min="-2" max="-2" attributes="0"/>
+                              <Component id="titleLinkComboText" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="titleLinkComboBox" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="presentedTextField" alignment="0" pref="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="analyticsUserLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="analyticsUserTextField" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="abstractLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="abstractComboBox" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="abstractComboBox" linkSize="1" min="-2" pref="193" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -87,29 +77,13 @@
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="paperComboBox" max="32767" attributes="0"/>
-                                  <Component id="bibtexComboBox" max="32767" attributes="0"/>
+                                  <Component id="paperComboBox" linkSize="1" min="-2" pref="193" max="-2" attributes="0"/>
+                                  <Component id="bibtexComboBox" linkSize="1" min="-2" pref="193" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="titleLinkComboText" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="titleLinkComboBox" pref="200" max="32767" attributes="0"/>
-                          </Group>
-                          <Component id="presentedTextField" alignment="0" pref="0" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="analyticsUserLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="analyticsUserTextField" pref="0" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="linkToTextCheckBox" min="-2" max="-2" attributes="0"/>
-                                  <Component id="linkToBibtexCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="analyticsCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="linkToTextCheckBox" min="-2" max="-2" attributes="0"/>
+                          <Component id="linkToBibtexCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="analyticsCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -121,21 +95,6 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="headerSeparator" alignment="1" min="-2" pref="10" max="-2" attributes="0"/>
-                  <Component id="headerLabel" alignment="1" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="headerTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="headerBrowseButton" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="footerTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="footerBrowseButton" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="linkToTextLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                   <Component id="linkToTextSeparator" alignment="1" min="-2" pref="10" max="-2" attributes="0"/>
@@ -199,47 +158,6 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="headerLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Header &amp; Footer"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JSeparator" name="headerSeparator">
-    </Component>
-    <Component class="javax.swing.JTextField" name="headerTextField">
-      <Properties>
-        <Property name="columns" type="int" value="29"/>
-        <Property name="toolTipText" type="java.lang.String" value="The contents of this file will be copied to your publication list before the publications themselves are listed. See the provided default header for an example."/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="headerTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        headerTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        headerTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JButton" name="headerBrowseButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Browse..."/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="headerBrowseButtonActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JTextField" name="footerTextField">
-      <Properties>
-        <Property name="columns" type="int" value="29"/>
-        <Property name="toolTipText" type="java.lang.String" value="The contents of this file will be copied to your publication list after the publications themselves are listed. See the provided default footer for an example."/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="footerTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        footerTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        footerTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JButton" name="footerBrowseButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Browse..."/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="footerBrowseButtonActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JLabel" name="linkToTextLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Alternative versions"/>

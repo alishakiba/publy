@@ -3,12 +3,9 @@
 package publy.gui;
 
 import java.awt.Cursor;
-import java.nio.file.Path;
-import javax.swing.JFileChooser;
 import publy.Console;
 import publy.GeneratorMain;
 import publy.data.settings.Settings;
-import publy.io.ResourceLocator;
 import publy.io.settings.SettingsWriter;
 
 /**
@@ -25,21 +22,9 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame(Settings settings) {
         this.settings = settings;
         initComponents();
-        populateValues();
 
         // Make sure all console output from the generation is redirected to the text area.
         Console.setOutputTarget(consoleTextPane);
-    }
-
-    private void populateValues() {
-        // Publications
-        if (settings.getPublications() == null) {
-            pubTextField.setText("");
-            pubFileChooser.setCurrentDirectory(ResourceLocator.getBaseDirectory().toFile());
-        } else {
-            pubTextField.setText(ResourceLocator.getRelativePath(settings.getPublications()));
-            pubFileChooser.setCurrentDirectory(settings.getPublications().getParent().toFile());
-        }
     }
 
     /**
@@ -51,19 +36,11 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pubFileChooser = new javax.swing.JFileChooser();
         mainSplitPane = new javax.swing.JSplitPane();
-        topPanel = new javax.swing.JPanel();
-        publicationsPanel = new javax.swing.JPanel();
-        pubLabel = new javax.swing.JLabel();
-        pubTextField = new javax.swing.JTextField();
-        pubBrowseButton = new javax.swing.JButton();
         settingsTabbedPane = new javax.swing.JTabbedPane();
-        generalScrollPane = new javax.swing.JScrollPane();
-        generalPanel = new javax.swing.JPanel();
+        fileSettingsPanel = new publy.gui.FileSettingsPanel(settings);
+        categorySettingsPanel = new publy.gui.CategorySettingsPanel(settings.getGeneralSettings());
         generalSettingsPanel = new publy.gui.GeneralSettingsPanel(settings.getGeneralSettings());
-        htmlScrollPane = new javax.swing.JScrollPane();
-        htmlPanel = new javax.swing.JPanel();
         htmlSettingsPanel = new publy.gui.HTMLSettingsPanel(settings.getHtmlSettings());
         bottomPanel = new javax.swing.JPanel();
         buttonPanel = new javax.swing.JPanel();
@@ -80,91 +57,12 @@ public class MainFrame extends javax.swing.JFrame {
         mainSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         mainSplitPane.setResizeWeight(1.0);
 
-        topPanel.setLayout(new java.awt.BorderLayout());
+        settingsTabbedPane.addTab("Files", fileSettingsPanel);
+        settingsTabbedPane.addTab("Categories", categorySettingsPanel);
+        settingsTabbedPane.addTab("General", generalSettingsPanel);
+        settingsTabbedPane.addTab("HTML", htmlSettingsPanel);
 
-        pubLabel.setText("Publications file:");
-
-        pubTextField.setEditable(false);
-        pubTextField.setColumns(50);
-
-        pubBrowseButton.setText("Browse...");
-        pubBrowseButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pubBrowseButtonActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout publicationsPanelLayout = new javax.swing.GroupLayout(publicationsPanel);
-        publicationsPanel.setLayout(publicationsPanelLayout);
-        publicationsPanelLayout.setHorizontalGroup(
-            publicationsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(publicationsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pubLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pubTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pubBrowseButton)
-                .addContainerGap())
-        );
-        publicationsPanelLayout.setVerticalGroup(
-            publicationsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(publicationsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(publicationsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(pubLabel)
-                    .addComponent(pubTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pubBrowseButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        topPanel.add(publicationsPanel, java.awt.BorderLayout.NORTH);
-
-        javax.swing.GroupLayout generalPanelLayout = new javax.swing.GroupLayout(generalPanel);
-        generalPanel.setLayout(generalPanelLayout);
-        generalPanelLayout.setHorizontalGroup(
-            generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(generalPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(generalSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
-        );
-        generalPanelLayout.setVerticalGroup(
-            generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(generalPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(generalSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        generalScrollPane.setViewportView(generalPanel);
-
-        settingsTabbedPane.addTab("General", generalScrollPane);
-
-        javax.swing.GroupLayout htmlPanelLayout = new javax.swing.GroupLayout(htmlPanel);
-        htmlPanel.setLayout(htmlPanelLayout);
-        htmlPanelLayout.setHorizontalGroup(
-            htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(htmlPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(htmlSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(64, Short.MAX_VALUE))
-        );
-        htmlPanelLayout.setVerticalGroup(
-            htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(htmlPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(htmlSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
-        );
-
-        htmlScrollPane.setViewportView(htmlPanel);
-
-        settingsTabbedPane.addTab("HTML", htmlScrollPane);
-
-        topPanel.add(settingsTabbedPane, java.awt.BorderLayout.CENTER);
-
-        mainSplitPane.setTopComponent(topPanel);
+        mainSplitPane.setTopComponent(settingsTabbedPane);
 
         bottomPanel.setLayout(new java.awt.BorderLayout());
 
@@ -222,7 +120,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         bottomPanel.add(consoleScrollPane, java.awt.BorderLayout.CENTER);
 
-        mainSplitPane.setRightComponent(bottomPanel);
+        mainSplitPane.setBottomComponent(bottomPanel);
 
         getContentPane().add(mainSplitPane, java.awt.BorderLayout.CENTER);
 
@@ -255,32 +153,6 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_saveNQuitButtonActionPerformed
 
-    private void pubBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pubBrowseButtonActionPerformed
-        int opened = pubFileChooser.showOpenDialog(this);
-
-        if (opened == JFileChooser.APPROVE_OPTION) {
-            Path selected = pubFileChooser.getSelectedFile().toPath();
-            pubTextField.setText(ResourceLocator.getRelativePath(selected));
-            settings.setPublications(selected);
-
-            if (settings.getGeneralSettings().getTarget() == null) {
-                // Extract the base name
-                String baseName = pubFileChooser.getSelectedFile().getName();
-                int extension = baseName.lastIndexOf('.');
-
-                if (extension > -1) {
-                    baseName = baseName.substring(0, extension);
-                }
-
-                // Set an initial target
-                settings.getGeneralSettings().setTarget(selected.resolveSibling(baseName + ".html"));
-
-                // Update the GUI
-                generalSettingsPanel.updateTarget();
-            }
-        }
-    }//GEN-LAST:event_pubBrowseButtonActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -297,23 +169,15 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel bottomPanel;
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
+    private publy.gui.CategorySettingsPanel categorySettingsPanel;
     private javax.swing.JScrollPane consoleScrollPane;
     private javax.swing.JTextPane consoleTextPane;
-    private javax.swing.JPanel generalPanel;
-    private javax.swing.JScrollPane generalScrollPane;
+    private publy.gui.FileSettingsPanel fileSettingsPanel;
     private publy.gui.GeneralSettingsPanel generalSettingsPanel;
     private javax.swing.JButton generateButton;
-    private javax.swing.JPanel htmlPanel;
-    private javax.swing.JScrollPane htmlScrollPane;
     private publy.gui.HTMLSettingsPanel htmlSettingsPanel;
     private javax.swing.JSplitPane mainSplitPane;
-    private javax.swing.JButton pubBrowseButton;
-    private javax.swing.JFileChooser pubFileChooser;
-    private javax.swing.JLabel pubLabel;
-    private javax.swing.JTextField pubTextField;
-    private javax.swing.JPanel publicationsPanel;
     private javax.swing.JButton saveNQuitButton;
     private javax.swing.JTabbedPane settingsTabbedPane;
-    private javax.swing.JPanel topPanel;
     // End of variables declaration//GEN-END:variables
 }
