@@ -1,9 +1,0 @@
-/* Start off hidden, and hide for non-JS users */
-.bibtex-container {
-    display:none;
-}
-
-/* Show a hand pointer to indicate a button */
-.abstract-toggle, .bibtex-toggle {
-    cursor:pointer;
-}
