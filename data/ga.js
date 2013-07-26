@@ -63,7 +63,7 @@ $(document).ready(function() {
 
 // Google analytics code
 var _gaq = _gaq || [];
-var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+var pluginUrl = 'http://www.google-analytics.com/plugins/ga/inpage_linkid.js';
 _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
 _gaq.push(['_setAccount', '%%GAUSERACCOUNT%%']);
 _gaq.push(['_trackPageview']);
