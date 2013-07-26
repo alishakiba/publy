@@ -423,6 +423,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     private void writeBibTeXHTML(BibItem item) throws IOException {
         // Show / hide links
         writeToggleLink("bibtex", "BibTeX");
+        out.newLine();
 
         // Actual bibtex
         out.write(indent + "<div class=\"bibtex-container\">");
@@ -493,6 +494,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     private void writeArXivBibTeXHTML(BibItem item) throws IOException {
         // Show / hide links
         writeToggleLink("bibtex", "BibTeX");
+        out.newLine();
 
         // Actual bibtex
         out.write(indent + "<div class=\"bibtex-container\">");
@@ -556,7 +558,6 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("<button class=\"" + type + "-toggle\">");
         out.write(text);
         out.write("</button>");
-        out.newLine();
     }
 
     private boolean includeAbstract(BibItem item) {
