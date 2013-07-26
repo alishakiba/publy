@@ -56,7 +56,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Publy " + GeneratorMain.MAJOR_VERSION + "." + GeneratorMain.MINOR_VERSION);
-        setIconImage(GeneratorMain.PUBLY_ICON);
+        setIconImages(GeneratorMain.PUBLY_ICONS);
 
         mainSplitPane.setDividerLocation(getHeight() - 150);
         mainSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
