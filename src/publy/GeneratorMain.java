@@ -4,7 +4,10 @@
  */
 package publy;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -31,6 +34,13 @@ public class GeneratorMain {
 
     public static final int MAJOR_VERSION = 0;
     public static final int MINOR_VERSION = 4;
+    public static final Image PUBLY_ICON;
+
+    static {
+        // Prepare our icon
+        URL iconUrl = GeneratorMain.class.getResource("Icon1.png");
+        PUBLY_ICON = Toolkit.getDefaultToolkit().createImage(iconUrl);
+    }
 
     /**
      * @param args the command line arguments

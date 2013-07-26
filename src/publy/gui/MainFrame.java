@@ -3,6 +3,9 @@
 package publy.gui;
 
 import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
 import publy.Console;
 import publy.GeneratorMain;
 import publy.data.settings.Settings;
@@ -53,6 +56,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Publy " + GeneratorMain.MAJOR_VERSION + "." + GeneratorMain.MINOR_VERSION);
+        setIconImage(GeneratorMain.PUBLY_ICON);
 
         mainSplitPane.setDividerLocation(getHeight() - 150);
         mainSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);

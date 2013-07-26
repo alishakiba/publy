@@ -45,6 +45,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Publy - Console");
+        setIconImage(GeneratorMain.PUBLY_ICON);
 
         generateButton.setText("Generate");
         generateButton.setToolTipText("Run the generator with the current settings.");

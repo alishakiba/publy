@@ -83,8 +83,6 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         outCatScrollPane = new javax.swing.JScrollPane();
         outCatList = new javax.swing.JList();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder("Category Settings"));
-
         inCatList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
@@ -128,7 +126,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                         .addComponent(noteLabel)
                         .addGap(4, 4, 4)
                         .addComponent(noteSeparator))
-                    .addComponent(noteTextField))
+                    .addComponent(noteTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE))
                 .addContainerGap())
         );
         catPanelLayout.setVerticalGroup(
@@ -198,7 +196,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 428, Short.MAX_VALUE)
+            .addGap(0, 440, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -224,7 +222,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 284, Short.MAX_VALUE)
+            .addGap(0, 307, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(4, 4, 4)
@@ -247,7 +245,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                         .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGap(18, 18, 18)
                     .addComponent(catPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addContainerGap(34, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
