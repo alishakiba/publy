@@ -87,6 +87,8 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         footerBrowseButton = new javax.swing.JButton();
         headerBrowseButton = new javax.swing.JButton();
 
+        pubLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        pubLabel.setForeground(new java.awt.Color(51, 51, 102));
         pubLabel.setText("List of publications");
 
         pubTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -109,6 +111,8 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        targetLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        targetLabel.setForeground(new java.awt.Color(51, 51, 102));
         targetLabel.setText("Output file");
 
         targetTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -132,6 +136,8 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        headerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        headerLabel.setForeground(new java.awt.Color(51, 51, 102));
         headerLabel.setText("Header & Footer");
 
         headerTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -186,7 +192,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pubLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator2))
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(targetLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -203,11 +209,11 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(pubBrowseButton))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(targetTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                                .addComponent(targetTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(targetBrowseButton))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(footerTextField)
+                                .addComponent(footerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(footerBrowseButton))
                             .addGroup(layout.createSequentialGroup()
@@ -247,7 +253,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(footerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(footerBrowseButton))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

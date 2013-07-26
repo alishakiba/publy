@@ -94,6 +94,8 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         titleLinkComboText = new javax.swing.JLabel();
         titleLinkComboBox = new javax.swing.JComboBox();
 
+        linkToTextLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        linkToTextLabel.setForeground(new java.awt.Color(51, 51, 102));
         linkToTextLabel.setText("Alternative versions");
 
         linkToTextCheckBox.setText("Generate a plain text version");
@@ -110,6 +112,8 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        linksLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        linksLabel.setForeground(new java.awt.Color(51, 51, 102));
         linksLabel.setText("Per publication links");
 
         abstractLabel.setText("Include the abstract for:");
@@ -139,6 +143,8 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        analyticsLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        analyticsLabel.setForeground(new java.awt.Color(51, 51, 102));
         analyticsLabel.setText("Google analytics");
 
         analyticsCheckBox.setText("Include analytics code");
@@ -165,7 +171,9 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         analyticsUserTextField.setColumns(25);
         analyticsUserTextField.setEnabled(false);
 
-        presentedLabel.setText("Text added after papers I presented");
+        presentedLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        presentedLabel.setForeground(new java.awt.Color(51, 51, 102));
+        presentedLabel.setText("Text added after presented papers");
 
         presentedTextField.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
@@ -180,6 +188,8 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         });
         presentedTextField.setColumns(40);
 
+        titleLinkLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        titleLinkLabel.setForeground(new java.awt.Color(51, 51, 102));
         titleLinkLabel.setText("Title link");
 
         titleLinkComboText.setText("Use the title as link for:");
@@ -225,31 +235,28 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                                 .addComponent(titleLinkComboText)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(titleLinkComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(presentedTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
+                            .addComponent(presentedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(analyticsUserLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(analyticsUserTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                                .addComponent(analyticsUserTextField))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(abstractLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(abstractComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(abstractComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(linkToTextCheckBox)
+                            .addComponent(linkToBibtexCheckBox)
+                            .addComponent(analyticsCheckBox)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(bibtexLabel)
                                     .addComponent(paperLabel))
-                                .addGap(18, 18, 18)
+                                .addGap(12, 12, 12)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(paperComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(bibtexComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(linkToTextCheckBox)
-                            .addComponent(linkToBibtexCheckBox)
-                            .addComponent(analyticsCheckBox))))
+                                    .addComponent(bibtexComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(paperComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addContainerGap())
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {abstractComboBox, bibtexComboBox, paperComboBox});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()

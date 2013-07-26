@@ -128,10 +128,16 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        authorLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        authorLabel.setForeground(new java.awt.Color(51, 51, 102));
         authorLabel.setText("Author information");
 
+        numLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        numLabel.setForeground(new java.awt.Color(51, 51, 102));
         numLabel.setText("Publication numbering");
 
+        titleFirstLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        titleFirstLabel.setForeground(new java.awt.Color(51, 51, 102));
         titleFirstLabel.setText("Title placement");
 
         titleFirstCheckBox.setText("Title before authors");
@@ -205,7 +211,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                                 .addComponent(numLocalRadioButton)
                                 .addGap(18, 18, 18)
                                 .addComponent(numGlobalRadioButton)
-                                .addContainerGap(18, Short.MAX_VALUE))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(titleFirstCheckBox)
