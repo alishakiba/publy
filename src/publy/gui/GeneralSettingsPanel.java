@@ -101,8 +101,6 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         noFirstNameRadioButton = new javax.swing.JRadioButton();
         reverseNamesCheckBox = new javax.swing.JCheckBox();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder("General Settings"));
-
         numGroup.add(numNoneRadioButton);
         numNoneRadioButton.setText("None");
         numNoneRadioButton.setToolTipText("Do not number any publications.");
@@ -207,7 +205,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                                 .addComponent(numLocalRadioButton)
                                 .addGap(18, 18, 18)
                                 .addComponent(numGlobalRadioButton)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap(18, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(titleFirstCheckBox)
@@ -277,7 +275,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                     .addComponent(numGlobalRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(reverseNumberingCheckBox)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
