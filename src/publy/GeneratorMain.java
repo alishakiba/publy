@@ -71,6 +71,13 @@ public class GeneratorMain {
         }
 
         if (settings == null) {
+            // Notify the user
+            if (exception == null) {
+                JOptionPane.showMessageDialog(null, "No configuration information was found. Please set up your preferences.", "Publy - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "An exception occurred while parsing the configuration. Loading the default configuration.", "Publy - Launching Settings Window", JOptionPane.ERROR_MESSAGE);
+            }
+            
             // Launch the GUI
             final Throwable ex = exception;
 
@@ -87,13 +94,6 @@ public class GeneratorMain {
                     mf.setVisible(true);
                 }
             });
-
-            // Notify the user
-            if (ex == null) {
-                JOptionPane.showMessageDialog(null, "No configuration information was found. Please set up your preferences.", "Publy - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "An exception occurred while parsing the configuration. Loading the default configuration.", "Publy - Launching Settings Window", JOptionPane.ERROR_MESSAGE);
-            }
         } else {
             Console.log("Configuration parsed successfully.");
             generatePublicationList(settings);
