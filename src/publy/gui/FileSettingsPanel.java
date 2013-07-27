@@ -31,7 +31,12 @@ public class FileSettingsPanel extends javax.swing.JPanel {
     public FileSettingsPanel(Settings settings) {
         this.settings = settings;
         initComponents();
+        applyStyles();
         populateValues();
+    }
+    
+    private void applyStyles() {
+        UIStyles.applyHeaderStyle(pubLabel, targetLabel, headerLabel);
     }
     
     private void populateValues() {
@@ -87,8 +92,6 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         footerBrowseButton = new javax.swing.JButton();
         headerBrowseButton = new javax.swing.JButton();
 
-        pubLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        pubLabel.setForeground(new java.awt.Color(51, 51, 102));
         pubLabel.setText("List of publications");
 
         pubTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -115,8 +118,6 @@ public class FileSettingsPanel extends javax.swing.JPanel {
 
         targetSeparator.setPreferredSize(new java.awt.Dimension(0, 5));
 
-        targetLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        targetLabel.setForeground(new java.awt.Color(51, 51, 102));
         targetLabel.setText("Output file");
 
         targetTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -140,8 +141,6 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             }
         });
 
-        headerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        headerLabel.setForeground(new java.awt.Color(51, 51, 102));
         headerLabel.setText("Header & Footer");
 
         headerSeparator.setPreferredSize(new java.awt.Dimension(0, 5));
@@ -198,7 +197,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pubLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE))
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(targetLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

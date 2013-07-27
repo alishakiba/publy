@@ -169,12 +169,6 @@
     </Component>
     <Component class="javax.swing.JLabel" name="authorLabel">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="11" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="66" green="33" red="33" type="rgb"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Author information"/>
       </Properties>
     </Component>
@@ -182,12 +176,6 @@
     </Component>
     <Component class="javax.swing.JLabel" name="numLabel">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="11" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="66" green="33" red="33" type="rgb"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Publication numbering"/>
       </Properties>
     </Component>
@@ -197,12 +185,6 @@
     </Component>
     <Component class="javax.swing.JLabel" name="titleFirstLabel">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="11" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="66" green="33" red="33" type="rgb"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Title placement"/>
       </Properties>
     </Component>
