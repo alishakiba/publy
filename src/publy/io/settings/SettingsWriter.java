@@ -15,6 +15,7 @@ import publy.data.category.CategoryIdentifier;
 import publy.data.settings.FormatSettings;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
+import publy.gui.UIConstants;
 import publy.io.ResourceLocator;
 
 /**
@@ -39,7 +40,7 @@ public class SettingsWriter {
             // Write header
             out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             out.newLine();
-            out.write("<plgsettings majorversion=\"" + GeneratorMain.MAJOR_VERSION + "\" minorversion=\"" + GeneratorMain.MINOR_VERSION + "\">");
+            out.write("<plgsettings majorversion=\"" + UIConstants.MAJOR_VERSION + "\" minorversion=\"" + UIConstants.MINOR_VERSION + "\">");
             out.newLine();
 
             writeGeneralSettings(settings, out);

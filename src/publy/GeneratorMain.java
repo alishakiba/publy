@@ -4,13 +4,9 @@
  */
 package publy;
 
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -32,22 +28,6 @@ import publy.io.settings.SettingsReader;
  * @author Sander
  */
 public class GeneratorMain {
-
-    public static final int MAJOR_VERSION = 0;
-    public static final int MINOR_VERSION = 4;
-    public static final List<Image> PUBLY_ICONS;
-
-    static {
-        // Prepare our icons
-        String[] icons = {"Icon1-16.png", "Icon1-24.png", "Icon1-32.png", "Icon1-48.png", "Icon1-64.png", "Icon1-256.png"};
-        
-        PUBLY_ICONS = new ArrayList<>(icons.length);
-        
-        for (String fileName : icons) {
-            URL iconUrl = GeneratorMain.class.getResource(fileName);
-            PUBLY_ICONS.add(Toolkit.getDefaultToolkit().createImage(iconUrl));
-        }
-    }
 
     /**
      * @param args the command line arguments

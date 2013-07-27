@@ -4,10 +4,10 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="title" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-      <Connection code="&quot;Publy &quot; + GeneratorMain.MAJOR_VERSION + &quot;.&quot; + GeneratorMain.MINOR_VERSION" type="code"/>
+      <Connection code="&quot;Publy &quot; + UIConstants.MAJOR_VERSION + &quot;.&quot; + UIConstants.MINOR_VERSION" type="code"/>
     </Property>
     <Property name="iconImages" type="java.util.List" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-      <Connection code="GeneratorMain.PUBLY_ICONS" type="code"/>
+      <Connection code="UIConstants.PUBLY_ICONS" type="code"/>
     </Property>
   </Properties>
   <SyntheticProperties>
