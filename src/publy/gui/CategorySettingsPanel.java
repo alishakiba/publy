@@ -2,9 +2,11 @@
  */
 package publy.gui;
 
+import java.awt.Color;
 import java.util.EnumSet;
 import java.util.Set;
 import javax.swing.DefaultListModel;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import publy.data.category.CategoryIdentifier;
@@ -34,7 +36,13 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     public CategorySettingsPanel(FormatSettings settings) {
         this.settings = settings;
         initComponents();
+        applyStyles();
         populateValues();
+    }
+    
+    private void applyStyles() {
+        UIStyles.applyHeaderStyle(catLabel, noteLabel);
+        UIStyles.applyHeaderStyle((TitledBorder) catPanel.getBorder());
     }
 
     @SuppressWarnings("unchecked")
@@ -96,10 +104,8 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         });
         inCatScrollPane.setViewportView(inCatList);
 
-        catPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Category Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(51, 51, 102))); // NOI18N
+        catPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Category Properties"));
 
-        noteLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        noteLabel.setForeground(new java.awt.Color(51, 51, 102));
         noteLabel.setText("Note");
 
         noteTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -143,8 +149,6 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        catLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        catLabel.setForeground(new java.awt.Color(51, 51, 102));
         catLabel.setText("Category selection");
 
         inButton.setText("<html>&larr;</html>");

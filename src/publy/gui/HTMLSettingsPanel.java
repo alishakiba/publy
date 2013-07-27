@@ -2,7 +2,6 @@
  */
 package publy.gui;
 
-import java.awt.Component;
 import java.util.Arrays;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.event.DocumentEvent;
@@ -31,7 +30,12 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     public HTMLSettingsPanel(HTMLSettings settings) {
         this.settings = settings;
         initComponents();
+        applyStyles();
         populateValues();
+    }
+    
+    private void applyStyles() {
+        UIStyles.applyHeaderStyle(linkToTextLabel, analyticsLabel, linksLabel, presentedLabel, titleLinkLabel);
     }
     
     private void populateValues() {
@@ -94,8 +98,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         titleLinkComboText = new javax.swing.JLabel();
         titleLinkComboBox = new javax.swing.JComboBox();
 
-        linkToTextLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        linkToTextLabel.setForeground(new java.awt.Color(51, 51, 102));
         linkToTextLabel.setText("Alternative versions");
 
         linkToTextCheckBox.setText("Generate a plain text version");
@@ -112,8 +114,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             }
         });
 
-        linksLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        linksLabel.setForeground(new java.awt.Color(51, 51, 102));
         linksLabel.setText("Per publication links");
 
         abstractLabel.setText("Include the abstract for:");
@@ -143,8 +143,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             }
         });
 
-        analyticsLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        analyticsLabel.setForeground(new java.awt.Color(51, 51, 102));
         analyticsLabel.setText("Google analytics");
 
         analyticsCheckBox.setText("Include analytics code");
@@ -171,8 +169,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         analyticsUserTextField.setColumns(25);
         analyticsUserTextField.setEnabled(false);
 
-        presentedLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        presentedLabel.setForeground(new java.awt.Color(51, 51, 102));
         presentedLabel.setText("Text added after presented papers");
 
         presentedTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -188,8 +184,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         });
         presentedTextField.setColumns(40);
 
-        titleLinkLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        titleLinkLabel.setForeground(new java.awt.Color(51, 51, 102));
         titleLinkLabel.setText("Title link");
 
         titleLinkComboText.setText("Use the title as link for:");

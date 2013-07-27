@@ -26,7 +26,12 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     public GeneralSettingsPanel(FormatSettings settings) {
         this.settings = settings;
         initComponents();
+        applyStyles();
         populateValues();
+    }
+    
+    private void applyStyles() {
+        UIStyles.applyHeaderStyle(authorLabel, numLabel, titleFirstLabel);
     }
 
     private void populateValues() {
@@ -128,16 +133,10 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             }
         });
 
-        authorLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        authorLabel.setForeground(new java.awt.Color(51, 51, 102));
         authorLabel.setText("Author information");
 
-        numLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        numLabel.setForeground(new java.awt.Color(51, 51, 102));
         numLabel.setText("Publication numbering");
 
-        titleFirstLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        titleFirstLabel.setForeground(new java.awt.Color(51, 51, 102));
         titleFirstLabel.setText("Title placement");
 
         titleFirstCheckBox.setText("Title before authors");

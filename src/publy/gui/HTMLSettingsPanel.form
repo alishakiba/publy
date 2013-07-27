@@ -153,12 +153,6 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="linkToTextLabel">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="11" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="66" green="33" red="33" type="rgb"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Alternative versions"/>
       </Properties>
     </Component>
@@ -182,12 +176,6 @@
     </Component>
     <Component class="javax.swing.JLabel" name="linksLabel">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="11" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="66" green="33" red="33" type="rgb"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Per publication links"/>
       </Properties>
     </Component>
@@ -240,12 +228,6 @@
     </Component>
     <Component class="javax.swing.JLabel" name="analyticsLabel">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="11" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="66" green="33" red="33" type="rgb"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Google analytics"/>
       </Properties>
     </Component>
@@ -276,12 +258,6 @@
     </Component>
     <Component class="javax.swing.JLabel" name="presentedLabel">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="11" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="66" green="33" red="33" type="rgb"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Text added after presented papers"/>
       </Properties>
     </Component>
@@ -297,12 +273,6 @@
     </Component>
     <Component class="javax.swing.JLabel" name="titleLinkLabel">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="11" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="66" green="33" red="33" type="rgb"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Title link"/>
       </Properties>
     </Component>
