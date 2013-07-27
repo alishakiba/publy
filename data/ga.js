@@ -44,7 +44,7 @@ $(document).ready(function() {
                 _gaq.push(['_trackEvent', elEv.category.toLowerCase(), elEv.action.toLowerCase(), elEv.label.toLowerCase(), elEv.value, elEv.non_i]);
                 
                 // If this is a link that opens in the same window, we need to wait a little while for the event to register
-                if (el.attr('target') == undefined || el.attr('target').toLowerCase() != '_blank') {
+                if (event.which == 1 && (el.attr('target') == undefined || el.attr('target').toLowerCase() != '_blank')) {
                     setTimeout(function() { location.href = elEv.loc; }, 400);
                     return false;
                 }
