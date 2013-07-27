@@ -259,19 +259,10 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         for (int i = 0; i < getCategories().size(); i++) {
             OutputCategory c = getCategories().get(i);
 
-            out.write("        <a href=\"#" + c.getShortName().toLowerCase() + "\"");
-
             if (c == current) {
-                out.write(" class=\"current\"");
-            }
-
-            out.write(">");
-
-            out.write(c.getShortName());
-            out.write("</a>");
-
-            if (i < getCategories().size() - 1) {
-                out.write(" -");
+                out.write("        <span class=\"current\">" + c.getShortName() + "</span>");
+            } else {
+                out.write("        <a href=\"#" + c.getShortName().toLowerCase() + "\">" + c.getShortName() + "</a>");
             }
 
             out.newLine();
