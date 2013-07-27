@@ -22,6 +22,7 @@ import publy.data.bibitem.BibItem;
 import publy.data.category.OutputCategory;
 import publy.data.settings.FormatSettings;
 import publy.data.settings.HTMLSettings;
+import publy.gui.UIConstants;
 import publy.io.PublicationListWriter;
 import publy.io.ResourceLocator;
 
@@ -103,7 +104,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
 
         // Credit line
-        out.write("    <p>Generated from a BibTeX file by Publy " + GeneratorMain.MAJOR_VERSION + "." + GeneratorMain.MINOR_VERSION + ".</p>");
+        out.write("    <p>Generated from a BibTeX file by Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION + ".</p>");
         out.newLine();
 
         if (htmlSettings.getFooter() == null) {
