@@ -242,14 +242,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
         String author = item.get("author");
 
         if (author == null) {
-            Console.error("No authors found for %s.", item.getId());
+            Console.error("No authors found for bibitem \"%s\".", item.getId());
             return "";
         } else {
             List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
 
             for (Author a : item.getAuthors()) {
                 if (a == null) {
-                    Console.error("Null author found for %s.%n(Authors: %s)", item.getId(), item.getAuthors().toString());
+                    Console.error("Null author found for bibitem \"%s\".%n(Authors: \"%s\")", item.getId(), item.getAuthors().toString());
                 } else {
                     if (settings.isListAllAuthors() || !a.isMe()) {
                         authorLinks.add(a.getLinkedAndFormattedHtmlName(settings.getNameDisplay(), settings.isReverseNames()));
