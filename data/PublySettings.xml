@@ -6,9 +6,10 @@
   <!-- General settings -->
   <generalsettings>
     <target>misc/test/test.html</target>
-    <listallauthors>true</listallauthors>
+    <mynames><![CDATA[jit;Prosenjit Bose]]></mynames>
+    <listallauthors>false</listallauthors>
     <namedisplay>FULL</namedisplay>
-    <reversenames>true</reversenames>
+    <reversenames>false</reversenames>
     <titlefirst>false</titlefirst>
     <numbering>GLOBAL</numbering>
     <reversenumbering>true</reversenumbering>

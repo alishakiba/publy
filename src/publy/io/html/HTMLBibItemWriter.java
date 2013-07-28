@@ -168,7 +168,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         // Don't add an authors line if it's just me and I just want to list co-authors
-        if (settings.isListAllAuthors() || item.getAuthors().size() > 1 || (item.getAuthors().size() == 1 && !item.getAuthors().get(0).isMe())) {
+        if (settings.isListAllAuthors() || item.getAuthors().size() > 1 || (item.getAuthors().size() == 1 && !item.getAuthors().get(0).isMe(settings.getMyNames(), settings.getNameDisplay(), settings.isReverseNames()))) {
             String authors = formatAuthors(item);
 
             if (authors.endsWith(".</span>") || authors.endsWith(".</a>")) {
@@ -251,7 +251,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 if (a == null) {
                     Console.error("Null author found for bibitem \"%s\".%n(Authors: \"%s\")", item.getId(), item.getAuthors().toString());
                 } else {
-                    if (settings.isListAllAuthors() || !a.isMe()) {
+                    if (settings.isListAllAuthors() || !a.isMe(settings.getMyNames(), settings.getNameDisplay(), settings.isReverseNames())) {
                         authorLinks.add(a.getLinkedAndFormattedHtmlName(settings.getNameDisplay(), settings.isReverseNames()));
                     }
                 }
