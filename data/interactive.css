@@ -7,3 +7,8 @@
 .abstract-toggle, .bibtex-toggle {
     cursor:pointer;
 }
+
+/* Don't allow line-breaks within author names */
+.author {
+    white-space: nowrap;
+}
