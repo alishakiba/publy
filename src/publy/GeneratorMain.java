@@ -99,16 +99,6 @@ public class GeneratorMain {
                 Console.except(ex, "Exception while parsing publications list:");
             }
 
-            if (items != null) {
-                try {
-                    PublicationListWriter writer = new HTMLPublicationListWriter(settings.getGeneralSettings(), settings.getHtmlSettings());
-                    writer.writePublicationList(items, settings.getGeneralSettings().getTarget());
-                    Console.log("HTML publication list written successfully.");
-                } catch (Exception | AssertionError ex) {
-                    Console.except(ex, "Exception while writing HTML publication list:");
-                }
-            }
-
             if (items != null && settings.getHtmlSettings().linkToTextVersion()) {
                 try {
                     PublicationListWriter writer = new PlainPublicationListWriter(settings.getGeneralSettings());
@@ -126,6 +116,16 @@ public class GeneratorMain {
                     Console.log("BibTeX publication list written successfully.");
                 } catch (Exception | AssertionError ex) {
                     Console.except(ex, "Exception while writing BibTeX publication list:");
+                }
+            }
+            
+            if (items != null) {
+                try {
+                    PublicationListWriter writer = new HTMLPublicationListWriter(settings.getGeneralSettings(), settings.getHtmlSettings());
+                    writer.writePublicationList(items, settings.getGeneralSettings().getTarget());
+                    Console.log("HTML publication list written successfully.");
+                } catch (Exception | AssertionError ex) {
+                    Console.except(ex, "Exception while writing HTML publication list:");
                 }
             }
 
