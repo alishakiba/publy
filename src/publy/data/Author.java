@@ -141,8 +141,14 @@ public class Author {
         this.url = url;
     }
 
-    public boolean isMe() {
-        return "me".equals(abbreviation);
+    public boolean isMe(List<String> myNames, FormatSettings.NameDisplay display, boolean reversed) {
+        for (String name : myNames) {
+            if (latexName.equals(name) || abbreviation.equals(name) || getFormattedName(display, reversed).equals(name)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     private String formatFirstName(FormatSettings.NameDisplay display) {

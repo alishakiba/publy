@@ -22,7 +22,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
@@ -79,6 +79,15 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="titleFirstSeparator" max="32767" attributes="0"/>
                           </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="yourNameLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="yourNameSeparator" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                              <Component id="yourNameTextField" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -88,8 +97,15 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="yourNameLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="yourNameSeparator" min="-2" pref="7" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="yourNameTextField" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="authorSeparator" min="-2" pref="7" max="-2" attributes="0"/>
                   <Component id="authorLabel" min="-2" max="-2" attributes="0"/>
@@ -258,6 +274,21 @@
       <Events>
         <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="reverseNamesCheckBoxItemStateChanged"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="yourNameLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Your name"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="yourNameSeparator">
+    </Component>
+    <Component class="javax.swing.JTextField" name="yourNameTextField">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Semicolon-separated list of names or author abbreviations from the BibTeX file that denote you."/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="yourNameTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        yourNameTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        yourNameTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

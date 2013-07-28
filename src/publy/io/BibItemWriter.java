@@ -105,7 +105,7 @@ public abstract class BibItemWriter {
                 if (a == null) {
                     Console.error("Null author found for %s.%n(Authors: %s)", item.getId(), item.getAuthors().toString());
                 } else {
-                    if (settings.isListAllAuthors() || !a.isMe()) {
+                    if (settings.isListAllAuthors() || !a.isMe(settings.getMyNames(), settings.getNameDisplay(), settings.isReverseNames())) {
                         authorLinks.add(a.getFormattedName(settings.getNameDisplay(), settings.isReverseNames()));
                     }
                 }

@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
-import publy.GeneratorMain;
 import publy.data.category.CategoryIdentifier;
 import publy.data.settings.FormatSettings;
 import publy.data.settings.HTMLSettings;
@@ -68,6 +68,7 @@ public class SettingsWriter {
         out.newLine();
 
         output(out, 4, "target", makeString(format.getTarget()));
+        output(out, 4, "mynames", makeCData(format.getMyNames()));
         output(out, 4, "listallauthors", makeString(format.isListAllAuthors()));
         output(out, 4, "namedisplay", makeString(format.getNameDisplay()));
         output(out, 4, "reversenames", makeString(format.isReverseNames()));
@@ -200,5 +201,25 @@ public class SettingsWriter {
 
     private static String makeCData(String content) {
         return "<![CDATA[" + (content == null ? "" : content) + "]]>";
+    }
+    
+    /**
+     * Saves a list of strings as a semicolon-separated string in a CDATA section.
+     * @param content
+     * @return 
+     */
+    private static String makeCData(List<String> content) {
+        StringBuilder sb = new StringBuilder();
+        
+        if (content != null) {
+            for (String part : content) {
+                sb.append(';');
+                sb.append(part);
+            }
+        }
+        
+        sb.deleteCharAt(0);
+        
+        return "<![CDATA[" + sb.toString() + "]]>";
     }
 }

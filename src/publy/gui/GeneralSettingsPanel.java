@@ -3,6 +3,10 @@
 package publy.gui;
 
 import java.awt.event.ItemEvent;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import publy.data.settings.FormatSettings;
 
 /**
@@ -31,10 +35,22 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     }
     
     private void applyStyles() {
-        UIStyles.applyHeaderStyle(authorLabel, numLabel, titleFirstLabel);
+        UIStyles.applyHeaderStyle(yourNameLabel, authorLabel, numLabel, titleFirstLabel);
     }
 
     private void populateValues() {
+        // Your Name
+        List<String> myNames = settings.getMyNames();
+        StringBuilder sb = new StringBuilder();
+        
+        for (String name : myNames) {
+            sb.append(';');
+            sb.append(name);
+        }
+        
+        sb.deleteCharAt(0); // Delete the first semicolon
+        yourNameTextField.setText(sb.toString());
+        
         // Author info
         switch (settings.getNameDisplay()) {
             case FULL:
@@ -105,6 +121,9 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         abbrFirstNameRadioButton = new javax.swing.JRadioButton();
         noFirstNameRadioButton = new javax.swing.JRadioButton();
         reverseNamesCheckBox = new javax.swing.JCheckBox();
+        yourNameLabel = new javax.swing.JLabel();
+        yourNameSeparator = new javax.swing.JSeparator();
+        yourNameTextField = new javax.swing.JTextField();
 
         numGroup.add(numNoneRadioButton);
         numNoneRadioButton.setText("None");
@@ -194,6 +213,21 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        yourNameLabel.setText("Your name");
+
+        yourNameTextField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                yourNameTextFieldTextChanged(e);
+            }
+            public void removeUpdate(DocumentEvent e) {
+                yourNameTextFieldTextChanged(e);
+            }
+            public void changedUpdate(DocumentEvent e) {
+                //Plain text components do not fire these events
+            }
+        });
+        yourNameTextField.setToolTipText("Semicolon-separated list of names or author abbreviations from the BibTeX file that denote you.");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -243,13 +277,26 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(titleFirstLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(titleFirstSeparator)))
+                                .addComponent(titleFirstSeparator))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(yourNameLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(yourNameSeparator))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(yourNameTextField)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(yourNameLabel)
+                    .addComponent(yourNameSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(yourNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(authorSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(authorLabel))
@@ -284,6 +331,10 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void yourNameTextFieldTextChanged(DocumentEvent e) {
+        settings.setMyNames(Arrays.asList(yourNameTextField.getText().split(";")));
+    }
+    
     private void numNoneRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numNoneRadioButtonActionPerformed
         settings.setNumbering(FormatSettings.Numbering.NONE);
         reverseNumberingCheckBox.setEnabled(false);
@@ -367,5 +418,8 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox titleFirstCheckBox;
     private javax.swing.JLabel titleFirstLabel;
     private javax.swing.JSeparator titleFirstSeparator;
+    private javax.swing.JLabel yourNameLabel;
+    private javax.swing.JSeparator yourNameSeparator;
+    private javax.swing.JTextField yourNameTextField;
     // End of variables declaration//GEN-END:variables
 }

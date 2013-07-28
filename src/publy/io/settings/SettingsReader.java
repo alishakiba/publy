@@ -7,6 +7,7 @@ package publy.io.settings;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -88,6 +89,9 @@ public class SettingsReader extends DefaultHandler {
                 // General settings
                 case "target":
                     settings.getGeneralSettings().setTarget(ResourceLocator.getFullPath(text));
+                    break;
+                case "mynames":
+                    settings.getGeneralSettings().setMyNames(Arrays.asList(text.split(";")));
                     break;
                 case "listallauthors":
                     settings.getGeneralSettings().setListAllAuthors(Boolean.parseBoolean(text));
