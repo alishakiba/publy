@@ -99,7 +99,7 @@ public class GeneratorMain {
                 Console.except(ex, "Exception while parsing publications list:");
             }
 
-            if (items != null && settings.getHtmlSettings().linkToTextVersion()) {
+            if (items != null && settings.getHtmlSettings().generateTextVersion()) {
                 try {
                     PublicationListWriter writer = new PlainPublicationListWriter(settings.getGeneralSettings());
                     writer.writePublicationList(items, settings.getGeneralSettings().getPlainTextTarget());
@@ -109,7 +109,7 @@ public class GeneratorMain {
                 }
             }
 
-            if (items != null && settings.getHtmlSettings().linkToBibtexVersion()) {
+            if (items != null && settings.getHtmlSettings().generateBibtexVersion()) {
                 try {
                     PublicationListWriter writer = new BibtexPublicationListWriter(settings.getGeneralSettings());
                     writer.writePublicationList(items, settings.getGeneralSettings().getBibtexTarget());
