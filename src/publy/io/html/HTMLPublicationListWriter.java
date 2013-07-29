@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import publy.Console;
-import publy.GeneratorMain;
 import publy.data.bibitem.BibItem;
 import publy.data.category.OutputCategory;
 import publy.data.settings.FormatSettings;
@@ -73,16 +72,16 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         // Write the body
         out.write("    <p>My publications as of " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".");
 
-        if (htmlSettings.linkToTextVersion() || htmlSettings.linkToBibtexVersion()) {
+        if (htmlSettings.linkToAlternateVersions() && (htmlSettings.generateTextVersion() || htmlSettings.generateBibtexVersion())) {
             Path htmlDir = getSettings().getTarget().getParent();
 
             out.write(" Also available as <a href=\"");
 
-            if (htmlSettings.linkToTextVersion()) {
+            if (htmlSettings.generateTextVersion()) {
                 out.write(htmlDir.relativize(getSettings().getPlainTextTarget()).toString());
                 out.write("\" rel=\"alternate\">plain text</a>");
 
-                if (htmlSettings.linkToBibtexVersion()) {
+                if (htmlSettings.generateBibtexVersion()) {
                     out.write(" or <a href=\"");
                     out.write(htmlDir.relativize(getSettings().getBibtexTarget()).toString());
                     out.write("\" rel=\"alternate\">BibTeX</a>.");

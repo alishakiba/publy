@@ -118,11 +118,14 @@ public class SettingsReader extends DefaultHandler {
                     settings.getGeneralSettings().setNote(noteFor, text);
                     break;
                 // HTML-specific settings
-                case "linktotextversion":
-                    settings.getHtmlSettings().setLinkToTextVersion(Boolean.parseBoolean(text));
+                case "generatetextversion":
+                    settings.getHtmlSettings().setGenerateTextVersion(Boolean.parseBoolean(text));
                     break;
-                case "linktobibtexversion":
-                    settings.getHtmlSettings().setLinkToBibtexVersion(Boolean.parseBoolean(text));
+                case "generatebibtexversion":
+                    settings.getHtmlSettings().setGenerateBibtexVersion(Boolean.parseBoolean(text));
+                    break;
+                case "linktoalternateversions":
+                    settings.getHtmlSettings().setLinkToAlternateVersions(Boolean.parseBoolean(text));
                     break;
                 case "includeabstract":
                     settings.getHtmlSettings().setIncludeAbstract(PublicationType.valueOf(text));

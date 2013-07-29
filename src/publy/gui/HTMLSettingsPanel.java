@@ -40,8 +40,10 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     
     private void populateValues() {
         // Links
-        linkToTextCheckBox.setSelected(settings.linkToTextVersion());
-        linkToBibtexCheckBox.setSelected(settings.linkToBibtexVersion());
+        linkToTextCheckBox.setSelected(settings.generateTextVersion());
+        linkToBibtexCheckBox.setSelected(settings.generateBibtexVersion());
+        insertLinksCheckBox.setSelected(settings.linkToAlternateVersions());
+        insertLinksCheckBox.setEnabled(settings.generateTextVersion() || settings.generateBibtexVersion());
 
         // Publication links
         abstractComboBox.setSelectedItem(settings.getIncludeAbstract());
@@ -97,6 +99,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         titleLinksSeparator = new javax.swing.JSeparator();
         titleLinkComboText = new javax.swing.JLabel();
         titleLinkComboBox = new javax.swing.JComboBox();
+        insertLinksCheckBox = new javax.swing.JCheckBox();
 
         linkToTextLabel.setText("Alternative versions");
 
@@ -195,6 +198,13 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        insertLinksCheckBox.setText("Insert links to these versions");
+        insertLinksCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertLinksCheckBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -207,10 +217,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(linkToTextSeparator))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(linksLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(linksSeparator))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(titleLinkLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(titleLinksSeparator))
@@ -222,6 +228,10 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                         .addComponent(analyticsLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(analyticsSeparator))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(linksLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(linksSeparator))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,9 +248,6 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                                 .addComponent(abstractLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(abstractComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(linkToTextCheckBox)
-                            .addComponent(linkToBibtexCheckBox)
-                            .addComponent(analyticsCheckBox)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(bibtexLabel)
@@ -248,7 +255,14 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                                 .addGap(12, 12, 12)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(bibtexComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(paperComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                    .addComponent(paperComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(insertLinksCheckBox)
+                                    .addComponent(linkToTextCheckBox)
+                                    .addComponent(linkToBibtexCheckBox)
+                                    .addComponent(analyticsCheckBox))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -262,6 +276,8 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                 .addComponent(linkToTextCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(linkToBibtexCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(insertLinksCheckBox)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(linksLabel)
@@ -307,7 +323,8 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void linkToTextCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkToTextCheckBoxActionPerformed
-        settings.setLinkToTextVersion(linkToTextCheckBox.isSelected());
+        settings.setGenerateTextVersion(linkToTextCheckBox.isSelected());
+        insertLinksCheckBox.setEnabled(settings.generateTextVersion() || settings.generateBibtexVersion());
     }//GEN-LAST:event_linkToTextCheckBoxActionPerformed
 
     private void abstractComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abstractComboBoxActionPerformed
@@ -339,12 +356,17 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_analyticsCheckBoxActionPerformed
 
     private void linkToBibtexCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkToBibtexCheckBoxActionPerformed
-        settings.setLinkToBibtexVersion(linkToBibtexCheckBox.isSelected());
+        settings.setGenerateBibtexVersion(linkToBibtexCheckBox.isSelected());
+        insertLinksCheckBox.setEnabled(settings.generateTextVersion() || settings.generateBibtexVersion());
     }//GEN-LAST:event_linkToBibtexCheckBoxActionPerformed
 
     private void titleLinkComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_titleLinkComboBoxActionPerformed
         settings.setTitleTarget((HTMLSettings.TitleLinkTarget) titleLinkComboBox.getSelectedItem());
     }//GEN-LAST:event_titleLinkComboBoxActionPerformed
+
+    private void insertLinksCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertLinksCheckBoxActionPerformed
+        settings.setLinkToAlternateVersions(insertLinksCheckBox.isSelected());
+    }//GEN-LAST:event_insertLinksCheckBoxActionPerformed
     
     private void analyticsUserTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
@@ -366,6 +388,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JTextField analyticsUserTextField;
     private javax.swing.JComboBox bibtexComboBox;
     private javax.swing.JLabel bibtexLabel;
+    private javax.swing.JCheckBox insertLinksCheckBox;
     private javax.swing.JCheckBox linkToBibtexCheckBox;
     private javax.swing.JCheckBox linkToTextCheckBox;
     private javax.swing.JLabel linkToTextLabel;

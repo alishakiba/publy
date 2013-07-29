@@ -17,17 +17,12 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="linkToTextLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="linkToTextSeparator" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="linksLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="linksSeparator" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="titleLinkLabel" min="-2" max="-2" attributes="0"/>
@@ -44,7 +39,12 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="analyticsSeparator" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="linksLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="linksSeparator" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
@@ -63,9 +63,6 @@
                               <EmptySpace min="-2" max="-2" attributes="0"/>
                               <Component id="abstractComboBox" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="linkToTextCheckBox" min="-2" max="-2" attributes="0"/>
-                          <Component id="linkToBibtexCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="analyticsCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="bibtexLabel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -77,10 +74,19 @@
                                   <Component id="paperComboBox" alignment="1" max="32767" attributes="0"/>
                               </Group>
                           </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="insertLinksCheckBox" min="-2" max="-2" attributes="0"/>
+                                  <Component id="linkToTextCheckBox" min="-2" max="-2" attributes="0"/>
+                                  <Component id="linkToBibtexCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="analyticsCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -96,6 +102,8 @@
               <Component id="linkToTextCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="linkToBibtexCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="insertLinksCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="linksLabel" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -291,6 +299,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="titleLinkComboBoxActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="insertLinksCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Insert links to these versions"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="insertLinksCheckBoxActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

@@ -27,8 +27,9 @@
 
   <!-- HTML-specific settings -->
   <htmlsettings>
-    <linktotextversion>true</linktotextversion>
-    <linktobibtexversion>true</linktobibtexversion>
+    <generatetextversion>true</generatetextversion>
+    <generatebibtexversion>false</generatebibtexversion>
+    <linktoalternateversions>true</linktoalternateversions>
     <includeabstract>ALL</includeabstract>
     <includebibtex>ARXIV</includebibtex>
     <includepaper>ARXIV</includepaper>

@@ -110,8 +110,9 @@ public class SettingsWriter {
         out.write("  <htmlsettings>");
         out.newLine();
 
-        output(out, 4, "linktotextversion", makeString(settings.linkToTextVersion()));
-        output(out, 4, "linktobibtexversion", makeString(settings.linkToBibtexVersion()));
+        output(out, 4, "generatetextversion", makeString(settings.generateTextVersion()));
+        output(out, 4, "generatebibtexversion", makeString(settings.generateBibtexVersion()));
+        output(out, 4, "linktoalternateversions", makeString(settings.linkToAlternateVersions()));
         output(out, 4, "includeabstract", makeString(settings.getIncludeAbstract()));
         output(out, 4, "includebibtex", makeString(settings.getIncludeBibtex()));
         output(out, 4, "includepaper", makeString(settings.getIncludePaper()));

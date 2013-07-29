@@ -33,8 +33,9 @@ public class HTMLSettings {
             }
         }
     }
-    private boolean linkToTextVersion = false;
-    private boolean linkToBibtexVersion = false;
+    private boolean generateTextVersion = false;
+    private boolean generateBibtexVersion = false;
+    private boolean linkToAlternateVersions = true;
     private PublicationType includeAbstract = PublicationType.ALL;
     private PublicationType includeBibtex = PublicationType.ARXIV; // ALL should not be an option here.
     private PublicationType includePaper = PublicationType.ARXIV;
@@ -44,16 +45,28 @@ public class HTMLSettings {
     private String googleAnalyticsUser = null;
     private String presentedText = null;
 
-    public boolean linkToBibtexVersion() {
-        return linkToBibtexVersion;
+    public boolean generateBibtexVersion() {
+        return generateBibtexVersion;
     }
 
-    public void setLinkToBibtexVersion(boolean linkToBibtexVersion) {
-        this.linkToBibtexVersion = linkToBibtexVersion;
+    public void setGenerateBibtexVersion(boolean generateBibtexVersion) {
+        this.generateBibtexVersion = generateBibtexVersion;
     }
 
-    public boolean linkToTextVersion() {
-        return linkToTextVersion;
+    public boolean generateTextVersion() {
+        return generateTextVersion;
+    }
+    
+    public void setGenerateTextVersion(boolean generateTextVersion) {
+        this.generateTextVersion = generateTextVersion;
+    }
+
+    public boolean linkToAlternateVersions() {
+        return linkToAlternateVersions;
+    }
+
+    public void setLinkToAlternateVersions(boolean linkToAlternateVersions) {
+        this.linkToAlternateVersions = linkToAlternateVersions;
     }
 
     public PublicationType getIncludeAbstract() {
@@ -86,10 +99,6 @@ public class HTMLSettings {
 
     public void setTitleTarget(TitleLinkTarget titleTarget) {
         this.titleTarget = titleTarget;
-    }
-
-    public void setLinkToTextVersion(boolean linkToTextVersion) {
-        this.linkToTextVersion = linkToTextVersion;
     }
 
     public void setIncludeAbstract(PublicationType includeAbstract) {
