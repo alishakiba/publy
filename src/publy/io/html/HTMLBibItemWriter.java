@@ -178,15 +178,15 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 output(indent, authors, ".<br>", true);
             }
         }
-        
+
         if (!settings.isTitleFirst()) {
             writeTitleAndAbstractHTML(item);
         }
     }
-    
+
     protected void writeTitleAndAbstractHTML(BibItem item) throws IOException {
         out.write(indent);
-        
+
         // Title
         if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
             output("<h2 class=\"title abstract-toggle\">", formatTitle(item), "</h2>");
@@ -329,6 +329,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private void writeLinks(BibItem item, boolean includeBibtex, boolean includeArxivBibtex) throws IOException {
+        out.write(indent + "<div class=\"links\">");
+        out.newLine();
+
         // Paper link
         if (includePaper(item) && htmlSettings.getTitleTarget() != HTMLSettings.TitleLinkTarget.PAPER) {
             try {
@@ -349,7 +352,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     text = "Paper";
                 }
 
-                out.write(indent + "[<a href=\"" + link + "\">" + text + "</a>]");
+                out.write(indent + "  <a href=\"" + link + "\">" + text + "</a>");
                 out.newLine();
 
                 checkExistance(item.get("paper"), "paper", item);
@@ -360,13 +363,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // arXiv link
         if (item.anyNonEmpty("arxiv")) {
-            out.write(indent + "[<a href=\"http://arxiv.org/abs/" + item.get("arxiv") + "\">arXiv</a>]");
+            out.write(indent + "  <a href=\"http://arxiv.org/abs/" + item.get("arxiv") + "\">arXiv</a>");
             out.newLine();
         }
 
         // DOI link
         if (item.anyNonEmpty("doi")) {
-            out.write(indent + "[<a href=\"http://dx.doi.org/" + item.get("doi") + "\">DOI</a>]");
+            out.write(indent + "  <a href=\"http://dx.doi.org/" + item.get("doi") + "\">DOI</a>");
             out.newLine();
         }
 
@@ -377,11 +380,22 @@ public class HTMLBibItemWriter extends BibItemWriter {
             writeCustomLink(item, i); // link<i>
         }
 
+        // Close links div
+        out.write(indent + "</div>");
+        out.newLine();
+
         // BibTeX link
-        if (includeBibtex) {
-            writeBibTeXHTML(item);
-        } else if (includeArxivBibtex) {
-            writeArXivBibTeXHTML(item);
+        if (includeBibtex || includeArxivBibtex) {
+            // Show / hide link
+            writeToggleLink("bibtex", "BibTeX");
+            out.newLine();
+
+            // Actual bibtex
+            if (includeBibtex) {
+                writeBibtexHTML(item);
+            } else {
+                writeArxivBibtexHTML(item);
+            }
         }
     }
 
@@ -414,18 +428,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     }
                 }
 
-                out.write(indent + "[<a href=\"" + target + "\">" + text + "</a>]");
+                out.write(indent + "  <a href=\"" + target + "\">" + text + "</a>");
                 out.newLine();
             }
         }
     }
 
-    private void writeBibTeXHTML(BibItem item) throws IOException {
-        // Show / hide links
-        writeToggleLink("bibtex", "BibTeX");
-        out.newLine();
-
-        // Actual bibtex
+    private void writeBibtexHTML(BibItem item) throws IOException {
         out.write(indent + "<div class=\"bibtex-container\">");
         out.newLine();
         out.write(indent + "  <pre class=\"bibtex\">");
@@ -486,17 +495,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.newLine(); // No comma after the last element
         out.write("}</pre>");
         out.newLine();
-        
+
         out.write(indent + "</div>");
         out.newLine();
     }
 
-    private void writeArXivBibTeXHTML(BibItem item) throws IOException {
-        // Show / hide links
-        writeToggleLink("bibtex", "BibTeX");
-        out.newLine();
-
-        // Actual bibtex
+    private void writeArxivBibtexHTML(BibItem item) throws IOException {
         out.write(indent + "<div class=\"bibtex-container\">");
         out.newLine();
         out.write(indent + "  <pre class=\"bibtex\">");
@@ -548,7 +552,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.newLine(); // No comma after the last element
         out.write("}</pre>");
         out.newLine();
-        
+
         out.write(indent + "</div>");
         out.newLine();
     }
