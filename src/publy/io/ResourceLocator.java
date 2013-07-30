@@ -24,14 +24,18 @@ public class ResourceLocator {
             // - path/*.jar - when run from a jar archive
             workingDir = Paths.get(ResourceLocator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
+
+
             if (workingDir.endsWith(Paths.get("build", "classes"))) {
                 // Running in NetBeans, remove "build/classes"
                 workingDir = workingDir.getParent().getParent();
-            } else if (workingDir.getFileName().endsWith(".jar")) {
+            } else if (workingDir.getFileName().toString().endsWith(".jar")) {
                 // Running from a jar
                 workingDir = workingDir.getParent();
             } else {
-                Console.log("WARNING: Working directory is of an unknown form:%n%s", workingDir.toString());
+                Console.log("WARNING: Working directory is of an unknown form:%n\"%s\"", workingDir.toString());
+                workingDir = Paths.get(System.getProperty("user.dir"));
+                Console.log("Reverted to working directory \"%s\".", workingDir.toString());
             }
         } catch (NullPointerException // From the long chain of initializers
                 | SecurityException // Can be thrown from getProtectionDomain(), if a SecurityManager is enabled
