@@ -183,7 +183,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
         out.write("    <div id=\"" + c.getShortName().toLowerCase() + "\" class=\"section\">");
         out.newLine();
-        out.write("      <h1 class=\"section-title\">" + c.getName() + "</h1>");
+        out.write("      <h2 class=\"section-title\">" + c.getName() + "</h2>");
         out.newLine();
         out.newLine();
         writeNavigation(c, out);
