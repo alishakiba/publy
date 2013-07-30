@@ -21,7 +21,7 @@ public class ResourceLocator {
         try {
             // Location of the publy package. Can be of one of two forms:
             // - path/build/classes - when run from within NetBeans
-            // - path/Publy.jar - when run from a jar archive
+            // - path/*.jar - when run from a jar archive
             workingDir = Paths.get(ResourceLocator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
             if (workingDir.endsWith(Paths.get("build", "classes"))) {
