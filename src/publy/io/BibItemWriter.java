@@ -96,14 +96,14 @@ public abstract class BibItemWriter {
         String author = item.get("author");
 
         if (author == null) {
-            Console.error("No authors found for %s.", item.getId());
+            Console.error("No authors found for entry \"%s\".", item.getId());
             return "";
         } else {
             List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
 
             for (Author a : item.getAuthors()) {
                 if (a == null) {
-                    Console.error("Null author found for %s.%n(Authors: %s)", item.getId(), item.getAuthors().toString());
+                    Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), author);
                 } else {
                     if (settings.isListAllAuthors() || !a.isMe(settings.getMyNames(), settings.getNameDisplay(), settings.isReverseNames())) {
                         authorLinks.add(a.getFormattedName(settings.getNameDisplay(), settings.isReverseNames()));
@@ -111,16 +111,22 @@ public abstract class BibItemWriter {
                 }
             }
 
-            return formatNames(authorLinks);
+            if (settings.isListAllAuthors()) {
+                return formatNames(authorLinks);
+            } else {
+                if (authorLinks.size() == item.getAuthors().size()) {
+                    Console.log("WARNING: None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
+
+                    return formatNames(authorLinks);
+                } else {
+                    return "With " + formatNames(authorLinks);
+                }
+            }
         }
     }
 
     protected String formatNames(List<String> names) {
         StringBuilder result = new StringBuilder();
-
-        if (!settings.isListAllAuthors()) {
-            result.append("With ");
-        }
 
         for (int i = 0; i < names.size(); i++) {
             String name = names.get(i);
@@ -304,7 +310,7 @@ public abstract class BibItemWriter {
 
                 result.append(c);
             } else if (state == RemoveBracesState.OPTIONAL_ARGUMENT || state == RemoveBracesState.ARGUMENT) {
-                if ((state == RemoveBracesState.OPTIONAL_ARGUMENT && c == ']') ||(state == RemoveBracesState.ARGUMENT && c == '}')) {
+                if ((state == RemoveBracesState.OPTIONAL_ARGUMENT && c == ']') || (state == RemoveBracesState.ARGUMENT && c == '}')) {
                     state = RemoveBracesState.BEFORE_POSSIBLE_ARGUMENT;
                 }
 
@@ -315,7 +321,7 @@ public abstract class BibItemWriter {
                 } else {
                     state = RemoveBracesState.DEFAULT;
                 }
-                
+
                 result.append(c);
             }
         }

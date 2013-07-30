@@ -242,14 +242,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
         String author = item.get("author");
 
         if (author == null) {
-            Console.error("No authors found for bibitem \"%s\".", item.getId());
+            Console.error("No authors found for entry \"%s\".", item.getId());
             return "";
         } else {
             List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
 
             for (Author a : item.getAuthors()) {
                 if (a == null) {
-                    Console.error("Null author found for bibitem \"%s\".%n(Authors: \"%s\")", item.getId(), item.getAuthors().toString());
+                    Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), author);
                 } else {
                     if (settings.isListAllAuthors() || !a.isMe(settings.getMyNames(), settings.getNameDisplay(), settings.isReverseNames())) {
                         authorLinks.add(a.getLinkedAndFormattedHtmlName(settings.getNameDisplay(), settings.isReverseNames()));
@@ -257,7 +257,17 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 }
             }
 
-            return formatNames(authorLinks);
+            if (settings.isListAllAuthors()) {
+                return formatNames(authorLinks);
+            } else {
+                if (authorLinks.size() == item.getAuthors().size()) {
+                    Console.log("WARNING: None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
+
+                    return formatNames(authorLinks);
+                } else {
+                    return "With " + formatNames(authorLinks);
+                }
+            }
         }
     }
 
