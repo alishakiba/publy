@@ -27,7 +27,7 @@ public class ResourceLocator {
             if (workingDir.endsWith(Paths.get("build", "classes"))) {
                 // Running in NetBeans, remove "build/classes"
                 workingDir = workingDir.getParent().getParent();
-            } else if (workingDir.endsWith(".jar")) {
+            } else if (workingDir.getFileName().endsWith(".jar")) {
                 // Running from a jar
                 workingDir = workingDir.getParent();
             } else {
