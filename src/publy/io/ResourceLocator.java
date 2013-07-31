@@ -24,8 +24,6 @@ public class ResourceLocator {
             // - path/*.jar - when run from a jar archive
             workingDir = Paths.get(ResourceLocator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
-
-
             if (workingDir.endsWith(Paths.get("build", "classes"))) {
                 // Running in NetBeans, remove "build/classes"
                 workingDir = workingDir.getParent().getParent();
