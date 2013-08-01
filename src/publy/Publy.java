@@ -54,32 +54,50 @@ public class Publy {
             // Unavailable: use default L&F
         }
 
+        boolean showSettings = false;
+
         if (settings == null) {
+            showSettings = true;
+
             // Notify the user
             if (exception == null) {
                 JOptionPane.showMessageDialog(null, "No configuration information was found. Please set up your preferences.", "Publy - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "An exception occurred while parsing the configuration. Loading the default configuration.", "Publy - Launching Settings Window", JOptionPane.ERROR_MESSAGE);
             }
+        } else {
+            Path pubList = settings.getPublications();
+            Path target = settings.getGeneralSettings().getTarget();
+            
+            if (pubList == null || target == null) {
+                showSettings = true;
+                JOptionPane.showMessageDialog(null, "Some critical settings have not been specified yet. Please complete your configuration.", "Publy - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
+            } else if (Files.notExists(pubList)) {
+                showSettings = true;
+                JOptionPane.showMessageDialog(null, "The publication list \"" + pubList.getFileName().toString() + "\" could not be found at the indicated location.", "Publy - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
 
+        if (showSettings) {
             // Launch the GUI
-            final Throwable ex = exception;
+            // Variables need to be final in order to be shared
+            final Settings guiSettings = (settings == null ? Settings.defaultSettings() : settings);
+            final Throwable guiException = exception;
 
             java.awt.EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    MainFrame mf = new MainFrame(Settings.defaultSettings());
+                    MainFrame mf = new MainFrame(guiSettings);
 
                     // Report an Exception, if one occurred
-                    if (ex != null) {
-                        Console.except(ex, "Exception occurred while parsing the configuration:");
+                    if (guiException != null) {
+                        Console.except(guiException, "Exception occurred while parsing the configuration:");
                     }
 
                     mf.setVisible(true);
                 }
             });
         } else {
-            Console.log("Configuration parsed successfully.");
             generatePublicationList(settings);
         }
     }
