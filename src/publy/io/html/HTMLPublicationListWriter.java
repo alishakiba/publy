@@ -62,6 +62,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             }
         }
 
+        // Header
         if (htmlSettings.getHeader() == null) {
             publy.Console.error("No header found. The generated HTML file will not be valid.");
         } else {
@@ -69,13 +70,11 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             copyFile(htmlSettings.getHeader(), out);
         }
 
-        // Write the body
-        out.write("    <p>My publications as of " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".");
-
+        // Alternate version links
         if (htmlSettings.linkToAlternateVersions() && (htmlSettings.generateTextVersion() || htmlSettings.generateBibtexVersion())) {
             Path htmlDir = getSettings().getTarget().getParent();
 
-            out.write(" Also available as <a href=\"");
+            out.write("    <p>This list is also available as <a href=\"");
 
             if (htmlSettings.generateTextVersion()) {
                 out.write(htmlDir.relativize(getSettings().getPlainTextTarget()).toString());
@@ -92,10 +91,10 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                 out.write(htmlDir.relativize(getSettings().getBibtexTarget()).toString());
                 out.write("\" rel=\"alternate\">BibTeX</a>.");
             }
-        }
 
-        out.write("</p>");
-        out.newLine();
+            out.write("</p>");
+            out.newLine();
+        }
 
         // Navigation?
         if (htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.TOP
@@ -107,15 +106,15 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         for (OutputCategory c : getCategories()) {
             writeCategory(c, out);
         }
-        
+
         // Navigation?
         if (htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM
                 || htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
             writeNavigation(out);
         }
 
-        // Credit line
-        out.write("    <p>Generated from a BibTeX file by Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION + ".</p>");
+        // Credit line and last modified
+        out.write("    <p>Generated from a BibTeX file by Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION + ".&nbsp;&nbsp;Last modified on "  + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".</p>");
         out.newLine();
 
         if (htmlSettings.getFooter() == null) {

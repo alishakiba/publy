@@ -28,7 +28,7 @@
   <!-- HTML-specific settings -->
   <htmlsettings>
     <generatetextversion>true</generatetextversion>
-    <generatebibtexversion>false</generatebibtexversion>
+    <generatebibtexversion>true</generatebibtexversion>
     <linktoalternateversions>true</linktoalternateversions>
     <navplacement>BEFORE_SECTION_AND_BOTTOM</navplacement>
     <includeabstract>ALL</includeabstract>
