@@ -186,7 +186,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             }
 
             if (!found) {
-                Console.log("Warning: Referenced file \"%s\" not found at \"%s\".", file, path);
+                Console.warn("Referenced file \"%s\" not found at \"%s\".", file, path);
             }
         }
     }
