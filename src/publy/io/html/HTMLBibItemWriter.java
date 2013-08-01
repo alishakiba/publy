@@ -339,9 +339,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private void writeLinks(BibItem item, boolean includeBibtex, boolean includeArxivBibtex) throws IOException {
-        out.write(indent + "<div class=\"links\">");
-        out.newLine();
-
+        // Make sure the div is not written if there are no links
+        boolean divOpened = false;
+        
         // Paper link
         if (includePaper(item) && htmlSettings.getTitleTarget() != HTMLSettings.TitleLinkTarget.PAPER) {
             try {
@@ -362,8 +362,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     text = "Paper";
                 }
 
-                out.write(indent + "  <a href=\"" + link + "\">" + text + "</a>");
-                out.newLine();
+                writeLink(divOpened, link, text);
+                divOpened = true;
 
                 checkExistance(item.get("paper"), "paper", item);
             } catch (URISyntaxException ex) {
@@ -373,26 +373,28 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // arXiv link
         if (item.anyNonEmpty("arxiv")) {
-            out.write(indent + "  <a href=\"http://arxiv.org/abs/" + item.get("arxiv") + "\">arXiv</a>");
-            out.newLine();
+            writeLink(divOpened, "http://arxiv.org/abs/" + item.get("arxiv"), "arXiv");
+            divOpened = true;
         }
 
         // DOI link
         if (item.anyNonEmpty("doi")) {
-            out.write(indent + "  <a href=\"http://dx.doi.org/" + item.get("doi") + "\">DOI</a>");
-            out.newLine();
+            writeLink(divOpened, "http://dx.doi.org/" + item.get("doi"), "DOI");
+            divOpened = true;
         }
 
         // Other user-specified links
-        writeCustomLink(item, -1); // link
+        divOpened = writeCustomLink(divOpened, item, -1); // link
 
         for (int i = 0; i < 20; i++) {
-            writeCustomLink(item, i); // link<i>
+            divOpened = writeCustomLink(divOpened, item, i); // link<i>
         }
 
         // Close links div
-        out.write(indent + "</div>");
-        out.newLine();
+        if (divOpened) {
+            out.write(indent + "</div>");
+            out.newLine();
+        }
 
         // BibTeX link
         if (includeBibtex || includeArxivBibtex) {
@@ -409,7 +411,17 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
     }
 
-    private void writeCustomLink(BibItem item, int i) throws IOException {
+    private void writeLink(boolean divOpened, String link, String text) throws IOException {
+        if (!divOpened) {
+            out.write(indent + "<div class=\"links\">");
+            out.newLine();
+        }
+
+        out.write(indent + "  <a href=\"" + link + "\">" + text + "</a>");
+        out.newLine();
+    }
+
+    private boolean writeCustomLink(boolean divOpened, BibItem item, int i) throws IOException {
         String attribute = (i == -1 ? "link" : "link" + i);
 
         if (item.anyNonEmpty(attribute)) {
@@ -438,10 +450,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     }
                 }
 
-                out.write(indent + "  <a href=\"" + target + "\">" + text + "</a>");
-                out.newLine();
+                writeLink(divOpened, target, text);
+                return true;
             }
         }
+        
+        return divOpened;
     }
 
     private void writeBibtexHTML(BibItem item) throws IOException {
