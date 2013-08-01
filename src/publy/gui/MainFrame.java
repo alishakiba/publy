@@ -7,7 +7,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
 import publy.Console;
-import publy.GeneratorMain;
+import publy.Publy;
 import publy.data.settings.Settings;
 import publy.io.settings.SettingsWriter;
 
@@ -139,7 +139,7 @@ public class MainFrame extends javax.swing.JFrame {
         // Clear the console before generating
         consoleTextPane.setText("");
 
-        GeneratorMain.generatePublicationList(settings);
+        Publy.generatePublicationList(settings);
         
         // Change cursor back
         setCursor(Cursor.getDefaultCursor());

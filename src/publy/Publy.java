@@ -27,7 +27,7 @@ import publy.io.settings.SettingsReader;
  *
  * @author Sander
  */
-public class GeneratorMain {
+public class Publy {
 
     /**
      * @param args the command line arguments

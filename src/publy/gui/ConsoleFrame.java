@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import publy.Console;
-import publy.GeneratorMain;
+import publy.Publy;
 import publy.data.settings.Settings;
 import publy.io.settings.SettingsReader;
 
@@ -123,7 +123,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
         }
 
         if (settings != null) {
-            GeneratorMain.generatePublicationList(settings);
+            Publy.generatePublicationList(settings);
         }
         
         // Change cursor back
