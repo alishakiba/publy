@@ -127,6 +127,9 @@ public class SettingsReader extends DefaultHandler {
                 case "linktoalternateversions":
                     settings.getHtmlSettings().setLinkToAlternateVersions(Boolean.parseBoolean(text));
                     break;
+                case "navplacement":
+                    settings.getHtmlSettings().setNavPlacement(HTMLSettings.NavigationPlacement.valueOf(text));
+                    break;
                 case "includeabstract":
                     settings.getHtmlSettings().setIncludeAbstract(PublicationType.valueOf(text));
                     break;
