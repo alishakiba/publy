@@ -96,10 +96,22 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
         out.write("</p>");
         out.newLine();
-        out.newLine();
 
+        // Navigation?
+        if (htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.TOP
+                || htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM) {
+            writeNavigation(out);
+        }
+
+        out.newLine();
         for (OutputCategory c : getCategories()) {
             writeCategory(c, out);
+        }
+        
+        // Navigation?
+        if (htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM
+                || htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
+            writeNavigation(out);
         }
 
         // Credit line
@@ -181,13 +193,26 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
+        // Section start
         out.write("    <div id=\"" + c.getShortName().toLowerCase() + "\" class=\"section\">");
         out.newLine();
+
+        // Navigation?
+        if (htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_TITLE
+                || htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
+            writeNavigation(c, out);
+        }
+
+        // Section title
         out.write("      <h2 class=\"section-title\">" + c.getName() + "</h2>");
         out.newLine();
-        out.newLine();
-        writeNavigation(c, out);
 
+        // Navigation?
+        if (htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.AFTER_SECTION_TITLE) {
+            writeNavigation(c, out);
+        }
+
+        // Note
         String note = getSettings().getCategoryNotes().get(c.getId());
 
         if (note != null && !note.isEmpty()) {
@@ -198,16 +223,15 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             out.newLine();
         }
 
-        // Start the list for this section
+        // Section list start
         if (getSettings().getNumbering() == FormatSettings.Numbering.NONE) {
             out.write("      <ul class=\"section-list\">"); // Unordered list
         } else if (getSettings().getNumbering() == FormatSettings.Numbering.LOCAL) {
             out.write("      <ol class=\"section-list\">");
-            // There is limited browser support for the reversed attribute, so we'll add values manually
-
             // Reset the count
             if (getSettings().isReverseNumbering()) {
                 count = c.getItems().size();
+                // There is limited browser support for the reversed attribute, so we'll add values manually if needed
             } else {
                 count = 0;
             }
@@ -220,6 +244,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
         out.newLine();
 
+        // The actual entries
         for (BibItem item : c.getItems()) {
             if (getSettings().isReverseNumbering()) {
                 out.write("        <li id=\"" + item.getId() + "\" value=\"" + count + "\" class=\"bibentry\">");
@@ -238,7 +263,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             out.newLine();
         }
 
-        // Close the list
+        // Section list end
         if (getSettings().getNumbering() == FormatSettings.Numbering.NONE) {
             out.write("      </ul>");
         } else { // LOCAL or GLOBAL
@@ -247,12 +272,18 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
         out.newLine();
 
+        // Section end
         out.write("    </div>");
         out.newLine();
         out.newLine();
     }
 
+    private void writeNavigation(BufferedWriter out) throws IOException {
+        writeNavigation(null, out);
+    }
+
     private void writeNavigation(OutputCategory current, BufferedWriter out) throws IOException {
+        out.newLine();
         out.write("      <p class=\"navigation\">");
         out.newLine();
 

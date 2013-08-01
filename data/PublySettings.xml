@@ -30,6 +30,7 @@
     <generatetextversion>true</generatetextversion>
     <generatebibtexversion>false</generatebibtexversion>
     <linktoalternateversions>true</linktoalternateversions>
+    <navplacement>BEFORE_SECTION_AND_BOTTOM</navplacement>
     <includeabstract>ALL</includeabstract>
     <includebibtex>ARXIV</includebibtex>
     <includepaper>ARXIV</includepaper>

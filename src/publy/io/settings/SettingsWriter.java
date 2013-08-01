@@ -113,6 +113,7 @@ public class SettingsWriter {
         output(out, 4, "generatetextversion", makeString(settings.generateTextVersion()));
         output(out, 4, "generatebibtexversion", makeString(settings.generateBibtexVersion()));
         output(out, 4, "linktoalternateversions", makeString(settings.linkToAlternateVersions()));
+        output(out, 4, "navplacement", makeString(settings.getNavPlacement()));
         output(out, 4, "includeabstract", makeString(settings.getIncludeAbstract()));
         output(out, 4, "includebibtex", makeString(settings.getIncludeBibtex()));
         output(out, 4, "includepaper", makeString(settings.getIncludePaper()));
