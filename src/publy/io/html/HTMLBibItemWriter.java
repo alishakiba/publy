@@ -277,14 +277,68 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
     
     protected String changeQuotes(String string) {
-        String result = string;
+        StringBuilder sb = new StringBuilder(string.length());
+        char lastChar = '\u0000'; // State. Either '\u0000' (regular), '<' (in an HTML tag), '\'' (after a straight quote), or '`' (after a grave)
         
-        result = result.replaceAll("\"|(\'\')", "\u201D"); // Single " or Double '' -> U+201D (right double quotation mark)
-        result = result.replaceAll("``", "\u201C"); // Double `` -> U+201C (left double quotation mark)
-        result = result.replaceAll("'", "\u2019"); // A single ' -> U+2019 (right single quotation mark)
-        result = result.replaceAll("`", "\u2018"); // A single ` -> U+2018 (left single quotation mark)
+        for (char c : string.toCharArray()) {
+            if (lastChar == '`') {
+                // Single or double quote?
+                if (c == '`') {
+                    // Double `` -> U+201C (left double quotation mark)
+                    sb.append('\u201C');
+                    // lastChar is reset at the end of the loop
+                } else {
+                    // Single ` -> U+2018 (left single quotation mark)
+                    sb.append('\u2018');
+                    lastChar = '\u0000'; // Reset lastChar here so current char gets processed regularly
+                }
+            } else if (lastChar == '\'') {
+                // Single or double quote?
+                if (c == '\'') {
+                    // Double '' -> U+201D (right double quotation mark)
+                    sb.append('\u201D');
+                    // lastChar is reset at the end of the loop
+                } else {
+                    // Single ' -> U+2019 (right single quotation mark)
+                    sb.append('\u2019');
+                    lastChar = '\u0000'; // Reset lastChar here so current char gets processed regularly
+                }
+            }
+            
+            if (lastChar == '\u0000') {
+                // Regular case
+                switch (c) {
+                    case '<': // HTML tag open
+                        lastChar = c;
+                        sb.append(c);
+                        break;
+                    case '"': // Single " -> U+201D (right double quotation mark)
+                        sb.append('\u201D');
+                        break;
+                    case '`': // Single or double `
+                        lastChar = c;
+                        break;
+                    case '\'': // Single or double '
+                        lastChar = c;
+                        break;
+                    default:
+                        sb.append(c);
+                        break;
+                }
+            } else if (lastChar == '<') {
+                // In an HTML tag
+                if (c == '>') {
+                    // Close the tag
+                    lastChar = '\u0000';
+                }
+                
+                sb.append(c);
+            } else {
+                lastChar = '\u0000';
+            }
+        }
         
-        return result;
+        return sb.toString();
     }
 
     private void writeVolume(BibItem item, String connective) throws IOException {

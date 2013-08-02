@@ -28,6 +28,10 @@ public class HTMLBibItemWriterTest {
         expected.put("``This is also simple.''", "“This is also simple.”");
         expected.put("As is ``this\".", "As is “this”.");
         
+        // Ignore quotes in HTML tags
+        expected.put("<span class=\"author\">O'Rourke</span>", "<span class=\"author\">O’Rourke</span>");
+        expected.put("<a href=\"http://www.google.com\">O'Rourke</a>", "<a href=\"http://www.google.com\">O’Rourke</a>");
+        
         HTMLBibItemWriter testInstance = new HTMLBibItemWriter(null, null, null);
         
         for (String input : expected.keySet()) {
