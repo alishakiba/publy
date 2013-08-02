@@ -208,13 +208,17 @@ public abstract class BibItemWriter {
     protected void output(String prefix, String string, String connective, boolean newLine) throws IOException {
         if (string != null && !string.isEmpty()) {
             out.write(prefix);
-            out.write(removeBraces(LatexToUnicode.convertToUnicode(string)));
+            out.write(processString(string));
             out.write(connective);
 
             if (newLine) {
                 out.newLine();
             }
         }
+    }
+    
+    protected String processString(String string) {
+        return removeBraces(LatexToUnicode.convertToUnicode(string));
     }
 
     protected String changeCaseT(String s) {
