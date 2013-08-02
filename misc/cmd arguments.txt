@@ -1,0 +1,39 @@
+﻿Publy command-line options:
+
+-h, --help: help
+-d, --debug: print stack traces with errors
+-f, --input: input file (publication list)
+-o, --output: output file (website)
+-q, -s, --quiet, --silent: hide log output
+-v, -V, --version: version info
+-w, --no-warn: hide warnings
+
+--------------------------------
+
+Command-line output should be of the form
+
+"Publy: <message>"
+
+Where <message> does not start with a capital letter, or end with a period.
+
+--------------------------------
+
+Version info should be presented as:
+
+Publy 0.4
+Copyright (c) 2013 Sander Verdonschot
+License Apache v2
+This is free software. You are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+--------------------------------
+
+Help info should end with:
+
+Report bugs to: <email>
+Publy home page: <website>
+
+--------------------------------
+
+For a library that assists in command-line parsing, see
+JCommander - http://jcommander.org/
