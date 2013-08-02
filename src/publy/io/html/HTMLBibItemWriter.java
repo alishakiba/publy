@@ -271,6 +271,22 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
     }
 
+    @Override
+    protected String processString(String string) {
+        return changeQuotes(super.processString(string));
+    }
+    
+    protected String changeQuotes(String string) {
+        String result = string;
+        
+        result = result.replaceAll("\"|(\'\')", "\u201D"); // Single " or Double '' -> U+201D (right double quotation mark)
+        result = result.replaceAll("``", "\u201C"); // Double `` -> U+201C (left double quotation mark)
+        result = result.replaceAll("'", "\u2019"); // A single ' -> U+2019 (right single quotation mark)
+        result = result.replaceAll("`", "\u2018"); // A single ` -> U+2018 (left single quotation mark)
+        
+        return result;
+    }
+
     private void writeVolume(BibItem item, String connective) throws IOException {
         String volume = item.get("volume");
         String series = item.get("series");
