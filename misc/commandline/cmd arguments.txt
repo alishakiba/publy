@@ -1,9 +1,11 @@
 ﻿Publy command-line options:
 
--h, --help: help
+-c, --config <F>: use this configuration file
 -d, --debug: print stack traces with errors
--f, --input: input file (publication list)
--o, --output: output file (website)
+-g, --gui: open the settings gui
+-h, --help: help
+-f, --input <F>: input file (publication list)
+-o, --output <F>: output file (website)
 -q, -s, --quiet, --silent: hide log output
 -v, -V, --version: version info
 -w, --no-warn: hide warnings
