@@ -25,14 +25,14 @@ import publy.io.ResourceLocator;
 public class SettingsWriter {
 
     public static void writeSettings(Settings settings) throws IOException {
-        Path settingsFile = ResourceLocator.getFullPath(SettingsReader.DEFAULT_SETTINGS_LOCATION);
-        Path dataDir = settingsFile.getParent();
+        Path settingsFile = SettingsReader.getSettingsFile();
+        Path settingsDirectory = settingsFile.getParent();
 
-        if (Files.notExists(dataDir)) {
+        if (Files.notExists(settingsDirectory)) {
             try {
-                Files.createDirectories(dataDir);
+                Files.createDirectories(settingsDirectory);
             } catch (Exception ex) {
-                throw new IOException("Could not create the directory \"" + dataDir + "\" to store the settings.", ex);
+                throw new IOException("Could not create the directory \"" + settingsDirectory + "\" to store the settings.", ex);
             }
         }
 
@@ -197,7 +197,7 @@ public class SettingsWriter {
         return ResourceLocator.getRelativePath(p).replaceAll("\\\\", "/");
     }
 
-    private static String makeString(Enum e) {
+    private static String makeString(Enum<?> e) {
         return e.name();
     }
 

@@ -20,7 +20,9 @@ public class Console {
     private static final SimpleAttributeSet logAttributes;
     private static final SimpleAttributeSet warnAttributes;
     private static final SimpleAttributeSet errorAttributes;
-    private static final boolean PRINT_STACKTRACE = true;
+    private static boolean printStacktrace = false;
+    private static boolean printWarning = true;
+    private static boolean printLog = true;
     private static JTextPane textPane = null; // A styled text area to log to, if the program was invoked without an attached console
 
     // Static font initialization
@@ -30,53 +32,57 @@ public class Console {
         StyleConstants.setFontFamily(logAttributes, "Monospaced");
         StyleConstants.setFontSize(logAttributes, 12);
 
-        // The same font, but yellow for warnings
+        // The same font, but yellow/orange for warnings
         warnAttributes = new SimpleAttributeSet(logAttributes);
         StyleConstants.setForeground(warnAttributes, new Color(230, 138, 0));
-        
+
         // The same font, but red for errors
         errorAttributes = new SimpleAttributeSet(logAttributes);
         StyleConstants.setForeground(errorAttributes, Color.red);
     }
 
     public static void log(String format, Object... args) {
-        if (textPane == null) {
-            if (System.console() == null) {
-                createConsoleFrame();
-            } else {
-                System.console().format(" " + format + "%n", args);
-                System.console().flush();
+        if (printLog) {
+            if (textPane == null) {
+                if (System.console() == null) {
+                    createConsoleFrame();
+                } else {
+                    System.console().format(" " + format + "%n", args);
+                    System.console().flush();
+                }
             }
-        }
 
-        // Re-check, because textPane might have been set by createConsoleFrame()
-        if (textPane != null) {
-            try {
-                textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" " + format + "%n", args), logAttributes);
-            } catch (BadLocationException ex) {
-                // This should never happen
-                throw new AssertionError(ex);
+            // Re-check, because textPane might have been set by createConsoleFrame()
+            if (textPane != null) {
+                try {
+                    textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" " + format + "%n", args), logAttributes);
+                } catch (BadLocationException ex) {
+                    // This should never happen
+                    throw new AssertionError(ex);
+                }
             }
         }
     }
-    
-    public static void warn(String format, Object... args) {
-        if (textPane == null) {
-            if (System.console() == null) {
-                createConsoleFrame();
-            } else {
-                System.console().format(" WARNING: " + format + "%n", args);
-                System.console().flush();
-            }
-        }
 
-        // Re-check, because textPane might have been set by createConsoleFrame()
-        if (textPane != null) {
-            try {
-                textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" Warning: " + format + "%n", args), warnAttributes);
-            } catch (BadLocationException ex) {
-                // This should never happen
-                throw new AssertionError(ex);
+    public static void warn(String format, Object... args) {
+        if (printWarning) {
+            if (textPane == null) {
+                if (System.console() == null) {
+                    createConsoleFrame();
+                } else {
+                    System.console().format(" WARNING: " + format + "%n", args);
+                    System.console().flush();
+                }
+            }
+
+            // Re-check, because textPane might have been set by createConsoleFrame()
+            if (textPane != null) {
+                try {
+                    textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" Warning: " + format + "%n", args), warnAttributes);
+                } catch (BadLocationException ex) {
+                    // This should never happen
+                    throw new AssertionError(ex);
+                }
             }
         }
     }
@@ -105,7 +111,7 @@ public class Console {
     public static void except(Throwable exception, String format, Object... args) {
         String exceptionText;
 
-        if (PRINT_STACKTRACE) {
+        if (printStacktrace) {
             StringWriter stackTrace = new StringWriter();
             exception.printStackTrace(new PrintWriter(stackTrace));
             exceptionText = stackTrace.toString();
@@ -140,7 +146,7 @@ public class Console {
             // Copy the current text over
             textPane.setStyledDocument(Console.textPane.getStyledDocument());
         }
-        
+
         Console.textPane = textPane;
     }
 
@@ -148,5 +154,29 @@ public class Console {
         ConsoleFrame consoleFrame = new ConsoleFrame();
         // The constructor of ConsoleFrame calls setOutputTarget
         consoleFrame.setVisible(true);
+    }
+
+    public static boolean isPrintStacktrace() {
+        return printStacktrace;
+    }
+
+    public static void setPrintStacktrace(boolean printStacktrace) {
+        Console.printStacktrace = printStacktrace;
+    }
+
+    public static boolean isPrintWarning() {
+        return printWarning;
+    }
+
+    public static void setPrintWarning(boolean printWarning) {
+        Console.printWarning = printWarning;
+    }
+
+    public static boolean isPrintLog() {
+        return printLog;
+    }
+
+    public static void setPrintLog(boolean printLog) {
+        Console.printLog = printLog;
     }
 }
