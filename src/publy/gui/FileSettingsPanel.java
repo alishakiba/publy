@@ -2,9 +2,11 @@
  */
 package publy.gui;
 
+import java.awt.Color;
 import java.nio.file.Path;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import publy.data.settings.Settings;
@@ -24,7 +26,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
     public FileSettingsPanel() {
         initComponents();
     }
-    
+
     /**
      * Creates new form FileSettingsPanel
      */
@@ -34,30 +36,35 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         applyStyles();
         populateValues();
     }
-    
+
     private void applyStyles() {
         UIStyles.applyHeaderStyle(pubLabel, targetLabel, headerLabel);
     }
-    
+
     private void populateValues() {
         // Publications
-        updateField(pubTextField, pubFileChooser, settings.getPublications());
-        
+        updateField(pubTextField, pubFileChooser, settings.getPublications(), true);
+
         // Target
-        updateField(targetTextField, targetFileChooser, settings.getGeneralSettings().getTarget());
-        
+        updateField(targetTextField, targetFileChooser, settings.getGeneralSettings().getTarget(), true);
+
         // Header and Footer
-        updateField(headerTextField, headerFileChooser, settings.getHtmlSettings().getHeader());
-        updateField(footerTextField, footerFileChooser, settings.getHtmlSettings().getFooter());
+        updateField(headerTextField, headerFileChooser, settings.getHtmlSettings().getHeader(), false);
+        updateField(footerTextField, footerFileChooser, settings.getHtmlSettings().getFooter(), false);
     }
-    
+
     /**
-     * Updates the property with the associated text field and file chooser to reflect the new value.
+     * Updates the property with the associated text field and file chooser to
+     * reflect the new value.
      */
-    private void updateField(JTextField textField, JFileChooser fileChooser, Path newValue) {
+    private void updateField(JTextField textField, JFileChooser fileChooser, Path newValue, boolean errorWhenEmpty) {
         if (newValue == null) {
             textField.setText("");
             fileChooser.setCurrentDirectory(ResourceLocator.getBaseDirectory().toFile());
+
+            if (errorWhenEmpty) {
+                textField.setBackground(UIConstants.TEXTFIELD_ERROR_COLOR);
+            }
         } else {
             textField.setText(ResourceLocator.getRelativePath(newValue));
             fileChooser.setCurrentDirectory(newValue.getParent().toFile());
@@ -283,21 +290,35 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                 settings.getGeneralSettings().setTarget(selected.resolveSibling(baseName + ".html"));
 
                 // Update the GUI
-                updateField(targetTextField, targetFileChooser, settings.getGeneralSettings().getTarget());
+                updateField(targetTextField, targetFileChooser, settings.getGeneralSettings().getTarget(), true);
             }
         }
     }//GEN-LAST:event_pubBrowseButtonActionPerformed
-    
+
     private void pubTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
         settings.setPublications(ResourceLocator.getFullPath(pubTextField.getText()));
+
+        // Remove the error background?
+        if (pubTextField.getText().isEmpty()) {
+            pubTextField.setBackground(UIConstants.TEXTFIELD_ERROR_COLOR);
+        } else {
+            pubTextField.setBackground(UIManager.getColor("TextField.background"));
+        }
     }
-    
+
     private void targetTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
         settings.getGeneralSettings().setTarget(ResourceLocator.getFullPath(targetTextField.getText()));
+        
+        // Remove the error background?
+        if (targetTextField.getText().isEmpty()) {
+            targetTextField.setBackground(UIConstants.TEXTFIELD_ERROR_COLOR);
+        } else {
+            targetTextField.setBackground(UIManager.getColor("TextField.background"));
+        }
     }
-    
+
     private void headerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
         settings.getHtmlSettings().setHeader(ResourceLocator.getFullPath(headerTextField.getText()));
@@ -307,7 +328,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         // Update the settings
         settings.getHtmlSettings().setFooter(ResourceLocator.getFullPath(footerTextField.getText()));
     }
-    
+
     private void targetBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_targetBrowseButtonActionPerformed
         int opened = targetFileChooser.showOpenDialog(this);
 
@@ -315,7 +336,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             targetTextField.setText(ResourceLocator.getRelativePath(targetFileChooser.getSelectedFile().toPath()));
         }
     }//GEN-LAST:event_targetBrowseButtonActionPerformed
-    
+
     private void footerBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_footerBrowseButtonActionPerformed
         int opened = footerFileChooser.showOpenDialog(this);
 

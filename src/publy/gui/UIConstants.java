@@ -2,6 +2,7 @@
  */
 package publy.gui;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
@@ -34,4 +35,6 @@ public class UIConstants {
             UIConstants.PUBLY_ICONS.add(Toolkit.getDefaultToolkit().createImage(iconUrl));
         }
     }
+    
+    public static final Color TEXTFIELD_ERROR_COLOR = new Color(255, 210, 210);
 }

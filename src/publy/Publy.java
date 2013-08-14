@@ -41,7 +41,7 @@ public class Publy {
      */
     public static void main(String[] args) {
         setLookAndFeel();
-        
+
         // Parse the command line arguments
         CommandLineArguments arguments = new CommandLineArguments();
         JCommander jc;
@@ -151,7 +151,7 @@ public class Publy {
             }
         } else {
             Path settingsFile = ResourceLocator.getFullPath(settingsLocation);
-            
+
             if (Files.exists(settingsFile)) {
                 try {
                     settings = SettingsReader.parseSettings(settingsFile);
@@ -223,6 +223,8 @@ public class Publy {
             Console.error("No publication list was set.");
         } else if (Files.notExists(pubList)) {
             Console.error("No publication list was found at: %s", pubList);
+        } else if (settings.getGeneralSettings().getTarget() == null) {
+            Console.error("No output file was set.");
         } else {
             // Parse all publications
             List<BibItem> items = null;
