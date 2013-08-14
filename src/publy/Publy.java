@@ -5,6 +5,7 @@
 package publy;
 
 import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,6 +21,7 @@ import publy.gui.MainFrame;
 import publy.gui.UIConstants;
 import publy.io.BibTeXParser;
 import publy.io.PublicationListWriter;
+import publy.io.ResourceLocator;
 import publy.io.bibtex.BibtexPublicationListWriter;
 import publy.io.html.HTMLPublicationListWriter;
 import publy.io.plain.PlainPublicationListWriter;
@@ -38,12 +40,21 @@ public class Publy {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        setLookAndFeel();
+        
         // Parse the command line arguments
         CommandLineArguments arguments = new CommandLineArguments();
-        JCommander jc = new JCommander(arguments, args);
+        JCommander jc;
+
+        try {
+            jc = new JCommander(arguments, args);
+        } catch (ParameterException ex) {
+            Console.error(ex.getMessage());
+            return;
+        }
 
         if (arguments.isHelp()) {
-            jc.setProgramName("Publy");
+            jc.setProgramName("java -jar Publy.jar");
             jc.usage();
         } else if (arguments.isVersion()) {
             printVersionInfo();
@@ -54,7 +65,6 @@ public class Publy {
             Console.setPrintStacktrace(arguments.isDebug());
 
             readSettings(arguments.getConfig());
-            setLookAndFeel();
 
             if (arguments.isGui()) {
                 runInGuiMode(arguments);
@@ -79,7 +89,7 @@ public class Publy {
             notifyForMissingSettings();
             settings = Settings.defaultSettings();
         }
-        
+
         applyCommandlineOverwites(arguments);
 
         launchGUI();
@@ -131,22 +141,25 @@ public class Publy {
         }
     }
 
-    private static void readSettings(Path settingsLocation) {
-        if (settingsLocation == null) {
+    private static void readSettings(String settingsLocation) {
+        if (settingsLocation == null || settingsLocation.isEmpty()) {
+            // Parse the settings in the default location
             try {
                 settings = SettingsReader.parseSettings();
             } catch (ParserConfigurationException | SAXException | IOException ex) {
                 exception = ex;
             }
         } else {
-            if (Files.exists(settingsLocation)) {
+            Path settingsFile = ResourceLocator.getFullPath(settingsLocation);
+            
+            if (Files.exists(settingsFile)) {
                 try {
-                    settings = SettingsReader.parseSettings(settingsLocation);
+                    settings = SettingsReader.parseSettings(settingsFile);
                 } catch (ParserConfigurationException | SAXException | IOException ex) {
                     exception = ex;
                 }
             } else {
-                exception = new IOException("The configuration file \"" + settingsLocation.getFileName().toString() + "\" could not be found at the indicated location.");
+                Console.error("The configuration file \"%s\" could not be found at \"%s\".", settingsLocation, settingsFile);
             }
         }
     }
@@ -171,14 +184,14 @@ public class Publy {
             JOptionPane.showMessageDialog(null, "An exception occurred while parsing the configuration. Loading the default configuration.", "Publy - Launching Settings Window", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     private static void applyCommandlineOverwites(CommandLineArguments arguments) {
-        if (arguments.getInput() != null) {
-            settings.setPublications(arguments.getInput());
+        if (arguments.getInput() != null && !arguments.getInput().isEmpty()) {
+            settings.setPublications(ResourceLocator.getFullPath(arguments.getInput()));
         }
-        
-        if (arguments.getOutput() != null) {
-            settings.getGeneralSettings().setTarget(arguments.getOutput());
+
+        if (arguments.getOutput() != null && !arguments.getOutput().isEmpty()) {
+            settings.getGeneralSettings().setTarget(ResourceLocator.getFullPath(arguments.getOutput()));
         }
     }
 
