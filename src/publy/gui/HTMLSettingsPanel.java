@@ -59,6 +59,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         // Google analytics
         String user = settings.getGoogleAnalyticsUser();
         analyticsUserTextField.setText(user);
+        analyticsUserTextField.setEnabled(user != null && !user.isEmpty());
         analyticsCheckBox.setSelected(user != null && !user.isEmpty());
         
         // PresentedText
