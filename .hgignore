@@ -4,3 +4,5 @@ desktop.ini
 nbproject/genfiles.properties
 nbproject/private/
 build/
+dist/
+misc/test/

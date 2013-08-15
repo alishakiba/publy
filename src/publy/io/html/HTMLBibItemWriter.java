@@ -168,41 +168,42 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         // Don't add an authors line if it's just me and I just want to list co-authors
-        if (settings.isListAllAuthors() || item.getAuthors().size() > 1) {
+        if (settings.isListAllAuthors() || item.getAuthors().size() > 1 || (item.getAuthors().size() == 1 && !item.getAuthors().get(0).isMe(settings.getMyNames(), settings.getNameDisplay(), settings.isReverseNames()))) {
             String authors = formatAuthors(item);
 
             if (authors.endsWith(".</span>") || authors.endsWith(".</a>")) {
-                // Don't double up on periods when author names are abbreviated and reversed
+                // Don't double up on periods (occurs when author names are abbreviated and reversed)
                 output(indent, authors, "<br>", true);
             } else {
                 output(indent, authors, ".<br>", true);
             }
         }
-        
+
         if (!settings.isTitleFirst()) {
             writeTitleAndAbstractHTML(item);
         }
     }
-    
+
     protected void writeTitleAndAbstractHTML(BibItem item) throws IOException {
         out.write(indent);
-        
+
         // Title
         if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
-            output("<h2 class=\"title link\">", formatTitle(item), "</h2>");
+            output("<h3 class=\"title abstract-toggle\">", formatTitle(item), "</h3>");
         } else if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && includePaper(item)) {
             try {
                 String href = (new URI(null, null, item.get("paper"), null)).toString();
 
                 out.write("<a href=\"" + href + "\">");
-                output("<h2 class=\"title\">", formatTitle(item), "</h2>");
+                output("<h3 class=\"title\">", formatTitle(item), "</h3>");
                 out.write("</a>");
                 checkExistance(item.get("paper"), "paper", item);
             } catch (URISyntaxException ex) {
                 Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
+                output("<h3 class=\"title\">", formatTitle(item), "</h3>");
             }
         } else {
-            output("<h2 class=\"title\">", formatTitle(item), "</h2>");
+            output("<h3 class=\"title\">", formatTitle(item), "</h3>");
         }
 
         // Add text if I presented this paper
@@ -212,22 +213,23 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Abstract if included
         if (includeAbstract(item)) {
-            out.newLine();
-
             // Show \ hide link for the abstract
             if (htmlSettings.getTitleTarget() != HTMLSettings.TitleLinkTarget.ABSTRACT) {
-                writeToggleLink(item.getId() + "_abstract", "Abstract");
+                out.newLine();
+                writeToggleLink("abstract", "Abstract");
             }
 
             out.write("<br>");
             out.newLine();
 
             // Actual abstract
-            out.write(indent + "<div id=\"" + item.getId() + "_abstract\" class=\"collapsible\">");
+            out.write(indent + "<div class=\"abstract-container\">");
             out.write("<div class=\"abstract\">");
-            out.write("<span class=\"abstractword\">Abstract: </span>");
+            out.newLine();
+            out.write(indent + "  <span class=\"abstractword\">Abstract: </span>");
             output(item.get("abstract"));
-            out.write("</div></div>");
+            out.newLine();
+            out.write(indent + "</div></div>");
             out.newLine();
         } else {
             out.write("<br>");
@@ -240,23 +242,103 @@ public class HTMLBibItemWriter extends BibItemWriter {
         String author = item.get("author");
 
         if (author == null) {
-            Console.error("No authors found for %s.", item.getId());
+            Console.error("No authors found for entry \"%s\".", item.getId());
             return "";
         } else {
             List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
 
             for (Author a : item.getAuthors()) {
                 if (a == null) {
-                    Console.error("Null author found for %s.%n(Authors: %s)", item.getId(), item.getAuthors().toString());
+                    Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), author);
                 } else {
-                    if (settings.isListAllAuthors() || !a.isMe()) {
+                    if (settings.isListAllAuthors() || !a.isMe(settings.getMyNames(), settings.getNameDisplay(), settings.isReverseNames())) {
                         authorLinks.add(a.getLinkedAndFormattedHtmlName(settings.getNameDisplay(), settings.isReverseNames()));
                     }
                 }
             }
 
-            return formatNames(authorLinks);
+            if (settings.isListAllAuthors()) {
+                return formatNames(authorLinks);
+            } else {
+                if (authorLinks.size() == item.getAuthors().size()) {
+                    Console.warn("None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
+
+                    return formatNames(authorLinks);
+                } else {
+                    return "With " + formatNames(authorLinks);
+                }
+            }
         }
+    }
+
+    @Override
+    protected String processString(String string) {
+        return changeQuotes(super.processString(string));
+    }
+    
+    protected String changeQuotes(String string) {
+        StringBuilder sb = new StringBuilder(string.length());
+        char lastChar = '\u0000'; // State. Either '\u0000' (regular), '<' (in an HTML tag), '\'' (after a straight quote), or '`' (after a grave)
+        
+        for (char c : string.toCharArray()) {
+            if (lastChar == '`') {
+                // Single or double quote?
+                if (c == '`') {
+                    // Double `` -> U+201C (left double quotation mark)
+                    sb.append('\u201C');
+                    // lastChar is reset at the end of the loop
+                } else {
+                    // Single ` -> U+2018 (left single quotation mark)
+                    sb.append('\u2018');
+                    lastChar = '\u0000'; // Reset lastChar here so current char gets processed regularly
+                }
+            } else if (lastChar == '\'') {
+                // Single or double quote?
+                if (c == '\'') {
+                    // Double '' -> U+201D (right double quotation mark)
+                    sb.append('\u201D');
+                    // lastChar is reset at the end of the loop
+                } else {
+                    // Single ' -> U+2019 (right single quotation mark)
+                    sb.append('\u2019');
+                    lastChar = '\u0000'; // Reset lastChar here so current char gets processed regularly
+                }
+            }
+            
+            if (lastChar == '\u0000') {
+                // Regular case
+                switch (c) {
+                    case '<': // HTML tag open
+                        lastChar = c;
+                        sb.append(c);
+                        break;
+                    case '"': // Single " -> U+201D (right double quotation mark)
+                        sb.append('\u201D');
+                        break;
+                    case '`': // Single or double `
+                        lastChar = c;
+                        break;
+                    case '\'': // Single or double '
+                        lastChar = c;
+                        break;
+                    default:
+                        sb.append(c);
+                        break;
+                }
+            } else if (lastChar == '<') {
+                // In an HTML tag
+                if (c == '>') {
+                    // Close the tag
+                    lastChar = '\u0000';
+                }
+                
+                sb.append(c);
+            } else {
+                lastChar = '\u0000';
+            }
+        }
+        
+        return sb.toString();
     }
 
     private void writeVolume(BibItem item, String connective) throws IOException {
@@ -327,6 +409,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private void writeLinks(BibItem item, boolean includeBibtex, boolean includeArxivBibtex) throws IOException {
+        // Make sure the div is not written if there are no links
+        boolean divOpened = false;
+        
         // Paper link
         if (includePaper(item) && htmlSettings.getTitleTarget() != HTMLSettings.TitleLinkTarget.PAPER) {
             try {
@@ -347,8 +432,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     text = "Paper";
                 }
 
-                out.write(indent + "[<a href=\"" + link + "\">" + text + "</a>]");
-                out.newLine();
+                writeLink(divOpened, link, text);
+                divOpened = true;
 
                 checkExistance(item.get("paper"), "paper", item);
             } catch (URISyntaxException ex) {
@@ -358,32 +443,55 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // arXiv link
         if (item.anyNonEmpty("arxiv")) {
-            out.write(indent + "[<a href=\"http://arxiv.org/abs/" + item.get("arxiv") + "\">arXiv</a>]");
-            out.newLine();
+            writeLink(divOpened, "http://arxiv.org/abs/" + item.get("arxiv"), "arXiv");
+            divOpened = true;
         }
 
         // DOI link
         if (item.anyNonEmpty("doi")) {
-            out.write(indent + "[<a href=\"http://dx.doi.org/" + item.get("doi") + "\">DOI</a>]");
-            out.newLine();
+            writeLink(divOpened, "http://dx.doi.org/" + item.get("doi"), "DOI");
+            divOpened = true;
         }
 
         // Other user-specified links
-        writeCustomLink(item, -1); // link
+        divOpened = writeCustomLink(divOpened, item, -1); // link
 
         for (int i = 0; i < 20; i++) {
-            writeCustomLink(item, i); // link<i>
+            divOpened = writeCustomLink(divOpened, item, i); // link<i>
+        }
+
+        // Close links div
+        if (divOpened) {
+            out.write(indent + "</div>");
+            out.newLine();
         }
 
         // BibTeX link
-        if (includeBibtex) {
-            writeBibTeXHTML(item);
-        } else if (includeArxivBibtex) {
-            writeArXivBibTeXHTML(item);
+        if (includeBibtex || includeArxivBibtex) {
+            // Show / hide link
+            writeToggleLink("bibtex", "BibTeX");
+            out.newLine();
+
+            // Actual bibtex
+            if (includeBibtex) {
+                writeBibtexHTML(item);
+            } else {
+                writeArxivBibtexHTML(item);
+            }
         }
     }
 
-    private void writeCustomLink(BibItem item, int i) throws IOException {
+    private void writeLink(boolean divOpened, String link, String text) throws IOException {
+        if (!divOpened) {
+            out.write(indent + "<div class=\"links\">");
+            out.newLine();
+        }
+
+        out.write(indent + "  <a href=\"" + link + "\">" + text + "</a>");
+        out.newLine();
+    }
+
+    private boolean writeCustomLink(boolean divOpened, BibItem item, int i) throws IOException {
         String attribute = (i == -1 ? "link" : "link" + i);
 
         if (item.anyNonEmpty(attribute)) {
@@ -412,19 +520,18 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     }
                 }
 
-                out.write(indent + "[<a href=\"" + target + "\">" + text + "</a>]");
-                out.newLine();
+                writeLink(divOpened, target, text);
+                return true;
             }
         }
+        
+        return divOpened;
     }
 
-    private void writeBibTeXHTML(BibItem item) throws IOException {
-        // Show / hide links
-        writeToggleLink(item.getId() + "_bibtex", "BibTeX");
-
-        // Actual bibtex
-        out.write(indent + "<div id=\"" + item.getId() + "_bibtex\" class=\"collapsible\">");
-        out.write("<pre class=\"bibtex\">");
+    private void writeBibtexHTML(BibItem item) throws IOException {
+        out.write(indent + "<div class=\"bibtex-container\">");
+        out.newLine();
+        out.write(indent + "  <pre class=\"bibtex\">");
         out.newLine();
 
         // Item type
@@ -480,17 +587,17 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         out.newLine(); // No comma after the last element
-        out.write("}</pre></div>");
+        out.write("}</pre>");
+        out.newLine();
+
+        out.write(indent + "</div>");
         out.newLine();
     }
 
-    private void writeArXivBibTeXHTML(BibItem item) throws IOException {
-        // Show / hide links
-        writeToggleLink(item.getId() + "_bibtex", "BibTeX");
-
-        // Actual bibtex
-        out.write(indent + "<div id=\"" + item.getId() + "_bibtex\" class=\"collapsible\">");
-        out.write("<pre class=\"bibtex\">");
+    private void writeArxivBibtexHTML(BibItem item) throws IOException {
+        out.write(indent + "<div class=\"bibtex-container\">");
+        out.newLine();
+        out.write(indent + "  <pre class=\"bibtex\">");
         out.newLine();
 
         // Item type
@@ -537,32 +644,18 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("  ee={http://arxiv.org/abs/" + item.get("arxiv") + "}");
 
         out.newLine(); // No comma after the last element
-        out.write("}</pre></div>");
+        out.write("}</pre>");
+        out.newLine();
+
+        out.write(indent + "</div>");
         out.newLine();
     }
 
-    private void writeToggleLink(String id, String linkText) throws IOException {
-        // Mark as interactive so users with JS disabled do not see links that do nothing
+    private void writeToggleLink(String type, String text) throws IOException {
         out.write(indent);
-        out.write("<span class=\"interactive\">");
-
-        // Link to reveal
-        out.write("[<a href=\"javascript:toggle('" + id + "');\" id=\"" + id + "_plus\" class=\"shown\">");
-        out.write(linkText);
-        out.write("</a>");
-
-        // Link to hide
-        out.write("<a href=\"javascript:toggle('" + id + "');\" id=\"" + id + "_minus\" class=\"hidden\">");
-        out.write("Hide " + linkText);
-        out.write("</a>]");
-
-        out.write("</span>");
-
-        // Disabled link for users without JS
-        out.write("<noscript><div>[");
-        out.write(linkText);
-        out.write("]</div></noscript>");
-        out.newLine();
+        out.write("<button class=\"" + type + "-toggle\">");
+        out.write(text);
+        out.write("</button>");
     }
 
     private boolean includeAbstract(BibItem item) {
@@ -581,7 +674,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         Path file = settings.getTarget().resolveSibling(path);
 
         if (Files.notExists(file)) {
-            Console.log("Warning: the file \"%s\" that is linked in attribute \"%s\" of publication \"%s\" cannot be found at \"%s\".", path, attr, item.getId(), file);
+            Console.warn("The file \"%s\" that is linked in attribute \"%s\" of publication \"%s\" cannot be found at \"%s\".", path, attr, item.getId(), file);
         }
     }
 }

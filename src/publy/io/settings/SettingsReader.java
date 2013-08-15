@@ -7,6 +7,7 @@ package publy.io.settings;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -27,6 +28,8 @@ import publy.io.ResourceLocator;
 public class SettingsReader extends DefaultHandler {
 
     static final String DEFAULT_SETTINGS_LOCATION = "data/PublySettings.xml";
+    private static Path settingsFile = ResourceLocator.getFullPath(DEFAULT_SETTINGS_LOCATION);
+            
     private StringBuilder textBuffer; // Contains the characters that are read between start and end elements (e.g. <item>Text</item>)
     private Settings settings; // Contains the read settings after parsing.
     private CategoryIdentifier noteFor = null; // The category the current note is for. (null if there is none)
@@ -36,15 +39,26 @@ public class SettingsReader extends DefaultHandler {
     }
 
     public static Settings parseSettings() throws ParserConfigurationException, SAXException, IOException {
-        Path settingsFile = ResourceLocator.getFullPath(DEFAULT_SETTINGS_LOCATION);
+        return parseSettings(ResourceLocator.getFullPath(DEFAULT_SETTINGS_LOCATION));
+    }
+    
+    public static Settings parseSettings(Path settingsLocation) throws ParserConfigurationException, SAXException, IOException {
         Settings settings = null;
 
+        if (settingsLocation != null) {
+            settingsFile = settingsLocation;
+        }
+        
         if (Files.exists(settingsFile)) {
             settings = new Settings();
             parseSettings(settings, settingsFile);
         }
 
         return settings;
+    }
+
+    public static Path getSettingsFile() {
+        return settingsFile;
     }
 
     private static void parseSettings(Settings settings, Path inputFile) throws ParserConfigurationException, SAXException, IOException {
@@ -89,6 +103,9 @@ public class SettingsReader extends DefaultHandler {
                 case "target":
                     settings.getGeneralSettings().setTarget(ResourceLocator.getFullPath(text));
                     break;
+                case "mynames":
+                    settings.getGeneralSettings().setMyNames(Arrays.asList(text.split(";")));
+                    break;
                 case "listallauthors":
                     settings.getGeneralSettings().setListAllAuthors(Boolean.parseBoolean(text));
                     break;
@@ -114,11 +131,17 @@ public class SettingsReader extends DefaultHandler {
                     settings.getGeneralSettings().setNote(noteFor, text);
                     break;
                 // HTML-specific settings
-                case "linktotextversion":
-                    settings.getHtmlSettings().setLinkToTextVersion(Boolean.parseBoolean(text));
+                case "generatetextversion":
+                    settings.getHtmlSettings().setGenerateTextVersion(Boolean.parseBoolean(text));
                     break;
-                case "linktobibtexversion":
-                    settings.getHtmlSettings().setLinkToBibtexVersion(Boolean.parseBoolean(text));
+                case "generatebibtexversion":
+                    settings.getHtmlSettings().setGenerateBibtexVersion(Boolean.parseBoolean(text));
+                    break;
+                case "linktoalternateversions":
+                    settings.getHtmlSettings().setLinkToAlternateVersions(Boolean.parseBoolean(text));
+                    break;
+                case "navplacement":
+                    settings.getHtmlSettings().setNavPlacement(HTMLSettings.NavigationPlacement.valueOf(text));
                     break;
                 case "includeabstract":
                     settings.getHtmlSettings().setIncludeAbstract(PublicationType.valueOf(text));

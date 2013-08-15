@@ -9,12 +9,13 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
-import publy.GeneratorMain;
 import publy.data.category.CategoryIdentifier;
 import publy.data.settings.FormatSettings;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
+import publy.gui.UIConstants;
 import publy.io.ResourceLocator;
 
 /**
@@ -24,14 +25,14 @@ import publy.io.ResourceLocator;
 public class SettingsWriter {
 
     public static void writeSettings(Settings settings) throws IOException {
-        Path settingsFile = ResourceLocator.getFullPath(SettingsReader.DEFAULT_SETTINGS_LOCATION);
-        Path dataDir = settingsFile.getParent();
+        Path settingsFile = SettingsReader.getSettingsFile();
+        Path settingsDirectory = settingsFile.getParent();
 
-        if (Files.notExists(dataDir)) {
+        if (Files.notExists(settingsDirectory)) {
             try {
-                Files.createDirectories(dataDir);
+                Files.createDirectories(settingsDirectory);
             } catch (Exception ex) {
-                throw new IOException("Could not create the directory \"" + dataDir + "\" to store the settings.", ex);
+                throw new IOException("Could not create the directory \"" + settingsDirectory + "\" to store the settings.", ex);
             }
         }
 
@@ -39,7 +40,7 @@ public class SettingsWriter {
             // Write header
             out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             out.newLine();
-            out.write("<plgsettings majorversion=\"" + GeneratorMain.MAJOR_VERSION + "\" minorversion=\"" + GeneratorMain.MINOR_VERSION + "\">");
+            out.write("<plgsettings majorversion=\"" + UIConstants.MAJOR_VERSION + "\" minorversion=\"" + UIConstants.MINOR_VERSION + "\">");
             out.newLine();
 
             writeGeneralSettings(settings, out);
@@ -67,6 +68,7 @@ public class SettingsWriter {
         out.newLine();
 
         output(out, 4, "target", makeString(format.getTarget()));
+        output(out, 4, "mynames", makeCData(format.getMyNames()));
         output(out, 4, "listallauthors", makeString(format.isListAllAuthors()));
         output(out, 4, "namedisplay", makeString(format.getNameDisplay()));
         output(out, 4, "reversenames", makeString(format.isReverseNames()));
@@ -108,8 +110,10 @@ public class SettingsWriter {
         out.write("  <htmlsettings>");
         out.newLine();
 
-        output(out, 4, "linktotextversion", makeString(settings.linkToTextVersion()));
-        output(out, 4, "linktobibtexversion", makeString(settings.linkToBibtexVersion()));
+        output(out, 4, "generatetextversion", makeString(settings.generateTextVersion()));
+        output(out, 4, "generatebibtexversion", makeString(settings.generateBibtexVersion()));
+        output(out, 4, "linktoalternateversions", makeString(settings.linkToAlternateVersions()));
+        output(out, 4, "navplacement", makeString(settings.getNavPlacement()));
         output(out, 4, "includeabstract", makeString(settings.getIncludeAbstract()));
         output(out, 4, "includebibtex", makeString(settings.getIncludeBibtex()));
         output(out, 4, "includepaper", makeString(settings.getIncludePaper()));
@@ -193,11 +197,31 @@ public class SettingsWriter {
         return ResourceLocator.getRelativePath(p).replaceAll("\\\\", "/");
     }
 
-    private static String makeString(Enum e) {
+    private static String makeString(Enum<?> e) {
         return e.name();
     }
 
     private static String makeCData(String content) {
         return "<![CDATA[" + (content == null ? "" : content) + "]]>";
+    }
+    
+    /**
+     * Saves a list of strings as a semicolon-separated string in a CDATA section.
+     * @param content
+     * @return 
+     */
+    private static String makeCData(List<String> content) {
+        StringBuilder sb = new StringBuilder();
+        
+        if (content != null) {
+            for (String part : content) {
+                sb.append(';');
+                sb.append(part);
+            }
+        }
+        
+        sb.deleteCharAt(0);
+        
+        return "<![CDATA[" + sb.toString() + "]]>";
     }
 }
