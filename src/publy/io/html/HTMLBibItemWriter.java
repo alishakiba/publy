@@ -513,8 +513,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 } else {
                     // Most likely link to a file on disk. Encode correctly.
                     try {
-                        target = (new URI(null, null, target, null)).toString();
                         checkExistance(target, attribute, item);
+                        target = (new URI(null, null, target, null)).toString();
                     } catch (URISyntaxException ex) {
                         Console.except(ex, "Could not parse the target of %s of item \"%s\":", attribute, item.getId());
                     }
