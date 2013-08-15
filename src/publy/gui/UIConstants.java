@@ -16,7 +16,7 @@ import java.util.List;
 public class UIConstants {
 
     public static final int MAJOR_VERSION = 0;
-    public static final int MINOR_VERSION = 4;
+    public static final int MINOR_VERSION = 5;
     public static final List<Image> PUBLY_ICONS;
 
     static {
