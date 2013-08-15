@@ -96,31 +96,37 @@ public abstract class BibItemWriter {
         String author = item.get("author");
 
         if (author == null) {
-            Console.error("No authors found for %s.", item.getId());
+            Console.error("No authors found for entry \"%s\".", item.getId());
             return "";
         } else {
             List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
 
             for (Author a : item.getAuthors()) {
                 if (a == null) {
-                    Console.error("Null author found for %s.%n(Authors: %s)", item.getId(), item.getAuthors().toString());
+                    Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), author);
                 } else {
-                    if (settings.isListAllAuthors() || !a.isMe()) {
+                    if (settings.isListAllAuthors() || !a.isMe(settings.getMyNames(), settings.getNameDisplay(), settings.isReverseNames())) {
                         authorLinks.add(a.getFormattedName(settings.getNameDisplay(), settings.isReverseNames()));
                     }
                 }
             }
 
-            return formatNames(authorLinks);
+            if (settings.isListAllAuthors()) {
+                return formatNames(authorLinks);
+            } else {
+                if (authorLinks.size() == item.getAuthors().size()) {
+                    Console.warn("None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
+
+                    return formatNames(authorLinks);
+                } else {
+                    return "With " + formatNames(authorLinks);
+                }
+            }
         }
     }
 
     protected String formatNames(List<String> names) {
         StringBuilder result = new StringBuilder();
-
-        if (!settings.isListAllAuthors()) {
-            result.append("With ");
-        }
 
         for (int i = 0; i < names.size(); i++) {
             String name = names.get(i);
@@ -202,13 +208,17 @@ public abstract class BibItemWriter {
     protected void output(String prefix, String string, String connective, boolean newLine) throws IOException {
         if (string != null && !string.isEmpty()) {
             out.write(prefix);
-            out.write(removeBraces(LatexToUnicode.convertToUnicode(string)));
+            out.write(processString(string));
             out.write(connective);
 
             if (newLine) {
                 out.newLine();
             }
         }
+    }
+    
+    protected String processString(String string) {
+        return removeBraces(LatexToUnicode.convertToUnicode(string));
     }
 
     protected String changeCaseT(String s) {
@@ -233,7 +243,7 @@ public abstract class BibItemWriter {
                         if (level == 0) {
                             escape = true;
                         }
-                        
+
                         sb.append(c);
                         break;
                     default:
@@ -257,35 +267,69 @@ public abstract class BibItemWriter {
         return sb.toString();
     }
 
+    private enum RemoveBracesState {
+
+        DEFAULT, ESCAPE, COMMAND_NAME, OPTIONAL_ARGUMENT, ARGUMENT, BEFORE_POSSIBLE_ARGUMENT;
+    }
+
     protected String removeBraces(String field) {
         StringBuilder result = new StringBuilder(field.length());
-        boolean escape = false;
-        
+        RemoveBracesState state = RemoveBracesState.DEFAULT;
+
         for (char c : field.toCharArray()) {
-            if (!escape) {
+            if (state == RemoveBracesState.DEFAULT) {
                 switch (c) {
                     case '{': // Remove
                         break;
                     case '}': // Remove
                         break;
                     case '\\':
-                        escape = true;
+                        state = RemoveBracesState.ESCAPE;
                         break;
                     default:
                         result.append(c);
                         break;
                 }
-            } else {
+            } else if (state == RemoveBracesState.ESCAPE) {
+                if (Character.isLetter(c)) {
+                    state = RemoveBracesState.COMMAND_NAME;
+                } else {
+                    state = RemoveBracesState.DEFAULT;
+                }
+
+                // Discard the slash before braces
                 if (c != '{' && c != '}') {
-                    // Only add the escaping slash for non-braces
                     result.append('\\');
                 }
-                
+
                 result.append(c);
-                escape = false;
+            } else if (state == RemoveBracesState.COMMAND_NAME) {
+                if (c == '[') {
+                    state = RemoveBracesState.OPTIONAL_ARGUMENT;
+                } else if (c == '{') {
+                    state = RemoveBracesState.ARGUMENT;
+                } else if (!Character.isLetter(c)) {
+                    state = RemoveBracesState.DEFAULT;
+                }
+
+                result.append(c);
+            } else if (state == RemoveBracesState.OPTIONAL_ARGUMENT || state == RemoveBracesState.ARGUMENT) {
+                if ((state == RemoveBracesState.OPTIONAL_ARGUMENT && c == ']') || (state == RemoveBracesState.ARGUMENT && c == '}')) {
+                    state = RemoveBracesState.BEFORE_POSSIBLE_ARGUMENT;
+                }
+
+                result.append(c);
+            } else if (state == RemoveBracesState.BEFORE_POSSIBLE_ARGUMENT) {
+                if (c == '{') {
+                    state = RemoveBracesState.ARGUMENT;
+                } else {
+                    state = RemoveBracesState.DEFAULT;
+                }
+
+                result.append(c);
             }
         }
-        
+
         return result.toString();
     }
 }

@@ -33,8 +33,35 @@ public class HTMLSettings {
             }
         }
     }
-    private boolean linkToTextVersion = false;
-    private boolean linkToBibtexVersion = false;
+
+    public enum NavigationPlacement {
+
+        NO_NAVIGATION, TOP, TOP_AND_BOTTOM, AFTER_SECTION_TITLE, BEFORE_SECTION_TITLE, BEFORE_SECTION_AND_BOTTOM;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case NO_NAVIGATION:
+                    return "No navigation";
+                case TOP:
+                    return "At the top of the page";
+                case TOP_AND_BOTTOM:
+                    return "At the top and bottom";
+                case AFTER_SECTION_TITLE:
+                    return "After each section title";
+                case BEFORE_SECTION_TITLE:
+                    return "Before each section title";
+                case BEFORE_SECTION_AND_BOTTOM:
+                    return "Before each section and at the bottom";
+                default:
+                    throw new AssertionError("Unexpected NavigationPlacement: " + this);
+            }
+        }
+    }
+    private boolean generateTextVersion = false;
+    private boolean generateBibtexVersion = false;
+    private boolean linkToAlternateVersions = true;
+    private NavigationPlacement navPlacement = NavigationPlacement.TOP;
     private PublicationType includeAbstract = PublicationType.ALL;
     private PublicationType includeBibtex = PublicationType.ARXIV; // ALL should not be an option here.
     private PublicationType includePaper = PublicationType.ARXIV;
@@ -44,16 +71,36 @@ public class HTMLSettings {
     private String googleAnalyticsUser = null;
     private String presentedText = null;
 
-    public boolean linkToBibtexVersion() {
-        return linkToBibtexVersion;
+    public boolean generateBibtexVersion() {
+        return generateBibtexVersion;
     }
 
-    public void setLinkToBibtexVersion(boolean linkToBibtexVersion) {
-        this.linkToBibtexVersion = linkToBibtexVersion;
+    public void setGenerateBibtexVersion(boolean generateBibtexVersion) {
+        this.generateBibtexVersion = generateBibtexVersion;
     }
 
-    public boolean linkToTextVersion() {
-        return linkToTextVersion;
+    public boolean generateTextVersion() {
+        return generateTextVersion;
+    }
+
+    public void setGenerateTextVersion(boolean generateTextVersion) {
+        this.generateTextVersion = generateTextVersion;
+    }
+
+    public boolean linkToAlternateVersions() {
+        return linkToAlternateVersions;
+    }
+
+    public void setLinkToAlternateVersions(boolean linkToAlternateVersions) {
+        this.linkToAlternateVersions = linkToAlternateVersions;
+    }
+
+    public NavigationPlacement getNavPlacement() {
+        return navPlacement;
+    }
+
+    public void setNavPlacement(NavigationPlacement navPlacement) {
+        this.navPlacement = navPlacement;
     }
 
     public PublicationType getIncludeAbstract() {
@@ -86,10 +133,6 @@ public class HTMLSettings {
 
     public void setTitleTarget(TitleLinkTarget titleTarget) {
         this.titleTarget = titleTarget;
-    }
-
-    public void setLinkToTextVersion(boolean linkToTextVersion) {
-        this.linkToTextVersion = linkToTextVersion;
     }
 
     public void setIncludeAbstract(PublicationType includeAbstract) {

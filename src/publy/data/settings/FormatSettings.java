@@ -6,6 +6,7 @@ package publy.data.settings;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,8 @@ public class FormatSettings {
     }
     // General
     private Path target;
+    // Identification
+    private List<String> myNames = Arrays.asList("me");
     // Author info
     private boolean listAllAuthors = true;
     private NameDisplay nameDisplay = NameDisplay.ABBREVIATED;
@@ -57,6 +60,14 @@ public class FormatSettings {
         return target;
     }
 
+    public List<String> getMyNames() {
+        return myNames;
+    }
+
+    public void setMyNames(List<String> myNames) {
+        this.myNames = myNames;
+    }
+
     /**
      * Returns the path to the location where the plain text version of the
      * publication list will be written to, if any. Returns
@@ -74,7 +85,7 @@ public class FormatSettings {
         }
 
         return target.resolveSibling(baseName + ".utf8.txt");
-        // Add .utf8 to indicate to the web serer that this file should be 
+        // Add .utf8 to indicate to the web server that this file should be 
         // served with an UTF-8 header. This won't always work (it depends on 
         // the server settings), but it is the best we can do for a plain text file.
     }

@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import publy.Console;
-import publy.GeneratorMain;
+import publy.Publy;
 import publy.data.settings.Settings;
 import publy.io.settings.SettingsReader;
 
@@ -23,6 +23,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
      */
     public ConsoleFrame() {
         initComponents();
+        setLocationRelativeTo(null); // Center
         Console.setOutputTarget(consoleTextPane);
     }
 
@@ -43,7 +44,8 @@ public class ConsoleFrame extends javax.swing.JFrame {
         consoleTextPane = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Publy - Console");
+        setTitle("Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION + " - Console");
+        setIconImages(UIConstants.PUBLY_ICONS);
 
         generateButton.setText("Generate");
         generateButton.setToolTipText("Run the generator with the current settings.");
@@ -121,7 +123,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
         }
 
         if (settings != null) {
-            GeneratorMain.generatePublicationList(settings);
+            Publy.generatePublicationList(settings);
         }
         
         // Change cursor back

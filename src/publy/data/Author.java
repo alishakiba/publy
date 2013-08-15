@@ -90,11 +90,13 @@ public class Author {
     }
 
     public String getFormattedPlaintextName(FormatSettings.NameDisplay display, boolean reversed) {
+        String fname = getFormattedName(display, reversed);
+        
         if (plaintextName == null) {
-            return getFormattedName(display, reversed);
+            return fname;
         } else {
             if (plaintextName.contains("%%NAME%%")) {
-                return plaintextName.replaceAll("%%NAME%%", getFormattedName(display, reversed));
+                return plaintextName.replaceAll("%%NAME%%", fname);
             } else {
                 return plaintextName;
             }
@@ -110,11 +112,13 @@ public class Author {
     }
 
     public String getFormattedHtmlName(FormatSettings.NameDisplay display, boolean reversed) {
+        String fname = getFormattedName(display, reversed);
+        
         if (htmlName == null) {
-            return getFormattedName(display, reversed);
+            return fname;
         } else {
             if (htmlName.contains("%%NAME%%")) {
-                return htmlName.replaceAll("%%NAME%%", getFormattedName(display, reversed));
+                return htmlName.replaceAll("%%NAME%%", fname);
             } else {
                 return htmlName;
             }
@@ -137,8 +141,14 @@ public class Author {
         this.url = url;
     }
 
-    public boolean isMe() {
-        return "me".equals(abbreviation);
+    public boolean isMe(List<String> myNames, FormatSettings.NameDisplay display, boolean reversed) {
+        for (String name : myNames) {
+            if (latexName.equals(name) || abbreviation.equals(name) || getFormattedName(display, reversed).equals(name)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     private String formatFirstName(FormatSettings.NameDisplay display) {
