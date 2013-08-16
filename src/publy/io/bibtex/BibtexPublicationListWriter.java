@@ -65,14 +65,6 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
         out.newLine();
         out.newLine();
 
-        String note = getSettings().getCategoryNotes().get(c.getId());
-
-        if (note != null && !note.isEmpty()) {
-            out.write(note);
-            out.newLine();
-            out.newLine();
-        }
-
         for (BibItem item : c.getItems()) {
             // Write the appropriate number
             if (getSettings().getNumbering() != FormatSettings.Numbering.NONE) {
