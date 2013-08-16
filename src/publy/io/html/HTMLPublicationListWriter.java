@@ -114,7 +114,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
 
         // Credit line and last modified
-        out.write("    <p>Generated from a BibTeX file by Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION + ".&nbsp;&nbsp;Last modified on "  + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".</p>");
+        out.write("    <p>Generated from a BibTeX file by Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION + ".&nbsp;&nbsp;Last modified on " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".</p>");
         out.newLine();
 
         if (htmlSettings.getFooter() == null) {
@@ -162,32 +162,43 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void ensureReferencedFileExists(String file) throws IOException {
-        // Check if this file already exists; if so, do nothing
-        // Resolve this via URI, to properly handle escaped characters like %20
-        Path path = Paths.get(getSettings().getTarget().getParent().toUri().resolve(file));
+        try {
+            // First strip anything following a '#', as that's most likely a link inside the document
+            String strippedFile = file;
+            
+            if (strippedFile.contains("#")) {
+                strippedFile = strippedFile.substring(0, strippedFile.indexOf('#'));
+            }
 
-        if (Files.notExists(path)) {
-            // Grab the file name
-            Path fileName = path.getFileName();
+            // Resolve this via URI, to properly handle escaped characters like %20
+            Path path = Paths.get(getSettings().getTarget().getParent().toUri().resolve(strippedFile));
 
-            // See if there is a file with this name in data
-            boolean found = false;
-            Path dataDir = ResourceLocator.getBaseDirectory().resolve(DEFAULT_BASEJS_LOCATION).getParent();
+            // Check if this file already exists; if so, do nothing
+            if (Files.notExists(path)) {
+                // Grab the file name
+                Path fileName = path.getFileName();
 
-            try (DirectoryStream<Path> stream = Files.newDirectoryStream(dataDir)) {
-                for (Path dataFile : stream) {
-                    if (Files.isRegularFile(dataFile) && fileName.equals(dataFile.getFileName())) {
-                        // Copy this file to the target directory
-                        Files.copy(dataFile, path);
-                        found = true;
-                        break;
+                // See if there is a file with this name in data
+                boolean found = false;
+                Path dataDir = ResourceLocator.getBaseDirectory().resolve(DEFAULT_BASEJS_LOCATION).getParent();
+
+                try (DirectoryStream<Path> stream = Files.newDirectoryStream(dataDir)) {
+                    for (Path dataFile : stream) {
+                        if (Files.isRegularFile(dataFile) && fileName.equals(dataFile.getFileName())) {
+                            // Copy this file to the target directory
+                            Files.copy(dataFile, path);
+                            found = true;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (!found) {
-                Console.warn("Referenced file \"%s\" not found at \"%s\".", file, path);
+                if (!found) {
+                    Console.warn("Referenced file \"%s\" not found at \"%s\".", file, path);
+                }
             }
+        } catch (Exception e) {
+            Console.warn("Exception while checking if file \"%s\" exists: %s", file, e.toString());
         }
     }
 
