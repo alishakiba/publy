@@ -261,7 +261,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 return formatNames(authorLinks);
             } else {
                 if (authorLinks.size() == item.getAuthors().size()) {
-                    Console.warn("None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
+                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
 
                     return formatNames(authorLinks);
                 } else {
@@ -674,7 +674,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         Path file = settings.getTarget().resolveSibling(path);
 
         if (Files.notExists(file)) {
-            Console.warn("The file \"%s\" that is linked in attribute \"%s\" of publication \"%s\" cannot be found at \"%s\".", path, attr, item.getId(), file);
+            Console.warn(Console.WarningType.MISSING_REFERENCE, "The file \"%s\" that is linked in attribute \"%s\" of publication \"%s\" cannot be found at \"%s\".", path, attr, item.getId(), file);
         }
     }
 }

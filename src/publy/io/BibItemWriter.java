@@ -115,7 +115,7 @@ public abstract class BibItemWriter {
                 return formatNames(authorLinks);
             } else {
                 if (authorLinks.size() == item.getAuthors().size()) {
-                    Console.warn("None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
+                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
 
                     return formatNames(authorLinks);
                 } else {
