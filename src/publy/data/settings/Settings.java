@@ -15,6 +15,7 @@ public class Settings {
     private Path publications;
     private HTMLSettings htmlSettings;
     private FormatSettings generalSettings;
+    private ConsoleSettings consoleSettings;
 
     /**
      * Creates a new empty Settings object.
@@ -25,6 +26,7 @@ public class Settings {
         publications = null;
         htmlSettings = new HTMLSettings();
         generalSettings = new FormatSettings();
+        consoleSettings = new ConsoleSettings();
     }
     
     /**
@@ -42,6 +44,10 @@ public class Settings {
     public Path getPublications() {
         return publications;
     }
+    
+    public void setPublications(Path publications) {
+        this.publications = publications;
+    }
 
     public HTMLSettings getHtmlSettings() {
         return htmlSettings;
@@ -51,7 +57,7 @@ public class Settings {
         return generalSettings;
     }
 
-    public void setPublications(Path publications) {
-        this.publications = publications;
+    public ConsoleSettings getConsoleSettings() {
+        return consoleSettings;
     }
 }

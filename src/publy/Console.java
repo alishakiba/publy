@@ -9,6 +9,7 @@ import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import publy.data.settings.ConsoleSettings;
 import publy.gui.ConsoleFrame;
 
 /**
@@ -20,9 +21,7 @@ public class Console {
     private static final SimpleAttributeSet logAttributes;
     private static final SimpleAttributeSet warnAttributes;
     private static final SimpleAttributeSet errorAttributes;
-    private static boolean printStacktrace = false;
-    private static boolean printWarning = true;
-    private static boolean printLog = true;
+    private static ConsoleSettings settings = new ConsoleSettings();
     private static JTextPane textPane = null; // A styled text area to log to, if the program was invoked without an attached console
 
     // Static font initialization
@@ -42,7 +41,7 @@ public class Console {
     }
 
     public static void log(String format, Object... args) {
-        if (printLog) {
+        if (settings.isShowLogs()) {
             if (textPane == null) {
                 if (System.console() == null) {
                     createConsoleFrame();
@@ -65,7 +64,7 @@ public class Console {
     }
 
     public static void warn(String format, Object... args) {
-        if (printWarning) {
+        if (settings.isShowWarnings()) {
             if (textPane == null) {
                 if (System.console() == null) {
                     createConsoleFrame();
@@ -111,7 +110,7 @@ public class Console {
     public static void except(Throwable exception, String format, Object... args) {
         String exceptionText;
 
-        if (printStacktrace) {
+        if (settings.isShowStackTraces()) {
             StringWriter stackTrace = new StringWriter();
             exception.printStackTrace(new PrintWriter(stackTrace));
             exceptionText = stackTrace.toString();
@@ -156,27 +155,11 @@ public class Console {
         consoleFrame.setVisible(true);
     }
 
-    public static boolean isPrintStacktrace() {
-        return printStacktrace;
+    public static ConsoleSettings getSettings() {
+        return settings;
     }
 
-    public static void setPrintStacktrace(boolean printStacktrace) {
-        Console.printStacktrace = printStacktrace;
-    }
-
-    public static boolean isPrintWarning() {
-        return printWarning;
-    }
-
-    public static void setPrintWarning(boolean printWarning) {
-        Console.printWarning = printWarning;
-    }
-
-    public static boolean isPrintLog() {
-        return printLog;
-    }
-
-    public static void setPrintLog(boolean printLog) {
-        Console.printLog = printLog;
+    public static void setSettings(ConsoleSettings settings) {
+        Console.settings = settings;
     }
 }

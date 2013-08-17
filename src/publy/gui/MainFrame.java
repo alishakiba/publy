@@ -3,9 +3,6 @@
 package publy.gui;
 
 import java.awt.Cursor;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.net.URL;
 import publy.Console;
 import publy.Publy;
 import publy.data.settings.Settings;
@@ -29,6 +26,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         // Make sure all console output from the generation is redirected to the text area.
         Console.setOutputTarget(consoleTextPane);
+        
+        // Make sure the console reads from the correct settings object
+        Console.setSettings(settings.getConsoleSettings());
     }
 
     /**
@@ -46,6 +46,7 @@ public class MainFrame extends javax.swing.JFrame {
         categorySettingsPanel = new publy.gui.CategorySettingsPanel(settings.getGeneralSettings());
         generalSettingsPanel = new publy.gui.GeneralSettingsPanel(settings.getGeneralSettings());
         htmlSettingsPanel = new publy.gui.HTMLSettingsPanel(settings.getHtmlSettings());
+        consoleSettingsPanel = new publy.gui.ConsoleSettingsPanel(settings.getConsoleSettings());
         bottomPanel = new javax.swing.JPanel();
         buttonPanel = new javax.swing.JPanel();
         generateButton = new javax.swing.JButton();
@@ -66,6 +67,7 @@ public class MainFrame extends javax.swing.JFrame {
         settingsTabbedPane.addTab("Categories", categorySettingsPanel);
         settingsTabbedPane.addTab("General", generalSettingsPanel);
         settingsTabbedPane.addTab("HTML", htmlSettingsPanel);
+        settingsTabbedPane.addTab("Console", consoleSettingsPanel);
 
         mainSplitPane.setTopComponent(settingsTabbedPane);
 
@@ -176,6 +178,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton cancelButton;
     private publy.gui.CategorySettingsPanel categorySettingsPanel;
     private javax.swing.JScrollPane consoleScrollPane;
+    private publy.gui.ConsoleSettingsPanel consoleSettingsPanel;
     private javax.swing.JTextPane consoleTextPane;
     private publy.gui.FileSettingsPanel fileSettingsPanel;
     private publy.gui.GeneralSettingsPanel generalSettingsPanel;

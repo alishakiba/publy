@@ -59,11 +59,6 @@ public class Publy {
         } else if (arguments.isVersion()) {
             printVersionInfo();
         } else {
-            // Apply output settings
-            Console.setPrintLog(!arguments.isSilent());
-            Console.setPrintWarning(!arguments.isHidewarnings());
-            Console.setPrintStacktrace(arguments.isDebug());
-
             readSettings(arguments.getConfig());
 
             if (arguments.isGui()) {
@@ -186,6 +181,7 @@ public class Publy {
     }
 
     private static void applyCommandlineOverwites(CommandLineArguments arguments) {
+        // File settings
         if (arguments.getInput() != null && !arguments.getInput().isEmpty()) {
             settings.setPublications(ResourceLocator.getFullPath(arguments.getInput()));
         }
@@ -193,6 +189,21 @@ public class Publy {
         if (arguments.getOutput() != null && !arguments.getOutput().isEmpty()) {
             settings.getGeneralSettings().setTarget(ResourceLocator.getFullPath(arguments.getOutput()));
         }
+
+        // Console settings
+        if (arguments.isSilent()) {
+            settings.getConsoleSettings().setShowLogs(false);
+        }
+        
+        if (arguments.isHidewarnings()) {
+            settings.getConsoleSettings().setShowWarnings(false);
+        }
+        
+        if (arguments.isDebug()) {
+            settings.getConsoleSettings().setShowStackTraces(true);
+        }
+        
+        Console.setSettings(settings.getConsoleSettings());
     }
 
     private static void launchGUI() {

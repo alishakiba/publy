@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import publy.data.category.CategoryIdentifier;
+import publy.data.settings.ConsoleSettings;
 import publy.data.settings.FormatSettings;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
@@ -46,6 +47,7 @@ public class SettingsWriter {
             writeGeneralSettings(settings, out);
             writeFormatSettings(settings.getGeneralSettings(), out);
             writeHTMLSettings(settings.getHtmlSettings(), out);
+            writeConsoleSettings(settings.getConsoleSettings(), out);
 
             // Write footer
             out.write("</plgsettings>");
@@ -124,6 +126,24 @@ public class SettingsWriter {
         output(out, 4, "presentedtext", makeCData(settings.getPresentedText()));
 
         out.write("  </htmlsettings>");
+        out.newLine();
+        out.newLine();
+    }
+    
+    private static void writeConsoleSettings(ConsoleSettings settings, BufferedWriter out) throws IOException {
+        out.write("  <!-- Console settings -->");
+        out.newLine();
+
+        out.write("  <consolesettings>");
+        out.newLine();
+
+        output(out, 4, "showWarnings", makeString(settings.isShowWarnings()));
+        output(out, 4, "warnMissingReferences", makeString(settings.isWarnMissingReferences()));
+        output(out, 4, "warnNotAuthor", makeString(settings.isWarnNotAuthor()));
+        output(out, 4, "showLogs", makeString(settings.isShowLogs()));
+        output(out, 4, "showStackTraces", makeString(settings.isShowStackTraces()));
+
+        out.write("  </consolesettings>");
         out.newLine();
         out.newLine();
     }
