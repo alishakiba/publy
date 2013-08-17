@@ -31,16 +31,16 @@ public class ResourceLocator {
                 // Running from a jar
                 workingDir = workingDir.getParent();
             } else {
-                Console.warn("Working directory is of an unknown form:%n\"%s\"", workingDir.toString());
+                Console.warn(Console.WarningType.OTHER, "Working directory is of an unknown form:%n\"%s\"", workingDir.toString());
                 workingDir = Paths.get(System.getProperty("user.dir"));
-                Console.warn("Reverted to working directory \"%s\".", workingDir.toString());
+                Console.log("Reverted to working directory \"%s\".", workingDir.toString());
             }
         } catch (NullPointerException // From the long chain of initializers
                 | SecurityException // Can be thrown from getProtectionDomain(), if a SecurityManager is enabled
                 | URISyntaxException ex) {
             Console.except(ex, "Exception while initializing base directory:");
             workingDir = Paths.get(System.getProperty("user.dir"));
-            Console.warn("Reverted to working directory \"%s\".", workingDir.toString());
+            Console.log("Reverted to working directory \"%s\".", workingDir.toString());
         }
 
         baseDirectory = workingDir;

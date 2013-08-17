@@ -18,6 +18,10 @@ import publy.gui.ConsoleFrame;
  */
 public class Console {
 
+    public enum WarningType {
+        MISSING_REFERENCE, NOT_AUTHORED_BY_USER, OTHER;
+    }
+    
     private static final SimpleAttributeSet logAttributes;
     private static final SimpleAttributeSet warnAttributes;
     private static final SimpleAttributeSet errorAttributes;
@@ -63,8 +67,8 @@ public class Console {
         }
     }
 
-    public static void warn(String format, Object... args) {
-        if (settings.isShowWarnings()) {
+    public static void warn(WarningType type, String format, Object... args) {
+        if (showWarnings(type)) {
             if (textPane == null) {
                 if (System.console() == null) {
                     createConsoleFrame();
@@ -137,6 +141,23 @@ public class Console {
                 // This should never happen
                 throw new AssertionError(ex);
             }
+        }
+    }
+    
+    private static boolean showWarnings(WarningType type) {
+        if (settings.isShowWarnings()) {
+            switch (type) {
+                case MISSING_REFERENCE:
+                    return settings.isWarnMissingReferences();
+                case NOT_AUTHORED_BY_USER:
+                    return settings.isWarnNotAuthor();
+                case OTHER:
+                    return true;
+                default:
+                    throw new AssertionError("Unexpected warning type: " + type);
+            }
+        } else {
+            return false;
         }
     }
 

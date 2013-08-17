@@ -194,11 +194,11 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                 }
 
                 if (!found) {
-                    Console.warn("Referenced file \"%s\" not found at \"%s\".", file, path);
+                    Console.warn(Console.WarningType.MISSING_REFERENCE, "Referenced file \"%s\" not found at \"%s\".", file, path);
                 }
             }
         } catch (Exception e) {
-            Console.warn("Exception while checking if file \"%s\" exists: %s", file, e.toString());
+            Console.warn(Console.WarningType.MISSING_REFERENCE, "Exception while checking if file \"%s\" exists: %s", file, e.toString());
         }
     }
 
