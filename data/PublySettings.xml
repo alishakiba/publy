@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plgsettings majorversion="0" minorversion="4">
+<plgsettings majorversion="0" minorversion="5">
   <!-- Relative path to a BibTeX file with the publication list -->
   <publications>misc/testdata/route.bib</publications>
 
@@ -40,5 +40,14 @@
     <googleanalyticsuser><![CDATA[]]></googleanalyticsuser>
     <presentedtext><![CDATA[]]></presentedtext>
   </htmlsettings>
+
+  <!-- Console settings -->
+  <consolesettings>
+    <showWarnings>true</showWarnings>
+    <warnMissingReferences>true</warnMissingReferences>
+    <warnNotAuthor>true</warnNotAuthor>
+    <showLogs>true</showLogs>
+    <showStackTraces>false</showStackTraces>
+  </consolesettings>
 
 </plgsettings>

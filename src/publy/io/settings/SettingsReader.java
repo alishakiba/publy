@@ -29,7 +29,6 @@ public class SettingsReader extends DefaultHandler {
 
     static final String DEFAULT_SETTINGS_LOCATION = "data/PublySettings.xml";
     private static Path settingsFile = ResourceLocator.getFullPath(DEFAULT_SETTINGS_LOCATION);
-            
     private StringBuilder textBuffer; // Contains the characters that are read between start and end elements (e.g. <item>Text</item>)
     private Settings settings; // Contains the read settings after parsing.
     private CategoryIdentifier noteFor = null; // The category the current note is for. (null if there is none)
@@ -41,14 +40,14 @@ public class SettingsReader extends DefaultHandler {
     public static Settings parseSettings() throws ParserConfigurationException, SAXException, IOException {
         return parseSettings(ResourceLocator.getFullPath(DEFAULT_SETTINGS_LOCATION));
     }
-    
+
     public static Settings parseSettings(Path settingsLocation) throws ParserConfigurationException, SAXException, IOException {
         Settings settings = null;
 
         if (settingsLocation != null) {
             settingsFile = settingsLocation;
         }
-        
+
         if (Files.exists(settingsFile)) {
             settings = new Settings();
             parseSettings(settings, settingsFile);
@@ -166,6 +165,22 @@ public class SettingsReader extends DefaultHandler {
                     break;
                 case "presentedtext":
                     settings.getHtmlSettings().setPresentedText(text);
+                    break;
+                // Console settings
+                case "showWarnings":
+                    settings.getConsoleSettings().setShowWarnings(Boolean.parseBoolean(text));
+                    break;
+                case "warnMissingReferences":
+                    settings.getConsoleSettings().setWarnMissingReferences(Boolean.parseBoolean(text));
+                    break;
+                case "warnNotAuthor":
+                    settings.getConsoleSettings().setWarnNotAuthor(Boolean.parseBoolean(text));
+                    break;
+                case "showLogs":
+                    settings.getConsoleSettings().setShowLogs(Boolean.parseBoolean(text));
+                    break;
+                case "showStackTraces":
+                    settings.getConsoleSettings().setShowStackTraces(Boolean.parseBoolean(text));
                     break;
                 default:
                     break;

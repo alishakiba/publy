@@ -102,6 +102,18 @@
                 </Constraint>
               </Constraints>
             </Component>
+            <Component class="publy.gui.ConsoleSettingsPanel" name="consoleSettingsPanel">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new publy.gui.ConsoleSettingsPanel(settings.getConsoleSettings())"/>
+              </AuxValues>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                  <JTabbedPaneConstraints tabName="Console">
+                    <Property name="tabTitle" type="java.lang.String" value="Console"/>
+                  </JTabbedPaneConstraints>
+                </Constraint>
+              </Constraints>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="bottomPanel">
