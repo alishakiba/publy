@@ -22,7 +22,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import publy.data.category.CategoryIdentifier;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.CategorySettings;
 
 /**
  *
@@ -30,7 +30,7 @@ import publy.data.settings.FormatSettings;
  */
 public class CategorySettingsPanel extends javax.swing.JPanel {
 
-    private FormatSettings settings;
+    private CategorySettings settings;
     private DefaultListModel<CategoryIdentifier> inListModel;
     private DefaultListModel<CategoryIdentifier> outListModel;
     private CategoryIdentifier selectedCategory = null;
@@ -45,7 +45,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     /**
      * Creates new form FileSettingsPanel
      */
-    public CategorySettingsPanel(FormatSettings settings) {
+    public CategorySettingsPanel(CategorySettings settings) {
         this.settings = settings;
         initComponents();
         applyStyles();
@@ -88,7 +88,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         inCatScrollPane = new javax.swing.JScrollPane();
-        inCatList = new javax.swing.JList();
+        inCatList = new javax.swing.JList<CategoryIdentifier>();
         catPanel = new javax.swing.JPanel();
         noteLabel = new javax.swing.JLabel();
         noteSeparator = new javax.swing.JSeparator();
@@ -101,7 +101,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         upButton = new javax.swing.JButton();
         downButton = new javax.swing.JButton();
         outCatScrollPane = new javax.swing.JScrollPane();
-        outCatList = new javax.swing.JList();
+        outCatList = new javax.swing.JList<CategoryIdentifier>();
 
         inCatList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -323,13 +323,13 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                 // Remove selection in the out list
                 outCatList.clearSelection();
 
-                setSelectedCategory((CategoryIdentifier) inCatList.getSelectedValue());
+                setSelectedCategory(inCatList.getSelectedValue());
             }
         }
     }//GEN-LAST:event_inCatListValueChanged
 
     private void inButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inButtonActionPerformed
-        CategoryIdentifier selected = (CategoryIdentifier) outCatList.getSelectedValue();
+        CategoryIdentifier selected = outCatList.getSelectedValue();
 
         // Update the UI
         inListModel.addElement(selected);
@@ -342,7 +342,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_inButtonActionPerformed
 
     private void outButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_outButtonActionPerformed
-        CategoryIdentifier selected = (CategoryIdentifier) inCatList.getSelectedValue();
+        CategoryIdentifier selected = inCatList.getSelectedValue();
 
         // Update the UI
         outListModel.addElement(selected);
@@ -401,7 +401,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                 // Remove selection in the in list
                 inCatList.clearSelection();
 
-                setSelectedCategory((CategoryIdentifier) outCatList.getSelectedValue());
+                setSelectedCategory(outCatList.getSelectedValue());
             }
         }
     }//GEN-LAST:event_outCatListValueChanged
@@ -412,13 +412,13 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     private javax.swing.JSeparator catSeparator;
     private javax.swing.JButton downButton;
     private javax.swing.JButton inButton;
-    private javax.swing.JList inCatList;
+    private javax.swing.JList<CategoryIdentifier> inCatList;
     private javax.swing.JScrollPane inCatScrollPane;
     private javax.swing.JLabel noteLabel;
     private javax.swing.JSeparator noteSeparator;
     private javax.swing.JTextField noteTextField;
     private javax.swing.JButton outButton;
-    private javax.swing.JList outCatList;
+    private javax.swing.JList<CategoryIdentifier> outCatList;
     private javax.swing.JScrollPane outCatScrollPane;
     private javax.swing.JButton upButton;
     // End of variables declaration//GEN-END:variables

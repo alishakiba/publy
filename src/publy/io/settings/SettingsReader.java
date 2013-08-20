@@ -27,7 +27,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import publy.data.PublicationType;
 import publy.data.category.CategoryIdentifier;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.GeneralSettings;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
 import publy.io.ResourceLocator;
@@ -105,78 +105,83 @@ public class SettingsReader extends DefaultHandler {
 
         if (text != null && !text.isEmpty()) {
             switch (qName) {
-                // Publications settings
+                // File settings
                 case "publications":
-                    settings.setPublications(ResourceLocator.getFullPath(text));
+                    settings.getFileSettings().setPublications(ResourceLocator.getFullPath(text));
                     break;
-                // General settings
                 case "target":
-                    settings.getGeneralSettings().setTarget(ResourceLocator.getFullPath(text));
+                    settings.getFileSettings().setTarget(ResourceLocator.getFullPath(text));
                     break;
-                case "mynames":
+                case "header":
+                    settings.getFileSettings().setHeader(ResourceLocator.getFullPath(text));
+                    break;
+                case "footer":
+                    settings.getFileSettings().setFooter(ResourceLocator.getFullPath(text));
+                    break;
+
+                // Category settings
+                case "category":
+                    settings.getCategorySettings().addCategory(CategoryIdentifier.valueOf(text));
+                    break;
+                case "note":
+                    settings.getCategorySettings().setNote(noteFor, text);
+                    break;
+
+                // General settings
+                case "myNames":
                     settings.getGeneralSettings().setMyNames(Arrays.asList(text.split(";")));
                     break;
-                case "listallauthors":
-                    settings.getGeneralSettings().setListAllAuthors(Boolean.parseBoolean(text));
+                case "nameDisplay":
+                    settings.getGeneralSettings().setNameDisplay(GeneralSettings.NameDisplay.valueOf(text));
                     break;
-                case "namedisplay":
-                    settings.getGeneralSettings().setNameDisplay(FormatSettings.NameDisplay.valueOf(text));
-                    break;
-                case "reversenames":
+                case "reverseNames":
                     settings.getGeneralSettings().setReverseNames(Boolean.parseBoolean(text));
                     break;
-                case "titlefirst":
+                case "listAllAuthors":
+                    settings.getGeneralSettings().setListAllAuthors(Boolean.parseBoolean(text));
+                    break;
+                case "titleFirst":
                     settings.getGeneralSettings().setTitleFirst(Boolean.parseBoolean(text));
                     break;
                 case "numbering":
-                    settings.getGeneralSettings().setNumbering(FormatSettings.Numbering.valueOf(text));
+                    settings.getGeneralSettings().setNumbering(GeneralSettings.Numbering.valueOf(text));
                     break;
-                case "reversenumbering":
+                case "reverseNumbering":
                     settings.getGeneralSettings().setReverseNumbering(Boolean.parseBoolean(text));
                     break;
-                case "category":
-                    settings.getGeneralSettings().addCategory(CategoryIdentifier.valueOf(text));
-                    break;
-                case "note":
-                    settings.getGeneralSettings().setNote(noteFor, text);
-                    break;
+
                 // HTML-specific settings
-                case "generatetextversion":
+                case "generateTextVersion":
                     settings.getHtmlSettings().setGenerateTextVersion(Boolean.parseBoolean(text));
                     break;
-                case "generatebibtexversion":
+                case "generateBibtexVersion":
                     settings.getHtmlSettings().setGenerateBibtexVersion(Boolean.parseBoolean(text));
                     break;
-                case "linktoalternateversions":
+                case "linkToAlternateVersions":
                     settings.getHtmlSettings().setLinkToAlternateVersions(Boolean.parseBoolean(text));
                     break;
-                case "navplacement":
+                case "navPlacement":
                     settings.getHtmlSettings().setNavPlacement(HTMLSettings.NavigationPlacement.valueOf(text));
                     break;
-                case "includeabstract":
+                case "includeAbstract":
                     settings.getHtmlSettings().setIncludeAbstract(PublicationType.valueOf(text));
                     break;
-                case "includebibtex":
+                case "includeBibtex":
                     settings.getHtmlSettings().setIncludeBibtex(PublicationType.valueOf(text));
                     break;
-                case "includepaper":
+                case "includePaper":
                     settings.getHtmlSettings().setIncludePaper(PublicationType.valueOf(text));
                     break;
-                case "titletarget":
+                case "titleTarget":
                     settings.getHtmlSettings().setTitleTarget(HTMLSettings.TitleLinkTarget.valueOf(text));
                     break;
-                case "header":
-                    settings.getHtmlSettings().setHeader(ResourceLocator.getFullPath(text));
-                    break;
-                case "footer":
-                    settings.getHtmlSettings().setFooter(ResourceLocator.getFullPath(text));
-                    break;
-                case "googleanalyticsuser":
-                    settings.getHtmlSettings().setGoogleAnalyticsUser(text);
-                    break;
-                case "presentedtext":
+                case "presentedText":
                     settings.getHtmlSettings().setPresentedText(text);
                     break;
+                case "googleAnalyticsUser":
+                    settings.getHtmlSettings().setGoogleAnalyticsUser(text);
+                    break;
+
                 // Console settings
                 case "showWarnings":
                     settings.getConsoleSettings().setShowWarnings(Boolean.parseBoolean(text));
@@ -193,6 +198,7 @@ public class SettingsReader extends DefaultHandler {
                 case "showStackTraces":
                     settings.getConsoleSettings().setShowStackTraces(Boolean.parseBoolean(text));
                     break;
+                    
                 default:
                     break;
             }

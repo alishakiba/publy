@@ -18,7 +18,7 @@ package publy.data;
 import java.util.ArrayList;
 import java.util.List;
 import publy.Console;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.GeneralSettings;
 
 /**
  *
@@ -66,11 +66,11 @@ public class Author {
         return latexName;
     }
 
-    public String getFormattedName(FormatSettings.NameDisplay display, boolean reversed) {
+    public String getFormattedName(GeneralSettings.NameDisplay display, boolean reversed) {
         // First von Last, Jr OR von Last, First, Jr
         String name = "";
 
-        if (!reversed && display != FormatSettings.NameDisplay.NONE && !firstName.isEmpty()) {
+        if (!reversed && display != GeneralSettings.NameDisplay.NONE && !firstName.isEmpty()) {
             name = formatFirstName(display) + " ";
         }
 
@@ -85,7 +85,7 @@ public class Author {
             name += ", " + juniorPart;
         }
 
-        if (reversed && display != FormatSettings.NameDisplay.NONE && !firstName.isEmpty()) {
+        if (reversed && display != GeneralSettings.NameDisplay.NONE && !firstName.isEmpty()) {
             name += ", " + formatFirstName(display);
         }
 
@@ -100,7 +100,7 @@ public class Author {
         this.plaintextName = plaintextName;
     }
 
-    public String getFormattedPlaintextName(FormatSettings.NameDisplay display, boolean reversed) {
+    public String getFormattedPlaintextName(GeneralSettings.NameDisplay display, boolean reversed) {
         String fname = getFormattedName(display, reversed);
         
         if (plaintextName == null) {
@@ -122,7 +122,7 @@ public class Author {
         this.htmlName = htmlName;
     }
 
-    public String getFormattedHtmlName(FormatSettings.NameDisplay display, boolean reversed) {
+    public String getFormattedHtmlName(GeneralSettings.NameDisplay display, boolean reversed) {
         String fname = getFormattedName(display, reversed);
         
         if (htmlName == null) {
@@ -136,7 +136,7 @@ public class Author {
         }
     }
 
-    public String getLinkedAndFormattedHtmlName(FormatSettings.NameDisplay display, boolean reversed) {
+    public String getLinkedAndFormattedHtmlName(GeneralSettings.NameDisplay display, boolean reversed) {
         if (url != null && !url.isEmpty()) {
             return "<a href=\"" + url + "\" class=\"author\">" + getFormattedHtmlName(display, reversed) + "</a>";
         } else {
@@ -152,7 +152,7 @@ public class Author {
         this.url = url;
     }
 
-    public boolean isMe(List<String> myNames, FormatSettings.NameDisplay display, boolean reversed) {
+    public boolean isMe(List<String> myNames, GeneralSettings.NameDisplay display, boolean reversed) {
         for (String name : myNames) {
             if (latexName.equals(name) || abbreviation.equals(name) || getFormattedName(display, reversed).equals(name)) {
                 return true;
@@ -162,7 +162,7 @@ public class Author {
         return false;
     }
 
-    private String formatFirstName(FormatSettings.NameDisplay display) {
+    private String formatFirstName(GeneralSettings.NameDisplay display) {
         switch (display) {
             case NONE:
                 return "";

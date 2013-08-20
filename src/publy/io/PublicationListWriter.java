@@ -26,7 +26,7 @@ import java.util.ListIterator;
 import publy.data.bibitem.BibItem;
 import publy.data.category.CategoryIdentifier;
 import publy.data.category.OutputCategory;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.Settings;
 
 /**
  *
@@ -35,14 +35,14 @@ import publy.data.settings.FormatSettings;
 public abstract class PublicationListWriter {
 
     private List<OutputCategory> categories;
-    private FormatSettings settings;
+    protected Settings settings;
 
-    public PublicationListWriter(FormatSettings settings) {
+    public PublicationListWriter(Settings settings) {
         this.settings = settings;
 
-        categories = new ArrayList<>(settings.getCategories().size());
+        categories = new ArrayList<>(settings.getCategorySettings().getCategories().size());
 
-        for (CategoryIdentifier category : settings.getCategories()) {
+        for (CategoryIdentifier category : settings.getCategorySettings().getCategories()) {
             categories.add(OutputCategory.fromIdentifier(category));
         }
     }
@@ -92,9 +92,5 @@ public abstract class PublicationListWriter {
 
     public List<OutputCategory> getCategories() {
         return categories;
-    }
-
-    public FormatSettings getSettings() {
-        return settings;
     }
 }

@@ -20,7 +20,7 @@ import publy.data.bibitem.InvitedTalk;
 import publy.data.bibitem.MastersThesis;
 import publy.data.bibitem.PhDThesis;
 import publy.data.bibitem.Unpublished;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.Settings;
 
 /**
  *
@@ -132,7 +132,7 @@ public class BibItemWriterTest {
     
     private class TestBibItemWriter extends BibItemWriter {
 
-        private TestBibItemWriter(BufferedWriter out, FormatSettings settings) {
+        private TestBibItemWriter(BufferedWriter out, Settings settings) {
             super(out, settings);
         }
 

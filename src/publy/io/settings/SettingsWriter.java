@@ -23,8 +23,10 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import publy.data.category.CategoryIdentifier;
+import publy.data.settings.CategorySettings;
 import publy.data.settings.ConsoleSettings;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.FileSettings;
+import publy.data.settings.GeneralSettings;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
 import publy.gui.UIConstants;
@@ -55,8 +57,9 @@ public class SettingsWriter {
             out.write("<plgsettings majorversion=\"" + UIConstants.MAJOR_VERSION + "\" minorversion=\"" + UIConstants.MINOR_VERSION + "\">");
             out.newLine();
 
-            writeGeneralSettings(settings, out);
-            writeFormatSettings(settings.getGeneralSettings(), out);
+            writeFileSettings(settings.getFileSettings(), out);
+            writeCategorySettings(settings.getCategorySettings(), out);
+            writeGeneralSettings(settings.getGeneralSettings(), out);
             writeHTMLSettings(settings.getHtmlSettings(), out);
             writeConsoleSettings(settings.getConsoleSettings(), out);
 
@@ -66,34 +69,35 @@ public class SettingsWriter {
         }
     }
 
-    private static void writeGeneralSettings(Settings settings, BufferedWriter out) throws IOException {
-        out.write("  <!-- Relative path to a BibTeX file with the publication list -->");
+    private static void writeFileSettings(FileSettings settings, BufferedWriter out) throws IOException {
+        out.write("  <!-- File settings -->");
         out.newLine();
-        output(out, 2, "publications", makeString(settings.getPublications()));
+
+        out.write("  <fileSettings>");
+        out.newLine();
+
+        output(out, 4, "publications", makeString(settings.getPublications()));
+        output(out, 4, "target", makeString(settings.getTarget()));
+        output(out, 4, "header", makeString(settings.getHeader()));
+        output(out, 4, "footer", makeString(settings.getFooter()));
+
+        out.write("  </fileSettings>");
+        out.newLine();
         out.newLine();
     }
 
-    private static void writeFormatSettings(FormatSettings format, BufferedWriter out) throws IOException {
-        out.write("  <!-- General settings -->");
+    private static void writeCategorySettings(CategorySettings settings, BufferedWriter out) throws IOException {
+        out.write("  <!-- Category settings -->");
         out.newLine();
 
-        out.write("  <generalsettings>");
+        out.write("  <categorySettings>");
         out.newLine();
-
-        output(out, 4, "target", makeString(format.getTarget()));
-        output(out, 4, "mynames", makeCData(format.getMyNames()));
-        output(out, 4, "listallauthors", makeString(format.isListAllAuthors()));
-        output(out, 4, "namedisplay", makeString(format.getNameDisplay()));
-        output(out, 4, "reversenames", makeString(format.isReverseNames()));
-        output(out, 4, "titlefirst", makeString(format.isTitleFirst()));
-        output(out, 4, "numbering", makeString(format.getNumbering()));
-        output(out, 4, "reversenumbering", makeString(format.isReverseNumbering()));
 
         // Categories
         out.write("    <categories>");
         out.newLine();
 
-        for (CategoryIdentifier cid : format.getCategories()) {
+        for (CategoryIdentifier cid : settings.getCategories()) {
             output(out, 6, "category", makeString(cid));
         }
 
@@ -104,14 +108,34 @@ public class SettingsWriter {
         out.write("    <categorynotes>");
         out.newLine();
 
-        for (Map.Entry<CategoryIdentifier, String> entry : format.getCategoryNotes().entrySet()) {
+        for (Map.Entry<CategoryIdentifier, String> entry : settings.getCategoryNotes().entrySet()) {
             output(out, 6, "note", makeCData(entry.getValue()), "category", makeString(entry.getKey()));
         }
 
         out.write("    </categorynotes>");
         out.newLine();
 
-        out.write("  </generalsettings>");
+        out.write("  </categorySettings>");
+        out.newLine();
+        out.newLine();
+    }
+
+    private static void writeGeneralSettings(GeneralSettings format, BufferedWriter out) throws IOException {
+        out.write("  <!-- General settings -->");
+        out.newLine();
+
+        out.write("  <generalSettings>");
+        out.newLine();
+
+        output(out, 4, "myNames", makeCData(format.getMyNames()));
+        output(out, 4, "nameDisplay", makeString(format.getNameDisplay()));
+        output(out, 4, "reverseNames", makeString(format.reverseNames()));
+        output(out, 4, "listAllAuthors", makeString(format.listAllAuthors()));
+        output(out, 4, "titleFirst", makeString(format.titleFirst()));
+        output(out, 4, "numbering", makeString(format.getNumbering()));
+        output(out, 4, "reverseNumbering", makeString(format.reverseNumbering()));
+
+        out.write("  </generalSettings>");
         out.newLine();
         out.newLine();
     }
@@ -120,32 +144,30 @@ public class SettingsWriter {
         out.write("  <!-- HTML-specific settings -->");
         out.newLine();
 
-        out.write("  <htmlsettings>");
+        out.write("  <htmlSettings>");
         out.newLine();
 
-        output(out, 4, "generatetextversion", makeString(settings.generateTextVersion()));
-        output(out, 4, "generatebibtexversion", makeString(settings.generateBibtexVersion()));
-        output(out, 4, "linktoalternateversions", makeString(settings.linkToAlternateVersions()));
-        output(out, 4, "navplacement", makeString(settings.getNavPlacement()));
-        output(out, 4, "includeabstract", makeString(settings.getIncludeAbstract()));
-        output(out, 4, "includebibtex", makeString(settings.getIncludeBibtex()));
-        output(out, 4, "includepaper", makeString(settings.getIncludePaper()));
-        output(out, 4, "titletarget", makeString(settings.getTitleTarget()));
-        output(out, 4, "header", makeString(settings.getHeader()));
-        output(out, 4, "footer", makeString(settings.getFooter()));
-        output(out, 4, "googleanalyticsuser", makeCData(settings.getGoogleAnalyticsUser()));
-        output(out, 4, "presentedtext", makeCData(settings.getPresentedText()));
+        output(out, 4, "generateTextVersion", makeString(settings.generateTextVersion()));
+        output(out, 4, "generateBibtexVersion", makeString(settings.generateBibtexVersion()));
+        output(out, 4, "linkToAlternateVersions", makeString(settings.linkToAlternateVersions()));
+        output(out, 4, "navPlacement", makeString(settings.getNavPlacement()));
+        output(out, 4, "includeAbstract", makeString(settings.getIncludeAbstract()));
+        output(out, 4, "includeBibtex", makeString(settings.getIncludeBibtex()));
+        output(out, 4, "includePaper", makeString(settings.getIncludePaper()));
+        output(out, 4, "titleTarget", makeString(settings.getTitleTarget()));
+        output(out, 4, "presentedText", makeCData(settings.getPresentedText()));
+        output(out, 4, "googleAnalyticsUser", makeCData(settings.getGoogleAnalyticsUser()));
 
-        out.write("  </htmlsettings>");
+        out.write("  </htmlSettings>");
         out.newLine();
         out.newLine();
     }
-    
+
     private static void writeConsoleSettings(ConsoleSettings settings, BufferedWriter out) throws IOException {
         out.write("  <!-- Console settings -->");
         out.newLine();
 
-        out.write("  <consolesettings>");
+        out.write("  <consoleSettings>");
         out.newLine();
 
         output(out, 4, "showWarnings", makeString(settings.isShowWarnings()));
@@ -154,7 +176,7 @@ public class SettingsWriter {
         output(out, 4, "showLogs", makeString(settings.isShowLogs()));
         output(out, 4, "showStackTraces", makeString(settings.isShowStackTraces()));
 
-        out.write("  </consolesettings>");
+        out.write("  </consoleSettings>");
         out.newLine();
         out.newLine();
     }
@@ -235,24 +257,26 @@ public class SettingsWriter {
     private static String makeCData(String content) {
         return "<![CDATA[" + (content == null ? "" : content) + "]]>";
     }
-    
+
     /**
-     * Saves a list of strings as a semicolon-separated string in a CDATA section.
+     * Saves a list of strings as a semicolon-separated string in a CDATA
+     * section.
+     *
      * @param content
-     * @return 
+     * @return
      */
     private static String makeCData(List<String> content) {
         StringBuilder sb = new StringBuilder();
-        
+
         if (content != null) {
             for (String part : content) {
                 sb.append(';');
                 sb.append(part);
             }
         }
-        
+
         sb.deleteCharAt(0);
-        
+
         return "<![CDATA[" + sb.toString() + "]]>";
     }
 }

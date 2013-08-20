@@ -26,7 +26,7 @@ import publy.data.bibitem.InvitedTalk;
 import publy.data.bibitem.MastersThesis;
 import publy.data.bibitem.PhDThesis;
 import publy.data.bibitem.Unpublished;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.Settings;
 import publy.io.BibItemWriter;
 
 /**
@@ -35,7 +35,7 @@ import publy.io.BibItemWriter;
  */
 public class PlainBibItemWriter extends BibItemWriter {
 
-    public PlainBibItemWriter(BufferedWriter out, FormatSettings settings) {
+    public PlainBibItemWriter(BufferedWriter out, Settings settings) {
         super(out, settings);
     }
 
@@ -139,12 +139,12 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     private void writeTitleAndAuthors(BibItem item) throws IOException {
-        if (settings.isTitleFirst()) {
+        if (settings.getGeneralSettings().titleFirst()) {
             output(formatTitle(item), ".", true);
         }
 
         // Don't add an authors line if it's just me and I just want to list co-authors
-        if (settings.isListAllAuthors() || item.getAuthors().size() > 1) {
+        if (settings.getGeneralSettings().listAllAuthors() || item.getAuthors().size() > 1) {
             String authors = formatAuthors(item);
 
             if (authors.endsWith(".")) {
@@ -155,7 +155,7 @@ public class PlainBibItemWriter extends BibItemWriter {
             }
         }
 
-        if (!settings.isTitleFirst()) {
+        if (!settings.getGeneralSettings().titleFirst()) {
             output(formatTitle(item), ".", true);
         }
     }

@@ -21,7 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import publy.data.bibitem.BibItem;
 import publy.data.category.OutputCategory;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.GeneralSettings;
+import publy.data.settings.Settings;
 import publy.gui.UIConstants;
 import publy.io.PublicationListWriter;
 
@@ -34,17 +35,17 @@ public class PlainPublicationListWriter extends PublicationListWriter {
     private PlainBibItemWriter itemWriter;
     private int count;
 
-    public PlainPublicationListWriter(FormatSettings settings) {
+    public PlainPublicationListWriter(Settings settings) {
         super(settings);
     }
 
     @Override
     protected void writePublicationList(BufferedWriter out) throws IOException {
-        itemWriter = new PlainBibItemWriter(out, getSettings());
+        itemWriter = new PlainBibItemWriter(out, settings);
 
         // Initialize the count
-        if (getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL) {
-            if (getSettings().isReverseNumbering()) {
+        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL) {
+            if (settings.getGeneralSettings().reverseNumbering()) {
                 count = 0;
 
                 for (OutputCategory c : getCategories()) {
@@ -67,8 +68,8 @@ public class PlainPublicationListWriter extends PublicationListWriter {
 
     private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
         // Reset the count if necessary
-        if (getSettings().getNumbering() == FormatSettings.Numbering.LOCAL) {
-            if (getSettings().isReverseNumbering()) {
+        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.LOCAL) {
+            if (settings.getGeneralSettings().reverseNumbering()) {
                 count = c.getItems().size();
             } else {
                 count = 1;
@@ -81,11 +82,11 @@ public class PlainPublicationListWriter extends PublicationListWriter {
 
         for (BibItem item : c.getItems()) {
             // Write the appropriate number
-            if (getSettings().getNumbering() != FormatSettings.Numbering.NONE) {
+            if (settings.getGeneralSettings().getNumbering() != GeneralSettings.Numbering.NONE) {
                 out.write(count + ".");
                 out.newLine();
 
-                if (getSettings().isReverseNumbering()) {
+                if (settings.getGeneralSettings().reverseNumbering()) {
                     count--;
                 } else {
                     count++;

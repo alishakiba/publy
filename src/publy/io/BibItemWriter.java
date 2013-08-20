@@ -30,7 +30,8 @@ import publy.data.bibitem.InvitedTalk;
 import publy.data.bibitem.MastersThesis;
 import publy.data.bibitem.PhDThesis;
 import publy.data.bibitem.Unpublished;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.GeneralSettings;
+import publy.data.settings.Settings;
 
 /**
  *
@@ -39,9 +40,9 @@ import publy.data.settings.FormatSettings;
 public abstract class BibItemWriter {
 
     protected BufferedWriter out;
-    protected FormatSettings settings;
+    protected Settings settings;
 
-    public BibItemWriter(BufferedWriter out, FormatSettings settings) {
+    public BibItemWriter(BufferedWriter out, Settings settings) {
         this.out = out;
         this.settings = settings;
     }
@@ -105,24 +106,25 @@ public abstract class BibItemWriter {
 
     protected String formatAuthors(BibItem item) {
         String author = item.get("author");
-
+        
         if (author == null) {
             Console.error("No authors found for entry \"%s\".", item.getId());
             return "";
         } else {
             List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
+            GeneralSettings gs = settings.getGeneralSettings();
 
             for (Author a : item.getAuthors()) {
                 if (a == null) {
                     Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), author);
                 } else {
-                    if (settings.isListAllAuthors() || !a.isMe(settings.getMyNames(), settings.getNameDisplay(), settings.isReverseNames())) {
-                        authorLinks.add(a.getFormattedName(settings.getNameDisplay(), settings.isReverseNames()));
+                    if (gs.listAllAuthors() || !a.isMe(gs.getMyNames(), gs.getNameDisplay(), gs.reverseNames())) {
+                        authorLinks.add(a.getFormattedName(gs.getNameDisplay(), gs.reverseNames()));
                     }
                 }
             }
 
-            if (settings.isListAllAuthors()) {
+            if (gs.listAllAuthors()) {
                 return formatNames(authorLinks);
             } else {
                 if (authorLinks.size() == item.getAuthors().size()) {

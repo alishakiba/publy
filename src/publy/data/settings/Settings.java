@@ -15,17 +15,15 @@
  */
 package publy.data.settings;
 
-import java.nio.file.Path;
-
 /**
  *
  * @author Sander
  */
 public class Settings {
-
-    private Path publications;
+    private FileSettings fileSettings;
+    private CategorySettings categorySettings;
+    private GeneralSettings generalSettings;
     private HTMLSettings htmlSettings;
-    private FormatSettings generalSettings;
     private ConsoleSettings consoleSettings;
 
     /**
@@ -34,9 +32,10 @@ public class Settings {
      * @param publications
      */
     public Settings() {
-        publications = null;
+        fileSettings = new FileSettings();
+        categorySettings = new CategorySettings();
         htmlSettings = new HTMLSettings();
-        generalSettings = new FormatSettings();
+        generalSettings = new GeneralSettings();
         consoleSettings = new ConsoleSettings();
     }
     
@@ -47,25 +46,25 @@ public class Settings {
     public static Settings defaultSettings() {
         Settings result = new Settings();
         
-        result.generalSettings = FormatSettings.defaultSettings();
+        result.categorySettings = CategorySettings.defaultSettings();
         
         return result;
     }
 
-    public Path getPublications() {
-        return publications;
+    public FileSettings getFileSettings() {
+        return fileSettings;
     }
-    
-    public void setPublications(Path publications) {
-        this.publications = publications;
+
+    public CategorySettings getCategorySettings() {
+        return categorySettings;
+    }
+
+    public GeneralSettings getGeneralSettings() {
+        return generalSettings;
     }
 
     public HTMLSettings getHtmlSettings() {
         return htmlSettings;
-    }
-
-    public FormatSettings getGeneralSettings() {
-        return generalSettings;
     }
 
     public ConsoleSettings getConsoleSettings() {

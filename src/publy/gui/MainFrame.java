@@ -55,8 +55,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         mainSplitPane = new javax.swing.JSplitPane();
         settingsTabbedPane = new javax.swing.JTabbedPane();
-        fileSettingsPanel = new publy.gui.FileSettingsPanel(settings);
-        categorySettingsPanel = new publy.gui.CategorySettingsPanel(settings.getGeneralSettings());
+        fileSettingsPanel = new publy.gui.FileSettingsPanel(settings.getFileSettings());
+        categorySettingsPanel = new publy.gui.CategorySettingsPanel(settings.getCategorySettings());
         generalSettingsPanel = new publy.gui.GeneralSettingsPanel(settings.getGeneralSettings());
         htmlSettingsPanel = new publy.gui.HTMLSettingsPanel(settings.getHtmlSettings());
         consoleSettingsPanel = new publy.gui.ConsoleSettingsPanel(settings.getConsoleSettings());
