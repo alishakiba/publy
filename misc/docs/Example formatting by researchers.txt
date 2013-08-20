@@ -1,0 +1,131 @@
+﻿Pat Morin:
+
+4
+B. Ballinger, N. Benbernou, P. Bose, M. Damian, E. D. Demaine, V. Dujmović, R. Flatland, F. Hurtado, J. Iacono, A. Lubiw, P. Morin, V. Sacristán, D. Souvaine, and R. Uehara. 
+Coverage with -transmitters in the presence of obstacles. 
+Journal of Combinatorial Optimization, 25(2):208-233, March 2013. 
+Preliminary version appears in Proceedings of the 4th Annual International Conference on Combinatorial Optimization and Applications (COCOA2010), pages Part II: 1-15, 2010. 
+[pdf].
+
+([pdf] links to pdf)
+
+Vida Dujmović:
+
+[17]
+B. Ballinger, N. Benbernou, P. Bose, M. Damian, E. D. Demaine, V. Dujmović, R. Flatland, F. Hurtado, J. Iacono, A. Lubiw, P. Morin, V. Sacristan, D. Dubrule, and R. Uehara 
+"Coverage with k-transmitters in the presence of obstacle". 
+Journal of Combinatorial Optimization 
+Accepted in 2012. 
+Special issue of selected papers from COCOA 2010. 
+[pdf]
+
+([pdf] links to local pdf, journal title links to paper on journal webpage)
+
+Michiel Smid:
+
+Minati De, Anil Maheshwari, Subhas Nandy, Michiel Smid. 
+An in-place min-max priority search tree. 
+Computational Geometry: Theory and Applications, volume 46, 2013, pp. 310-327. 
+A preliminary version appeared as An in-place priority search tree in the Proceedings of the 23rd Canadian Conference on Computational Geometry, 2011, pp. 331-336. 
+
+(Title links to pdf, title of prel. version links to that pdf)
+
+John Iacono:
+
+[7] David Bremner, Dan Chen, John Iacono, Stefan Langerman, and Pat Morin. Output-sensitive algorithms for Tukey depth and related problems. Statistics and Computing, 18(3):259-266, 2008. pdf
+
+(pdf links to pdf)
+
+Jit Bose:
+
+[10]
+B. BALLINGER, N. BENBERNOU, P. BOSE, M. DAMIAN, E. D. DEMAINE, V. DUJMOVIC, R. FLATLAND, F. HURTADO, J. IACONO, A. LUBIW, P. MORIN, V. SACRISTAN, D. SOUVAINE AND R. UEHARA. Coverage with K-transmitters in the presence of obstacles. Journal of Combinatorial Optimization, 25(2), pp. 208-233, 2013.
+
+Rolf Fagerberg:
+
+Optimal Sparse Matrix Dense Vector Multiplication in the I/O-Model
+M. A. Bender, G. S. Brodal, R. Fagerberg, R. Jacob, E. Vicari 
+Theory of Computing Systems (special issue on SPAA 2007), 47(4):934-962, 2010. (Also in Proc. 19th ACM Symposium on Parallelism in Algorithms and Architectures (SPAA), 2007.)
+
+Adam Sheffer:
+
+3. A. Dumitrescu, A. Schulz, A. Sheffer, and Cs. D. Tóth, 
+Bounds on the maximum multiplicity of some common geometric graphs, 
+SIAM J. Discrete Math., 27(2), 802--826. 
+(Also in Proc. 28th International Symposium on Theoretical Aspects of Computer Science (STACS 2011), 637--648.)
+
+(title links to arxiv)
+
+Uli Wagner:
+
+Ke Chen, Amos Fiat, Haim Kaplan, Meital Levy, Jiří Matoušek, Elchanan Mossel, János Pach, Micha Sharir, Shakhar Smorodinsky, Uli Wagner, and Emo Welzl
+Online conflict-free coloring for intervals (pdf)
+Siam Journal of Computing 36(5) (2006), pp. 1342--1359.
+
+An extended abstract appeared in Proc. 16th Annual ACM-SIAM Symposium on Discrete Algorithms (SODA), 2005.
+
+(pdf links to pdf)
+
+Nadia M. Benbernou:
+
+Brad Ballinger, Nadia Benbernou, Prosenjit Bose, Mirela Damian, Vida Dujmović, Robin Flatland, Ferran Hurtado, John Iacono, Anna Lubiw, Pat Morin, Vera Sacristán, Diane Souvaine, and Ryuhei Uehara. Coverage with k-Transmitters in the Presence of Obstacles. Proceedings of the 4th Annual International Conference on Combinatorial Optimization and Applications (COCOA 2010), Hawaii, USA, December 18-20, 2010.
+
+(title links to pdf)
+
+Mirela Damian:
+
+3. Brad Ballinger, Nadia Benbernou, Prosenjit Bose, Mirela Damian, Erik Demaine, Vida Dujmović, Robin Flatland, Ferran Hurtado, John Iacono, Anna Lubiw, Pat Morin, Vera Sacristán, Diane Souvaine and Ryuhei Uehara. Coverage with k-transmitters in the presence of obstacles. Journal of Combinatorial Optimization, 25(2):208-233, February 2013.
+
+Erik Demaine:
+
+Coverage with k-Transmitters in the Presence of Obstacles 
+(joint work with Brad Ballinger, Nadia Benbernou, Prosenjit Bose, Mirela Damian, Vida Dujmović, Robin Flatland, Ferran Hurtado, John Iacono, Anna Lubiw, Pat Morin, Vera Sacristán, Diane Souvaine, and Ryuhei Uehara) 
+in Proceedings of the 4th Annual International Conference on Combinatorial Optimization and Applications (COCOA 2010), Lecture Notes in Computer Science, volume 6509, The Big Island, Hawaii, USA, December 18–20, 2010, pages 627–652.
+
+(title links to a page dedicated to this paper, with more details such as a pdf, abstract, comments and other formats)
+
+Ferran Hurtado:
+
+Coverage with k-Transmitters in the Presence of Obstacles. Brad Ballinger, Nadia Benbernou, Prosenjit Bose, Mirela Damian, Erik D.Demaine, 
+Vida Dujmovic, Robin Flatland, Ferran Hurtado, John Iacono, Anna Lubiw, Pat Morin, Vera Sacristán, Diane Souvaine, and Ryuhei Uehara
+Journal of Combinatorial Optimization,Volume 25, Issue 2, pp 208-233. http://dx.doi.org/10.1007/s10878-012-9475-x
+Ext. abstract in Proc. 4th International Conference on Combinatorial Optimization and Applications, Hawaii, 2010, LNCS 6508, Part II pp. 1-15.
+
+(doi link is an actual link)
+
+Vera Sacristán Adinolfi:
+
+B. Brallinger, N. Benbernou, P. Bose, M. Damian, E. D. Demaine, V. Dumivic, R. Flatland, F. Hurtado, J. Iacono, A. Lubiw, P. Morin, V. Sacristán, D. Souvaine, R. Uehara
+Coverage with k-Transmitters in the Presence of Obstacles
+In Journal of Combinatorial Optimization, Vol. 25, N. 2, pp. 208-233, 2013. PDF
+Preliminary version in Proc. 4th Annual International Conference on Combinatorial Optimization and Applications, LNCS 6509, pp.1-15, Hawaii, December 18-20, 2010. PDF
+
+(both PDFs link to respective pdf versions)
+
+Diane L. Souvaine:
+
+``Staged Self-Assembly: Nanomanufacture of Arbitrary Shapes with O(1) Glues ,'' with Erik D. Demaine, Martin L. Demaine, Sándor P. Fekete, Mashhood Ishaque, Eynat Rafalin, and Robert Schweller. Natural Computing, 7(3), 2008. Special issue of selected papers from the 13th International Meeting on DNA Computing, 2007, 347-370. Online version .
+
+(online version links to pdf)
+
+Ryuhei UEHARA:
+
+40. Brad Ballinger, Nadia Benbernou, Prosenjit Bose, Mirela Damian, Erik D. Demaine, Vida Dujmović, Robin Flatland, Ferran Hurtado, John Iacono, Anna Lubiw, Pat Morin, Vera Sacristán, Diane Souvaine, and Ryuhei Uehara: Coverage with k-Transmitters in the Presence of Obstacles, Journal of Combinatorial Optimization, Vol. 25(2), pp. 208-233, Feburary, 2013. DOI:10.1007/s10878-012-9475-x
+
+(journal links to the paper at Springer, DOI is an actual link)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
