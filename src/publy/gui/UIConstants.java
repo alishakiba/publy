@@ -30,16 +30,18 @@ public class UIConstants {
 
     public static final int MAJOR_VERSION = 0;
     public static final int MINOR_VERSION = 5;
-    public static final List<Image> PUBLY_ICONS;
+    public static final List<Image> PUBLY_ICONS; // Initialized in the static block
+    public static final Image PUBLY_LOGO; // Initialized in the static block
+    public static final Color TEXTFIELD_ERROR_COLOR = new Color(255, 210, 210);
 
     static {
         // Prepare our icons
-        String[] icons = {"resources/Icon1-16.png",
-            "resources/Icon1-24.png",
-            "resources/Icon1-32.png",
-            "resources/Icon1-48.png",
-            "resources/Icon1-64.png",
-            "resources/Icon1-256.png"};
+        String[] icons = {"resources/icon-16.png",
+            "resources/icon-24.png",
+            "resources/icon-32.png",
+            "resources/icon-48.png",
+            "resources/icon-64.png",
+            "resources/icon-256.png"};
 
         PUBLY_ICONS = new ArrayList<>(icons.length);
 
@@ -47,7 +49,9 @@ public class UIConstants {
             URL iconUrl = UIConstants.class.getResource(fileName);
             UIConstants.PUBLY_ICONS.add(Toolkit.getDefaultToolkit().createImage(iconUrl));
         }
+
+        // Import the logo
+        URL logoUrl = UIConstants.class.getResource("resources/logo.png");
+        PUBLY_LOGO = Toolkit.getDefaultToolkit().createImage(logoUrl);
     }
-    
-    public static final Color TEXTFIELD_ERROR_COLOR = new Color(255, 210, 210);
 }
