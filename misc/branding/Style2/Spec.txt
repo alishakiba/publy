@@ -1,0 +1,8 @@
+﻿white circle, P hsv=(200,90,80), vertically centered, slightly to the right
+
+icon 16 - 14 pt
+icon 24 - 21 pt
+icon 32 - 28 pt
+icon 48 - 42 pt, (1,1,2)-drop shadow
+icon 64 - 56 pt, (1,1,2)-drop shadow
+icon 256 - 224 pt, (4,4,8)-drop shadow
