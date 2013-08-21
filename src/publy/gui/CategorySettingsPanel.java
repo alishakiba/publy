@@ -163,40 +163,40 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
 
         catLabel.setText("Category selection");
 
-        inButton.setText("<html>&larr;</html>");
+        inButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/left-26.png"))); // NOI18N
         inButton.setToolTipText("Include the selected category.");
         inButton.setEnabled(false);
-        inButton.setPreferredSize(new java.awt.Dimension(43, 33));
+        inButton.setPreferredSize(new java.awt.Dimension(40, 40));
         inButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inButtonActionPerformed(evt);
             }
         });
 
-        outButton.setText("<html>&rarr;</html>");
+        outButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/right-26.png"))); // NOI18N
         outButton.setToolTipText("Remove the selected category.");
         outButton.setEnabled(false);
-        outButton.setPreferredSize(new java.awt.Dimension(43, 33));
+        outButton.setPreferredSize(new java.awt.Dimension(40, 40));
         outButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 outButtonActionPerformed(evt);
             }
         });
 
-        upButton.setText("<html>&uarr;</html>");
+        upButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/up-26.png"))); // NOI18N
         upButton.setToolTipText("Move the selected category up.");
         upButton.setEnabled(false);
-        upButton.setPreferredSize(new java.awt.Dimension(43, 33));
+        upButton.setPreferredSize(new java.awt.Dimension(40, 40));
         upButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 upButtonActionPerformed(evt);
             }
         });
 
-        downButton.setText("<html>&darr;</html>");
+        downButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/down-26.png"))); // NOI18N
         downButton.setToolTipText("Move the selected category down.");
         downButton.setEnabled(false);
-        downButton.setPreferredSize(new java.awt.Dimension(43, 33));
+        downButton.setPreferredSize(new java.awt.Dimension(40, 40));
         downButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 downButtonActionPerformed(evt);
@@ -229,7 +229,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                         .addComponent(catSeparator))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(inCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(inCatScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(inButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -238,8 +238,8 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                             .addComponent(downButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(catButtonSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(outCatScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                        .addGap(0, 0, 0))
                     .addComponent(catPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
