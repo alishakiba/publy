@@ -34,7 +34,10 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
      * Empty constructor, for use in the NetBeans GUI editor.
      */
     public HTMLSettingsPanel() {
+        settings = new HTMLSettings();
         initComponents();
+        applyStyles();
+        populateValues();
     }
     
     /**

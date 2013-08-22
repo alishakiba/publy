@@ -15,6 +15,12 @@
  */
 package publy.gui;
 
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+
 /**
  *
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
@@ -26,6 +32,11 @@ public class AboutPanel extends javax.swing.JPanel {
      */
     public AboutPanel() {
         initComponents();
+        applyStyles();
+    }
+
+    private void applyStyles() {
+        UIStyles.applyHeaderStyle(aboutHeader, versionHeader, legalHeader, attributionHeader);
     }
 
     /**
@@ -37,28 +48,232 @@ public class AboutPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        logoLabel = new javax.swing.JLabel();
+        aboutHeader = new javax.swing.JLabel();
+        aboutSeparator = new javax.swing.JSeparator();
+        aboutTextLabel = new javax.swing.JLabel();
+        versionHeader = new javax.swing.JLabel();
+        versionSeparator = new javax.swing.JSeparator();
+        versionLabel = new javax.swing.JLabel();
+        checkLabel = new javax.swing.JLabel();
+        websiteLink = new LinkLabel("the website", "https://bitbucket.org/Mangara/publy/downloads");
+        newVersionsLabel = new javax.swing.JLabel();
+        legalHeader = new javax.swing.JLabel();
+        legalSeparator = new javax.swing.JSeparator();
+        copyrightLabel = new javax.swing.JLabel();
+        licensedLabel = new javax.swing.JLabel();
+        licenseLink = new LinkLabel("Apache License, Version 2.0", "http://www.apache.org/licenses/LICENSE-2.0");
+        openBracketLabel = new javax.swing.JLabel();
+        tldrLegalLink = new LinkLabel("Summary", "http://www.tldrlegal.com/license/apache-license-2.0-(apache-2.0)");
+        closeBracketLabel = new javax.swing.JLabel();
+        runningVersionLabel = new javax.swing.JLabel();
+        attributionHeader = new javax.swing.JLabel();
+        attributionSeparator = new javax.swing.JSeparator();
+        usesLabel = new javax.swing.JLabel();
+        jCommanderLink = new LinkLabel("JCommander", "http://jcommander.org/");
+        parseCmdLabel = new javax.swing.JLabel();
+        jCommanderCopyrightLabel = new javax.swing.JLabel();
+        iconsByLabel = new javax.swing.JLabel();
+        iconsLink = new LinkLabel("VisualPharm", "http://www.visualpharm.com/");
+        dotLabel = new javax.swing.JLabel();
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/logo.png"))); // NOI18N
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/logo-100.png"))); // NOI18N
+
+        aboutHeader.setText("About Publy");
+
+        aboutTextLabel.setText("<html><p>Publy is ...</p></html>");
+
+        versionHeader.setText("Version info");
+
+        versionLabel.setText(String.format("%d.%d", UIConstants.MAJOR_VERSION, UIConstants.MINOR_VERSION));
+        versionLabel.setFont(versionLabel.getFont().deriveFont(Font.BOLD, versionLabel.getFont().getSize2D() + 2));
+
+        checkLabel.setText("Check ");
+
+        newVersionsLabel.setText(" for updates.");
+
+        legalHeader.setText("Legal stuff");
+
+        copyrightLabel.setText("Copyright © 2013 Sander Verdonschot");
+
+        licensedLabel.setText("Licensed under the ");
+
+        openBracketLabel.setText(" ( ");
+
+        closeBracketLabel.setText(" )");
+
+        runningVersionLabel.setText("You are running version:");
+
+        attributionHeader.setText("Attribution");
+
+        usesLabel.setText("Publy uses ");
+
+        parseCmdLabel.setText(" to parse command-line arguments.");
+
+        jCommanderCopyrightLabel.setText("JCommander is Copyright © 2010 Cédric Beust.");
+
+        iconsByLabel.setText("The tab icons are designed by ");
+
+        dotLabel.setText(".");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(versionHeader)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(versionSeparator))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(legalHeader)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(legalSeparator))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(aboutHeader)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(aboutSeparator))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(attributionHeader)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(attributionSeparator))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(aboutTextLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(logoLabel))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(runningVersionLabel)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(versionLabel))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(checkLabel)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(websiteLink)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(newVersionsLabel))
+                                            .addComponent(jCommanderCopyrightLabel)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(usesLabel)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(jCommanderLink)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(parseCmdLabel))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(iconsByLabel)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(iconsLink)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(dotLabel))
+                                            .addComponent(copyrightLabel)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(licensedLabel)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(licenseLink)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(openBracketLabel)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(tldrLegalLink)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(closeBracketLabel)))
+                                        .addGap(0, 23, Short.MAX_VALUE)))))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(227, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(aboutHeader)
+                    .addComponent(aboutSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(aboutTextLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(logoLabel)))
+                .addGap(1, 1, 1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(versionHeader)
+                    .addComponent(versionSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(versionLabel)
+                    .addComponent(runningVersionLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(checkLabel)
+                    .addComponent(websiteLink)
+                    .addComponent(newVersionsLabel))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(legalHeader)
+                    .addComponent(legalSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(copyrightLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(licensedLabel)
+                    .addComponent(licenseLink)
+                    .addComponent(openBracketLabel)
+                    .addComponent(tldrLegalLink)
+                    .addComponent(closeBracketLabel))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(attributionHeader)
+                    .addComponent(attributionSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(usesLabel)
+                    .addComponent(jCommanderLink)
+                    .addComponent(parseCmdLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCommanderCopyrightLabel)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(iconsByLabel)
+                    .addComponent(iconsLink)
+                    .addComponent(dotLabel))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel aboutHeader;
+    private javax.swing.JSeparator aboutSeparator;
+    private javax.swing.JLabel aboutTextLabel;
+    private javax.swing.JLabel attributionHeader;
+    private javax.swing.JSeparator attributionSeparator;
+    private javax.swing.JLabel checkLabel;
+    private javax.swing.JLabel closeBracketLabel;
+    private javax.swing.JLabel copyrightLabel;
+    private javax.swing.JLabel dotLabel;
+    private javax.swing.JLabel iconsByLabel;
+    private javax.swing.JLabel iconsLink;
+    private javax.swing.JLabel jCommanderCopyrightLabel;
+    private javax.swing.JLabel jCommanderLink;
+    private javax.swing.JLabel legalHeader;
+    private javax.swing.JSeparator legalSeparator;
+    private javax.swing.JLabel licenseLink;
+    private javax.swing.JLabel licensedLabel;
+    private javax.swing.JLabel logoLabel;
+    private javax.swing.JLabel newVersionsLabel;
+    private javax.swing.JLabel openBracketLabel;
+    private javax.swing.JLabel parseCmdLabel;
+    private javax.swing.JLabel runningVersionLabel;
+    private javax.swing.JLabel tldrLegalLink;
+    private javax.swing.JLabel usesLabel;
+    private javax.swing.JLabel versionHeader;
+    private javax.swing.JLabel versionLabel;
+    private javax.swing.JSeparator versionSeparator;
+    private javax.swing.JLabel websiteLink;
     // End of variables declaration//GEN-END:variables
 }

@@ -29,7 +29,11 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
      * Empty constructor, for use in the NetBeans GUI editor.
      */
     public ConsoleSettingsPanel() {
+        settings = new ConsoleSettings();
         initComponents();
+        applyStyles();
+        populateValues();
+        updateEnabledStates();
     }
 
     /**

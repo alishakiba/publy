@@ -36,7 +36,9 @@ public class FileSettingsPanel extends javax.swing.JPanel {
      * Empty constructor, for use in the NetBeans GUI editor.
      */
     public FileSettingsPanel() {
+        // Don't initialize settings, as NetBeans will error on ResourceLocator
         initComponents();
+        applyStyles();
     }
 
     /**
