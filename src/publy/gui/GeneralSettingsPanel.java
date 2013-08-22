@@ -34,7 +34,10 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
      * Empty constructor, for use in the NetBeans GUI editor.
      */
     public GeneralSettingsPanel() {
+        settings = new GeneralSettings();
         initComponents();
+        applyStyles();
+        populateValues();
     }
 
     /**
