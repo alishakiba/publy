@@ -460,7 +460,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // DOI link
         if (item.anyNonEmpty("doi")) {
-            writeLink(divOpened, "http://dx.doi.org/" + item.get("doi"), "DOI");
+            String link = item.get("doi");
+            
+            // Add the general DOI part if necessary 
+            if (!link.startsWith("http://dx.doi.org/")) {
+                link = "http://dx.doi.org/" + link;
+            }
+            
+            writeLink(divOpened, link, "DOI");
             divOpened = true;
         }
 
