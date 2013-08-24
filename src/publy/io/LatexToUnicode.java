@@ -28,24 +28,23 @@ import java.util.regex.Pattern;
 public class LatexToUnicode {
 
     /**
-     * A generic LaTeX command:
-     * * A backslash - \\\\
-     * * One or more non-terminating characters - [^ {}]+
-     * * Either a space, or a closing brace, or a (possibly empty) argument enclosed in braces - ( |\\}|\\{[^}]*\\})
+     * A generic LaTeX command: 
+     * A backslash - \\\\ 
+     * One or more non-terminating characters - [^ \\\\{}]+ 
+     * A closing character or argument - ($| |\\}|\\\\|\\{[^}]*\\})
      */
-    private static final Pattern LATEX_COMMAND_1 = Pattern.compile("(\\\\[^ {}]+)( |\\}|\\{[^}]*\\})");
+    private static final Pattern LATEX_COMMAND_1 = Pattern.compile("(\\\\[^ \\\\{}]+)($| |\\}|\\\\|\\{[^}]*\\})");
     /**
-     * Special syntax for LaTeX commands that operate on a single character:
-     * * A backslash - \\\\
-     * * One symbol among the following: ', `, ^, ", ~, ., =  - (['`\\^\"~=.])
-     * * A one-character argument - (.)
+     * Special syntax for LaTeX commands that operate on a single character: * A
+     * backslash - \\\\ * One symbol among the following: ', `, ^, ", ~, ., = -
+     * (['`\\^\"~=.]) * A one-character argument - (.)
      */
     private static final Pattern LATEX_COMMAND_2 = Pattern.compile("\\\\(['`\\^\"~=.])(.)");
     private static final Map<String, Character> LATEX_TO_UNICODE = populateSpecialCharacters();
 
     private LatexToUnicode() {
     }
-    
+
     public static String convertToUnicode(String s) {
         // Split into parts that are not in math-mode and treat each seperately
         StringBuilder result = new StringBuilder();
@@ -122,46 +121,69 @@ public class LatexToUnicode {
 
         return result.toString();
     }
-    
+
     private static String convertNonMathToUnicode(String s) {
         String result = replaceCommands(s, LATEX_COMMAND_1);
         return replaceCommands(result, LATEX_COMMAND_2);
     }
-    
+
     private static String replaceCommands(String input, Pattern commandPattern) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         Matcher m = commandPattern.matcher(input);
-        
-        while (m.find()) {
+
+        int currentSearchPosition = 0;
+
+        while (m.find(currentSearchPosition)) {
+            int nextSearchPosition = m.end();
+
             // Convert the argument-less version (\'o) to the version with argument (\'{o}) if necessary
             String command;
             String tail = "";
-            
+
             if (commandPattern == LATEX_COMMAND_1) {
                 if (m.group().endsWith("}") && m.group().contains("{")) {
                     command = m.group();
                 } else {
                     // Do not take the closing character into account
                     command = m.group(1);
-                    tail = m.group(2);
+
+                    if (m.group(2).equals("\\")) {
+                        // This character has to be taken into account for the next command
+                        nextSearchPosition--;
+                    } else {
+                        tail = m.group(2);
+                    }
                 }
             } else if (commandPattern == LATEX_COMMAND_2) {
                 command = '\\' + m.group(1) + '{' + m.group(2) + '}';
             } else {
                 throw new AssertionError("Unexpected command pattern: " + commandPattern);
             }
-            
+
             if (LATEX_TO_UNICODE.containsKey(command)) {
                 // Replace the command with the corresponding Unicode character
-                m.appendReplacement(result, Character.toString(LATEX_TO_UNICODE.get(command)) + tail);
+                result.append(input.substring(currentSearchPosition, m.start()))
+                        .append(Character.toString(LATEX_TO_UNICODE.get(command)))
+                        .append(tail);
+            } else if (commandPattern == LATEX_COMMAND_1 && LATEX_TO_UNICODE.containsKey(m.group(1))) {
+                // Apparently the part in braces doesn't actually belong to the command
+                // Replace the command with the corresponding Unicode character
+                result.append(input.substring(currentSearchPosition, m.start()))
+                        .append(Character.toString(LATEX_TO_UNICODE.get(m.group(1))));
+
+                if (!m.group(2).equals("{}")) {
+                    result.append(m.group(2));
+                }
             } else {
-                // Keep the command in ($0 is the entire matched string)
-                m.appendReplacement(result, "$0");
+                // Keep the command in
+                result.append(input.substring(currentSearchPosition, nextSearchPosition));
             }
+
+            currentSearchPosition = nextSearchPosition;
         }
-        
-        m.appendTail(result);
-        
+
+        result.append(input.substring(currentSearchPosition));
+
         return result.toString();
     }
 
@@ -444,6 +466,7 @@ public class LatexToUnicode {
         characters.put("\\O", '\u00D8');
         characters.put("\\OE", '\u0152');
         characters.put("\\Omega", '\u03A9');
+        characters.put("\\Omicron", '\u039F');
         characters.put("\\Phi", '\u03A6');
         characters.put("\\Pi", '\u03A0');
         characters.put("\\Pisymbol{ppi020}{105}", '\u2A9E');
@@ -2094,6 +2117,7 @@ public class LatexToUnicode {
         characters.put("\\oint", '\u222E');
         characters.put("\\omega", '\u03C9');
         characters.put("\\ominus", '\u2296');
+        characters.put("\\omicron", '\u03BF');
         characters.put("\\openbracketleft", '\u301A');
         characters.put("\\openbracketright", '\u301B');
         characters.put("\\oplus", '\u2295');
