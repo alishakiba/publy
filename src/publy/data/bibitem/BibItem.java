@@ -113,6 +113,11 @@ public abstract class BibItem {
         this.venue = venue;
     }
 
+    public boolean anyNonEmpty(String field) {
+        String v = values.get(field);
+        return (v != null && !v.isEmpty());
+    }
+
     public boolean anyNonEmpty(String... fields) {
         for (String field : fields) {
             String v = values.get(field);

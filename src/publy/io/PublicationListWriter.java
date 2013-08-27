@@ -58,23 +58,10 @@ public abstract class PublicationListWriter {
     protected abstract void writePublicationList(BufferedWriter out) throws IOException;
 
     private void categorizePapers(List<BibItem> items) {
-        // Make a copy so the population can remove items without removing them from the main list
+        // Make a copy so the categories can remove items without removing them from the main list
         List<BibItem> tempItems = new ArrayList<>(items);
 
-        // Make a copy with the same categories, but in the right order for the population logic
-        List<OutputCategory> populateOrderedCategories = new ArrayList<>(categories.size());
-
-        for (CategoryIdentifier id : OutputCategory.populateOrder) {
-            for (OutputCategory c : categories) {
-                if (c.getId() == id) {
-                    // This category is next
-                    populateOrderedCategories.add(c);
-                    break;
-                }
-            }
-        }
-
-        for (OutputCategory c : populateOrderedCategories) {
+        for (OutputCategory c : categories) {
             c.populate(tempItems);
         }
 

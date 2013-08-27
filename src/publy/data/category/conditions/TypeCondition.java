@@ -13,23 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package publy.data.category;
+package publy.data.category.conditions;
 
+import java.util.Arrays;
+import java.util.List;
 import publy.data.bibitem.BibItem;
 
 /**
  *
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
-public class UnpublishedCategory extends OutputCategory {
+public class TypeCondition extends Condition {
 
-    public UnpublishedCategory() {
-        super("Unpublished", "Unpublished manuscripts", CategoryIdentifier.UNPUBLISHED);
+    private List<String> types;
+
+    public TypeCondition(String... types) {
+        this.types = Arrays.asList(types);
+    }
+
+    public TypeCondition(List<String> types) {
+        this.types = types;
+    }
+
+    public List<String> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<String> types) {
+        this.types = types;
     }
 
     @Override
-    public boolean fitsCategory(BibItem item) {
-        return "unpublished".equals(item.getType());
+    public boolean matches(BibItem item) {
+        return types.contains(item.getType()) || types.contains("*");
     }
-    
 }

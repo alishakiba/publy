@@ -13,27 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package publy.data.category;
+package publy.data.category.conditions;
 
-import publy.data.bibitem.BibItem;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
-public class TalksCategory extends OutputCategory {
-
-    public TalksCategory() {
-        super("Talks", "Invited Talks", CategoryIdentifier.TALK);
-    }
-
-    @Override
-    public boolean fitsCategory(BibItem item) {
-        if ("talk".equals(item.getType())) {
-            return !item.anyNonEmpty("status") || item.get("status").startsWith("accepted");
-        } else {
-            return false;
-        }
-    }
+public class InverseConditionTest {
     
+    public InverseConditionTest() {
+    }
+
+    /**
+     * Test of matches method, of class InverseCondition.
+     */
+    @Test
+    public void testMatches() {
+    }
 }
