@@ -37,11 +37,11 @@ public class TypeConditionTest {
      */
     @Test
     public void testMatches() {
-        TypeCondition allTypes = new TypeCondition("*");
-        TypeCondition books = new TypeCondition("book");
-        TypeCondition conference = new TypeCondition("inproceedings", "conference");
-        TypeCondition journal = new TypeCondition("article");
-        TypeCondition talks = new TypeCondition("talk");
+        TypeCondition allTypes = new TypeCondition(false, "*");
+        TypeCondition books = new TypeCondition(false, "book");
+        TypeCondition conference = new TypeCondition(false, "inproceedings", "conference");
+        TypeCondition journal = new TypeCondition(false, "article");
+        TypeCondition talks = new TypeCondition(false, "talk");
         
         List<TypeCondition> conditions = Arrays.asList(allTypes, books, conference, journal, talks);
 
@@ -61,6 +61,14 @@ public class TypeConditionTest {
                 boolean result = conditions.get(i).matches(items.get(j));
                 
                 assertEquals("Cond: " + conditions.get(i).getTypes() + " with " + items.get(j).getType(), ex, result);
+                
+                conditions.get(i).setInverted(!conditions.get(i).isInverted());
+                
+                result = conditions.get(i).matches(items.get(j));
+                
+                assertEquals("Inverted cond: " + conditions.get(i).getTypes() + " with " + items.get(j).getType(), !ex, result);
+                
+                conditions.get(i).setInverted(!conditions.get(i).isInverted());
             }
         }
     }

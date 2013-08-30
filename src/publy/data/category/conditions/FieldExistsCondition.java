@@ -21,25 +21,15 @@ import publy.data.bibitem.BibItem;
  *
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
-public class FieldExistsCondition extends Condition {
+public class FieldExistsCondition extends FieldCondition {
 
-    private String field;
-
-    public FieldExistsCondition(String field) {
-        this.field = field;
-    }
-
-    public String getField() {
-        return field;
-    }
-
-    public void setField(String field) {
-        this.field = field;
+    public FieldExistsCondition(boolean inverted, String field) {
+        super(inverted, field);
     }
     
     @Override
-    public boolean matches(BibItem item) {
-        return item.getFields().contains(field);
+    public boolean internalMatches(BibItem item) {
+        return item.getFields().contains(getField());
     }
     
 }

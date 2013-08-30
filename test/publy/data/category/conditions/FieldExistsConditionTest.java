@@ -15,8 +15,12 @@
  */
 package publy.data.category.conditions;
 
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import publy.data.ExampleBibItems;
+import publy.data.bibitem.BibItem;
 
 /**
  *
@@ -32,5 +36,37 @@ public class FieldExistsConditionTest {
      */
     @Test
     public void testMatches() {
+        FieldExistsCondition year = new FieldExistsCondition(false, "year");
+        FieldExistsCondition pages = new FieldExistsCondition(false, "pages");
+        FieldExistsCondition booktitle = new FieldExistsCondition(false, "booktitle");
+        FieldExistsCondition status = new FieldExistsCondition(false, "status");
+        
+        List<FieldExistsCondition> conditions = Arrays.asList(year, pages, booktitle, status);
+
+        List<BibItem> items = new ExampleBibItems();
+
+        boolean[][] expected = new boolean[][] {
+            new boolean[] {true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true }, // year
+            new boolean[] {false, false, false, false, true,  false, false, false, true,  true,  true,  false, false, false, true,  true,  true,  true,  true,  true,  false}, // pages
+            new boolean[] {true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  false, false, false, true,  true,  true,  true,  true,  true,  false}, // booktitle
+            new boolean[] {true,  true,  true,  true,  false, false, false, false, false, false, false, true,  false, false, false, false, false, false, false, false, false}  // status
+        };
+        
+        for (int i = 0; i < conditions.size(); i++) {
+            for (int j = 0; j < items.size(); j++) {
+                boolean ex = expected[i][j];
+                boolean result = conditions.get(i).matches(items.get(j));
+                
+                assertEquals("Cond: " + conditions.get(i).getField()+ " with " + items.get(j), ex, result);
+                
+                conditions.get(i).setInverted(!conditions.get(i).isInverted());
+                
+                result = conditions.get(i).matches(items.get(j));
+                
+                assertEquals("Inverted cond: " + conditions.get(i).getField()+ " with " + items.get(j), !ex, result);
+                
+                conditions.get(i).setInverted(!conditions.get(i).isInverted());
+            }
+        }
     }
 }

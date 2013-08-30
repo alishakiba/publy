@@ -76,6 +76,7 @@ public class AboutPanel extends javax.swing.JPanel {
         iconsByLabel = new javax.swing.JLabel();
         iconsLink = new LinkLabel("VisualPharm", "http://www.visualpharm.com/");
         dotLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/logo-100.png"))); // NOI18N
 
@@ -112,9 +113,11 @@ public class AboutPanel extends javax.swing.JPanel {
 
         jCommanderCopyrightLabel.setText("JCommander is Copyright © 2010 Cédric Beust.");
 
-        iconsByLabel.setText("The tab icons are designed by ");
+        iconsByLabel.setText("The icons used in the GUI  are designed by ");
 
         dotLabel.setText(".");
+
+        jLabel1.setText("Used under a ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -183,8 +186,9 @@ public class AboutPanel extends javax.swing.JPanel {
                                                 .addGap(0, 0, 0)
                                                 .addComponent(tldrLegalLink)
                                                 .addGap(0, 0, 0)
-                                                .addComponent(closeBracketLabel)))
-                                        .addGap(0, 23, Short.MAX_VALUE)))))
+                                                .addComponent(closeBracketLabel))
+                                            .addComponent(jLabel1))
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -243,7 +247,9 @@ public class AboutPanel extends javax.swing.JPanel {
                     .addComponent(iconsByLabel)
                     .addComponent(iconsLink)
                     .addComponent(dotLabel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addContainerGap(66, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -260,6 +266,7 @@ public class AboutPanel extends javax.swing.JPanel {
     private javax.swing.JLabel iconsLink;
     private javax.swing.JLabel jCommanderCopyrightLabel;
     private javax.swing.JLabel jCommanderLink;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel legalHeader;
     private javax.swing.JSeparator legalSeparator;
     private javax.swing.JLabel licenseLink;

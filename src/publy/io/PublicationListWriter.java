@@ -23,8 +23,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import publy.Console;
 import publy.data.bibitem.BibItem;
-import publy.data.category.CategoryIdentifier;
 import publy.data.category.OutputCategory;
 import publy.data.settings.Settings;
 
@@ -39,11 +39,15 @@ public abstract class PublicationListWriter {
 
     public PublicationListWriter(Settings settings) {
         this.settings = settings;
-
-        categories = new ArrayList<>(settings.getCategorySettings().getCategories().size());
-
-        for (CategoryIdentifier category : settings.getCategorySettings().getCategories()) {
-            categories.add(OutputCategory.fromIdentifier(category));
+        categories = new ArrayList<>(settings.getCategorySettings().getActiveCategories().size());
+        
+        for (OutputCategory c : settings.getCategorySettings().getActiveCategories()) {
+            try {
+                categories.add((OutputCategory) c.clone());
+            } catch (CloneNotSupportedException ex) {
+                // Should never happen
+                Console.except(ex, "Category \"%s\" could not be copied.", c.getShortName());
+            }
         }
     }
 
