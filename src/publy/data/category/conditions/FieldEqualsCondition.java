@@ -23,19 +23,18 @@ import publy.data.bibitem.BibItem;
  *
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
-public class FieldEqualsCondition extends Condition {
+public class FieldEqualsCondition extends FieldCondition {
 
-    private String field;
     private List<String> values;
 
-    public FieldEqualsCondition(String field, String... values) {
-        this.field = field;
-        this.values = Arrays.asList(values);
-    }
-    
-    public FieldEqualsCondition(String field, List<String> values) {
-        this.field = field;
+    public FieldEqualsCondition(boolean inverted, String field, List<String> values) {
+        super(inverted, field);
         this.values = values;
+    }
+
+    public FieldEqualsCondition(boolean inverted, String field, String... values) {
+        super(inverted, field);
+        this.values = Arrays.asList(values);
     }
 
     public List<String> getValues() {
@@ -46,8 +45,12 @@ public class FieldEqualsCondition extends Condition {
         this.values = values;
     }
 
+    public void setValues(String... values) {
+        this.values = Arrays.asList(values);
+    }
+
     @Override
-    public boolean matches(BibItem item) {
-        return values.contains(item.get(field));
+    public boolean internalMatches(BibItem item) {
+        return values.contains(item.get(getField()));
     }
 }

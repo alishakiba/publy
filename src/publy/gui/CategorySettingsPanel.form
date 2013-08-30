@@ -20,23 +20,23 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="catLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="catSelectionHeader" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="catSeparator" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                      <Component id="inCatScrollPane" linkSize="1" pref="150" max="32767" attributes="0"/>
+                      <Component id="inCatScrollPane" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="inButton" min="-2" max="-2" attributes="0"/>
                           <Component id="outButton" linkSize="3" max="32767" attributes="0"/>
                           <Component id="upButton" linkSize="3" alignment="0" max="32767" attributes="0"/>
                           <Component id="downButton" linkSize="3" alignment="0" max="32767" attributes="0"/>
                           <Component id="catButtonSeparator" linkSize="3" alignment="0" pref="43" max="32767" attributes="0"/>
+                          <Component id="inButton" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="outCatScrollPane" linkSize="1" pref="150" max="32767" attributes="0"/>
+                      <Component id="outCatScrollPane" max="32767" attributes="0"/>
                   </Group>
                   <Component id="catPanel" alignment="1" max="32767" attributes="0"/>
               </Group>
@@ -49,7 +49,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="catLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="catSelectionHeader" min="-2" max="-2" attributes="0"/>
                   <Component id="catSeparator" min="-2" pref="7" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -69,7 +69,7 @@
                   <Component id="outCatScrollPane" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="catPanel" min="-2" max="-2" attributes="0"/>
+              <Component id="catPanel" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -100,7 +100,7 @@
             <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="inCatListValueChanged"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;CategoryIdentifier&gt;"/>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;OutputCategory&gt;"/>
           </AuxValues>
         </Component>
       </SubComponents>
@@ -117,15 +117,55 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="noteLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                          <Component id="noteSeparator" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="nameHeader" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="nameSeparator" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="noteHeader" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="noteSeparator" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="shortNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="fullNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="shortNameTextField" max="32767" attributes="0"/>
+                                              <Component id="fullNameTextField" max="32767" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <Component id="noteTextField" pref="271" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
                       </Group>
-                      <Component id="noteTextField" alignment="0" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Component id="editFiltersButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Component id="filtersHeader" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="filtersSeparator" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -136,20 +176,42 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="noteSeparator" alignment="1" min="-2" pref="7" max="-2" attributes="0"/>
-                      <Component id="noteLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="nameHeader" min="-2" max="-2" attributes="0"/>
+                      <Component id="nameSeparator" min="-2" pref="7" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="shortNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="shortNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="fullNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="fullNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="noteHeader" min="-2" max="-2" attributes="0"/>
+                      <Component id="noteSeparator" min="-2" pref="7" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="noteTextField" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="filtersHeader" min="-2" max="-2" attributes="0"/>
+                      <Component id="filtersSeparator" min="-2" pref="7" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="editFiltersButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="noteLabel">
+        <Component class="javax.swing.JLabel" name="noteHeader">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Note"/>
+            <Property name="text" type="java.lang.String" value="HTML Note"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JSeparator" name="noteSeparator">
@@ -164,9 +226,49 @@
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="noteTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        noteTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        noteTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
           </AuxValues>
         </Component>
+        <Component class="javax.swing.JLabel" name="nameHeader">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Name"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="shortNameLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Short:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSeparator" name="nameSeparator">
+        </Component>
+        <Component class="javax.swing.JTextField" name="shortNameTextField">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="fullNameLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Full:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="fullNameTextField">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="filtersHeader">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Filters"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSeparator" name="filtersSeparator">
+        </Component>
+        <Component class="javax.swing.JButton" name="editFiltersButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Edit Filters..."/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="catLabel">
+    <Component class="javax.swing.JLabel" name="catSelectionHeader">
       <Properties>
         <Property name="text" type="java.lang.String" value="Category selection"/>
       </Properties>
@@ -259,7 +361,7 @@
             <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="outCatListValueChanged"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;CategoryIdentifier&gt;"/>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;OutputCategory&gt;"/>
           </AuxValues>
         </Component>
       </SubComponents>

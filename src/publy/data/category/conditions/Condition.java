@@ -23,5 +23,30 @@ import publy.data.bibitem.BibItem;
  */
 public abstract class Condition {
 
-    public abstract boolean matches(BibItem item);
+    private boolean inverted;
+
+    public Condition(boolean inverted) {
+        this.inverted = inverted;
+    }
+    
+    /**
+     * Checks whether the given item matches this condition.
+     * 
+     * @param item
+     * @return true iff the given item matches this condition.
+     */
+    public boolean matches(BibItem item) {
+        boolean match = internalMatches(item);
+        return (inverted ? !match : match);
+    }
+    
+    protected abstract boolean internalMatches(BibItem item);
+
+    public boolean isInverted() {
+        return inverted;
+    }
+
+    public void setInverted(boolean inverted) {
+        this.inverted = inverted;
+    }
 }

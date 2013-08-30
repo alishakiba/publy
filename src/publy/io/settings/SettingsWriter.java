@@ -21,8 +21,12 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
-import publy.data.category.CategoryIdentifier;
+import publy.data.category.OutputCategory;
+import publy.data.category.conditions.Condition;
+import publy.data.category.conditions.FieldContainsCondition;
+import publy.data.category.conditions.FieldEqualsCondition;
+import publy.data.category.conditions.FieldExistsCondition;
+import publy.data.category.conditions.TypeCondition;
 import publy.data.settings.CategorySettings;
 import publy.data.settings.ConsoleSettings;
 import publy.data.settings.FileSettings;
@@ -94,25 +98,55 @@ public class SettingsWriter {
         out.newLine();
 
         // Categories
-        out.write("    <categories>");
+        out.write("    <allCategories>");
         out.newLine();
 
-        for (CategoryIdentifier cid : settings.getCategories()) {
-            output(out, 6, "category", makeString(cid));
+        for (OutputCategory c : settings.getAllCategories()) {
+            out.write("      <category>");
+            out.newLine();
+
+            // Basic properties
+            output(out, 8, "shortName", makeCData(c.getShortName()));
+            output(out, 8, "name", makeCData(c.getName()));
+            output(out, 8, "htmlNote", makeCData(c.getHtmlNote()));
+
+            // type condition
+            writeCondition(out, 8, c.getTypeCondition());
+
+            // field conditions
+            out.write("        <fieldConditions>");
+            out.newLine();
+
+            for (Condition condition : c.getFieldConditions()) {
+                writeCondition(out, 10, condition);
+            }
+
+            out.write("        </fieldConditions>");
+            out.newLine();
+
+            out.write("      </category>");
+            out.newLine();
         }
 
-        out.write("    </categories>");
+        out.write("    </allCategories>");
         out.newLine();
 
         // Category notes
-        out.write("    <categorynotes>");
-        out.newLine();
+        out.write("    <activeCategories>");
 
-        for (Map.Entry<CategoryIdentifier, String> entry : settings.getCategoryNotes().entrySet()) {
-            output(out, 6, "note", makeCData(entry.getValue()), "category", makeString(entry.getKey()));
+        // Reference by index in allCategories
+        boolean first = true;
+        for (OutputCategory c : settings.getActiveCategories()) {
+            if (first) {
+                first = false;
+            } else {
+                out.write(';');
+            }
+
+            out.write(Integer.toString(settings.getAllCategories().indexOf(c)));
         }
 
-        out.write("    </categorynotes>");
+        out.write("</activeCategories>");
         out.newLine();
 
         out.write("  </categorySettings>");
@@ -181,6 +215,20 @@ public class SettingsWriter {
         out.newLine();
     }
 
+    private static void writeCondition(BufferedWriter out, int indent, Condition condition) throws IOException {
+        if (condition instanceof TypeCondition) {
+            output(out, indent, "TypeCondition", makeCData(((TypeCondition) condition).getTypes()), "inverted", makeString(condition.isInverted()));
+        } else if (condition instanceof FieldExistsCondition) {
+            output(out, indent, "FieldExistsCondition", "", "inverted", makeString(condition.isInverted()), "field", ((FieldExistsCondition) condition).getField());
+        } else if (condition instanceof FieldEqualsCondition) {
+            output(out, indent, "FieldEqualsCondition", makeCData(((FieldEqualsCondition) condition).getValues()), "inverted", makeString(condition.isInverted()), "field", ((FieldEqualsCondition) condition).getField());
+        } else if (condition instanceof FieldContainsCondition) {
+            output(out, indent, "FieldContainsCondition", makeCData(((FieldContainsCondition) condition).getValues()), "inverted", makeString(condition.isInverted()), "field", ((FieldContainsCondition) condition).getField());
+        } else {
+            throw new AssertionError("Unknown condition type: " + condition);
+        }
+    }
+
     private static void output(BufferedWriter out, int indent, String tag, String content) throws IOException {
         out.write(indent(indent));
         out.write("<");
@@ -236,6 +284,12 @@ public class SettingsWriter {
                 return "    ";
             case 6:
                 return "      ";
+            case 8:
+                return "        ";
+            case 10:
+                return "          ";
+            case 12:
+                return "            ";
             default:
                 throw new AssertionError("Unexpected indentation number: " + indent);
         }

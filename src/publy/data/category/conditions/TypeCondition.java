@@ -27,12 +27,14 @@ public class TypeCondition extends Condition {
 
     private List<String> types;
 
-    public TypeCondition(String... types) {
-        this.types = Arrays.asList(types);
+    public TypeCondition(boolean inverted, List<String> types) {
+        super(inverted);
+        this.types = types;
     }
 
-    public TypeCondition(List<String> types) {
-        this.types = types;
+    public TypeCondition(boolean inverted, String... types) {
+        super(inverted);
+        this.types = Arrays.asList(types);
     }
 
     public List<String> getTypes() {
@@ -43,8 +45,12 @@ public class TypeCondition extends Condition {
         this.types = types;
     }
 
+    public void setTypes(String... types) {
+        this.types = Arrays.asList(types);
+    }
+
     @Override
-    public boolean matches(BibItem item) {
+    public boolean internalMatches(BibItem item) {
         return types.contains(item.getType()) || types.contains("*");
     }
 }

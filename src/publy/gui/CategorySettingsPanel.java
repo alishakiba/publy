@@ -15,13 +15,13 @@
  */
 package publy.gui;
 
-import java.util.EnumSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import publy.data.category.CategoryIdentifier;
+import publy.data.category.OutputCategory;
 import publy.data.settings.CategorySettings;
 
 /**
@@ -31,9 +31,9 @@ import publy.data.settings.CategorySettings;
 public class CategorySettingsPanel extends javax.swing.JPanel {
 
     private CategorySettings settings;
-    private DefaultListModel<CategoryIdentifier> inListModel;
-    private DefaultListModel<CategoryIdentifier> outListModel;
-    private CategoryIdentifier selectedCategory = null;
+    private DefaultListModel<OutputCategory> inListModel;
+    private DefaultListModel<OutputCategory> outListModel;
+    private OutputCategory selectedCategory = null;
 
     /**
      * Empty constructor, for use in the NetBeans GUI editor.
@@ -54,9 +54,9 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         applyStyles();
         populateValues();
     }
-    
+
     private void applyStyles() {
-        UIStyles.applyHeaderStyle(catLabel, noteLabel);
+        UIStyles.applyHeaderStyle(catSelectionHeader, nameHeader, noteHeader, filtersHeader);
         UIStyles.applyHeaderStyle((TitledBorder) catPanel.getBorder());
     }
 
@@ -66,14 +66,14 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         inListModel = new DefaultListModel<>();
         outListModel = new DefaultListModel<>();
 
-        Set<CategoryIdentifier> out = EnumSet.allOf(CategoryIdentifier.class);
+        List<OutputCategory> out = new ArrayList<>(settings.getAllCategories());
 
-        for (CategoryIdentifier c : settings.getCategories()) {
+        for (OutputCategory c : settings.getActiveCategories()) {
             inListModel.addElement(c);
             out.remove(c);
         }
 
-        for (CategoryIdentifier c : out) {
+        for (OutputCategory c : out) {
             outListModel.addElement(c);
         }
 
@@ -91,12 +91,21 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         inCatScrollPane = new javax.swing.JScrollPane();
-        inCatList = new javax.swing.JList<CategoryIdentifier>();
+        inCatList = new javax.swing.JList<OutputCategory>();
         catPanel = new javax.swing.JPanel();
-        noteLabel = new javax.swing.JLabel();
+        noteHeader = new javax.swing.JLabel();
         noteSeparator = new javax.swing.JSeparator();
         noteTextField = new javax.swing.JTextField();
-        catLabel = new javax.swing.JLabel();
+        nameHeader = new javax.swing.JLabel();
+        shortNameLabel = new javax.swing.JLabel();
+        nameSeparator = new javax.swing.JSeparator();
+        shortNameTextField = new javax.swing.JTextField();
+        fullNameLabel = new javax.swing.JLabel();
+        fullNameTextField = new javax.swing.JTextField();
+        filtersHeader = new javax.swing.JLabel();
+        filtersSeparator = new javax.swing.JSeparator();
+        editFiltersButton = new javax.swing.JButton();
+        catSelectionHeader = new javax.swing.JLabel();
         catSeparator = new javax.swing.JSeparator();
         inButton = new javax.swing.JButton();
         outButton = new javax.swing.JButton();
@@ -104,7 +113,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         upButton = new javax.swing.JButton();
         downButton = new javax.swing.JButton();
         outCatScrollPane = new javax.swing.JScrollPane();
-        outCatList = new javax.swing.JList<CategoryIdentifier>();
+        outCatList = new javax.swing.JList<OutputCategory>();
 
         inCatList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -121,7 +130,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
 
         catPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Category Properties"));
 
-        noteLabel.setText("Note");
+        noteHeader.setText("HTML Note");
 
         noteTextField.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
@@ -138,18 +147,61 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         noteTextField.setToolTipText("This text will be inserted after the category heading, before the publications in the category.");
         noteTextField.setEnabled(false);
 
+        nameHeader.setText("Name");
+
+        shortNameLabel.setText("Short:");
+
+        shortNameTextField.setEnabled(false);
+
+        fullNameLabel.setText("Full:");
+
+        fullNameTextField.setEnabled(false);
+
+        filtersHeader.setText("Filters");
+
+        editFiltersButton.setText("Edit Filters...");
+        editFiltersButton.setEnabled(false);
+
         javax.swing.GroupLayout catPanelLayout = new javax.swing.GroupLayout(catPanel);
         catPanel.setLayout(catPanelLayout);
         catPanelLayout.setHorizontalGroup(
             catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(catPanelLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
                 .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(catPanelLayout.createSequentialGroup()
-                        .addComponent(noteLabel)
-                        .addGap(4, 4, 4)
-                        .addComponent(noteSeparator))
-                    .addComponent(noteTextField))
+                        .addGap(10, 10, 10)
+                        .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(catPanelLayout.createSequentialGroup()
+                                .addComponent(nameHeader)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nameSeparator))
+                            .addGroup(catPanelLayout.createSequentialGroup()
+                                .addComponent(noteHeader)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(noteSeparator))
+                            .addGroup(catPanelLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(catPanelLayout.createSequentialGroup()
+                                        .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(shortNameLabel)
+                                            .addComponent(fullNameLabel))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(shortNameTextField)
+                                            .addComponent(fullNameTextField)))
+                                    .addComponent(noteTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)))))
+                    .addGroup(catPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(catPanelLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(editFiltersButton)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(catPanelLayout.createSequentialGroup()
+                                .addComponent(filtersHeader)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(filtersSeparator)))))
                 .addContainerGap())
         );
         catPanelLayout.setVerticalGroup(
@@ -157,14 +209,32 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
             .addGroup(catPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(noteSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(noteLabel))
+                    .addComponent(nameHeader)
+                    .addComponent(nameSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(shortNameLabel)
+                    .addComponent(shortNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fullNameLabel)
+                    .addComponent(fullNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(noteHeader)
+                    .addComponent(noteSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(noteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(filtersHeader)
+                    .addComponent(filtersSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(editFiltersButton)
+                .addContainerGap())
         );
 
-        catLabel.setText("Category selection");
+        catSelectionHeader.setText("Category selection");
 
         inButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/left-26.png"))); // NOI18N
         inButton.setToolTipText("Include the selected category.");
@@ -227,36 +297,33 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(catLabel)
+                        .addComponent(catSelectionHeader)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(catSeparator))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(inCatScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                        .addComponent(inCatScrollPane)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(inButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(outButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(upButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(downButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(catButtonSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE))
+                            .addComponent(catButtonSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                            .addComponent(inButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(outCatScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                        .addGap(0, 0, 0))
+                        .addComponent(outCatScrollPane))
                     .addComponent(catPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {inCatScrollPane, outCatScrollPane});
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {catButtonSeparator, downButton, outButton, upButton});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {catButtonSeparator, downButton, inButton, outButton, upButton});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(catLabel)
+                    .addComponent(catSelectionHeader)
                     .addComponent(catSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -273,7 +340,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                     .addComponent(inCatScrollPane)
                     .addComponent(outCatScrollPane))
                 .addGap(18, 18, 18)
-                .addComponent(catPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(catPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -282,24 +349,27 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void noteTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
-        // Update the settings
         if (selectedCategory != null) {
-            settings.getCategoryNotes().put(selectedCategory, noteTextField.getText());
+            selectedCategory.setHtmlNote(noteTextField.getText());
         }
     }
 
-    private void setSelectedCategory(CategoryIdentifier c) {
+    private void setSelectedCategory(OutputCategory c) {
         selectedCategory = c;
+        boolean active = c != null;
 
-        if (c == null) {
-            // Note
-            noteTextField.setText("");
-            noteTextField.setEnabled(false);
-        } else {
-            // Note
-            noteTextField.setText(settings.getCategoryNotes().get(c));
-            noteTextField.setEnabled(true);
-        }
+        // Name
+        shortNameTextField.setText(active ? c.getShortName(): "");
+        shortNameTextField.setEnabled(active);
+        fullNameTextField.setText(active ? c.getName(): "");
+        fullNameTextField.setEnabled(active);
+        
+        // Note
+        noteTextField.setText(active ? c.getHtmlNote() : "");
+        noteTextField.setEnabled(active);
+        
+        // Filters
+        editFiltersButton.setEnabled(active);
     }
 
     private void inCatListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_inCatListValueChanged
@@ -332,7 +402,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_inCatListValueChanged
 
     private void inButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inButtonActionPerformed
-        CategoryIdentifier selected = outCatList.getSelectedValue();
+        OutputCategory selected = outCatList.getSelectedValue();
 
         // Update the UI
         inListModel.addElement(selected);
@@ -341,11 +411,11 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         inCatList.setSelectedValue(selected, true);
 
         // Update the settings
-        settings.getCategories().add(selected);
+        settings.activate(selected);
     }//GEN-LAST:event_inButtonActionPerformed
 
     private void outButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_outButtonActionPerformed
-        CategoryIdentifier selected = inCatList.getSelectedValue();
+        OutputCategory selected = inCatList.getSelectedValue();
 
         // Update the UI
         outListModel.addElement(selected);
@@ -354,7 +424,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         outCatList.setSelectedValue(selected, true);
 
         // Update the settings
-        settings.getCategories().remove(selected);
+        settings.deactivate(selected);
     }//GEN-LAST:event_outButtonActionPerformed
 
     private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
@@ -362,13 +432,13 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
 
         if (selected > 0) {
             // Update the UI
-            CategoryIdentifier up = inListModel.set(selected - 1, selectedCategory);
+            OutputCategory up = inListModel.set(selected - 1, selectedCategory);
             inListModel.set(selected, up);
             inCatList.setSelectedValue(selectedCategory, true);
 
             // Update the settings
-            settings.getCategories().set(selected - 1, selectedCategory);
-            settings.getCategories().set(selected, up);
+            settings.getActiveCategories().set(selected - 1, selectedCategory);
+            settings.getActiveCategories().set(selected, up);
         }
     }//GEN-LAST:event_upButtonActionPerformed
 
@@ -377,13 +447,13 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
 
         if (selected < inListModel.getSize() - 1) {
             // Update the UI
-            CategoryIdentifier down = inListModel.set(selected + 1, selectedCategory);
+            OutputCategory down = inListModel.set(selected + 1, selectedCategory);
             inListModel.set(selected, down);
             inCatList.setSelectedValue(selectedCategory, true);
 
             // Update the settings
-            settings.getCategories().set(selected + 1, selectedCategory);
-            settings.getCategories().set(selected, down);
+            settings.getActiveCategories().set(selected + 1, selectedCategory);
+            settings.getActiveCategories().set(selected, down);
         }
     }//GEN-LAST:event_downButtonActionPerformed
 
@@ -410,19 +480,28 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_outCatListValueChanged
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSeparator catButtonSeparator;
-    private javax.swing.JLabel catLabel;
     private javax.swing.JPanel catPanel;
+    private javax.swing.JLabel catSelectionHeader;
     private javax.swing.JSeparator catSeparator;
     private javax.swing.JButton downButton;
+    private javax.swing.JButton editFiltersButton;
+    private javax.swing.JLabel filtersHeader;
+    private javax.swing.JSeparator filtersSeparator;
+    private javax.swing.JLabel fullNameLabel;
+    private javax.swing.JTextField fullNameTextField;
     private javax.swing.JButton inButton;
-    private javax.swing.JList<CategoryIdentifier> inCatList;
+    private javax.swing.JList<OutputCategory> inCatList;
     private javax.swing.JScrollPane inCatScrollPane;
-    private javax.swing.JLabel noteLabel;
+    private javax.swing.JLabel nameHeader;
+    private javax.swing.JSeparator nameSeparator;
+    private javax.swing.JLabel noteHeader;
     private javax.swing.JSeparator noteSeparator;
     private javax.swing.JTextField noteTextField;
     private javax.swing.JButton outButton;
-    private javax.swing.JList<CategoryIdentifier> outCatList;
+    private javax.swing.JList<OutputCategory> outCatList;
     private javax.swing.JScrollPane outCatScrollPane;
+    private javax.swing.JLabel shortNameLabel;
+    private javax.swing.JTextField shortNameTextField;
     private javax.swing.JButton upButton;
     // End of variables declaration//GEN-END:variables
 }

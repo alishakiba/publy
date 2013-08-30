@@ -233,7 +233,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
 
         // Note
-        String note = settings.getCategorySettings().getCategoryNotes().get(c.getId());
+        String note = c.getHtmlNote();
 
         if (note != null && !note.isEmpty()) {
             out.write("      <p class=\"section-note\">");

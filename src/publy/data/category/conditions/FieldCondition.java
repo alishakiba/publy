@@ -15,22 +15,23 @@
  */
 package publy.data.category.conditions;
 
-import publy.data.bibitem.BibItem;
-
 /**
  *
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
-public class InverseCondition extends Condition {
+public abstract class FieldCondition extends Condition {
+    private String field;
 
-    private Condition baseCondition;
-
-    public InverseCondition(Condition baseCondition) {
-        this.baseCondition = baseCondition;
+    public FieldCondition(boolean inverted, String field) {
+        super(inverted);
+        this.field = field;
     }
 
-    @Override
-    public boolean matches(BibItem item) {
-        return !baseCondition.matches(item);
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
     }
 }

@@ -90,8 +90,9 @@
                                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                               <Component id="closeBracketLabel" min="-2" max="-2" attributes="0"/>
                                           </Group>
+                                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="0" pref="23" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -170,7 +171,9 @@
                   <Component id="iconsLink" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="dotLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="66" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -298,7 +301,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="iconsByLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="The tab icons are designed by "/>
+        <Property name="text" type="java.lang.String" value="The icons used in the GUI  are designed by "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="iconsLink">
@@ -309,6 +312,11 @@
     <Component class="javax.swing.JLabel" name="dotLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="."/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Used under a "/>
       </Properties>
     </Component>
   </SubComponents>
