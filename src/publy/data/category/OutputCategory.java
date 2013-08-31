@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
 import publy.data.bibitem.BibItem;
-import publy.data.category.conditions.Condition;
 import publy.data.category.conditions.FieldCondition;
 import publy.data.category.conditions.TypeCondition;
 
@@ -174,6 +173,6 @@ public class OutputCategory implements Cloneable {
 
     @Override
     public String toString() {
-        return shortName;
+        return (shortName == null || shortName.isEmpty() ? " (no name) " : shortName);
     }
 }

@@ -22,6 +22,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import publy.data.category.OutputCategory;
+import publy.data.category.conditions.TypeCondition;
 import publy.data.settings.CategorySettings;
 
 /**
@@ -153,10 +154,32 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
 
         shortNameLabel.setText("Short:");
 
+        shortNameTextField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                shortNameTextFieldTextChanged(e);
+            }
+            public void removeUpdate(DocumentEvent e) {
+                shortNameTextFieldTextChanged(e);
+            }
+            public void changedUpdate(DocumentEvent e) {
+                //Plain text components do not fire these events
+            }
+        });
         shortNameTextField.setEnabled(false);
 
         fullNameLabel.setText("Full:");
 
+        fullNameTextField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                fullNameTextFieldTextChanged(e);
+            }
+            public void removeUpdate(DocumentEvent e) {
+                fullNameTextFieldTextChanged(e);
+            }
+            public void changedUpdate(DocumentEvent e) {
+                //Plain text components do not fire these events
+            }
+        });
         fullNameTextField.setEnabled(false);
 
         filtersHeader.setText("Filters");
@@ -239,7 +262,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         catSelectionHeader.setText("Category selection");
 
         inButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/left-26.png"))); // NOI18N
-        inButton.setToolTipText("Include the selected category.");
+        inButton.setToolTipText("Include category");
         inButton.setEnabled(false);
         inButton.setPreferredSize(new java.awt.Dimension(40, 40));
         inButton.addActionListener(new java.awt.event.ActionListener() {
@@ -249,7 +272,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         });
 
         outButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/right-26.png"))); // NOI18N
-        outButton.setToolTipText("Remove the selected category.");
+        outButton.setToolTipText("Exclude category");
         outButton.setEnabled(false);
         outButton.setPreferredSize(new java.awt.Dimension(40, 40));
         outButton.addActionListener(new java.awt.event.ActionListener() {
@@ -259,7 +282,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         });
 
         upButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/up-26.png"))); // NOI18N
-        upButton.setToolTipText("Move the selected category up.");
+        upButton.setToolTipText("Move up");
         upButton.setEnabled(false);
         upButton.setPreferredSize(new java.awt.Dimension(40, 40));
         upButton.addActionListener(new java.awt.event.ActionListener() {
@@ -269,7 +292,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         });
 
         downButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/down-26.png"))); // NOI18N
-        downButton.setToolTipText("Move the selected category down.");
+        downButton.setToolTipText("Move down");
         downButton.setEnabled(false);
         downButton.setPreferredSize(new java.awt.Dimension(40, 40));
         downButton.addActionListener(new java.awt.event.ActionListener() {
@@ -292,9 +315,21 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         outCatScrollPane.setViewportView(outCatList);
 
         newCategoryButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/add_list-26.png"))); // NOI18N
+        newCategoryButton.setToolTipText("New category");
+        newCategoryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newCategoryButtonActionPerformed(evt);
+            }
+        });
 
         deleteCategoryButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/delete-26.png"))); // NOI18N
+        deleteCategoryButton.setToolTipText("Delete category");
         deleteCategoryButton.setEnabled(false);
+        deleteCategoryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteCategoryButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -365,9 +400,25 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
 
     }// </editor-fold>//GEN-END:initComponents
 
-    private void noteTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
+    private void noteTextFieldTextChanged(DocumentEvent evt) {
         if (selectedCategory != null) {
             selectedCategory.setHtmlNote(noteTextField.getText());
+        }
+    }
+    
+    private void fullNameTextFieldTextChanged(DocumentEvent evt) {
+        if (selectedCategory != null) {
+            selectedCategory.setName(fullNameTextField.getText());
+        }
+    }
+    
+    private void shortNameTextFieldTextChanged(DocumentEvent evt) {
+        if (selectedCategory != null) {
+            selectedCategory.setShortName(shortNameTextField.getText());
+            
+            // Repaint the lists so the name updates there as well
+            inCatList.repaint();
+            outCatList.repaint();
         }
     }
 
@@ -498,6 +549,47 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_outCatListValueChanged
+
+    private void newCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCategoryButtonActionPerformed
+        // Find a unique name
+        int n = 0;
+        
+        for (OutputCategory c : settings.getAllCategories()) {
+            if (c.getShortName().equals("New")) {
+                n = 2;
+            } else if (c.getShortName().startsWith("New ")) {
+                try {
+                    Integer i = Integer.parseInt(c.getShortName().substring(4));
+                    n = Math.max(n, i + 1);
+                } catch (NumberFormatException e) {
+                    // The name doesn't collide, we're fine
+                    System.out.println("No collision with name: \"" + c.getShortName() + "\"");
+                }
+            }
+        }
+        
+        String name = (n > 0 ? "New " + n : "New");
+        
+        // Create the new category
+        OutputCategory newCategory = new OutputCategory(name, name, new TypeCondition(false, "*"));
+        
+        settings.addCategory(newCategory);
+        outListModel.addElement(newCategory);
+        outCatList.setSelectedValue(newCategory, true);
+    }//GEN-LAST:event_newCategoryButtonActionPerformed
+
+    private void deleteCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCategoryButtonActionPerformed
+        OutputCategory remove = selectedCategory;
+        
+        // Remove the category from the GUI
+        setSelectedCategory(null);
+        inListModel.removeElement(remove);
+        outListModel.removeElement(remove);
+        
+        // Remove it from the settings
+        settings.removeCategory(remove); // (also deactivates it if necessary)
+    }//GEN-LAST:event_deleteCategoryButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSeparator catButtonSeparator;
     private javax.swing.JPanel catPanel;
