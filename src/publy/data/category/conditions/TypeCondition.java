@@ -15,6 +15,7 @@
  */
 package publy.data.category.conditions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import publy.data.bibitem.BibItem;
@@ -35,6 +36,11 @@ public class TypeCondition extends Condition {
     public TypeCondition(boolean inverted, String... types) {
         super(inverted);
         this.types = Arrays.asList(types);
+    }
+
+    public TypeCondition(TypeCondition condition) {
+        super(condition);
+        types = new ArrayList<>(condition.types);
     }
 
     public List<String> getTypes() {

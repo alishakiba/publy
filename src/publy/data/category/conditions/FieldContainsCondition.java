@@ -15,6 +15,7 @@
  */
 package publy.data.category.conditions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import publy.data.bibitem.BibItem;
@@ -35,6 +36,11 @@ public class FieldContainsCondition extends FieldCondition {
     public FieldContainsCondition(boolean inverted, String field, String... values) {
         super(inverted, field);
         this.values = Arrays.asList(values);
+    }
+
+    public FieldContainsCondition(FieldContainsCondition condition) {
+        super(condition);
+        values = new ArrayList<>(condition.values);
     }
 
     public List<String> getValues() {

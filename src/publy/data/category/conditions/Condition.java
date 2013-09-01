@@ -28,6 +28,10 @@ public abstract class Condition {
     public Condition(boolean inverted) {
         this.inverted = inverted;
     }
+
+    public Condition(Condition condition) {
+        this.inverted = condition.inverted;
+    }
     
     /**
      * Checks whether the given item matches this condition.

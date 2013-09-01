@@ -27,6 +27,11 @@ public abstract class FieldCondition extends Condition {
         this.field = field;
     }
 
+    public FieldCondition(FieldCondition condition) {
+        super(condition);
+        this.field = condition.field;
+    }
+
     public String getField() {
         return field;
     }
