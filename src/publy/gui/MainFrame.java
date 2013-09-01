@@ -60,7 +60,7 @@ public class MainFrame extends javax.swing.JFrame {
         generalSettingsPanel = new publy.gui.GeneralSettingsPanel(settings.getGeneralSettings());
         htmlSettingsPanel = new publy.gui.HTMLSettingsPanel(settings.getHtmlSettings());
         consoleSettingsPanel = new publy.gui.ConsoleSettingsPanel(settings.getConsoleSettings());
-        aboutPanel1 = new publy.gui.AboutPanel();
+        aboutPanel = new publy.gui.AboutPanel();
         bottomPanel = new javax.swing.JPanel();
         buttonPanel = new javax.swing.JPanel();
         generateButton = new javax.swing.JButton();
@@ -84,7 +84,7 @@ public class MainFrame extends javax.swing.JFrame {
         settingsTabbedPane.addTab("General", new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/document-16.png")), generalSettingsPanel); // NOI18N
         settingsTabbedPane.addTab("HTML", new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/globe-16.png")), htmlSettingsPanel); // NOI18N
         settingsTabbedPane.addTab("Console", new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/console-16.png")), consoleSettingsPanel); // NOI18N
-        settingsTabbedPane.addTab("About", new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/about-16.png")), aboutPanel1); // NOI18N
+        settingsTabbedPane.addTab("About", new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/about-16.png")), aboutPanel); // NOI18N
 
         mainSplitPane.setTopComponent(settingsTabbedPane);
 
@@ -190,7 +190,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private publy.gui.AboutPanel aboutPanel1;
+    private publy.gui.AboutPanel aboutPanel;
     private javax.swing.JPanel bottomPanel;
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;

@@ -18,6 +18,7 @@ package publy.gui;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -186,6 +187,11 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
 
         editFiltersButton.setText("Edit Filters...");
         editFiltersButton.setEnabled(false);
+        editFiltersButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editFiltersButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout catPanelLayout = new javax.swing.GroupLayout(catPanel);
         catPanel.setLayout(catPanelLayout);
@@ -405,17 +411,17 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
             selectedCategory.setHtmlNote(noteTextField.getText());
         }
     }
-    
+
     private void fullNameTextFieldTextChanged(DocumentEvent evt) {
         if (selectedCategory != null) {
             selectedCategory.setName(fullNameTextField.getText());
         }
     }
-    
+
     private void shortNameTextFieldTextChanged(DocumentEvent evt) {
         if (selectedCategory != null) {
             selectedCategory.setShortName(shortNameTextField.getText());
-            
+
             // Repaint the lists so the name updates there as well
             inCatList.repaint();
             outCatList.repaint();
@@ -427,18 +433,18 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         boolean active = c != null;
 
         // Name
-        shortNameTextField.setText(active ? c.getShortName(): "");
+        shortNameTextField.setText(active ? c.getShortName() : "");
         shortNameTextField.setEnabled(active);
-        fullNameTextField.setText(active ? c.getName(): "");
+        fullNameTextField.setText(active ? c.getName() : "");
         fullNameTextField.setEnabled(active);
-        
+
         // Note
         noteTextField.setText(active ? c.getHtmlNote() : "");
         noteTextField.setEnabled(active);
-        
+
         // Filters
         editFiltersButton.setEnabled(active);
-        
+
         // Delete
         deleteCategoryButton.setEnabled(active);
     }
@@ -553,7 +559,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     private void newCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCategoryButtonActionPerformed
         // Find a unique name
         int n = 0;
-        
+
         for (OutputCategory c : settings.getAllCategories()) {
             if (c.getShortName().equals("New")) {
                 n = 2;
@@ -567,12 +573,12 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                 }
             }
         }
-        
+
         String name = (n > 0 ? "New " + n : "New");
-        
+
         // Create the new category
         OutputCategory newCategory = new OutputCategory(name, name, new TypeCondition(false, "*"));
-        
+
         settings.addCategory(newCategory);
         outListModel.addElement(newCategory);
         outCatList.setSelectedValue(newCategory, true);
@@ -580,16 +586,20 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
 
     private void deleteCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCategoryButtonActionPerformed
         OutputCategory remove = selectedCategory;
-        
+
         // Remove the category from the GUI
         setSelectedCategory(null);
         inListModel.removeElement(remove);
         outListModel.removeElement(remove);
-        
+
         // Remove it from the settings
         settings.removeCategory(remove); // (also deactivates it if necessary)
     }//GEN-LAST:event_deleteCategoryButtonActionPerformed
 
+    private void editFiltersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editFiltersButtonActionPerformed
+        ConditionsDialog cd = new ConditionsDialog((java.awt.Frame) SwingUtilities.getRoot(this), selectedCategory);
+        cd.setVisible(true);
+    }//GEN-LAST:event_editFiltersButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSeparator catButtonSeparator;
     private javax.swing.JPanel catPanel;

@@ -160,7 +160,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         });
 
         numGroup.add(numLocalRadioButton);
-        numLocalRadioButton.setText("Section numbering");
+        numLocalRadioButton.setText("Category numbering");
         numLocalRadioButton.setToolTipText("Number the publications in each section independently.");
         numLocalRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

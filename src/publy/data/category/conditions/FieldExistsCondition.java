@@ -26,6 +26,10 @@ public class FieldExistsCondition extends FieldCondition {
     public FieldExistsCondition(boolean inverted, String field) {
         super(inverted, field);
     }
+
+    public FieldExistsCondition(FieldExistsCondition condition) {
+        super(condition);
+    }
     
     @Override
     public boolean internalMatches(BibItem item) {
