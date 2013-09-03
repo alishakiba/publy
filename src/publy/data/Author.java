@@ -31,6 +31,7 @@ public class Author {
     private String latexName; // Name as given in the input bibtex file
     private String plaintextName, htmlName; // Possible name overrides from the bibtex file
     private String url; // The url associated with this author
+    private String group; // The group associated with this author
 
     public Author(String name) {
         this(name, name);
@@ -106,8 +107,8 @@ public class Author {
         if (plaintextName == null) {
             return fname;
         } else {
-            if (plaintextName.contains("%%NAME%%")) {
-                return plaintextName.replaceAll("%%NAME%%", fname);
+            if (plaintextName.contains("~NAME~")) {
+                return plaintextName.replaceAll("~NAME~", fname);
             } else {
                 return plaintextName;
             }
@@ -128,8 +129,8 @@ public class Author {
         if (htmlName == null) {
             return fname;
         } else {
-            if (htmlName.contains("%%NAME%%")) {
-                return htmlName.replaceAll("%%NAME%%", fname);
+            if (htmlName.contains("~NAME~")) {
+                return htmlName.replaceAll("~NAME~", fname);
             } else {
                 return htmlName;
             }
@@ -137,10 +138,16 @@ public class Author {
     }
 
     public String getLinkedAndFormattedHtmlName(GeneralSettings.NameDisplay display, boolean reversed) {
+        String classes = "author";
+        
+        if (group != null && !group.isEmpty()) {
+            classes += " " + group;
+        }
+        
         if (url != null && !url.isEmpty()) {
-            return "<a href=\"" + url + "\" class=\"author\">" + getFormattedHtmlName(display, reversed) + "</a>";
+            return "<a href=\"" + url + "\" class=\"" + classes + "\">" + getFormattedHtmlName(display, reversed) + "</a>";
         } else {
-            return "<span class=\"author\">" + getFormattedHtmlName(display, reversed) + "</span>";
+            return "<span class=\"" + classes + "\">" + getFormattedHtmlName(display, reversed) + "</span>";
         }
     }
 
@@ -150,6 +157,14 @@ public class Author {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 
     public boolean isMe(List<String> myNames, GeneralSettings.NameDisplay display, boolean reversed) {

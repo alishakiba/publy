@@ -52,6 +52,7 @@ public class BibTeXParser {
     private static final Pattern htmlPattern = Pattern.compile("htmlname=\"([^\"]*)\"");
     private static final Pattern plainPattern = Pattern.compile("plaintextname=\"([^\"]*)\"");
     private static final Pattern urlPattern = Pattern.compile("url=\"([^\"]*)\"");
+    private static final Pattern groupPattern = Pattern.compile("group=\"([^\"]*)\"");
     // Pattern for detecting an author link
     private static final Pattern authorPattern = Pattern.compile("<([^<>]*)>");
     // Pattern for detecting an abbreviation
@@ -286,7 +287,7 @@ public class BibTeXParser {
     }
 
     private static void parseAuthor(String line, Map<String, Author> authors) {
-        String shortName = null, name = null, plaintextName = null, htmlName = null, url = null;
+        String shortName = null, name = null, plaintextName = null, htmlName = null, url = null, group = null;
 
         Matcher matcher = shortPattern.matcher(line);
 
@@ -317,6 +318,12 @@ public class BibTeXParser {
         if (matcher.find()) {
             url = matcher.group(1);
         }
+        
+        matcher = groupPattern.matcher(line);
+
+        if (matcher.find()) {
+            group = matcher.group(1);
+        }
 
         if (shortName == null) {
             Console.error("Author tag is missing mandatory field \"short\":%n%s", line);
@@ -325,6 +332,7 @@ public class BibTeXParser {
         } else {
             Author author = new Author(shortName, name);
             author.setUrl(url);
+            author.setGroup(group);
             
             if (htmlName != null) {
                 author.setHtmlName(htmlName);

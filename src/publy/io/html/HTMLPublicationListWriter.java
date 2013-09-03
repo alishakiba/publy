@@ -343,7 +343,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                 try (BufferedReader reader = Files.newBufferedReader(gaJs, Charset.forName("UTF-8"));
                         BufferedWriter writer = Files.newBufferedWriter(gaJsTarget, Charset.forName("UTF-8"))) {
                     for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                        writer.write(line.replaceAll("%%GAUSERACCOUNT%%", settings.getHtmlSettings().getGoogleAnalyticsUser()));
+                        writer.write(line.replaceAll("~GAUSERACCOUNT~", settings.getHtmlSettings().getGoogleAnalyticsUser()));
                         writer.newLine();
                     }
                 }
