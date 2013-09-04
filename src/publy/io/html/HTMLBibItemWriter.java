@@ -471,7 +471,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
             divOpened = true;
         }
         
-        // URL
+        // ISBN link
+        if (item.anyNonEmpty("isbn")) {
+            String link = "http://www.worldcat.org/isbn/" + item.get("isbn");
+            writeLink(divOpened, link, "ISBN");
+            divOpened = true;
+        }
+        
+        // URL link
         if (item.anyNonEmpty("url")) {
             String link = item.get("url");
             writeLink(divOpened, link, "URL");
