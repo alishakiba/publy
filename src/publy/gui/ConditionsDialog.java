@@ -39,7 +39,6 @@ public class ConditionsDialog extends javax.swing.JDialog {
 
     private OutputCategory category;
     private TypeCondition typeCondition;
-    private List<FieldCondition> fieldConditions;
 
     /**
      * Creates new form ConditionsDialog
@@ -49,20 +48,6 @@ public class ConditionsDialog extends javax.swing.JDialog {
 
         this.category = category;
         typeCondition = new TypeCondition(category.getTypeCondition());
-        
-        fieldConditions = new ArrayList<>(category.getFieldConditions().size());
-        
-        for (FieldCondition c : category.getFieldConditions()) {
-            if (c instanceof FieldExistsCondition) {
-                fieldConditions.add(new FieldExistsCondition((FieldExistsCondition) c));
-            } else if (c instanceof FieldEqualsCondition) {
-                fieldConditions.add(new FieldEqualsCondition((FieldEqualsCondition) c));
-            } else if (c instanceof FieldContainsCondition) {
-                fieldConditions.add(new FieldContainsCondition((FieldContainsCondition) c));
-            } else {
-                throw new AssertionError("Unexpected field condition type: " + c.getClass());
-            }
-        }
 
         initComponents();
         applyStyles();
@@ -88,15 +73,25 @@ public class ConditionsDialog extends javax.swing.JDialog {
         }
 
         typeTextField.setText(makeString(typeCondition.getTypes()));
-        
+
         // Field conditions
-        for (int i = 0; i < fieldConditions.size(); i++) {
-            fieldConditionsPanel.add(new FieldConditionPanel(fieldConditions.get(i), fieldConditions, i), i);
+        for (int i = 0; i < category.getFieldConditions().size(); i++) {
+            FieldCondition cond = category.getFieldConditions().get(i);
+
+            if (cond instanceof FieldExistsCondition) {
+                fieldConditionsPanel.add(new FieldConditionPanel(new FieldExistsCondition((FieldExistsCondition) cond)), i);
+            } else if (cond instanceof FieldEqualsCondition) {
+                fieldConditionsPanel.add(new FieldConditionPanel(new FieldEqualsCondition((FieldEqualsCondition) cond)), i);
+            } else if (cond instanceof FieldContainsCondition) {
+                fieldConditionsPanel.add(new FieldConditionPanel(new FieldContainsCondition((FieldContainsCondition) cond)), i);
+            } else {
+                throw new AssertionError("Unexpected condition type: " + cond.getClass());
+            }
         }
-        
+
         fieldConditionsPanel.revalidate();
     }
-    
+
     private String makeString(List<String> values) {
         StringBuilder text = new StringBuilder();
         boolean first = true;
@@ -112,6 +107,18 @@ public class ConditionsDialog extends javax.swing.JDialog {
         }
 
         return text.toString();
+    }
+
+    private List<FieldCondition> getFieldConditions() {
+        List<FieldCondition> fieldConditions = new ArrayList<>(fieldConditionsPanel.getComponents().length);
+        
+        for (Component c : fieldConditionsPanel.getComponents()) {
+            if (c instanceof FieldConditionPanel) {
+                fieldConditions.add(((FieldConditionPanel) c).getCondition());
+            }
+        }
+        
+        return fieldConditions;
     }
 
     /**
@@ -279,8 +286,7 @@ public class ConditionsDialog extends javax.swing.JDialog {
 
     private void addConditionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addConditionButtonActionPerformed
         FieldCondition cond = new FieldExistsCondition(false, "field");
-        fieldConditions.add(cond);
-        FieldConditionPanel newComponent = new FieldConditionPanel(cond, fieldConditions, fieldConditions.size() - 1);
+        FieldConditionPanel newComponent = new FieldConditionPanel(cond);
 
         fieldConditionsPanel.add(newComponent, fieldConditionsPanel.getComponentCount() - 1); // Add the new object before the 'Add' button
         fieldConditionsPanel.revalidate(); // Recompute the layout and propagate the changes
@@ -290,12 +296,12 @@ public class ConditionsDialog extends javax.swing.JDialog {
     private void typeInvertCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeInvertCheckBoxActionPerformed
         if (typeInvertCheckBox.isSelected()) {
             typeCondition.setInverted(true);
-            
+
             typeInvertCheckBox.setForeground(UIManager.getDefaults().getColor("CheckBox.foreground"));
             typeLabel.setText(typeLabel.getText().substring(0, 1).toLowerCase() + typeLabel.getText().substring(1));
         } else {
             typeCondition.setInverted(false);
-            
+
             typeInvertCheckBox.setForeground(Color.GRAY);
             typeLabel.setText(typeLabel.getText().substring(0, 1).toUpperCase() + typeLabel.getText().substring(1));
         }
@@ -308,15 +314,14 @@ public class ConditionsDialog extends javax.swing.JDialog {
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         // Sync settings to the category
         category.setTypeCondition(typeCondition);
-        category.setFieldConditions(fieldConditions);
-        
+        category.setFieldConditions(getFieldConditions());
+
         dispose();
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addConditionButton;
     private javax.swing.JButton cancelButton;

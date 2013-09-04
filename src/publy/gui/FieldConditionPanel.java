@@ -16,6 +16,7 @@
 package publy.gui;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.event.ItemEvent;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -52,8 +53,6 @@ public class FieldConditionPanel extends javax.swing.JPanel {
         }
     }
     private FieldCondition condition;
-    private List<FieldCondition> conditionList;
-    private int index;
     private boolean initializing;
 
     /**
@@ -63,10 +62,8 @@ public class FieldConditionPanel extends javax.swing.JPanel {
      * @param conditions The full list of conditions.
      * @param index The index of this condition in the list.
      */
-    public FieldConditionPanel(FieldCondition condition, List<FieldCondition> conditions, int index) {
+    public FieldConditionPanel(FieldCondition condition) {
         this.condition = condition;
-        this.conditionList = conditions;
-        this.index = index;
 
         initComponents();
         populateValues();
@@ -127,6 +124,10 @@ public class FieldConditionPanel extends javax.swing.JPanel {
         return text.toString();
     }
 
+    public FieldCondition getCondition() {
+        return condition;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -140,6 +141,7 @@ public class FieldConditionPanel extends javax.swing.JPanel {
         fieldTextField = new javax.swing.JTextField();
         operationComboBox = new javax.swing.JComboBox<Operation>();
         valueTextField = new javax.swing.JTextField();
+        deleteButton = new javax.swing.JButton();
 
         setAlignmentX(LEFT_ALIGNMENT);
 
@@ -183,6 +185,14 @@ public class FieldConditionPanel extends javax.swing.JPanel {
         });
         valueTextField.setColumns(12);
 
+        deleteButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/cancel-14.png"))); // NOI18N
+        deleteButton.setPreferredSize(new java.awt.Dimension(49, 22));
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -195,8 +205,10 @@ public class FieldConditionPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(operationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(valueTextField)
-                .addContainerGap())
+                .addComponent(valueTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,7 +218,8 @@ public class FieldConditionPanel extends javax.swing.JPanel {
                     .addComponent(invertCheckBox)
                     .addComponent(fieldTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(operationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(valueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(valueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -240,11 +253,16 @@ public class FieldConditionPanel extends javax.swing.JPanel {
                 default:
                     throw new AssertionError("Unexpected operation: " + (Operation) operationComboBox.getSelectedItem());
             }
-
-            // Sync it to the category condition list
-            conditionList.set(index, condition);
         }
     }//GEN-LAST:event_operationComboBoxItemStateChanged
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        Container parent = getParent();
+        
+        parent.remove(this);
+        parent.revalidate();
+        parent.repaint();
+    }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void valueTextFieldTextChanged(DocumentEvent e) {
         if (!initializing) {
@@ -262,6 +280,7 @@ public class FieldConditionPanel extends javax.swing.JPanel {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton deleteButton;
     private javax.swing.JTextField fieldTextField;
     private javax.swing.JCheckBox invertCheckBox;
     private javax.swing.JComboBox<Operation> operationComboBox;
