@@ -154,7 +154,7 @@ public class ConditionsDialog extends javax.swing.JDialog {
         testOutputTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION + " - Conditions");
+        setTitle("Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION + " - Filters");
 
         typeHeader.setText("Types");
 

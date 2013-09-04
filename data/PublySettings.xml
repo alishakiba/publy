@@ -36,6 +36,7 @@
         <TypeCondition inverted="false"><![CDATA[inproceedings;conference]]></TypeCondition>
         <fieldConditions>
           <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
+          <FieldContainsCondition inverted="true" field="booktitle"><![CDATA[CCCG;EuroCG]]></FieldContainsCondition>
         </fieldConditions>
       </category>
       <category>
@@ -91,8 +92,17 @@
         <fieldConditions>
         </fieldConditions>
       </category>
+      <category>
+        <shortName><![CDATA[Abstracts]]></shortName>
+        <name><![CDATA[Papers in conferences without refereed proceedings]]></name>
+        <htmlNote><![CDATA[]]></htmlNote>
+        <TypeCondition inverted="false"><![CDATA[inproceedings;conference]]></TypeCondition>
+        <fieldConditions>
+          <FieldContainsCondition inverted="false" field="booktitle"><![CDATA[CCCG;EuroCG]]></FieldContainsCondition>
+        </fieldConditions>
+      </category>
     </allCategories>
-    <activeCategories>0;3;2;1;7;4</activeCategories>
+    <activeCategories>0;3;2;9;1;7;4</activeCategories>
   </categorySettings>
 
   <!-- General settings -->
