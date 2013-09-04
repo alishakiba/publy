@@ -470,6 +470,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
             writeLink(divOpened, link, "DOI");
             divOpened = true;
         }
+        
+        // URL
+        if (item.anyNonEmpty("url")) {
+            String link = item.get("url");
+            writeLink(divOpened, link, "URL");
+            divOpened = true;
+        }
 
         // Other user-specified links
         divOpened = writeCustomLink(divOpened, item, -1); // link
