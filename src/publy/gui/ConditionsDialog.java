@@ -18,18 +18,25 @@ package publy.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Rectangle;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import publy.Console;
+import publy.data.bibitem.BibItem;
 import publy.data.category.OutputCategory;
 import publy.data.category.conditions.FieldCondition;
 import publy.data.category.conditions.FieldContainsCondition;
 import publy.data.category.conditions.FieldEqualsCondition;
 import publy.data.category.conditions.FieldExistsCondition;
 import publy.data.category.conditions.TypeCondition;
+import publy.data.settings.Settings;
+import publy.io.BibTeXParser;
 
 /**
  *
@@ -111,13 +118,13 @@ public class ConditionsDialog extends javax.swing.JDialog {
 
     private List<FieldCondition> getFieldConditions() {
         List<FieldCondition> fieldConditions = new ArrayList<>(fieldConditionsPanel.getComponents().length);
-        
+
         for (Component c : fieldConditionsPanel.getComponents()) {
             if (c instanceof FieldConditionPanel) {
                 fieldConditions.add(((FieldConditionPanel) c).getCondition());
             }
         }
-        
+
         return fieldConditions;
     }
 
@@ -212,6 +219,7 @@ public class ConditionsDialog extends javax.swing.JDialog {
 
         testOutputTextArea.setEditable(false);
         testOutputTextArea.setColumns(20);
+        testOutputTextArea.setLineWrap(true);
         testOutputTextArea.setRows(3);
         testScrollPane.setViewportView(testOutputTextArea);
 
@@ -308,7 +316,66 @@ public class ConditionsDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_typeInvertCheckBoxActionPerformed
 
     private void testButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testButtonActionPerformed
-        // TODO add your handling code here:
+        // Clear the output
+        testOutputTextArea.setText("");
+        
+        // Get the publications list
+        Settings settings = ((MainFrame) SwingUtilities.getRoot(getParent())).getSettings();
+        Path pubList = settings.getFileSettings().getPublications();
+
+        if (pubList == null) {
+            testOutputTextArea.setText("No publication list was set.");
+        } else if (Files.notExists(pubList)) {
+            testOutputTextArea.setText(String.format("No publication list was found at: %s", pubList));
+        } else {
+            // Parse all publications
+            List<BibItem> items = null;
+
+            try {
+                items = BibTeXParser.parseFile(settings.getFileSettings().getPublications());
+            } catch (Exception | AssertionError ex) {
+                testOutputTextArea.setText(String.format("Exception while parsing publications list:%n%s", ex.toString()));
+            }
+
+            if (items != null) {
+                // Find all matching items
+                List<FieldCondition> fieldConditions = getFieldConditions();
+                List<BibItem> matches = new ArrayList<>();
+
+                for (BibItem item : items) {
+                    boolean match = typeCondition.matches(item);
+
+                    for (FieldCondition condition : fieldConditions) {
+                        match = match && condition.matches(item);
+                    }
+
+                    if (match) {
+                        matches.add(item);
+                    }
+                }
+
+                // Print info
+                if (!matches.isEmpty()) {
+                    testOutputTextArea.append("Matching items: ");
+                    
+                    boolean first = true;
+
+                    for (BibItem item : matches) {
+                        if (first) {
+                            first = false;
+                        } else {
+                            testOutputTextArea.append(", ");
+                        }
+                        
+                        testOutputTextArea.append(item.getId());
+                    }
+                    
+                    testOutputTextArea.append(".\n");
+                }
+
+                testOutputTextArea.append(matches.size() + " matches.");
+            }
+        }
     }//GEN-LAST:event_testButtonActionPerformed
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed

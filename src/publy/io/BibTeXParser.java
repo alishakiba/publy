@@ -416,6 +416,22 @@ public class BibTeXParser {
                     item.getAuthors().add(new Author(paperAuthor));
                 }
             }
+            
+            // Update the author field
+            StringBuilder newAuthors = new StringBuilder();
+            boolean first = true;
+            
+            for (Author a : item.getAuthors()) {
+                if (first) {
+                    first = false;
+                } else {
+                    newAuthors.append(" and ");
+                }
+                
+                newAuthors.append(a.getName());
+            }
+            
+            item.put("author", newAuthors.toString());
         }
     }
     
