@@ -17,84 +17,87 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
+              <EmptySpace pref="14" max="32767" attributes="0"/>
+              <Component id="logoLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="14" max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="versionHeader" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="versionSeparator" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="legalHeader" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="legalSeparator" max="32767" attributes="0"/>
+                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="usesLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                              <Component id="jCommanderLink" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                              <Component id="parseCmdLabel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                              <Component id="creativeCommonsLink" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                              <Component id="dotLabel1" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="iconsByLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                              <Component id="iconsLink" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                              <Component id="dotLabel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jCommanderCopyrightLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="aboutHeader" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="aboutSeparator" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="licensedLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                      <Component id="licenseLink" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="copyrightLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
+                              <Component id="versionHeader" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="versionSeparator" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="checkLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                      <Component id="websiteLink" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                      <Component id="newVersionsLabel" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <Component id="runningVersionLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="versionLabel" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="legalHeader" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="legalSeparator" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
                               <Component id="attributionHeader" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="attributionSeparator" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="aboutTextLabel" max="32767" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="logoLabel" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
-                                              <Component id="runningVersionLabel" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="versionLabel" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" attributes="0">
-                                              <Component id="checkLabel" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                              <Component id="websiteLink" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                              <Component id="newVersionsLabel" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="jCommanderCopyrightLabel" min="-2" max="-2" attributes="0"/>
-                                          <Group type="102" attributes="0">
-                                              <Component id="usesLabel" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                              <Component id="jCommanderLink" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                              <Component id="parseCmdLabel" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="iconsByLabel" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                              <Component id="iconsLink" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                              <Component id="dotLabel" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="copyrightLabel" min="-2" max="-2" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="licensedLabel" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                              <Component id="licenseLink" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                              <Component id="openBracketLabel" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                              <Component id="tldrLegalLink" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                              <Component id="closeBracketLabel" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -107,24 +110,14 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="aboutHeader" min="-2" max="-2" attributes="0"/>
-                  <Component id="aboutSeparator" min="-2" pref="7" max="-2" attributes="0"/>
-              </Group>
+              <Component id="logoLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="aboutTextLabel" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                      <Component id="logoLabel" min="-2" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="versionHeader" min="-2" max="-2" attributes="0"/>
-                  <Component id="versionSeparator" min="-2" pref="7" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                      <Component id="versionSeparator" min="-2" pref="7" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -134,8 +127,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="checkLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="websiteLink" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="newVersionsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="websiteLink" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
@@ -148,9 +141,6 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="licensedLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="licenseLink" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="openBracketLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="tldrLegalLink" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="closeBracketLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
@@ -160,20 +150,24 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="usesLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jCommanderLink" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="parseCmdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jCommanderLink" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jCommanderCopyrightLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="iconsByLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="iconsLink" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="dotLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="iconsLink" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="66" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="creativeCommonsLink" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="dotLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -182,20 +176,8 @@
     <Component class="javax.swing.JLabel" name="logoLabel">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/publy/gui/resources/logo-100.png"/>
+          <Image iconType="3" name="/publy/gui/resources/logo.png"/>
         </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="aboutHeader">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="About Publy"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JSeparator" name="aboutSeparator">
-    </Component>
-    <Component class="javax.swing.JLabel" name="aboutTextLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;p&gt;Publy is ...&lt;/p&gt;&lt;/html&gt;"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="versionHeader">
@@ -220,11 +202,6 @@
         <Property name="text" type="java.lang.String" value="Check "/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="websiteLink">
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LinkLabel(&quot;the website&quot;, &quot;https://bitbucket.org/Mangara/publy/downloads&quot;)"/>
-      </AuxValues>
-    </Component>
     <Component class="javax.swing.JLabel" name="newVersionsLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value=" for updates."/>
@@ -239,32 +216,12 @@
     </Component>
     <Component class="javax.swing.JLabel" name="copyrightLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Copyright &#xa9; 2013 Sander Verdonschot"/>
+        <Property name="text" type="java.lang.String" value="Copyright &#xa9; 2013 Sander Verdonschot."/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="licensedLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Licensed under the "/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="licenseLink">
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LinkLabel(&quot;Apache License, Version 2.0&quot;, &quot;http://www.apache.org/licenses/LICENSE-2.0&quot;)"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="openBracketLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" value=" ( "/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="tldrLegalLink">
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LinkLabel(&quot;Summary&quot;, &quot;http://www.tldrlegal.com/license/apache-license-2.0-(apache-2.0)&quot;)"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="closeBracketLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" value=" )"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="runningVersionLabel">
@@ -284,11 +241,6 @@
         <Property name="text" type="java.lang.String" value="Publy uses "/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jCommanderLink">
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LinkLabel(&quot;JCommander&quot;, &quot;http://jcommander.org/&quot;)"/>
-      </AuxValues>
-    </Component>
     <Component class="javax.swing.JLabel" name="parseCmdLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value=" to parse command-line arguments."/>
@@ -304,11 +256,6 @@
         <Property name="text" type="java.lang.String" value="The icons used in the GUI  are designed by "/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="iconsLink">
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LinkLabel(&quot;VisualPharm&quot;, &quot;http://www.visualpharm.com/&quot;)"/>
-      </AuxValues>
-    </Component>
     <Component class="javax.swing.JLabel" name="dotLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="."/>
@@ -317,6 +264,36 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="text" type="java.lang.String" value="Used under a "/>
+      </Properties>
+    </Component>
+    <Component class="publy.gui.LinkLabel" name="websiteLink">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new publy.gui.LinkLabel(&quot;the website&quot;, &quot;https://bitbucket.org/Mangara/publy/downloads&quot;)"/>
+      </AuxValues>
+    </Component>
+    <Component class="publy.gui.LinkLabel" name="licenseLink">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new publy.gui.LinkLabel(&quot;Apache License, Version 2.0&quot;, &quot;http://www.apache.org/licenses/LICENSE-2.0&quot;)"/>
+      </AuxValues>
+    </Component>
+    <Component class="publy.gui.LinkLabel" name="iconsLink">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new publy.gui.LinkLabel(&quot;VisualPharm&quot;, &quot;http://www.visualpharm.com/&quot;)"/>
+      </AuxValues>
+    </Component>
+    <Component class="publy.gui.LinkLabel" name="jCommanderLink">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new publy.gui.LinkLabel(&quot;JCommander&quot;, &quot;http://jcommander.org/&quot;)"/>
+      </AuxValues>
+    </Component>
+    <Component class="publy.gui.LinkLabel" name="creativeCommonsLink">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new publy.gui.LinkLabel(&quot;Creative Commons BY-ND 3.0 license&quot;, &quot;http://creativecommons.org/licenses/by-nd/3.0/&quot;)"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="dotLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="."/>
       </Properties>
     </Component>
   </SubComponents>
