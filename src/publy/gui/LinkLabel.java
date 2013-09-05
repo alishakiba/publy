@@ -24,6 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import publy.Console;
 
@@ -40,6 +41,13 @@ public class LinkLabel extends JLabel {
     private String text;
     private URI uri;
 
+    /**
+     * For usage in the GUI editor
+     */
+    public LinkLabel() {
+        super("link", new javax.swing.ImageIcon(LinkLabel.class.getResource("/publy/gui/resources/BlueGlobe-12.png")), SwingConstants.LEADING);
+    }
+
     public LinkLabel(String text, String uri) {
         super();
 
@@ -48,7 +56,7 @@ public class LinkLabel extends JLabel {
             styleAsLink();
             makeClickable();
         } else {
-            setText(uri.toString());
+            setText(text + " (" + uri.toString() + ")");
         }
     }
 
