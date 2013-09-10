@@ -569,7 +569,6 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                     n = Math.max(n, i + 1);
                 } catch (NumberFormatException e) {
                     // The name doesn't collide, we're fine
-                    System.out.println("No collision with name: \"" + c.getShortName() + "\"");
                 }
             }
         }
