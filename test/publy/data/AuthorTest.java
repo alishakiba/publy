@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.GeneralSettings;
 
 /**
  *
@@ -136,7 +136,7 @@ public class AuthorTest {
         for (String name : expected.keySet()) {
             Author a = new Author(name);
 
-            assertEquals(name + " - ", expected.get(name), a.getFormattedName(FormatSettings.NameDisplay.FULL, false));
+            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.NameDisplay.FULL, false));
         }
     }
     
@@ -194,7 +194,7 @@ public class AuthorTest {
         for (String name : expected.keySet()) {
             Author a = new Author(name);
 
-            assertEquals(name + " - ", expected.get(name), a.getFormattedName(FormatSettings.NameDisplay.FULL, true));
+            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.NameDisplay.FULL, true));
         }
     }
     
@@ -253,8 +253,8 @@ public class AuthorTest {
             Author a = new Author(name);
 
             // Reversed doesn't matter
-            assertEquals(name + " - ", expected.get(name), a.getFormattedName(FormatSettings.NameDisplay.NONE, false));
-            assertEquals(name + " reversed - ", expected.get(name), a.getFormattedName(FormatSettings.NameDisplay.NONE, true));
+            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.NameDisplay.NONE, false));
+            assertEquals(name + " reversed - ", expected.get(name), a.getFormattedName(GeneralSettings.NameDisplay.NONE, true));
         }
     }
     
@@ -315,7 +315,7 @@ public class AuthorTest {
         for (String name : expected.keySet()) {
             Author a = new Author(name);
 
-            assertEquals(name + " - ", expected.get(name), a.getFormattedName(FormatSettings.NameDisplay.ABBREVIATED, false));
+            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.NameDisplay.ABBREVIATED, false));
         }
     }
     
@@ -376,7 +376,7 @@ public class AuthorTest {
         for (String name : expected.keySet()) {
             Author a = new Author(name);
 
-            assertEquals(name + " - ", expected.get(name), a.getFormattedName(FormatSettings.NameDisplay.ABBREVIATED, true));
+            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.NameDisplay.ABBREVIATED, true));
         }
     }
 }

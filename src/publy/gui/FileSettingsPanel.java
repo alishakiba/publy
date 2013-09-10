@@ -1,15 +1,27 @@
 /*
+ * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package publy.gui;
 
-import java.awt.Color;
 import java.nio.file.Path;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import publy.data.settings.Settings;
+import publy.data.settings.FileSettings;
 import publy.io.ResourceLocator;
 
 /**
@@ -18,19 +30,21 @@ import publy.io.ResourceLocator;
  */
 public class FileSettingsPanel extends javax.swing.JPanel {
 
-    private Settings settings;
+    private FileSettings settings;
 
     /**
      * Empty constructor, for use in the NetBeans GUI editor.
      */
     public FileSettingsPanel() {
+        // Don't initialize settings, as NetBeans will error on ResourceLocator
         initComponents();
+        applyStyles();
     }
 
     /**
      * Creates new form FileSettingsPanel
      */
-    public FileSettingsPanel(Settings settings) {
+    public FileSettingsPanel(FileSettings settings) {
         this.settings = settings;
         initComponents();
         applyStyles();
@@ -46,11 +60,11 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         updateField(pubTextField, pubFileChooser, settings.getPublications(), true);
 
         // Target
-        updateField(targetTextField, targetFileChooser, settings.getGeneralSettings().getTarget(), true);
+        updateField(targetTextField, targetFileChooser, settings.getTarget(), true);
 
         // Header and Footer
-        updateField(headerTextField, headerFileChooser, settings.getHtmlSettings().getHeader(), false);
-        updateField(footerTextField, footerFileChooser, settings.getHtmlSettings().getFooter(), false);
+        updateField(headerTextField, headerFileChooser, settings.getHeader(), false);
+        updateField(footerTextField, footerFileChooser, settings.getFooter(), false);
     }
 
     /**
@@ -277,7 +291,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             pubTextField.setText(ResourceLocator.getRelativePath(selected));
             settings.setPublications(selected);
 
-            if (settings.getGeneralSettings().getTarget() == null) {
+            if (settings.getTarget() == null) {
                 // Extract the base name
                 String baseName = pubFileChooser.getSelectedFile().getName();
                 int extension = baseName.lastIndexOf('.');
@@ -287,10 +301,10 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                 }
 
                 // Set an initial target
-                settings.getGeneralSettings().setTarget(selected.resolveSibling(baseName + ".html"));
+                settings.setTarget(selected.resolveSibling(baseName + ".html"));
 
                 // Update the GUI
-                updateField(targetTextField, targetFileChooser, settings.getGeneralSettings().getTarget(), true);
+                updateField(targetTextField, targetFileChooser, settings.getTarget(), true);
             }
         }
     }//GEN-LAST:event_pubBrowseButtonActionPerformed
@@ -309,7 +323,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
 
     private void targetTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
-        settings.getGeneralSettings().setTarget(ResourceLocator.getFullPath(targetTextField.getText()));
+        settings.setTarget(ResourceLocator.getFullPath(targetTextField.getText()));
         
         // Remove the error background?
         if (targetTextField.getText().isEmpty()) {
@@ -321,12 +335,12 @@ public class FileSettingsPanel extends javax.swing.JPanel {
 
     private void headerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
-        settings.getHtmlSettings().setHeader(ResourceLocator.getFullPath(headerTextField.getText()));
+        settings.setHeader(ResourceLocator.getFullPath(headerTextField.getText()));
     }
 
     private void footerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
-        settings.getHtmlSettings().setFooter(ResourceLocator.getFullPath(footerTextField.getText()));
+        settings.setFooter(ResourceLocator.getFullPath(footerTextField.getText()));
     }
 
     private void targetBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_targetBrowseButtonActionPerformed

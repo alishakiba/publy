@@ -1,11 +1,21 @@
 /*
+ * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package publy.gui;
 
 import java.awt.Cursor;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.net.URL;
 import publy.Console;
 import publy.Publy;
 import publy.data.settings.Settings;
@@ -29,6 +39,13 @@ public class MainFrame extends javax.swing.JFrame {
 
         // Make sure all console output from the generation is redirected to the text area.
         Console.setOutputTarget(consoleTextPane);
+        
+        // Make sure the console reads from the correct settings object
+        Console.setSettings(settings.getConsoleSettings());
+    }
+
+    public Settings getSettings() {
+        return settings;
     }
 
     /**
@@ -42,10 +59,12 @@ public class MainFrame extends javax.swing.JFrame {
 
         mainSplitPane = new javax.swing.JSplitPane();
         settingsTabbedPane = new javax.swing.JTabbedPane();
-        fileSettingsPanel = new publy.gui.FileSettingsPanel(settings);
-        categorySettingsPanel = new publy.gui.CategorySettingsPanel(settings.getGeneralSettings());
+        fileSettingsPanel = new publy.gui.FileSettingsPanel(settings.getFileSettings());
+        categorySettingsPanel = new publy.gui.CategorySettingsPanel(settings.getCategorySettings());
         generalSettingsPanel = new publy.gui.GeneralSettingsPanel(settings.getGeneralSettings());
         htmlSettingsPanel = new publy.gui.HTMLSettingsPanel(settings.getHtmlSettings());
+        consoleSettingsPanel = new publy.gui.ConsoleSettingsPanel(settings.getConsoleSettings());
+        aboutPanel = new publy.gui.AboutPanel();
         bottomPanel = new javax.swing.JPanel();
         buttonPanel = new javax.swing.JPanel();
         generateButton = new javax.swing.JButton();
@@ -57,15 +76,19 @@ public class MainFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION);
         setIconImages(UIConstants.PUBLY_ICONS);
+        setPreferredSize(new java.awt.Dimension(450, 720));
 
         mainSplitPane.setDividerLocation(getHeight() - 150);
         mainSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         mainSplitPane.setResizeWeight(1.0);
 
-        settingsTabbedPane.addTab("Files", fileSettingsPanel);
-        settingsTabbedPane.addTab("Categories", categorySettingsPanel);
-        settingsTabbedPane.addTab("General", generalSettingsPanel);
-        settingsTabbedPane.addTab("HTML", htmlSettingsPanel);
+        settingsTabbedPane.setFont(settingsTabbedPane.getFont().deriveFont(settingsTabbedPane.getFont().getSize2D() + 2));
+        settingsTabbedPane.addTab("Files", new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/folder-16.png")), fileSettingsPanel); // NOI18N
+        settingsTabbedPane.addTab("Categories", new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/puzzle-16.png")), categorySettingsPanel); // NOI18N
+        settingsTabbedPane.addTab("General", new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/document-16.png")), generalSettingsPanel); // NOI18N
+        settingsTabbedPane.addTab("HTML", new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/globe-16.png")), htmlSettingsPanel); // NOI18N
+        settingsTabbedPane.addTab("Console", new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/console-16.png")), consoleSettingsPanel); // NOI18N
+        settingsTabbedPane.addTab("About", new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/about-16.png")), aboutPanel); // NOI18N
 
         mainSplitPane.setTopComponent(settingsTabbedPane);
 
@@ -171,11 +194,13 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private publy.gui.AboutPanel aboutPanel;
     private javax.swing.JPanel bottomPanel;
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
     private publy.gui.CategorySettingsPanel categorySettingsPanel;
     private javax.swing.JScrollPane consoleScrollPane;
+    private publy.gui.ConsoleSettingsPanel consoleSettingsPanel;
     private javax.swing.JTextPane consoleTextPane;
     private publy.gui.FileSettingsPanel fileSettingsPanel;
     private publy.gui.GeneralSettingsPanel generalSettingsPanel;

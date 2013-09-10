@@ -1,6 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package publy.io.plain;
 
@@ -15,7 +26,7 @@ import publy.data.bibitem.InvitedTalk;
 import publy.data.bibitem.MastersThesis;
 import publy.data.bibitem.PhDThesis;
 import publy.data.bibitem.Unpublished;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.Settings;
 import publy.io.BibItemWriter;
 
 /**
@@ -24,7 +35,7 @@ import publy.io.BibItemWriter;
  */
 public class PlainBibItemWriter extends BibItemWriter {
 
-    public PlainBibItemWriter(BufferedWriter out, FormatSettings settings) {
+    public PlainBibItemWriter(BufferedWriter out, Settings settings) {
         super(out, settings);
     }
 
@@ -128,12 +139,12 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     private void writeTitleAndAuthors(BibItem item) throws IOException {
-        if (settings.isTitleFirst()) {
+        if (settings.getGeneralSettings().titleFirst()) {
             output(formatTitle(item), ".", true);
         }
 
         // Don't add an authors line if it's just me and I just want to list co-authors
-        if (settings.isListAllAuthors() || item.getAuthors().size() > 1) {
+        if (settings.getGeneralSettings().listAllAuthors() || item.getAuthors().size() > 1) {
             String authors = formatAuthors(item);
 
             if (authors.endsWith(".")) {
@@ -144,7 +155,7 @@ public class PlainBibItemWriter extends BibItemWriter {
             }
         }
 
-        if (!settings.isTitleFirst()) {
+        if (!settings.getGeneralSettings().titleFirst()) {
             output(formatTitle(item), ".", true);
         }
     }

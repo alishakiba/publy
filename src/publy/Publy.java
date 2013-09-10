@@ -1,6 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package publy;
 
@@ -59,11 +70,6 @@ public class Publy {
         } else if (arguments.isVersion()) {
             printVersionInfo();
         } else {
-            // Apply output settings
-            Console.setPrintLog(!arguments.isSilent());
-            Console.setPrintWarning(!arguments.isHidewarnings());
-            Console.setPrintStacktrace(arguments.isDebug());
-
             readSettings(arguments.getConfig());
 
             if (arguments.isGui()) {
@@ -108,8 +114,8 @@ public class Publy {
             applyCommandlineOverwites(arguments);
 
             // Basic checks, give the user a chance to fix issues instead of simply throwing an error
-            Path pubList = settings.getPublications();
-            Path target = settings.getGeneralSettings().getTarget();
+            Path pubList = settings.getFileSettings().getPublications();
+            Path target = settings.getFileSettings().getTarget();
 
             if (pubList == null || target == null) {
                 showSettings = true;
@@ -186,13 +192,29 @@ public class Publy {
     }
 
     private static void applyCommandlineOverwites(CommandLineArguments arguments) {
+        // File settings
         if (arguments.getInput() != null && !arguments.getInput().isEmpty()) {
-            settings.setPublications(ResourceLocator.getFullPath(arguments.getInput()));
+            settings.getFileSettings().setPublications(ResourceLocator.getFullPath(arguments.getInput()));
         }
 
         if (arguments.getOutput() != null && !arguments.getOutput().isEmpty()) {
-            settings.getGeneralSettings().setTarget(ResourceLocator.getFullPath(arguments.getOutput()));
+            settings.getFileSettings().setTarget(ResourceLocator.getFullPath(arguments.getOutput()));
         }
+
+        // Console settings
+        if (arguments.isSilent()) {
+            settings.getConsoleSettings().setShowLogs(false);
+        }
+        
+        if (arguments.isHidewarnings()) {
+            settings.getConsoleSettings().setShowWarnings(false);
+        }
+        
+        if (arguments.isDebug()) {
+            settings.getConsoleSettings().setShowStackTraces(true);
+        }
+        
+        Console.setSettings(settings.getConsoleSettings());
     }
 
     private static void launchGUI() {
@@ -217,29 +239,29 @@ public class Publy {
 
     public static void generatePublicationList(Settings settings) {
         // Check if the publication list is set and exists
-        Path pubList = settings.getPublications();
+        Path pubList = settings.getFileSettings().getPublications();
 
         if (pubList == null) {
             Console.error("No publication list was set.");
         } else if (Files.notExists(pubList)) {
             Console.error("No publication list was found at: %s", pubList);
-        } else if (settings.getGeneralSettings().getTarget() == null) {
+        } else if (settings.getFileSettings().getTarget() == null) {
             Console.error("No output file was set.");
         } else {
             // Parse all publications
             List<BibItem> items = null;
 
             try {
-                items = BibTeXParser.parseFile(settings.getPublications());
-                Console.log("Publications list \"%s\" parsed successfully.", settings.getPublications().getFileName());
+                items = BibTeXParser.parseFile(settings.getFileSettings().getPublications());
+                Console.log("Publications list \"%s\" parsed successfully.", settings.getFileSettings().getPublications().getFileName());
             } catch (Exception | AssertionError ex) {
                 Console.except(ex, "Exception while parsing publications list:");
             }
 
             if (items != null && settings.getHtmlSettings().generateTextVersion()) {
                 try {
-                    PublicationListWriter writer = new PlainPublicationListWriter(settings.getGeneralSettings());
-                    writer.writePublicationList(items, settings.getGeneralSettings().getPlainTextTarget());
+                    PublicationListWriter writer = new PlainPublicationListWriter(settings);
+                    writer.writePublicationList(items, settings.getFileSettings().getPlainTextTarget());
                     Console.log("Plain text publication list written successfully.");
                 } catch (Exception | AssertionError ex) {
                     Console.except(ex, "Exception while writing plain text publication list:");
@@ -248,8 +270,8 @@ public class Publy {
 
             if (items != null && settings.getHtmlSettings().generateBibtexVersion()) {
                 try {
-                    PublicationListWriter writer = new BibtexPublicationListWriter(settings.getGeneralSettings());
-                    writer.writePublicationList(items, settings.getGeneralSettings().getBibtexTarget());
+                    PublicationListWriter writer = new BibtexPublicationListWriter(settings);
+                    writer.writePublicationList(items, settings.getFileSettings().getBibtexTarget());
                     Console.log("BibTeX publication list written successfully.");
                 } catch (Exception | AssertionError ex) {
                     Console.except(ex, "Exception while writing BibTeX publication list:");
@@ -258,8 +280,8 @@ public class Publy {
 
             if (items != null) {
                 try {
-                    PublicationListWriter writer = new HTMLPublicationListWriter(settings.getGeneralSettings(), settings.getHtmlSettings());
-                    writer.writePublicationList(items, settings.getGeneralSettings().getTarget());
+                    PublicationListWriter writer = new HTMLPublicationListWriter(settings);
+                    writer.writePublicationList(items, settings.getFileSettings().getTarget());
                     Console.log("HTML publication list written successfully.");
                 } catch (Exception | AssertionError ex) {
                     Console.except(ex, "Exception while writing HTML publication list:");

@@ -1,6 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package publy.io.html;
 
@@ -24,8 +35,9 @@ import publy.data.bibitem.InvitedTalk;
 import publy.data.bibitem.MastersThesis;
 import publy.data.bibitem.PhDThesis;
 import publy.data.bibitem.Unpublished;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.GeneralSettings;
 import publy.data.settings.HTMLSettings;
+import publy.data.settings.Settings;
 import publy.io.BibItemWriter;
 
 /**
@@ -34,12 +46,10 @@ import publy.io.BibItemWriter;
  */
 public class HTMLBibItemWriter extends BibItemWriter {
 
-    private HTMLSettings htmlSettings;
     private static final String indent = "          ";
 
-    public HTMLBibItemWriter(BufferedWriter out, FormatSettings settings, HTMLSettings htmlSettings) {
+    public HTMLBibItemWriter(BufferedWriter out, Settings settings) {
         super(out, settings);
-        this.htmlSettings = htmlSettings;
     }
 
     @Override
@@ -163,12 +173,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeTitleAndAuthorsHTML(BibItem item) throws IOException {
-        if (settings.isTitleFirst()) {
+        if (settings.getGeneralSettings().titleFirst()) {
             writeTitleAndAbstractHTML(item);
         }
 
         // Don't add an authors line if it's just me and I just want to list co-authors
-        if (settings.isListAllAuthors() || item.getAuthors().size() > 1 || (item.getAuthors().size() == 1 && !item.getAuthors().get(0).isMe(settings.getMyNames(), settings.getNameDisplay(), settings.isReverseNames()))) {
+        if (settings.getGeneralSettings().listAllAuthors() || item.getAuthors().size() > 1 || (item.getAuthors().size() == 1 && !item.getAuthors().get(0).isMe(settings.getGeneralSettings().getMyNames(), settings.getGeneralSettings().getNameDisplay(), settings.getGeneralSettings().reverseNames()))) {
             String authors = formatAuthors(item);
 
             if (authors.endsWith(".</span>") || authors.endsWith(".</a>")) {
@@ -179,7 +189,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             }
         }
 
-        if (!settings.isTitleFirst()) {
+        if (!settings.getGeneralSettings().titleFirst()) {
             writeTitleAndAbstractHTML(item);
         }
     }
@@ -188,9 +198,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write(indent);
 
         // Title
-        if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
+        if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
             output("<h3 class=\"title abstract-toggle\">", formatTitle(item), "</h3>");
-        } else if (htmlSettings.getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && includePaper(item)) {
+        } else if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && includePaper(item)) {
             try {
                 String href = (new URI(null, null, item.get("paper"), null)).toString();
 
@@ -208,13 +218,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Add text if I presented this paper
         if ("yes".equals(item.get("presented"))) {
-            output(" ", htmlSettings.getPresentedText(), "");
+            output(" ", settings.getHtmlSettings().getPresentedText(), "");
         }
 
         // Abstract if included
         if (includeAbstract(item)) {
             // Show \ hide link for the abstract
-            if (htmlSettings.getTitleTarget() != HTMLSettings.TitleLinkTarget.ABSTRACT) {
+            if (settings.getHtmlSettings().getTitleTarget() != HTMLSettings.TitleLinkTarget.ABSTRACT) {
                 out.newLine();
                 writeToggleLink("abstract", "Abstract");
             }
@@ -246,22 +256,23 @@ public class HTMLBibItemWriter extends BibItemWriter {
             return "";
         } else {
             List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
+            GeneralSettings gs = settings.getGeneralSettings();
 
             for (Author a : item.getAuthors()) {
                 if (a == null) {
                     Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), author);
                 } else {
-                    if (settings.isListAllAuthors() || !a.isMe(settings.getMyNames(), settings.getNameDisplay(), settings.isReverseNames())) {
-                        authorLinks.add(a.getLinkedAndFormattedHtmlName(settings.getNameDisplay(), settings.isReverseNames()));
+                    if (gs.listAllAuthors() || !a.isMe(gs.getMyNames(), gs.getNameDisplay(), gs.reverseNames())) {
+                        authorLinks.add(a.getLinkedAndFormattedHtmlName(gs.getNameDisplay(), gs.reverseNames()));
                     }
                 }
             }
 
-            if (settings.isListAllAuthors()) {
+            if (gs.listAllAuthors()) {
                 return formatNames(authorLinks);
             } else {
                 if (authorLinks.size() == item.getAuthors().size()) {
-                    Console.warn("None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
+                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
 
                     return formatNames(authorLinks);
                 } else {
@@ -413,7 +424,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         boolean divOpened = false;
         
         // Paper link
-        if (includePaper(item) && htmlSettings.getTitleTarget() != HTMLSettings.TitleLinkTarget.PAPER) {
+        if (includePaper(item) && settings.getHtmlSettings().getTitleTarget() != HTMLSettings.TitleLinkTarget.PAPER) {
             try {
                 String link = (new URI(null, null, item.get("paper"), null)).toString();
                 String text;
@@ -449,7 +460,28 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // DOI link
         if (item.anyNonEmpty("doi")) {
-            writeLink(divOpened, "http://dx.doi.org/" + item.get("doi"), "DOI");
+            String link = item.get("doi");
+            
+            // Add the general DOI part if necessary 
+            if (!link.startsWith("http://dx.doi.org/")) {
+                link = "http://dx.doi.org/" + link;
+            }
+            
+            writeLink(divOpened, link, "DOI");
+            divOpened = true;
+        }
+        
+        // ISBN link
+        if (item.anyNonEmpty("isbn")) {
+            String link = "http://www.worldcat.org/isbn/" + item.get("isbn");
+            writeLink(divOpened, link, "ISBN");
+            divOpened = true;
+        }
+        
+        // URL link
+        if (item.anyNonEmpty("url")) {
+            String link = item.get("url");
+            writeLink(divOpened, link, "URL");
             divOpened = true;
         }
 
@@ -513,8 +545,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 } else {
                     // Most likely link to a file on disk. Encode correctly.
                     try {
-                        target = (new URI(null, null, target, null)).toString();
                         checkExistance(target, attribute, item);
+                        target = (new URI(null, null, target, null)).toString();
                     } catch (URISyntaxException ex) {
                         Console.except(ex, "Could not parse the target of %s of item \"%s\":", attribute, item.getId());
                     }
@@ -659,22 +691,22 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private boolean includeAbstract(BibItem item) {
-        return item.anyNonEmpty("abstract") && htmlSettings.getIncludeAbstract().matches(item);
+        return item.anyNonEmpty("abstract") && settings.getHtmlSettings().getIncludeAbstract().matches(item);
     }
 
     private boolean includeBibtex(BibItem item) {
-        return htmlSettings.getIncludeBibtex().matches(item);
+        return settings.getHtmlSettings().getIncludeBibtex().matches(item);
     }
 
     private boolean includePaper(BibItem item) {
-        return item.anyNonEmpty("paper") && htmlSettings.getIncludePaper().matches(item);
+        return item.anyNonEmpty("paper") && settings.getHtmlSettings().getIncludePaper().matches(item);
     }
 
     private void checkExistance(String path, String attr, BibItem item) {
-        Path file = settings.getTarget().resolveSibling(path);
+        Path file = settings.getFileSettings().getTarget().resolveSibling(path);
 
         if (Files.notExists(file)) {
-            Console.warn("The file \"%s\" that is linked in attribute \"%s\" of publication \"%s\" cannot be found at \"%s\".", path, attr, item.getId(), file);
+            Console.warn(Console.WarningType.MISSING_REFERENCE, "The file \"%s\" that is linked in attribute \"%s\" of publication \"%s\" cannot be found at \"%s\".", path, attr, item.getId(), file);
         }
     }
 }

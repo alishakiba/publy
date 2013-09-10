@@ -1,6 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package publy.io;
 
@@ -19,7 +30,8 @@ import publy.data.bibitem.InvitedTalk;
 import publy.data.bibitem.MastersThesis;
 import publy.data.bibitem.PhDThesis;
 import publy.data.bibitem.Unpublished;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.GeneralSettings;
+import publy.data.settings.Settings;
 
 /**
  *
@@ -28,9 +40,9 @@ import publy.data.settings.FormatSettings;
 public abstract class BibItemWriter {
 
     protected BufferedWriter out;
-    protected FormatSettings settings;
+    protected Settings settings;
 
-    public BibItemWriter(BufferedWriter out, FormatSettings settings) {
+    public BibItemWriter(BufferedWriter out, Settings settings) {
         this.out = out;
         this.settings = settings;
     }
@@ -94,28 +106,29 @@ public abstract class BibItemWriter {
 
     protected String formatAuthors(BibItem item) {
         String author = item.get("author");
-
+        
         if (author == null) {
             Console.error("No authors found for entry \"%s\".", item.getId());
             return "";
         } else {
             List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
+            GeneralSettings gs = settings.getGeneralSettings();
 
             for (Author a : item.getAuthors()) {
                 if (a == null) {
                     Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), author);
                 } else {
-                    if (settings.isListAllAuthors() || !a.isMe(settings.getMyNames(), settings.getNameDisplay(), settings.isReverseNames())) {
-                        authorLinks.add(a.getFormattedName(settings.getNameDisplay(), settings.isReverseNames()));
+                    if (gs.listAllAuthors() || !a.isMe(gs.getMyNames(), gs.getNameDisplay(), gs.reverseNames())) {
+                        authorLinks.add(a.getFormattedName(gs.getNameDisplay(), gs.reverseNames()));
                     }
                 }
             }
 
-            if (settings.isListAllAuthors()) {
+            if (gs.listAllAuthors()) {
                 return formatNames(authorLinks);
             } else {
                 if (authorLinks.size() == item.getAuthors().size()) {
-                    Console.warn("None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
+                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
 
                     return formatNames(authorLinks);
                 } else {
