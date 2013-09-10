@@ -29,7 +29,7 @@ import java.util.List;
 public class UIConstants {
 
     public static final int MAJOR_VERSION = 0;
-    public static final int MINOR_VERSION = 5;
+    public static final int MINOR_VERSION = 6;
     public static final List<Image> PUBLY_ICONS; // Initialized in the static block
     public static final Image PUBLY_LOGO; // Initialized in the static block
     public static final Color TEXTFIELD_ERROR_COLOR = new Color(255, 210, 210);
