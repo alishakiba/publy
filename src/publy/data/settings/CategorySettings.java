@@ -75,7 +75,7 @@ public class CategorySettings {
     }
 
     public void setAllCategories(List<OutputCategory> allCategories) {
-        this.allCategories = allCategories;
+        this.allCategories = new ArrayList<>(allCategories);
     }
 
     /**
@@ -104,7 +104,7 @@ public class CategorySettings {
     }
 
     public void setActiveCategories(List<OutputCategory> activeCategories) {
-        this.activeCategories = activeCategories;
+        this.activeCategories = new ArrayList<>(activeCategories);
     }
 
     /**
