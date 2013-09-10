@@ -1,20 +1,30 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package publy.data.settings;
-
-import java.nio.file.Path;
 
 /**
  *
  * @author Sander
  */
 public class Settings {
-
-    private Path publications;
+    private FileSettings fileSettings;
+    private CategorySettings categorySettings;
+    private GeneralSettings generalSettings;
     private HTMLSettings htmlSettings;
-    private FormatSettings generalSettings;
+    private ConsoleSettings consoleSettings;
 
     /**
      * Creates a new empty Settings object.
@@ -22,9 +32,11 @@ public class Settings {
      * @param publications
      */
     public Settings() {
-        publications = null;
+        fileSettings = new FileSettings();
+        categorySettings = new CategorySettings();
         htmlSettings = new HTMLSettings();
-        generalSettings = new FormatSettings();
+        generalSettings = new GeneralSettings();
+        consoleSettings = new ConsoleSettings();
     }
     
     /**
@@ -34,24 +46,28 @@ public class Settings {
     public static Settings defaultSettings() {
         Settings result = new Settings();
         
-        result.generalSettings = FormatSettings.defaultSettings();
+        result.categorySettings = CategorySettings.defaultSettings();
         
         return result;
     }
 
-    public Path getPublications() {
-        return publications;
+    public FileSettings getFileSettings() {
+        return fileSettings;
+    }
+
+    public CategorySettings getCategorySettings() {
+        return categorySettings;
+    }
+
+    public GeneralSettings getGeneralSettings() {
+        return generalSettings;
     }
 
     public HTMLSettings getHtmlSettings() {
         return htmlSettings;
     }
 
-    public FormatSettings getGeneralSettings() {
-        return generalSettings;
-    }
-
-    public void setPublications(Path publications) {
-        this.publications = publications;
+    public ConsoleSettings getConsoleSettings() {
+        return consoleSettings;
     }
 }

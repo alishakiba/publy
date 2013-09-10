@@ -1,4 +1,17 @@
 /*
+ * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package publy;
 
@@ -9,6 +22,7 @@ import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import publy.data.settings.ConsoleSettings;
 import publy.gui.ConsoleFrame;
 
 /**
@@ -17,12 +31,14 @@ import publy.gui.ConsoleFrame;
  */
 public class Console {
 
+    public enum WarningType {
+        MISSING_REFERENCE, NOT_AUTHORED_BY_USER, OTHER;
+    }
+    
     private static final SimpleAttributeSet logAttributes;
     private static final SimpleAttributeSet warnAttributes;
     private static final SimpleAttributeSet errorAttributes;
-    private static boolean printStacktrace = false;
-    private static boolean printWarning = true;
-    private static boolean printLog = true;
+    private static ConsoleSettings settings = new ConsoleSettings();
     private static JTextPane textPane = null; // A styled text area to log to, if the program was invoked without an attached console
 
     // Static font initialization
@@ -42,7 +58,7 @@ public class Console {
     }
 
     public static void log(String format, Object... args) {
-        if (printLog) {
+        if (settings.isShowLogs()) {
             if (textPane == null) {
                 if (System.console() == null) {
                     createConsoleFrame();
@@ -64,8 +80,8 @@ public class Console {
         }
     }
 
-    public static void warn(String format, Object... args) {
-        if (printWarning) {
+    public static void warn(WarningType type, String format, Object... args) {
+        if (showWarnings(type)) {
             if (textPane == null) {
                 if (System.console() == null) {
                     createConsoleFrame();
@@ -111,7 +127,7 @@ public class Console {
     public static void except(Throwable exception, String format, Object... args) {
         String exceptionText;
 
-        if (printStacktrace) {
+        if (settings.isShowStackTraces()) {
             StringWriter stackTrace = new StringWriter();
             exception.printStackTrace(new PrintWriter(stackTrace));
             exceptionText = stackTrace.toString();
@@ -140,6 +156,23 @@ public class Console {
             }
         }
     }
+    
+    private static boolean showWarnings(WarningType type) {
+        if (settings.isShowWarnings()) {
+            switch (type) {
+                case MISSING_REFERENCE:
+                    return settings.isWarnMissingReferences();
+                case NOT_AUTHORED_BY_USER:
+                    return settings.isWarnNotAuthor();
+                case OTHER:
+                    return true;
+                default:
+                    throw new AssertionError("Unexpected warning type: " + type);
+            }
+        } else {
+            return false;
+        }
+    }
 
     public static void setOutputTarget(JTextPane textPane) {
         if (Console.textPane != null) {
@@ -156,27 +189,11 @@ public class Console {
         consoleFrame.setVisible(true);
     }
 
-    public static boolean isPrintStacktrace() {
-        return printStacktrace;
+    public static ConsoleSettings getSettings() {
+        return settings;
     }
 
-    public static void setPrintStacktrace(boolean printStacktrace) {
-        Console.printStacktrace = printStacktrace;
-    }
-
-    public static boolean isPrintWarning() {
-        return printWarning;
-    }
-
-    public static void setPrintWarning(boolean printWarning) {
-        Console.printWarning = printWarning;
-    }
-
-    public static boolean isPrintLog() {
-        return printLog;
-    }
-
-    public static void setPrintLog(boolean printLog) {
-        Console.printLog = printLog;
+    public static void setSettings(ConsoleSettings settings) {
+        Console.settings = settings;
     }
 }

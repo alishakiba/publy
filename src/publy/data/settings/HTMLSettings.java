@@ -1,13 +1,21 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package publy.data.settings;
 
-import java.nio.file.Path;
 import publy.data.PublicationType;
-import publy.io.ResourceLocator;
-import publy.io.html.HTMLPublicationListWriter;
 
 /**
  *
@@ -58,18 +66,22 @@ public class HTMLSettings {
             }
         }
     }
+    // Alternate versions
     private boolean generateTextVersion = false;
     private boolean generateBibtexVersion = false;
     private boolean linkToAlternateVersions = true;
+    // Navigation
     private NavigationPlacement navPlacement = NavigationPlacement.TOP;
+    // Additional publication info
     private PublicationType includeAbstract = PublicationType.ALL;
     private PublicationType includeBibtex = PublicationType.ARXIV; // ALL should not be an option here.
     private PublicationType includePaper = PublicationType.ARXIV;
+    // Title link
     private TitleLinkTarget titleTarget = TitleLinkTarget.NONE;
-    private Path header = ResourceLocator.getFullPath(HTMLPublicationListWriter.DEFAULT_HEADER_LOCATION);
-    private Path footer = ResourceLocator.getFullPath(HTMLPublicationListWriter.DEFAULT_FOOTER_LOCATION);
-    private String googleAnalyticsUser = null;
+    // Presented
     private String presentedText = null;
+    // Google analytics
+    private String googleAnalyticsUser = null;
 
     public boolean generateBibtexVersion() {
         return generateBibtexVersion;
@@ -115,14 +127,6 @@ public class HTMLSettings {
         return includePaper;
     }
 
-    public Path getHeader() {
-        return header;
-    }
-
-    public Path getFooter() {
-        return footer;
-    }
-
     public String getGoogleAnalyticsUser() {
         return googleAnalyticsUser;
     }
@@ -145,14 +149,6 @@ public class HTMLSettings {
 
     public void setIncludePaper(PublicationType includePaper) {
         this.includePaper = includePaper;
-    }
-
-    public void setHeader(Path header) {
-        this.header = header;
-    }
-
-    public void setFooter(Path footer) {
-        this.footer = footer;
     }
 
     public void setGoogleAnalyticsUser(String googleAnalyticsUser) {

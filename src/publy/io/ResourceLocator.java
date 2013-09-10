@@ -1,4 +1,17 @@
 /*
+ * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package publy.io;
 
@@ -31,16 +44,16 @@ public class ResourceLocator {
                 // Running from a jar
                 workingDir = workingDir.getParent();
             } else {
-                Console.warn("Working directory is of an unknown form:%n\"%s\"", workingDir.toString());
+                Console.warn(Console.WarningType.OTHER, "Working directory is of an unknown form:%n\"%s\"", workingDir.toString());
                 workingDir = Paths.get(System.getProperty("user.dir"));
-                Console.warn("Reverted to working directory \"%s\".", workingDir.toString());
+                Console.log("Reverted to working directory \"%s\".", workingDir.toString());
             }
         } catch (NullPointerException // From the long chain of initializers
                 | SecurityException // Can be thrown from getProtectionDomain(), if a SecurityManager is enabled
                 | URISyntaxException ex) {
             Console.except(ex, "Exception while initializing base directory:");
             workingDir = Paths.get(System.getProperty("user.dir"));
-            Console.warn("Reverted to working directory \"%s\".", workingDir.toString());
+            Console.log("Reverted to working directory \"%s\".", workingDir.toString());
         }
 
         baseDirectory = workingDir;

@@ -1,6 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package publy.io.html;
 
@@ -19,8 +30,9 @@ import java.util.regex.Pattern;
 import publy.Console;
 import publy.data.bibitem.BibItem;
 import publy.data.category.OutputCategory;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.GeneralSettings;
 import publy.data.settings.HTMLSettings;
+import publy.data.settings.Settings;
 import publy.gui.UIConstants;
 import publy.io.PublicationListWriter;
 import publy.io.ResourceLocator;
@@ -38,20 +50,18 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     private HTMLBibItemWriter itemWriter;
     private int count;
     private Pattern linkPattern = Pattern.compile("(href|src)\\s*=\\s*\"([^\"]*)\"");
-    private HTMLSettings htmlSettings;
 
-    public HTMLPublicationListWriter(FormatSettings generalSettings, HTMLSettings htmlSettings) {
-        super(generalSettings);
-        this.htmlSettings = htmlSettings;
+    public HTMLPublicationListWriter(Settings settings) {
+        super(settings);
     }
 
     @Override
     protected void writePublicationList(BufferedWriter out) throws IOException {
-        itemWriter = new HTMLBibItemWriter(out, getSettings(), htmlSettings);
+        itemWriter = new HTMLBibItemWriter(out, settings);
 
         // Initialize the count
-        if (getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL) {
-            if (getSettings().isReverseNumbering()) {
+        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL) {
+            if (settings.getGeneralSettings().reverseNumbering()) {
                 count = 0;
 
                 for (OutputCategory c : getCategories()) {
@@ -63,32 +73,32 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
 
         // Header
-        if (htmlSettings.getHeader() == null) {
+        if (settings.getFileSettings().getHeader() == null) {
             publy.Console.error("No header found. The generated HTML file will not be valid.");
         } else {
             // Copy the header from the header file
-            copyFile(htmlSettings.getHeader(), out);
+            copyFile(settings.getFileSettings().getHeader(), out);
         }
 
         // Alternate version links
-        if (htmlSettings.linkToAlternateVersions() && (htmlSettings.generateTextVersion() || htmlSettings.generateBibtexVersion())) {
-            Path htmlDir = getSettings().getTarget().getParent();
+        if (settings.getHtmlSettings().linkToAlternateVersions() && (settings.getHtmlSettings().generateTextVersion() || settings.getHtmlSettings().generateBibtexVersion())) {
+            Path htmlDir = settings.getFileSettings().getTarget().getParent();
 
             out.write("    <p>This list is also available as <a href=\"");
 
-            if (htmlSettings.generateTextVersion()) {
-                out.write(htmlDir.relativize(getSettings().getPlainTextTarget()).toString());
+            if (settings.getHtmlSettings().generateTextVersion()) {
+                out.write(htmlDir.relativize(settings.getFileSettings().getPlainTextTarget()).toString());
                 out.write("\" rel=\"alternate\">plain text</a>");
 
-                if (htmlSettings.generateBibtexVersion()) {
+                if (settings.getHtmlSettings().generateBibtexVersion()) {
                     out.write(" or <a href=\"");
-                    out.write(htmlDir.relativize(getSettings().getBibtexTarget()).toString());
+                    out.write(htmlDir.relativize(settings.getFileSettings().getBibtexTarget()).toString());
                     out.write("\" rel=\"alternate\">BibTeX</a>.");
                 } else {
                     out.write(".");
                 }
             } else {
-                out.write(htmlDir.relativize(getSettings().getBibtexTarget()).toString());
+                out.write(htmlDir.relativize(settings.getFileSettings().getBibtexTarget()).toString());
                 out.write("\" rel=\"alternate\">BibTeX</a>.");
             }
 
@@ -97,8 +107,8 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
 
         // Navigation?
-        if (htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.TOP
-                || htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM) {
+        if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP
+                || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM) {
             writeNavigation(out);
         }
 
@@ -108,20 +118,20 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
 
         // Navigation?
-        if (htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM
-                || htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
+        if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM
+                || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
             writeNavigation(out);
         }
 
         // Credit line and last modified
-        out.write("    <p>Generated from a BibTeX file by Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION + ".&nbsp;&nbsp;Last modified on "  + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".</p>");
+        out.write("    <p>Generated from a BibTeX file by Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION + ".&nbsp;&nbsp;Last modified on " + (new SimpleDateFormat("d MMMM yyyy")).format(new Date()) + ".</p>");
         out.newLine();
 
-        if (htmlSettings.getFooter() == null) {
+        if (settings.getFileSettings().getFooter() == null) {
             publy.Console.error("No footer found. The generated HTML file will not be valid.");
         } else {
             // Copy the footer from the footer file
-            copyFile(htmlSettings.getFooter(), out);
+            copyFile(settings.getFileSettings().getFooter(), out);
         }
     }
 
@@ -162,32 +172,43 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void ensureReferencedFileExists(String file) throws IOException {
-        // Check if this file already exists; if so, do nothing
-        // Resolve this via URI, to properly handle escaped characters like %20
-        Path path = Paths.get(getSettings().getTarget().getParent().toUri().resolve(file));
+        try {
+            // First strip anything following a '#', as that's most likely a link inside the document
+            String strippedFile = file;
+            
+            if (strippedFile.contains("#")) {
+                strippedFile = strippedFile.substring(0, strippedFile.indexOf('#'));
+            }
 
-        if (Files.notExists(path)) {
-            // Grab the file name
-            Path fileName = path.getFileName();
+            // Resolve this via URI, to properly handle escaped characters like %20
+            Path path = Paths.get(settings.getFileSettings().getTarget().getParent().toUri().resolve(strippedFile));
 
-            // See if there is a file with this name in data
-            boolean found = false;
-            Path dataDir = ResourceLocator.getBaseDirectory().resolve(DEFAULT_BASEJS_LOCATION).getParent();
+            // Check if this file already exists; if so, do nothing
+            if (Files.notExists(path)) {
+                // Grab the file name
+                Path fileName = path.getFileName();
 
-            try (DirectoryStream<Path> stream = Files.newDirectoryStream(dataDir)) {
-                for (Path dataFile : stream) {
-                    if (Files.isRegularFile(dataFile) && fileName.equals(dataFile.getFileName())) {
-                        // Copy this file to the target directory
-                        Files.copy(dataFile, path);
-                        found = true;
-                        break;
+                // See if there is a file with this name in data
+                boolean found = false;
+                Path dataDir = ResourceLocator.getBaseDirectory().resolve(DEFAULT_BASEJS_LOCATION).getParent();
+
+                try (DirectoryStream<Path> stream = Files.newDirectoryStream(dataDir)) {
+                    for (Path dataFile : stream) {
+                        if (Files.isRegularFile(dataFile) && fileName.equals(dataFile.getFileName())) {
+                            // Copy this file to the target directory
+                            Files.copy(dataFile, path);
+                            found = true;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (!found) {
-                Console.warn("Referenced file \"%s\" not found at \"%s\".", file, path);
+                if (!found) {
+                    Console.warn(Console.WarningType.MISSING_REFERENCE, "Referenced file \"%s\" not found at \"%s\".", file, path);
+                }
             }
+        } catch (Exception e) {
+            Console.warn(Console.WarningType.MISSING_REFERENCE, "Exception while checking if file \"%s\" exists: %s", file, e.toString());
         }
     }
 
@@ -197,8 +218,8 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.newLine();
 
         // Navigation?
-        if (htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_TITLE
-                || htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
+        if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_TITLE
+                || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
             writeNavigation(c, out);
         }
 
@@ -207,12 +228,12 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.newLine();
 
         // Navigation?
-        if (htmlSettings.getNavPlacement() == HTMLSettings.NavigationPlacement.AFTER_SECTION_TITLE) {
+        if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.AFTER_SECTION_TITLE) {
             writeNavigation(c, out);
         }
 
         // Note
-        String note = getSettings().getCategoryNotes().get(c.getId());
+        String note = c.getHtmlNote();
 
         if (note != null && !note.isEmpty()) {
             out.write("      <p class=\"section-note\">");
@@ -223,29 +244,29 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
 
         // Section list start
-        if (getSettings().getNumbering() == FormatSettings.Numbering.NONE) {
+        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.NONE) {
             out.write("      <ul class=\"section-list\">"); // Unordered list
-        } else if (getSettings().getNumbering() == FormatSettings.Numbering.LOCAL) {
+        } else if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.LOCAL) {
             out.write("      <ol class=\"section-list\">");
             // Reset the count
-            if (getSettings().isReverseNumbering()) {
+            if (settings.getGeneralSettings().reverseNumbering()) {
                 count = c.getItems().size();
                 // There is limited browser support for the reversed attribute, so we'll add values manually if needed
             } else {
                 count = 0;
             }
-        } else if (getSettings().isReverseNumbering()) { // GLOBAL reversed
-            assert getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL && getSettings().isReverseNumbering();
+        } else if (settings.getGeneralSettings().reverseNumbering()) { // GLOBAL reversed
+            assert settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL && settings.getGeneralSettings().reverseNumbering();
             out.write("      <ol class=\"section-list\">");
         } else { // GLOBAL, not reversed
-            assert getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL && !getSettings().isReverseNumbering();
+            assert settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL && !settings.getGeneralSettings().reverseNumbering();
             out.write("      <ol class=\"section-list\" start=\"" + count + "\">");
         }
         out.newLine();
 
         // The actual entries
         for (BibItem item : c.getItems()) {
-            if (getSettings().isReverseNumbering()) {
+            if (settings.getGeneralSettings().reverseNumbering()) {
                 out.write("        <li id=\"" + item.getId() + "\" value=\"" + count + "\" class=\"bibentry\">");
                 count--;
             } else {
@@ -263,10 +284,10 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
 
         // Section list end
-        if (getSettings().getNumbering() == FormatSettings.Numbering.NONE) {
+        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.NONE) {
             out.write("      </ul>");
         } else { // LOCAL or GLOBAL
-            assert (getSettings().getNumbering() == FormatSettings.Numbering.LOCAL || getSettings().getNumbering() == FormatSettings.Numbering.GLOBAL);
+            assert (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.LOCAL || settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL);
             out.write("      </ol>");
         }
         out.newLine();
@@ -305,7 +326,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
     private void writeJavascript(BufferedWriter out) throws IOException {
         // Google Analytics code
-        if (htmlSettings.getGoogleAnalyticsUser() != null && !htmlSettings.getGoogleAnalyticsUser().isEmpty()) {
+        if (settings.getHtmlSettings().getGoogleAnalyticsUser() != null && !settings.getHtmlSettings().getGoogleAnalyticsUser().isEmpty()) {
             Path gaJs = ResourceLocator.getBaseDirectory().resolve(DEFAULT_GAJS_LOCATION);
 
             if (Files.exists(gaJs)) {
@@ -317,12 +338,12 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                 out.newLine();
 
                 // Copy the JavaScript file, substituting the user account placeholder
-                Path gaJsTarget = getSettings().getTarget().getParent().resolve(gaJs.getFileName());
+                Path gaJsTarget = settings.getFileSettings().getTarget().getParent().resolve(gaJs.getFileName());
 
                 try (BufferedReader reader = Files.newBufferedReader(gaJs, Charset.forName("UTF-8"));
                         BufferedWriter writer = Files.newBufferedWriter(gaJsTarget, Charset.forName("UTF-8"))) {
                     for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                        writer.write(line.replaceAll("%%GAUSERACCOUNT%%", htmlSettings.getGoogleAnalyticsUser()));
+                        writer.write(line.replaceAll("~GAUSERACCOUNT~", settings.getHtmlSettings().getGoogleAnalyticsUser()));
                         writer.newLine();
                     }
                 }

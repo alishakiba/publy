@@ -1,6 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package publy.io;
 
@@ -41,6 +52,7 @@ public class BibTeXParser {
     private static final Pattern htmlPattern = Pattern.compile("htmlname=\"([^\"]*)\"");
     private static final Pattern plainPattern = Pattern.compile("plaintextname=\"([^\"]*)\"");
     private static final Pattern urlPattern = Pattern.compile("url=\"([^\"]*)\"");
+    private static final Pattern groupPattern = Pattern.compile("group=\"([^\"]*)\"");
     // Pattern for detecting an author link
     private static final Pattern authorPattern = Pattern.compile("<([^<>]*)>");
     // Pattern for detecting an abbreviation
@@ -275,7 +287,7 @@ public class BibTeXParser {
     }
 
     private static void parseAuthor(String line, Map<String, Author> authors) {
-        String shortName = null, name = null, plaintextName = null, htmlName = null, url = null;
+        String shortName = null, name = null, plaintextName = null, htmlName = null, url = null, group = null;
 
         Matcher matcher = shortPattern.matcher(line);
 
@@ -306,6 +318,12 @@ public class BibTeXParser {
         if (matcher.find()) {
             url = matcher.group(1);
         }
+        
+        matcher = groupPattern.matcher(line);
+
+        if (matcher.find()) {
+            group = matcher.group(1);
+        }
 
         if (shortName == null) {
             Console.error("Author tag is missing mandatory field \"short\":%n%s", line);
@@ -314,6 +332,7 @@ public class BibTeXParser {
         } else {
             Author author = new Author(shortName, name);
             author.setUrl(url);
+            author.setGroup(group);
             
             if (htmlName != null) {
                 author.setHtmlName(htmlName);
@@ -397,6 +416,22 @@ public class BibTeXParser {
                     item.getAuthors().add(new Author(paperAuthor));
                 }
             }
+            
+            // Update the author field
+            StringBuilder newAuthors = new StringBuilder();
+            boolean first = true;
+            
+            for (Author a : item.getAuthors()) {
+                if (first) {
+                    first = false;
+                } else {
+                    newAuthors.append(" and ");
+                }
+                
+                newAuthors.append(a.getName());
+            }
+            
+            item.put("author", newAuthors.toString());
         }
     }
     

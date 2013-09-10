@@ -1,13 +1,24 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package publy.data;
 
 import java.util.ArrayList;
 import java.util.List;
 import publy.Console;
-import publy.data.settings.FormatSettings;
+import publy.data.settings.GeneralSettings;
 
 /**
  *
@@ -20,6 +31,7 @@ public class Author {
     private String latexName; // Name as given in the input bibtex file
     private String plaintextName, htmlName; // Possible name overrides from the bibtex file
     private String url; // The url associated with this author
+    private String group; // The group associated with this author
 
     public Author(String name) {
         this(name, name);
@@ -55,11 +67,11 @@ public class Author {
         return latexName;
     }
 
-    public String getFormattedName(FormatSettings.NameDisplay display, boolean reversed) {
+    public String getFormattedName(GeneralSettings.NameDisplay display, boolean reversed) {
         // First von Last, Jr OR von Last, First, Jr
         String name = "";
 
-        if (!reversed && display != FormatSettings.NameDisplay.NONE && !firstName.isEmpty()) {
+        if (!reversed && display != GeneralSettings.NameDisplay.NONE && !firstName.isEmpty()) {
             name = formatFirstName(display) + " ";
         }
 
@@ -74,7 +86,7 @@ public class Author {
             name += ", " + juniorPart;
         }
 
-        if (reversed && display != FormatSettings.NameDisplay.NONE && !firstName.isEmpty()) {
+        if (reversed && display != GeneralSettings.NameDisplay.NONE && !firstName.isEmpty()) {
             name += ", " + formatFirstName(display);
         }
 
@@ -89,14 +101,14 @@ public class Author {
         this.plaintextName = plaintextName;
     }
 
-    public String getFormattedPlaintextName(FormatSettings.NameDisplay display, boolean reversed) {
+    public String getFormattedPlaintextName(GeneralSettings.NameDisplay display, boolean reversed) {
         String fname = getFormattedName(display, reversed);
         
         if (plaintextName == null) {
             return fname;
         } else {
-            if (plaintextName.contains("%%NAME%%")) {
-                return plaintextName.replaceAll("%%NAME%%", fname);
+            if (plaintextName.contains("~NAME~")) {
+                return plaintextName.replaceAll("~NAME~", fname);
             } else {
                 return plaintextName;
             }
@@ -111,25 +123,31 @@ public class Author {
         this.htmlName = htmlName;
     }
 
-    public String getFormattedHtmlName(FormatSettings.NameDisplay display, boolean reversed) {
+    public String getFormattedHtmlName(GeneralSettings.NameDisplay display, boolean reversed) {
         String fname = getFormattedName(display, reversed);
         
         if (htmlName == null) {
             return fname;
         } else {
-            if (htmlName.contains("%%NAME%%")) {
-                return htmlName.replaceAll("%%NAME%%", fname);
+            if (htmlName.contains("~NAME~")) {
+                return htmlName.replaceAll("~NAME~", fname);
             } else {
                 return htmlName;
             }
         }
     }
 
-    public String getLinkedAndFormattedHtmlName(FormatSettings.NameDisplay display, boolean reversed) {
+    public String getLinkedAndFormattedHtmlName(GeneralSettings.NameDisplay display, boolean reversed) {
+        String classes = "author";
+        
+        if (group != null && !group.isEmpty()) {
+            classes += " " + group;
+        }
+        
         if (url != null && !url.isEmpty()) {
-            return "<a href=\"" + url + "\" class=\"author\">" + getFormattedHtmlName(display, reversed) + "</a>";
+            return "<a href=\"" + url + "\" class=\"" + classes + "\">" + getFormattedHtmlName(display, reversed) + "</a>";
         } else {
-            return "<span class=\"author\">" + getFormattedHtmlName(display, reversed) + "</span>";
+            return "<span class=\"" + classes + "\">" + getFormattedHtmlName(display, reversed) + "</span>";
         }
     }
 
@@ -141,7 +159,15 @@ public class Author {
         this.url = url;
     }
 
-    public boolean isMe(List<String> myNames, FormatSettings.NameDisplay display, boolean reversed) {
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public boolean isMe(List<String> myNames, GeneralSettings.NameDisplay display, boolean reversed) {
         for (String name : myNames) {
             if (latexName.equals(name) || abbreviation.equals(name) || getFormattedName(display, reversed).equals(name)) {
                 return true;
@@ -151,7 +177,7 @@ public class Author {
         return false;
     }
 
-    private String formatFirstName(FormatSettings.NameDisplay display) {
+    private String formatFirstName(GeneralSettings.NameDisplay display) {
         switch (display) {
             case NONE:
                 return "";
