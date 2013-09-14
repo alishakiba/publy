@@ -15,7 +15,6 @@
  */
 package publy.data.bibitem;
 
-import publy.data.Venue;
 import publy.data.Author;
 import java.util.*;
 import java.util.Map.Entry;
@@ -32,7 +31,6 @@ public abstract class BibItem {
     private List<String> mandatoryFields;
     private List<String> optionalFields;
     private List<Author> authors;
-    private Venue venue;
 
     public BibItem() {
         values = new LinkedHashMap<>();
@@ -103,14 +101,6 @@ public abstract class BibItem {
     public void setAuthors(Author... authors) {
         this.authors.clear();
         this.authors.addAll(Arrays.asList(authors));
-    }
-
-    public Venue getVenue() {
-        return venue;
-    }
-
-    public void setVenue(Venue venue) {
-        this.venue = venue;
     }
 
     public boolean anyNonEmpty(String field) {
