@@ -35,7 +35,6 @@ import publy.data.bibitem.InvitedTalk;
 import publy.data.bibitem.MastersThesis;
 import publy.data.bibitem.PhDThesis;
 import publy.data.bibitem.Unpublished;
-import publy.data.Venue;
 
 /**
  *
@@ -64,21 +63,19 @@ public class BibTeXParser {
     public static List<BibItem> parseFile(Path file) throws IOException {
         List<BibItem> items = new ArrayList<>();
         HashMap<String, String> abbreviations = new HashMap<>();
-        HashMap<String, Venue> venues = new HashMap<>();
         HashMap<String, Author> authors = new HashMap<>();
 
-        parseFile(file, items, abbreviations, venues, authors);
+        parseFile(file, items, abbreviations, authors);
 
         for (BibItem item : items) {
-            setVenue(item, venues);
-            expandAbbreviations(item, abbreviations, venues);
+            expandAbbreviations(item, abbreviations);
             replaceAuthors(item, authors);
         }
 
         return items;
     }
 
-    private static void parseFile(Path file, List<BibItem> items, Map<String, String> abbreviations, Map<String, Venue> venues, Map<String, Author> authors) throws IOException {
+    private static void parseFile(Path file, List<BibItem> items, Map<String, String> abbreviations, Map<String, Author> authors) throws IOException {
         HashSet<String> ids = new HashSet<>(); // Bibitem identifiers, used to check for duplicates
 
         try (BufferedReader in = Files.newBufferedReader(file, Charset.forName("UTF-8"))) {
@@ -101,7 +98,7 @@ public class BibTeXParser {
                     }
                 } else if (line.startsWith("<")) {
                     // A custom tag
-                    parseTag(collectItem(in, line, '<', '>'), abbreviations, venues, authors);
+                    parseTag(collectItem(in, line, '<', '>'), abbreviations, authors);
                 }
             }
         }
@@ -264,7 +261,7 @@ public class BibTeXParser {
         }
     }
 
-    private static void parseTag(String tag, Map<String, String> abbreviations, Map<String, Venue> venues, Map<String, Author> authors) {
+    private static void parseTag(String tag, Map<String, String> abbreviations, Map<String, Author> authors) {
         String type = tag.substring(1, tag.indexOf(' ', 2)).trim().toLowerCase();
 
         switch (type) {
@@ -273,12 +270,6 @@ public class BibTeXParser {
                 break;
             case "abbr":
                 parseAbbreviation(tag, abbreviations);
-                break;
-            case "conf":
-                parseVenue(tag, true, venues);
-                break;
-            case "journal":
-                parseVenue(tag, false, venues);
                 break;
             default:
                 Console.error("Unrecognized tag type \"%s\" at line \"%s\".", type, tag);
@@ -366,33 +357,6 @@ public class BibTeXParser {
             Console.error("Abbreviation tag detected, but no full information found:%n%s", line);
         }
     }
-
-    private static void parseVenue(String line, boolean conference, Map<String, Venue> venues) {
-        String shortName = null, fullName = null, abbreviation = null;
-        Matcher matcher = shortPattern.matcher(line);
-
-        if (matcher.find()) {
-            shortName = matcher.group(1);
-        }
-
-        matcher = fullPattern.matcher(line);
-
-        if (matcher.find()) {
-            fullName = matcher.group(1);
-        }
-
-        matcher = abbPattern.matcher(line);
-
-        if (matcher.find()) {
-            abbreviation = matcher.group(1);
-        }
-
-        if (shortName != null && fullName != null && abbreviation != null) {
-            venues.put(shortName, new Venue(conference, abbreviation, fullName, shortName));
-        } else {
-            Console.error("%s tag detected, but no full information found:%n%s", (conference ? "Conference" : "Journal"), line);
-        }
-    }
     
     private static void replaceAuthors(BibItem item, Map<String, Author> authors) {
         // Replace authors
@@ -435,7 +399,7 @@ public class BibTeXParser {
         }
     }
     
-    private static void expandAbbreviations(BibItem item, Map<String, String> abbreviations, Map<String, Venue> venues) {
+    private static void expandAbbreviations(BibItem item, Map<String, String> abbreviations) {
         for (String field : item.getFields()) {
             String currentValue = item.get(field);
 
@@ -453,8 +417,6 @@ public class BibTeXParser {
 
                     if (abbreviations.containsKey(abbreviation)) {
                         finalValue.append(abbreviations.get(abbreviation));
-                    } else if (venues.containsKey(abbreviation)) {
-                        finalValue.append(venues.get(abbreviation).getFullName());
                     } else {
                         Console.error("Abbreviation \"%s\" is used, but never defined.", matcher.group(1));
                     }
@@ -465,29 +427,6 @@ public class BibTeXParser {
                 finalValue.append(currentValue.substring(prevEnd, currentValue.length()));
 
                 item.put(field, finalValue.toString());
-            }
-        }
-    }
-
-    private static void setVenue(BibItem item, Map<String, Venue> venues) {
-        String venue = null;
-
-        if (item.anyNonEmpty("booktitle")) {
-            venue = item.get("booktitle");
-        } else if (item.anyNonEmpty("journal")) {
-            venue = item.get("journal");
-        }
-
-        if (venue != null) {
-            Matcher matcher = abbrPattern.matcher(venue);
-
-            while (matcher.find()) {
-                String abbr = matcher.group(1);
-
-                if (venues.containsKey(abbr)) {
-                    item.setVenue(venues.get(abbr));
-                    break;
-                }
             }
         }
     }
