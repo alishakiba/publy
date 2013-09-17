@@ -1,0 +1,110 @@
+﻿=== Field aliases
+
+journaltitle=journal
+location=address
+addendum = note ?
+
+pubstatus = status
+file = paper
+
+=== Types
+
+--- All
+Required: author;editor, title, year
+Optional: month, note, doi, eprint, eprintclass, eprinttype, url, urldate
+
+article
+Required: author, title, journal, year
+Optional: volume, number, pages
+Special : series, issn, eid
+
+book
+Required: author;editor, title, year
+Optional: editor, publisher, volume, number, series, address, edition
+Special : isbn
+
+inbook
+Required: author;editor, title, year
+Optional: editor, publisher, chapter, pages, volume, number, series, type, address, edition
+Special : bookauthor, booktitle, isbn
+
+booklet 
+Required: author;editor, title, year
+Optional: editor, howpublished, type, address
+Special : isbn
+
+collection
+Required: author;editor, title, year
+Optional: editor, publisher, volume, number, series, edition, address
+Special : isbn
+
+incollection
+Required: author, title, booktitle, year
+Optional: editor, publisher, volume, number, series, type, chapter, pages, address, edition
+Special : isbn
+
+manual
+Required: author, title, year
+Optional: organization, address, edition
+Special : type, isbn
+
+misc
+Required: author;editor, title, year
+Optional: editor, howpublished
+Special : type, organization, address, isbn
+
+online
+Required: author, title, year, url
+Optional: organization
+
+patent
+Required: author, title, number, year
+Optional: holder, type, address
+
+periodical
+Required: author;editor, title, year
+Optional: editor, publisher, series, volume, number, issue
+Special : issn
+
+proceedings 
+Required: author;editor, title, year
+Optional: editor, publisher, volume, number, series, organization, address
+Special : isbn
+
+inproceedings
+Required: author, title, booktitle, year
+Optional: editor, publisher, volume, number, series, organization, address, pages
+Special : isbn, chapter
+
+report
+Required: author, title, type, institution, year
+Optional: number, address
+Special : isrn
+
+thesis
+Required: author, title, type, school;institution, year
+Optional: address
+Special : isbn
+
+unpublished
+Required: author, title, year
+Optional: howpublished, address
+
+=== Type Aliases
+
+mvbook = @book
+bookinbook = @inbook
+suppbook = @inbook
+mvcollection = @collection
+suppcollection = @incollection.
+mvproceedings = @proceedings.
+suppperiodical = @article.
+reference = @collection.
+mvreference = @collection.
+inreference = @incollection.
+conference = @inproceedings.
+electronic = @online.
+mastersthesis = @thesis except that the type field is optional and defaults to the localized term ‘Master’s thesis’. You may still use the type field to override that.
+phdthesis = @thesis except that the type field is optional and defaults to the localized term ‘PhD thesis’. You may still use the type field to override that.
+techreport = @report except that the type field is optional and defaults to the localized term ‘technical report’. You may still use the type field to override that.
+www = @online.
