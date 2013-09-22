@@ -365,8 +365,186 @@ public class HTMLBibItemWriterTest {
             output.getBuffer().delete(0, output.getBuffer().length());
         }
     }
-    
-    
+
+    @Test
+    public void testWriteInBookNoTags() {
+        System.out.println("writeInBook");
+
+        HashMap<BibItem, String> expected = new LinkedHashMap<>();
+
+        BibItem test1 = new BibItem("inbook", "test1");
+        test1.put("author", "Andrew Author");
+        test1.put("title", "On the Importance of Meaningful Titles");
+        test1.put("year", "2010");
+        expected.put(test1, "");
+
+        BibItem test2 = new BibItem("inbook", "test2");
+        test2.put("author", "Andrew Author");
+        test2.put("title", "On the Importance of Meaningful Titles");
+        test2.put("year", "2010");
+        test2.put("series", "Lecture Notes in Lecturing");
+        expected.put(test2, "Lecture Notes in Lecturing.");
+
+        BibItem test3 = new BibItem("inbook", "test3");
+        test3.put("author", "Andrew Author");
+        test3.put("title", "On the Importance of Meaningful Titles");
+        test3.put("year", "2010");
+        test3.put("edition", "Third");
+        expected.put(test3, "Third edition,");
+
+        BibItem test4 = new BibItem("inbook", "test4");
+        test4.put("author", "Andrew Author");
+        test4.put("title", "On the Importance of Meaningful Titles");
+        test4.put("year", "2010");
+        test4.put("edition", "Third");
+        test4.put("series", "Lecture Notes in Lecturing");
+        expected.put(test4, "Lecture Notes in Lecturing. Third edition,");
+
+        BibItem test5 = new BibItem("inbook", "test5");
+        test5.put("author", "Andrew Author");
+        test5.put("title", "On the Importance of Meaningful Titles");
+        test5.put("year", "2010");
+        test5.put("publisher", "Bottomless Pit Publishing");
+        expected.put(test5, "Bottomless Pit Publishing,");
+
+        BibItem test6 = new BibItem("inbook", "test6");
+        test6.put("author", "Andrew Author");
+        test6.put("title", "On the Importance of Meaningful Titles");
+        test6.put("year", "2010");
+        test6.put("publisher", "Bottomless Pit Publishing");
+        test6.put("series", "Lecture Notes in Lecturing");
+        expected.put(test6, "Lecture Notes in Lecturing. Bottomless Pit Publishing,");
+
+        BibItem test7 = new BibItem("inbook", "test7");
+        test7.put("author", "Andrew Author");
+        test7.put("title", "On the Importance of Meaningful Titles");
+        test7.put("year", "2010");
+        test7.put("publisher", "Bottomless Pit Publishing");
+        test7.put("edition", "Third");
+        expected.put(test7, "Bottomless Pit Publishing, third edition,");
+
+        BibItem test8 = new BibItem("inbook", "test8");
+        test8.put("author", "Andrew Author");
+        test8.put("title", "On the Importance of Meaningful Titles");
+        test8.put("year", "2010");
+        test8.put("publisher", "Bottomless Pit Publishing");
+        test8.put("edition", "Third");
+        test8.put("series", "Lecture Notes in Lecturing");
+        expected.put(test8, "Lecture Notes in Lecturing. Bottomless Pit Publishing, third edition,");
+
+        BibItem test9 = new BibItem("inbook", "test9");
+        test9.put("author", "Andrew Author");
+        test9.put("title", "On the Importance of Meaningful Titles");
+        test9.put("year", "2010");
+        test9.put("volume", "1337");
+        expected.put(test9, "Volume 1337.");
+
+        BibItem test10 = new BibItem("inbook", "test10");
+        test10.put("author", "Andrew Author");
+        test10.put("title", "On the Importance of Meaningful Titles");
+        test10.put("year", "2010");
+        test10.put("volume", "1337");
+        test10.put("series", "Lecture Notes in Lecturing");
+        expected.put(test10, "Volume 1337 of Lecture Notes in Lecturing.");
+
+        BibItem test11 = new BibItem("inbook", "test11");
+        test11.put("author", "Andrew Author");
+        test11.put("title", "On the Importance of Meaningful Titles");
+        test11.put("year", "2010");
+        test11.put("volume", "1337");
+        test11.put("edition", "Third");
+        expected.put(test11, "Volume 1337. Third edition,");
+
+        BibItem test12 = new BibItem("inbook", "test12");
+        test12.put("author", "Andrew Author");
+        test12.put("title", "On the Importance of Meaningful Titles");
+        test12.put("year", "2010");
+        test12.put("volume", "1337");
+        test12.put("edition", "Third");
+        test12.put("series", "Lecture Notes in Lecturing");
+        expected.put(test12, "Volume 1337 of Lecture Notes in Lecturing. Third edition,");
+
+        BibItem test13 = new BibItem("inbook", "test13");
+        test13.put("author", "Andrew Author");
+        test13.put("title", "On the Importance of Meaningful Titles");
+        test13.put("year", "2010");
+        test13.put("volume", "1337");
+        test13.put("publisher", "Bottomless Pit Publishing");
+        expected.put(test13, "Volume 1337. Bottomless Pit Publishing,");
+
+        BibItem test14 = new BibItem("inbook", "test14");
+        test14.put("author", "Andrew Author");
+        test14.put("title", "On the Importance of Meaningful Titles");
+        test14.put("year", "2010");
+        test14.put("volume", "1337");
+        test14.put("publisher", "Bottomless Pit Publishing");
+        test14.put("series", "Lecture Notes in Lecturing");
+        expected.put(test14, "Volume 1337 of Lecture Notes in Lecturing. Bottomless Pit Publishing,");
+
+        BibItem test15 = new BibItem("inbook", "test15");
+        test15.put("author", "Andrew Author");
+        test15.put("title", "On the Importance of Meaningful Titles");
+        test15.put("year", "2010");
+        test15.put("volume", "1337");
+        test15.put("publisher", "Bottomless Pit Publishing");
+        test15.put("edition", "Third");
+        expected.put(test15, "Volume 1337. Bottomless Pit Publishing, third edition,");
+
+        BibItem test16 = new BibItem("inbook", "test16");
+        test16.put("author", "Andrew Author");
+        test16.put("title", "On the Importance of Meaningful Titles");
+        test16.put("year", "2010");
+        test16.put("volume", "1337");
+        test16.put("publisher", "Bottomless Pit Publishing");
+        test16.put("edition", "Third");
+        test16.put("series", "Lecture Notes in Lecturing");
+        expected.put(test16, "Volume 1337 of Lecture Notes in Lecturing. Bottomless Pit Publishing, third edition,");
+
+        BibItem test17 = new BibItem("inbook", "test17");
+        test17.put("series", "Lecture Notes in Lecturing");
+        test17.put("edition", "Third");
+        test17.put("howpublished", "Published by throwing each page into the ocean in a separate bottle");
+        test17.put("pages", "1--13");
+        test17.put("booktitle", "Proceedings of the 42nd Symposium Conference");
+        test17.put("number", "42");
+        test17.put("type", "Typical Publication");
+        test17.put("publisher", "Bottomless Pit Publishing");
+        test17.put("journal", "International Journal of Publications");
+        test17.put("author", "Andrew Author");
+        test17.put("title", "On the Importance of Meaningful Titles");
+        test17.put("organization", "Test Organization");
+        test17.put("chapter", "5");
+        test17.put("editor", "Edward Editor");
+        test17.put("school", "School of Schooling");
+        test17.put("address", "Nederweert, The Netherlands");
+        test17.put("volume", "1337");
+        test17.put("month", "January");
+        test17.put("year", "2010");
+        test17.put("note", "Note to self: don't use the note field");
+        test17.put("institution", "University of Learning");
+        expected.put(test17, "Volume 1337 of Lecture Notes in Lecturing. Bottomless Pit Publishing, third edition,");
+
+        StringWriter output = new StringWriter();
+        BufferedWriter buffer = new BufferedWriter(output);
+        HTMLBibItemWriter testInstance = new HTMLBibItemWriter(buffer, null);
+
+        for (BibItem input : expected.keySet()) {
+            String expectedResult = expected.get(input);
+
+            try {
+                testInstance.writeBook(input);
+                buffer.flush();
+                String result = removeTags(output.getBuffer().toString()).trim();
+
+                assertEquals(expectedResult, result);
+            } catch (IOException ex) {
+                fail("writeBook threw IOException on input:\n" + input + "\nException:\n" + ex);
+            }
+
+            // Clear the output
+            output.getBuffer().delete(0, output.getBuffer().length());
+        }
+    }
 
     @Test
     public void testChangeQuotes() {
