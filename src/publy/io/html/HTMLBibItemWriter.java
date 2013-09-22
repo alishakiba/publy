@@ -342,11 +342,11 @@ public class HTMLBibItemWriter extends BibItemWriter {
         String number = item.get("number");
 
         if (volume != null && !volume.isEmpty()) {
-            output((capitalize ? "Volume " : "volume "), volume, "");
+            output((capitalize ? "Volume " : "volume ") + "<span class=\"volume\">", volume, "</span>");
             output(" of <span class=\"series\">", series, "</span>");
             out.write(connective);
         } else if (number != null && !number.isEmpty()) {
-            output((capitalize ? "Number " : "number "), number, "");
+            output((capitalize ? "Number " : "number ") + "<span class=\"number\">", number, "</number>");
             output(" in <span class=\"series\">", series, "</span>");
             out.write(connective);
         } else {
