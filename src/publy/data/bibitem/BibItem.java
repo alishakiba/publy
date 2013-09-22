@@ -24,29 +24,52 @@ import publy.Console;
  *
  * @author Sander
  */
-public abstract class BibItem {
+public class BibItem {
 
     private String id;
+    private Type type;
+    private String originalType;
     private HashMap<String, String> values;
-    private List<String> mandatoryFields;
-    private List<String> optionalFields;
+    private HashMap<String, String> shortValues;
     private List<Author> authors;
 
-    public BibItem() {
+    public BibItem(String originalType, String id) {
+        this.type = Type.fromString(originalType);
+        this.originalType = originalType;
+        this.id = id;
+
         values = new LinkedHashMap<>();
-        mandatoryFields = new ArrayList<>();
-        optionalFields = new ArrayList<>();
+        shortValues = new LinkedHashMap<>();
         authors = new ArrayList<>();
+
+        handleSpecialTypes(originalType);
     }
 
-    public abstract String getType();
+    private void handleSpecialTypes(String originalType) {
+        switch (originalType) {
+            case "mastersthesis":
+                values.put("type", "Master's thesis");
+                // TODO: set short values too?
+                break;
+            case "phdthesis":
+                values.put("type", "PhD thesis");
+                break;
+            case "techreport":
+                values.put("type", "technical report");
+                break;
+        }
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public String getOriginalType() {
+        return originalType;
+    }
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String get(String attr) {
@@ -57,41 +80,68 @@ public abstract class BibItem {
         values.put(attr, value);
     }
 
+    public String getShort(String attr) {
+        String shortValue = shortValues.get(attr);
+
+        if (shortValue == null) {
+            return values.get(attr);
+        } else {
+            return shortValue;
+        }
+    }
+
+    public void putShort(String attr, String value) {
+        shortValues.put(attr, value);
+    }
+
     public Set<String> getFields() {
         return values.keySet();
     }
 
-    public List<String> getMandatoryFields() {
-        return mandatoryFields;
-    }
-
-    public void setMandatoryFields(String... mandatoryFields) {
-        this.mandatoryFields.clear();
-        this.mandatoryFields.addAll(Arrays.asList(mandatoryFields));
-    }
-
     public boolean checkMandatoryFields() {
         boolean complete = true;
+        List<String> missingFields = null;
 
-        for (String field : mandatoryFields) {
-            String v = values.get(field);
-
-            if (v == null || v.isEmpty()) {
+        for (String field : FieldData.getMandatoryFields(type)) {
+            if (!anyNonEmpty(field.split(";"))) {
                 complete = false;
-                Console.error("Item \"%s\" is missing mandatory field %s.", id, field);
+
+                if (missingFields == null) {
+                    missingFields = new ArrayList<>();
+                }
+
+                missingFields.add(field.replaceAll(";", " or "));
+            }
+        }
+
+        // Nice error
+        if (!complete) {
+            if (missingFields.size() == 1) {
+                Console.error("Item \"%s\" is missing mandatory field \"%s\".", id, missingFields.get(0));
+            } else {
+                StringBuilder sb = new StringBuilder();
+
+                for (int i = 0; i < missingFields.size(); i++) {
+                    if (i > 0) {
+                        if (missingFields.size() > 2) {
+                            sb.append(", ");
+                        } else {
+                            sb.append(" ");
+                        }
+
+                        if (i == missingFields.size() - 1) {
+                            sb.append("and ");
+                        }
+                    }
+
+                    sb.append("\"").append(missingFields.get(i)).append("\"");
+                }
+
+                Console.error("Item \"%s\" is missing mandatory fields %s.", id, sb.toString());
             }
         }
 
         return complete;
-    }
-
-    public List<String> getOptionalFields() {
-        return optionalFields;
-    }
-
-    public void setOptionalFields(String... optionalFields) {
-        this.optionalFields.clear();
-        this.optionalFields.addAll(Arrays.asList(optionalFields));
     }
 
     public List<Author> getAuthors() {
@@ -124,7 +174,7 @@ public abstract class BibItem {
         StringBuilder sb = new StringBuilder();
 
         sb.append("@");
-        sb.append(getType());
+        sb.append(getOriginalType());
         sb.append(" {");
         sb.append(id);
         sb.append(",\n");

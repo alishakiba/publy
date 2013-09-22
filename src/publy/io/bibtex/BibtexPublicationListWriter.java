@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import publy.data.bibitem.BibItem;
+import publy.data.bibitem.FieldData;
 import publy.data.category.OutputCategory;
 import publy.data.settings.GeneralSettings;
 import publy.data.settings.Settings;
@@ -105,7 +106,7 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
 
     private void writeBibtex(BibItem item, BufferedWriter out) throws IOException {
         // Item type
-        out.write("@" + item.getType() + "{" + item.getId() + ",");
+        out.write("@" + item.getOriginalType()+ "{" + item.getId() + ",");
         out.newLine();
 
         // The first field should omit the connecting ",".
@@ -128,7 +129,7 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
             first = false;
         }
 
-        for (String field : item.getMandatoryFields()) {
+        for (String field : FieldData.getMandatoryFields(item.getType())) {
             if (!field.equals("author")) {
                 if (first) {
                     first = false;
@@ -145,7 +146,7 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
             }
         }
 
-        for (String field : item.getOptionalFields()) {
+        for (String field : FieldData.getOptionalFields(item.getType())) {
             String v = item.get(field);
 
             if (!field.equals("author") && v != null && !v.isEmpty()) {
@@ -159,7 +160,7 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
                 out.write("  ");
                 out.write(field);
                 out.write("={");
-                out.write(item.get(field));
+                out.write(v);
                 out.write("}");
             }
         }
