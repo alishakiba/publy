@@ -57,7 +57,7 @@ public class FieldData {
         optionalFields.put(Type.ARTICLE, Arrays.asList("volume", "number", "pages", "issn", "eid", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.BOOK, Arrays.asList("editor", "publisher", "volume", "number", "series", "address", "edition", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.INBOOK, Arrays.asList("editor", "publisher", "chapter", "pages", "volume", "number", "series", "type", "address", "edition", "bookauthor", "booktitle", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
-        optionalFields.put(Type.BOOKLET, Arrays.asList("editor", "howpublished", "type", "address", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
+        optionalFields.put(Type.BOOKLET, Arrays.asList("editor", "howpublished", "address", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.COLLECTION, Arrays.asList("editor", "publisher", "volume", "number", "series", "edition", "address", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.INCOLLECTION, Arrays.asList("editor", "publisher", "volume", "number", "series", "type", "chapter", "pages", "address", "edition", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.MANUAL, Arrays.asList("organization", "address", "edition", "type", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));

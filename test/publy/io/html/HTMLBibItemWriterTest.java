@@ -532,13 +532,93 @@ public class HTMLBibItemWriterTest {
             String expectedResult = expected.get(input);
 
             try {
-                testInstance.writeBook(input);
+                testInstance.writeInBook(input);
                 buffer.flush();
                 String result = removeTags(output.getBuffer().toString()).trim();
 
                 assertEquals(expectedResult, result);
             } catch (IOException ex) {
-                fail("writeBook threw IOException on input:\n" + input + "\nException:\n" + ex);
+                fail("writeInBook threw IOException on input:\n" + input + "\nException:\n" + ex);
+            }
+
+            // Clear the output
+            output.getBuffer().delete(0, output.getBuffer().length());
+        }
+    }
+
+    @Test
+    public void testWriteBookletNoTags() {
+        System.out.println("writeBooklet");
+
+        HashMap<BibItem, String> expected = new LinkedHashMap<>();
+
+        BibItem test1 = new BibItem("booklet", "test1");
+        test1.put("author", "Andrew Author");
+        test1.put("title", "On the Importance of Meaningful Titles");
+        test1.put("year", "2010");
+        expected.put(test1, "");
+
+        BibItem test2 = new BibItem("booklet", "test2");
+        test2.put("author", "Andrew Author");
+        test2.put("title", "On the Importance of Meaningful Titles");
+        test2.put("year", "2010");
+        test2.put("howpublished", "Published by throwing each page into the ocean in a separate bottle");
+        expected.put(test2, "Published by throwing each page into the ocean in a separate bottle,");
+
+        BibItem test3 = new BibItem("booklet", "test3");
+        test3.put("author", "Andrew Author");
+        test3.put("title", "On the Importance of Meaningful Titles");
+        test3.put("year", "2010");
+        test3.put("address", "Nederweert, The Netherlands");
+        expected.put(test3, "Nederweert, The Netherlands,");
+
+        BibItem test4 = new BibItem("booklet", "test4");
+        test4.put("author", "Andrew Author");
+        test4.put("title", "On the Importance of Meaningful Titles");
+        test4.put("year", "2010");
+        test4.put("address", "Nederweert, The Netherlands");
+        test4.put("howpublished", "Published by throwing each page into the ocean in a separate bottle");
+        expected.put(test4, "Published by throwing each page into the ocean in a separate bottle, Nederweert, The Netherlands,");
+
+        BibItem test5 = new BibItem("booklet", "test5");
+        test5.put("series", "Lecture Notes in Lecturing");
+        test5.put("edition", "Third");
+        test5.put("howpublished", "Published by throwing each page into the ocean in a separate bottle");
+        test5.put("pages", "1--13");
+        test5.put("booktitle", "Proceedings of the 42nd Symposium Conference");
+        test5.put("number", "42");
+        test5.put("type", "Typical Publication");
+        test5.put("publisher", "Bottomless Pit Publishing");
+        test5.put("journal", "International Journal of Publications");
+        test5.put("author", "Andrew Author");
+        test5.put("title", "On the Importance of Meaningful Titles");
+        test5.put("organization", "Test Organization");
+        test5.put("chapter", "5");
+        test5.put("editor", "Edward Editor");
+        test5.put("school", "School of Schooling");
+        test5.put("address", "Nederweert, The Netherlands");
+        test5.put("volume", "1337");
+        test5.put("month", "January");
+        test5.put("year", "2010");
+        test5.put("note", "Note to self: don't use the note field");
+        test5.put("institution", "University of Learning");
+        expected.put(test5, "Published by throwing each page into the ocean in a separate bottle, Nederweert, The Netherlands,");
+
+        StringWriter output = new StringWriter();
+        BufferedWriter buffer = new BufferedWriter(output);
+        HTMLBibItemWriter testInstance = new HTMLBibItemWriter(buffer, null);
+
+        for (BibItem input : expected.keySet()) {
+            String expectedResult = expected.get(input);
+
+            try {
+                testInstance.writeBooklet(input);
+                buffer.flush();
+                String result = removeTags(output.getBuffer().toString()).trim();
+
+                assertEquals(expectedResult, result);
+            } catch (IOException ex) {
+                fail("writeBooklet threw IOException on input:\n" + input + "\nException:\n" + ex);
             }
 
             // Clear the output

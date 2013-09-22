@@ -65,7 +65,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     writeInBook(item);
                     break;
                 case BOOKLET:
-                    //writeBooklet(item);
+                    writeBooklet(item);
                     break;
                 case COLLECTION:
                     //writeCollection(item);
@@ -135,6 +135,11 @@ public class HTMLBibItemWriter extends BibItemWriter {
     protected void writeInBook(BibItem item) throws IOException {
         writeVolume(item, true, ". ");
         writePublisherAndEdition(item);
+    }
+    
+    protected void writeBooklet(BibItem item) throws IOException {
+        output("<span class=\"howpublished\">", item.get("howpublished"), "</span>, ");
+        output("<span class=\"address\">", item.get("address"), "</span>, ");
     }
 
     private void writePart(BibItem item) throws IOException {
