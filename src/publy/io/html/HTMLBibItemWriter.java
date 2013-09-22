@@ -62,7 +62,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     writeBook(item);
                     break;
                 case INBOOK:
-                    //writeInBook(item);
+                    writeInBook(item);
                     break;
                 case BOOKLET:
                     //writeBooklet(item);
@@ -129,16 +129,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     protected void writeBook(BibItem item) throws IOException {
         writeVolume(item, true, ". ");
-
-        if (item.anyNonEmpty("publisher")) {
-            output("<span class=\"publisher\">", item.get("publisher"), "</span>, ");
-
-            if (item.anyNonEmpty("edition")) {
-                output("<span class=\"edition\">", item.get("edition").toLowerCase(), " edition</span>, ");
-            }
-        } else if (item.anyNonEmpty("edition")) {
-            output("<span class=\"edition\">", changeCaseT(item.get("edition")), " edition</span>, ");
-        }
+        writePublisherAndEdition(item);
+    }
+    
+    protected void writeInBook(BibItem item) throws IOException {
+        writeVolume(item, true, ". ");
+        writePublisherAndEdition(item);
     }
 
     private void writePart(BibItem item) throws IOException {
@@ -351,6 +347,18 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write(connective);
         } else {
             output("<span class=\"series\">", series, "</span>" + connective);
+        }
+    }
+    
+    protected void writePublisherAndEdition(BibItem item) throws IOException {
+        if (item.anyNonEmpty("publisher")) {
+            output("<span class=\"publisher\">", item.get("publisher"), "</span>, ");
+
+            if (item.anyNonEmpty("edition")) {
+                output("<span class=\"edition\">", item.get("edition").toLowerCase(), " edition</span>, ");
+            }
+        } else if (item.anyNonEmpty("edition")) {
+            output("<span class=\"edition\">", changeCaseT(item.get("edition")), " edition</span>, ");
         }
     }
 
