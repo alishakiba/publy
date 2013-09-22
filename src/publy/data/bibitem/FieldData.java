@@ -54,7 +54,7 @@ public class FieldData {
 
         optionalFields = new HashMap<>();
 
-        optionalFields.put(Type.ARTICLE, Arrays.asList("volume", "number", "pages", "series", "issn", "eid", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
+        optionalFields.put(Type.ARTICLE, Arrays.asList("volume", "number", "pages", "issn", "eid", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.BOOK, Arrays.asList("editor", "publisher", "volume", "number", "series", "address", "edition", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.INBOOK, Arrays.asList("editor", "publisher", "chapter", "pages", "volume", "number", "series", "type", "address", "edition", "bookauthor", "booktitle", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.BOOKLET, Arrays.asList("editor", "howpublished", "type", "address", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));

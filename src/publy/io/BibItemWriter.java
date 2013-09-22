@@ -20,16 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import publy.Console;
-import publy.data.bibitem.Article;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
-import publy.data.bibitem.Book;
-import publy.data.bibitem.InCollection;
-import publy.data.bibitem.InProceedings;
-import publy.data.bibitem.InvitedTalk;
-import publy.data.bibitem.MastersThesis;
-import publy.data.bibitem.PhDThesis;
-import publy.data.bibitem.Unpublished;
 import publy.data.settings.GeneralSettings;
 import publy.data.settings.Settings;
 
@@ -47,52 +39,7 @@ public abstract class BibItemWriter {
         this.settings = settings;
     }
 
-    public void write(BibItem item) throws IOException {
-        switch (item.getType()) {
-            case "article":
-                writeArticle((Article) item);
-                break;
-            case "book":
-                writeBook((Book) item);
-                break;
-            case "inproceedings":
-                writeInProceedings((InProceedings) item);
-                break;
-            case "mastersthesis":
-                writeMastersThesis((MastersThesis) item);
-                break;
-            case "phdthesis":
-                writePhDThesis((PhDThesis) item);
-                break;
-            case "incollection":
-                writeInCollection((InCollection) item);
-                break;
-            case "talk":
-                writeInvitedTalk((InvitedTalk) item);
-                break;
-            case "unpublished":
-                writeUnpublished((Unpublished) item);
-                break;
-            default:
-                throw new AssertionError("Unrecognized BibItem type: " + item.getType());
-        }
-    }
-
-    protected abstract void writeArticle(Article item) throws IOException;
-
-    protected abstract void writeBook(Book item) throws IOException;
-
-    protected abstract void writeInProceedings(InProceedings item) throws IOException;
-
-    protected abstract void writeMastersThesis(MastersThesis item) throws IOException;
-
-    protected abstract void writePhDThesis(PhDThesis item) throws IOException;
-
-    protected abstract void writeInCollection(InCollection item) throws IOException;
-
-    protected abstract void writeInvitedTalk(InvitedTalk item) throws IOException;
-
-    protected abstract void writeUnpublished(Unpublished item) throws IOException;
+    public abstract void write(BibItem item) throws IOException;
 
     protected String formatTitle(BibItem item) {
         String title = item.get("title");
@@ -106,7 +53,7 @@ public abstract class BibItemWriter {
 
     protected String formatAuthors(BibItem item) {
         String author = item.get("author");
-        
+
         if (author == null) {
             Console.error("No authors found for entry \"%s\".", item.getId());
             return "";
@@ -191,14 +138,57 @@ public abstract class BibItemWriter {
             if (month == null || month.isEmpty()) {
                 return "";
             } else {
-                return month;
+                return formatMonth(month);
             }
         } else {
             if (month == null || month.isEmpty()) {
                 return year;
             } else {
-                return month + " " + year;
+                return formatMonth(month) + " " + year;
             }
+        }
+    }
+
+    protected String formatMonth(String month) {
+        switch (month) {
+            case "jan":
+            case "1":
+                return "January";
+            case "feb":
+            case "2":
+                return "February";
+            case "mar":
+            case "3":
+                return "March";
+            case "apr":
+            case "4":
+                return "April";
+            case "may":
+            case "5":
+                return "May";
+            case "jun":
+            case "6":
+                return "June";
+            case "jul":
+            case "7":
+                return "July";
+            case "aug":
+            case "8":
+                return "August";
+            case "sep":
+            case "9":
+                return "September";
+            case "oct":
+            case "10":
+                return "October";
+            case "nov":
+            case "11":
+                return "November";
+            case "dec":
+            case "12":
+                return "December";
+            default:
+                return month;
         }
     }
 
@@ -206,16 +196,20 @@ public abstract class BibItemWriter {
         output("", string, "", false);
     }
 
+    protected void output(String string, boolean newLine) throws IOException {
+        output("", string, "", newLine);
+    }
+
     protected void output(String string, String connective) throws IOException {
         output("", string, connective, false);
     }
 
-    protected void output(String prefix, String string, String connective) throws IOException {
-        output(prefix, string, connective, false);
-    }
-
     protected void output(String string, String connective, boolean newLine) throws IOException {
         output("", string, connective, newLine);
+    }
+
+    protected void output(String prefix, String string, String connective) throws IOException {
+        output(prefix, string, connective, false);
     }
 
     protected void output(String prefix, String string, String connective, boolean newLine) throws IOException {
@@ -229,11 +223,19 @@ public abstract class BibItemWriter {
             }
         }
     }
-    
+
     protected String processString(String string) {
         return removeBraces(LatexToUnicode.convertToUnicode(string));
     }
 
+    /**
+     * Converts the given string to title case. The first character is set in
+     * upper case, while the remaining characters are set in lower case.
+     * Characters between braces remain untouched.
+     *
+     * @param s
+     * @return
+     */
     protected String changeCaseT(String s) {
         StringBuilder sb = new StringBuilder();
         int level = 0;

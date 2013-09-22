@@ -25,16 +25,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import publy.Console;
 import publy.data.Pair;
-import publy.data.bibitem.Article;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
-import publy.data.bibitem.Book;
-import publy.data.bibitem.InCollection;
-import publy.data.bibitem.InProceedings;
-import publy.data.bibitem.InvitedTalk;
-import publy.data.bibitem.MastersThesis;
-import publy.data.bibitem.PhDThesis;
-import publy.data.bibitem.Unpublished;
 
 /**
  *
@@ -138,79 +130,55 @@ public class BibTeXParser {
     }
 
     private static BibItem parseBibItem(String bibItem) {
-        BibItem item = initializeBibItem(bibItem);
+        // Parse the type
+        String type = bibItem.substring(1, bibItem.indexOf('{')).trim().toLowerCase();
 
-        if (item != null) {
-            // Keep only the part between the outermost pair of braces
-            String body = bibItem.substring(bibItem.indexOf('{') + 1, bibItem.lastIndexOf('}')).trim();
+        // Keep only the part between the outermost pair of braces
+        String body = bibItem.substring(bibItem.indexOf('{') + 1, bibItem.lastIndexOf('}')).trim();
 
-            // Parse the id
-            int idEnd = body.indexOf(',');
+        // Parse the id
+        String id;
+        int idEnd = body.indexOf(',');
 
-            if (idEnd == -1) {
-                // No attributes
-                item.setId(body);
-                body = "";
+        if (idEnd == -1) {
+            // No attributes
+            id = body;
+            body = "";
+        } else {
+            id = body.substring(0, idEnd).trim();
+            body = body.substring(idEnd + 1).trim();
+        }
+
+        // Initialize the BibItem
+        BibItem item = new BibItem(type, id);
+
+        // Parse the attributes
+        int valueStart = body.indexOf('=');
+
+        while (valueStart > 0) {
+            // Parse the attribute name
+            String name = body.substring(0, valueStart).trim().toLowerCase();
+            body = body.substring(valueStart + 1).trim();
+
+            // Parse the attribute value
+            Pair<Integer, Integer> valuePos = getNextValuePosition(body);
+
+            if (valuePos == null) {
+                Console.error("Mismatched delimiters in attribute \"%s\" of publication \"%s\".", name, item.getId());
+                break;
             } else {
-                item.setId(body.substring(0, idEnd).trim());
-                body = body.substring(idEnd + 1).trim();
-            }
+                item.put(name, body.substring(valuePos.getFirst(), valuePos.getSecond()).trim());
+                body = body.substring(valuePos.getSecond() + valuePos.getFirst()).trim(); // Skip a final delimiter if there are any (valuePos.getFirst == 1)
 
-            // Parse the attributes
-            int valueStart = body.indexOf('=');
-
-            while (valueStart > 0) {
-                // Parse the attribute name
-                String name = body.substring(0, valueStart).trim().toLowerCase();
-                body = body.substring(valueStart + 1).trim();
-
-                // Parse the attribute value
-                Pair<Integer, Integer> valuePos = getNextValuePosition(body);
-
-                if (valuePos == null) {
-                    Console.error("Mismatched delimiters in attribute \"%s\" of publication \"%s\".", name, item.getId());
-                    break;
-                } else {
-                    item.put(name, body.substring(valuePos.getFirst(), valuePos.getSecond()).trim());
-                    body = body.substring(valuePos.getSecond() + valuePos.getFirst()).trim(); // Skip a final delimiter if there are any (valuePos.getFirst == 1)
-                    
-                    if (body.startsWith(",")) {
-                        body = body.substring(1).trim();
-                    }
+                if (body.startsWith(",")) {
+                    body = body.substring(1).trim();
                 }
-
-                valueStart = body.indexOf('=');
             }
+
+            valueStart = body.indexOf('=');
         }
 
         return item;
-    }
-
-    private static BibItem initializeBibItem(String bibItem) {
-        String type = bibItem.substring(1, bibItem.indexOf('{')).trim().toLowerCase();
-
-        switch (type) {
-            case "inproceedings":
-            case "conference":
-                return new InProceedings();
-            case "article":
-                return new Article();
-            case "mastersthesis":
-                return new MastersThesis();
-            case "phdthesis":
-                return new PhDThesis();
-            case "incollection":
-                return new InCollection();
-            case "unpublished":
-                return new Unpublished();
-            case "talk":
-                return new InvitedTalk();
-            case "book":
-                return new Book();
-            default:
-                Console.error("Unrecognized publication type \"%s\".", type);
-                return null;
-        }
     }
 
     private static Pair<Integer, Integer> getNextValuePosition(String body) {
@@ -248,7 +216,7 @@ public class BibTeXParser {
             // No delimiters. Capture everything up to the next ',' or the end of the item
             valueStart = 0;
             valueEnd = body.indexOf(',');
-            
+
             if (valueEnd == -1) {
                 valueEnd = body.length();
             }
@@ -309,7 +277,7 @@ public class BibTeXParser {
         if (matcher.find()) {
             url = matcher.group(1);
         }
-        
+
         matcher = groupPattern.matcher(line);
 
         if (matcher.find()) {
@@ -324,15 +292,15 @@ public class BibTeXParser {
             Author author = new Author(shortName, name);
             author.setUrl(url);
             author.setGroup(group);
-            
+
             if (htmlName != null) {
                 author.setHtmlName(htmlName);
             }
-            
+
             if (plaintextName != null) {
                 author.setPlaintextName(plaintextName);
             }
-            
+
             authors.put(shortName, author);
         }
     }
@@ -357,7 +325,7 @@ public class BibTeXParser {
             Console.error("Abbreviation tag detected, but no full information found:%n%s", line);
         }
     }
-    
+
     private static void replaceAuthors(BibItem item, Map<String, Author> authors) {
         // Replace authors
         String author = item.get("author");
@@ -380,25 +348,25 @@ public class BibTeXParser {
                     item.getAuthors().add(new Author(paperAuthor));
                 }
             }
-            
+
             // Update the author field
             StringBuilder newAuthors = new StringBuilder();
             boolean first = true;
-            
+
             for (Author a : item.getAuthors()) {
                 if (first) {
                     first = false;
                 } else {
                     newAuthors.append(" and ");
                 }
-                
+
                 newAuthors.append(a.getName());
             }
-            
+
             item.put("author", newAuthors.toString());
         }
     }
-    
+
     private static void expandAbbreviations(BibItem item, Map<String, String> abbreviations) {
         for (String field : item.getFields()) {
             String currentValue = item.get(field);

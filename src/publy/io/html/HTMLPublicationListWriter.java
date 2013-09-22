@@ -84,7 +84,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         if (settings.getHtmlSettings().linkToAlternateVersions() && (settings.getHtmlSettings().generateTextVersion() || settings.getHtmlSettings().generateBibtexVersion())) {
             Path htmlDir = settings.getFileSettings().getTarget().getParent();
 
-            out.write("    <p>This list is also available as <a href=\"");
+            out.write("    <p id=\"alternates\">This list is also available as <a href=\"");
 
             if (settings.getHtmlSettings().generateTextVersion()) {
                 out.write(htmlDir.relativize(settings.getFileSettings().getPlainTextTarget()).toString());
@@ -267,10 +267,10 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         // The actual entries
         for (BibItem item : c.getItems()) {
             if (settings.getGeneralSettings().reverseNumbering()) {
-                out.write("        <li id=\"" + item.getId() + "\" value=\"" + count + "\" class=\"bibentry\">");
+                out.write("        <li id=\"" + item.getId() + "\" value=\"" + count + "\" class=\"bibentry " + item.getOriginalType() + "\">");
                 count--;
             } else {
-                out.write("        <li id=\"" + item.getId() + "\" class=\"bibentry\">");
+                out.write("        <li id=\"" + item.getId() + "\" class=\"bibentry " + item.getOriginalType() + "\">");
                 count++;
             }
 
