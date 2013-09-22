@@ -131,13 +131,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
         writeVolume(item, true, ". ");
 
         if (item.anyNonEmpty("publisher")) {
-            output(item.get("publisher"), ", ");
+            output("<span class=\"publisher\">", item.get("publisher"), "</span>, ");
 
             if (item.anyNonEmpty("edition")) {
-                output(item.get("edition").toLowerCase(), " edition, ");
+                output("<span class=\"edition\">", item.get("edition").toLowerCase(), " edition</span>, ");
             }
         } else if (item.anyNonEmpty("edition")) {
-            output(changeCaseT(item.get("edition")), " edition, ");
+            output("<span class=\"edition\">", changeCaseT(item.get("edition")), " edition</span>, ");
         }
     }
 
@@ -342,11 +342,11 @@ public class HTMLBibItemWriter extends BibItemWriter {
         String number = item.get("number");
 
         if (volume != null && !volume.isEmpty()) {
-            output((capitalize ? "Volume " : "volume ") + "<span class=\"volume\">", volume, "</span>");
+            output("<span class=\"volume\">" + (capitalize ? "Volume " : "volume "), volume, "</span>");
             output(" of <span class=\"series\">", series, "</span>");
             out.write(connective);
         } else if (number != null && !number.isEmpty()) {
-            output((capitalize ? "Number " : "number ") + "<span class=\"number\">", number, "</number>");
+            output("<span class=\"number\">" + (capitalize ? "Number " : "number "), number, "</number>");
             output(" in <span class=\"series\">", series, "</span>");
             out.write(connective);
         } else {
