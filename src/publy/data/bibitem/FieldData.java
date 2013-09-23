@@ -39,13 +39,11 @@ public class FieldData {
         mandatoryFields.put(Type.BOOK, Arrays.asList("author;editor", "title", "year"));
         mandatoryFields.put(Type.INBOOK, Arrays.asList("author;editor", "title", "year"));
         mandatoryFields.put(Type.BOOKLET, Arrays.asList("author;editor", "title", "year"));
-        mandatoryFields.put(Type.COLLECTION, Arrays.asList("author;editor", "title", "year"));
         mandatoryFields.put(Type.INCOLLECTION, Arrays.asList("author", "title", "booktitle", "year"));
         mandatoryFields.put(Type.MANUAL, Arrays.asList("author", "title", "year"));
         mandatoryFields.put(Type.MISC, Arrays.asList("author;editor", "title", "year"));
         mandatoryFields.put(Type.ONLINE, Arrays.asList("author", "title", "year", "url"));
         mandatoryFields.put(Type.PATENT, Arrays.asList("author", "title", "number", "year"));
-        mandatoryFields.put(Type.PERIODICAL, Arrays.asList("author;editor", "title", "year"));
         mandatoryFields.put(Type.PROCEEDINGS, Arrays.asList("author;editor", "title", "year"));
         mandatoryFields.put(Type.INPROCEEDINGS, Arrays.asList("author", "title", "booktitle", "year"));
         mandatoryFields.put(Type.REPORT, Arrays.asList("author", "title", "type", "institution", "year"));
@@ -58,13 +56,11 @@ public class FieldData {
         optionalFields.put(Type.BOOK, Arrays.asList("editor", "publisher", "volume", "number", "series", "address", "edition", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.INBOOK, Arrays.asList("editor", "publisher", "chapter", "pages", "volume", "number", "series", "type", "address", "edition", "bookauthor", "booktitle", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.BOOKLET, Arrays.asList("editor", "howpublished", "address", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
-        optionalFields.put(Type.COLLECTION, Arrays.asList("editor", "publisher", "volume", "number", "series", "edition", "address", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.INCOLLECTION, Arrays.asList("editor", "publisher", "volume", "number", "series", "type", "chapter", "pages", "address", "edition", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.MANUAL, Arrays.asList("organization", "address", "edition", "type", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.MISC, Arrays.asList("editor", "howpublished", "type", "organization", "address", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.ONLINE, Arrays.asList("organization", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "urldate"));
         optionalFields.put(Type.PATENT, Arrays.asList("holder", "type", "address", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
-        optionalFields.put(Type.PERIODICAL, Arrays.asList("editor", "publisher", "series", "volume", "number", "issue", "issn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.PROCEEDINGS, Arrays.asList("editor", "publisher", "volume", "number", "series", "organization", "address", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.INPROCEEDINGS, Arrays.asList("editor", "publisher", "volume", "number", "series", "organization", "address", "pages", "isbn", "chapter", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.REPORT, Arrays.asList("number", "address", "isrn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));

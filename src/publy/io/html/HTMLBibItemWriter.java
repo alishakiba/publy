@@ -67,9 +67,6 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 case BOOKLET:
                     writeBooklet(item);
                     break;
-                case COLLECTION:
-                    //writeCollection(item);
-                    break;
                 case INCOLLECTION:
                     //writeInCollection(item);
                     break;
@@ -84,9 +81,6 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     break;
                 case PATENT:
                     //writePatent(item);
-                    break;
-                case PERIODICAL:
-                    //writePeriodical(item);
                     break;
                 case PROCEEDINGS:
                     //writeProceedings(item);
