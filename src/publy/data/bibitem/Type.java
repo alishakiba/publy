@@ -21,8 +21,8 @@ package publy.data.bibitem;
  */
 public enum Type {
 
-    ARTICLE, BOOK, INBOOK, BOOKLET, COLLECTION, INCOLLECTION, MANUAL, MISC,
-    ONLINE, PATENT, PERIODICAL, PROCEEDINGS, INPROCEEDINGS, REPORT, THESIS,
+    ARTICLE, BOOK, INBOOK, BOOKLET, INCOLLECTION, MANUAL, MISC,
+    ONLINE, PATENT, PROCEEDINGS, INPROCEEDINGS, REPORT, THESIS,
     UNPUBLISHED;
 
     @Override
@@ -41,8 +41,6 @@ public enum Type {
                 return INBOOK;
             case "booklet":
                 return BOOKLET;
-            case "collection":
-                return COLLECTION;
             case "incollection":
                 return INCOLLECTION;
             case "manual":
@@ -53,8 +51,7 @@ public enum Type {
                 return ONLINE;
             case "patent":
                 return PATENT;
-            case "periodical":
-                return PERIODICAL;
+
             case "proceedings":
                 return PROCEEDINGS;
             case "inproceedings":
@@ -73,18 +70,22 @@ public enum Type {
                 return INBOOK;
             case "suppbook":
                 return INBOOK;
+            case "collection":
+                return BOOK;
             case "mvcollection":
-                return COLLECTION;
+                return BOOK;
             case "suppcollection":
                 return INCOLLECTION;
+            case "periodical":
+                return BOOK;
             case "suppperiodical":
                 return ARTICLE;
             case "mvproceedings":
                 return PROCEEDINGS;
             case "reference":
-                return COLLECTION;
+                return BOOK;
             case "mvreference":
-                return COLLECTION;
+                return BOOK;
             case "inreference":
                 return INCOLLECTION;
             case "conference":
