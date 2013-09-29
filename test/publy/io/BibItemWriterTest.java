@@ -107,11 +107,11 @@ public class BibItemWriterTest {
     }
 
     /**
-     * Test of changeCaseT method, of class BibItemWriter.
+     * Test of toTitleCase method, of class BibItemWriter.
      */
     @Test
-    public void testChangeCaseT() {
-        System.out.println("changeCaseT");
+    public void testToTitleCase() {
+        System.out.println("toTitleCase");
 
         HashMap<String, String> expected = new LinkedHashMap<>();
 
@@ -142,7 +142,7 @@ public class BibItemWriterTest {
 
         for (String inputTitle : expected.keySet()) {
             String expectedResult = expected.get(inputTitle);
-            String result = testInstance.changeCaseT(inputTitle);
+            String result = testInstance.toTitleCase(inputTitle);
 
             assertEquals(expectedResult, result);
         }

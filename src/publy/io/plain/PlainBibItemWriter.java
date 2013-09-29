@@ -17,15 +17,7 @@ package publy.io.plain;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import publy.data.bibitem.Article;
 import publy.data.bibitem.BibItem;
-import publy.data.bibitem.Book;
-import publy.data.bibitem.InCollection;
-import publy.data.bibitem.InProceedings;
-import publy.data.bibitem.InvitedTalk;
-import publy.data.bibitem.MastersThesis;
-import publy.data.bibitem.PhDThesis;
-import publy.data.bibitem.Unpublished;
 import publy.data.settings.Settings;
 import publy.io.BibItemWriter;
 
@@ -38,9 +30,13 @@ public class PlainBibItemWriter extends BibItemWriter {
     public PlainBibItemWriter(BufferedWriter out, Settings settings) {
         super(out, settings);
     }
-
+    
     @Override
-    protected void writeArticle(Article item) throws IOException {
+    public void write(BibItem item) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    protected void writeArticle(BibItem item) throws IOException {
         writeTitleAndAuthors(item);
 
         // Handle submitted / accepted
@@ -64,8 +60,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         output(item.get("note"), ".", true);
     }
 
-    @Override
-    protected void writeBook(Book item) throws IOException {
+    protected void writeBook(BibItem item) throws IOException {
         writeTitleAndAuthors(item);
 
         output(item.get("publisher"), ", ");
@@ -74,13 +69,11 @@ public class PlainBibItemWriter extends BibItemWriter {
         output(item.get("note"), ".", true);
     }
 
-    @Override
-    protected void writeInProceedings(InProceedings item) throws IOException {
+    protected void writeInProceedings(BibItem item) throws IOException {
         writePart(item);
     }
 
-    @Override
-    protected void writeInCollection(InCollection item) throws IOException {
+    protected void writeInCollection(BibItem item) throws IOException {
         writePart(item);
     }
 
@@ -101,8 +94,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         output(item.get("note"), ".", true);
     }
 
-    @Override
-    protected void writeMastersThesis(MastersThesis item) throws IOException {
+    protected void writeMastersThesis(BibItem item) throws IOException {
         writeTitleAndAuthors(item);
 
         output("Master's thesis, ", item.get("school"), ", ");
@@ -111,8 +103,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         output(item.get("note"), ".", true);
     }
 
-    @Override
-    protected void writePhDThesis(PhDThesis item) throws IOException {
+    protected void writePhDThesis(BibItem item) throws IOException {
         writeTitleAndAuthors(item);
 
         output("PhD thesis, ", item.get("school"), ", ");
@@ -121,8 +112,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         output(item.get("note"), ".", true);
     }
 
-    @Override
-    protected void writeInvitedTalk(InvitedTalk item) throws IOException {
+    protected void writeInvitedTalk(BibItem item) throws IOException {
         output(formatTitle(item), ".", true);
 
         output(item.get("address"), ", ");
@@ -131,8 +121,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         output(item.get("note"), ".", true);
     }
 
-    @Override
-    protected void writeUnpublished(Unpublished item) throws IOException {
+    protected void writeUnpublished(BibItem item) throws IOException {
         writeTitleAndAuthors(item);
 
         output(item.get("note"), ".", true);

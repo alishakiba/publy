@@ -57,6 +57,6 @@ public class TypeCondition extends Condition {
 
     @Override
     public boolean internalMatches(BibItem item) {
-        return types.contains(item.getType()) || types.contains("*");
+        return types.contains(item.getOriginalType()) || types.contains("*");
     }
 }

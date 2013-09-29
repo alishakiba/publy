@@ -47,7 +47,7 @@ public abstract class BibItemWriter {
         if (title == null || title.isEmpty()) {
             return "";
         } else {
-            return changeCaseT(title);
+            return toTitleCase(title);
         }
     }
 
@@ -236,7 +236,22 @@ public abstract class BibItemWriter {
      * @param s
      * @return
      */
-    protected String changeCaseT(String s) {
+    protected String toTitleCase(String s) {
+        return changeCase(s, true);
+    }
+
+    /**
+     * Converts the given string to lower case. Characters between braces remain
+     * untouched.
+     *
+     * @param s
+     * @return
+     */
+    protected String toLowerCase(String s) {
+        return changeCase(s, false);
+    }
+
+    private String changeCase(String s, boolean title) {
         StringBuilder sb = new StringBuilder();
         int level = 0;
         boolean first = true;
@@ -263,17 +278,16 @@ public abstract class BibItemWriter {
                         break;
                     default:
                         if (level == 0) {
-                            if (first) {
+                            if (first && title) {
                                 sb.append(Character.toUpperCase(c));
-                                first = false;
                             } else {
                                 sb.append(Character.toLowerCase(c));
                             }
                         } else {
                             sb.append(c);
-                            first = false;
                         }
-
+                        
+                        first = false;
                         break;
                 }
             }
