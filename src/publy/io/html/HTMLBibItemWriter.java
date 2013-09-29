@@ -28,6 +28,7 @@ import publy.data.PublicationType;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.FieldData;
+import publy.data.bibitem.Type;
 import publy.data.settings.GeneralSettings;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
@@ -68,34 +69,34 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     writeBooklet(item);
                     break;
                 case INCOLLECTION:
-                    //writeInCollection(item);
+                    writeInCollection(item);
                     break;
                 case MANUAL:
-                    //writeManual(item);
+                    writeManual(item);
                     break;
                 case MISC:
                     writeMisc(item);
                     break;
                 case ONLINE:
-                    //writeOnline(item);
+                    writeOnline(item);
                     break;
                 case PATENT:
-                    //writePatent(item);
+                    writePatent(item);
                     break;
                 case PROCEEDINGS:
-                    //writeProceedings(item);
+                    writeProceedings(item);
                     break;
                 case INPROCEEDINGS:
-                    //writeInProceedings(item);
+                    writeInProceedings(item);
                     break;
                 case REPORT:
-                    //writeReport(item);
+                    writeReport(item);
                     break;
                 case THESIS:
                     writeThesis(item);
                     break;
                 case UNPUBLISHED:
-                    //writeUnpublished(item);
+                    writeUnpublished(item);
                     break;
                 default:
                     throw new AssertionError("Item \"" + item.getId() + "\" has an unexpected publication type: " + item.getType());
@@ -104,7 +105,11 @@ public class HTMLBibItemWriter extends BibItemWriter {
             output("<span class=\"date\">", formatDate(item), "</span>.<br>", true);
         }
 
-        output(indent + "<span class=\"note\">", item.get("note"), ".</span><br>", true);
+        // Write note (unpublished uses note as the publication info)
+        if (item.getType() != Type.UNPUBLISHED) {
+            output(indent + "<span class=\"note\">", item.get("note"), ".</span><br>", true);
+        }
+        
         writeLinks(item);
     }
 
@@ -125,30 +130,98 @@ public class HTMLBibItemWriter extends BibItemWriter {
         writeVolume(item, true, ". ");
         writePublisherAndEdition(item);
     }
-    
+
     protected void writeInBook(BibItem item) throws IOException {
         writeVolume(item, true, ". ");
         writePublisherAndEdition(item);
     }
-    
+
     protected void writeBooklet(BibItem item) throws IOException {
         output("<span class=\"howpublished\">", item.get("howpublished"), "</span>, ");
         output("<span class=\"address\">", item.get("address"), "</span>, ");
     }
 
-    private void writePart(BibItem item) throws IOException {
-        output("In <span class=\"booktitle\">", item.get("booktitle"), "</span>, ");
-        writeVolume(item, false, ", ");
-        output(formatPages(item, true), ", ");
+    protected void writeInCollection(BibItem item) throws IOException {
+        out.write("In ");
+        output("<span class=\"editor\">", item.get("editor"), ", editor, </span>"); // TODO: proper name formatting
+        output("<span class=\"booktitle\">", item.get("booktitle"), "</span>");
+
+        if (item.anyNonEmpty("volume", "series")) {
+            out.write(", ");
+            writeVolume(item, false, "");
+        }
+
+        if (item.anyNonEmpty("chapter")) {
+            out.write(", ");
+            writeChapter(item, false);
+        }
+
+        output(", <span class=\"pages\">", formatPages(item, true), "</span>");
+        out.write(".");
+
+        if (item.anyNonEmpty("publisher", "edition")) {
+            out.write(" ");
+            writePublisherAndEdition(item);
+        }
     }
 
-    protected void writeThesis(BibItem item) throws IOException {
-        output(item.get("type"), ", ");
-        output(item.get("school"), ", ");
+    protected void writeManual(BibItem item) throws IOException {
+        output("<span class=\"organization\">", item.get("organization"), "</span>, ");
+
+        String edition = item.get("edition");
+
+        if (edition != null && !edition.isEmpty()) {
+            if (item.anyNonEmpty("organization")) {
+                output("<span class=\"edition\">", toLowerCase(edition), " edition</span>, ");
+            } else {
+                output("<span class=\"edition\">", toTitleCase(edition), " edition</span>, ");
+            }
+        }
     }
 
     protected void writeMisc(BibItem item) throws IOException {
+        output(item.get("howpublished"), ", ");
         output(item.get("address"), ", ");
+    }
+
+    protected void writeOnline(BibItem item) throws IOException {
+        // No publication information necessary
+    }
+
+    protected void writePatent(BibItem item) throws IOException {
+        // TODO
+    }
+
+    protected void writeProceedings(BibItem item) throws IOException {
+        writeVolume(item, true, ", ");
+        output("<span class=\"address\">", item.get("address"), "</span>, ");
+    }
+
+    protected void writeInProceedings(BibItem item) throws IOException {
+        output("In <span class=\"booktitle\">", item.get("booktitle"), "</span>, ");
+        writeVolume(item, false, ", ");
+        output("<span class=\"pages\">", formatPages(item, true), "</span>, ");
+        output("<span class=\"address\">", item.get("address"), "</span>, ");
+    }
+
+    protected void writeReport(BibItem item) throws IOException {
+        output("<span class=\"type\">", toTitleCase(item.get("type")), "</span>");
+        output(" <span class=\"number\">", item.get("number"), "</span>");
+        out.write(", ");
+
+        output("<span class=\"institution\">", item.get("institution"), "</span>, ");
+        output("<span class=\"address\">", item.get("address"), "</span>, ");
+    }
+
+    protected void writeThesis(BibItem item) throws IOException {
+        output("<span class=\"type\">", item.get("type"), "</span>, ");
+        output("<span class=\"school\">", item.get("school"), "</span>, ");
+        output("<span class=\"address\">", item.get("address"), "</span>, ");
+    }
+
+    protected void writeUnpublished(BibItem item) throws IOException {
+        output("<span class=\"howpublished\">", item.get("howpublished"), "</span>, ");
+        output("<span class=\"note\">", item.get("note"), "</span>, ");
     }
 
     protected void writeTitleAndAuthorsHTML(BibItem item) throws IOException {
@@ -348,16 +421,38 @@ public class HTMLBibItemWriter extends BibItemWriter {
             output("<span class=\"series\">", series, "</span>" + connective);
         }
     }
-    
+
     protected void writePublisherAndEdition(BibItem item) throws IOException {
-        if (item.anyNonEmpty("publisher")) {
-            output("<span class=\"publisher\">", item.get("publisher"), "</span>, ");
+        String publisher = item.get("publisher");
+        String edition = item.get("edition");
+
+        if (publisher != null && !publisher.isEmpty()) {
+            output("<span class=\"publisher\">", publisher, "</span>, ");
 
             if (item.anyNonEmpty("edition")) {
-                output("<span class=\"edition\">", item.get("edition").toLowerCase(), " edition</span>, ");
+                output("<span class=\"edition\">", toLowerCase(edition), " edition</span>, ");
             }
-        } else if (item.anyNonEmpty("edition")) {
-            output("<span class=\"edition\">", changeCaseT(item.get("edition")), " edition</span>, ");
+        } else if (edition != null && !edition.isEmpty()) {
+            output("<span class=\"edition\">", toTitleCase(edition), " edition</span>, ");
+        }
+    }
+
+    protected void writeChapter(BibItem item, boolean capitalize) throws IOException {
+        String type = item.get("type");
+        String chapter = item.get("chapter");
+
+        if (chapter != null && !chapter.isEmpty()) {
+            out.write("<span class=\"chapter\">");
+
+            if (type != null && !type.isEmpty()) {
+                output(capitalize ? toTitleCase(type) : toLowerCase(type));
+            } else {
+                out.write("chapter");
+            }
+
+            output(" ", chapter, "");
+
+            out.write("</span>");
         }
     }
 
