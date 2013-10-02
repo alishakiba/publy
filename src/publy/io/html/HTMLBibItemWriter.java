@@ -447,7 +447,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             if (type != null && !type.isEmpty()) {
                 output(capitalize ? toTitleCase(type) : toLowerCase(type));
             } else {
-                out.write("chapter");
+                out.write(capitalize ? "Chapter" : "chapter");
             }
 
             output(" ", chapter, "");
