@@ -128,6 +128,7 @@ public class BibItemWriterTest {
         expected.put("mYtItLe {ROCKS}", "Mytitle ROCKS");
         expected.put("mYtItLe {RO{C}KS}", "Mytitle ROCKS");
         expected.put("m{Yt}ItLe RO{C}KS", "MYtitle roCks");
+        expected.put("{M}ytitle rocks", "Mytitle rocks");
         expected.put("Diagonal flips in {H}amiltonian triangulations on the sphere", "Diagonal flips in Hamiltonian triangulations on the sphere");
 
         // Escapes
@@ -143,6 +144,49 @@ public class BibItemWriterTest {
         for (String inputTitle : expected.keySet()) {
             String expectedResult = expected.get(inputTitle);
             String result = testInstance.toTitleCase(inputTitle);
+
+            assertEquals(expectedResult, result);
+        }
+    }
+    
+    /**
+     * Test of toLowerCase method, of class BibItemWriter.
+     */
+    @Test
+    public void testToLowerCase() {
+        System.out.println("toLowerCase");
+
+        HashMap<String, String> expected = new LinkedHashMap<>();
+
+        // Simple titles
+        expected.put("myTitLE", "mytitle");
+        expected.put("MyTitLE", "mytitle");
+        expected.put("Mytitle", "mytitle");
+        expected.put("myTitLE IS AWESOME", "mytitle is awesome");
+        expected.put("Mytitle rocks", "mytitle rocks");
+
+        // Braces
+        expected.put("{mYtItLe}", "mYtItLe");
+        expected.put("{mYtItLe ROCKS}", "mYtItLe ROCKS");
+        expected.put("mYtItLe {ROCKS}", "mytitle ROCKS");
+        expected.put("mYtItLe {RO{C}KS}", "mytitle ROCKS");
+        expected.put("m{Yt}ItLe RO{C}KS", "mYtitle roCks");
+        expected.put("{M}ytitle rocks", "Mytitle rocks");
+        expected.put("Diagonal flips in {H}amiltonian triangulations on the sphere", "diagonal flips in Hamiltonian triangulations on the sphere");
+
+        // Escapes
+        expected.put("m\\{Yt\\}ItLe RO\\{C\\}KS", "m\\{yt\\}itle ro\\{c\\}ks");
+        expected.put("m\\\\{Yt}ItLe RO\\\\{C}KS", "m\\\\Ytitle ro\\\\Cks");
+        expected.put("m{Yt\\}ItLe RO{C}KS", "mYt\\itle roCks");
+
+        // Mixed
+        expected.put("Konvexe {F}{\\\"u}nfecke in ebenen {P}unktmengen", "konvexe F\\\"unfecke in ebenen Punktmengen");
+
+        BibItemWriter testInstance = new TestBibItemWriter(null, null);
+
+        for (String inputTitle : expected.keySet()) {
+            String expectedResult = expected.get(inputTitle);
+            String result = testInstance.toLowerCase(inputTitle);
 
             assertEquals(expectedResult, result);
         }
@@ -184,6 +228,34 @@ public class BibItemWriterTest {
         for (String inputTitle : expected.keySet()) {
             String expectedResult = expected.get(inputTitle);
             String result = testInstance.removeBraces(inputTitle);
+
+            assertEquals(expectedResult, result);
+        }
+    }
+    
+    @Test
+    public void testChangeQuotes() {
+        System.out.println("changeQuotes");
+
+        HashMap<String, String> expected = new LinkedHashMap<>();
+
+        // Simple tests
+        expected.put("O'Rourke", "O’Rourke");
+        expected.put("This is `simple'.", "This is ‘simple’.");
+        expected.put("``This is also simple.''", "“This is also simple.”");
+        expected.put("As is ``this\".", "As is “this”.");
+
+        // Ignore quotes in HTML tags
+        expected.put("<span class=\"author\">O'Rourke</span>", "<span class=\"author\">O’Rourke</span>");
+        expected.put("<a href=\"http://www.google.com\">O'Rourke</a>", "<a href=\"http://www.google.com\">O’Rourke</a>");
+        expected.put("<span class=\"title\">On ``simple'' graphs</span>", "<span class=\"title\">On “simple” graphs</span>");
+        expected.put("<span class=\"title\">On ``simple\" graphs</span>", "<span class=\"title\">On “simple” graphs</span>");
+
+        BibItemWriter testInstance = new TestBibItemWriter(null, null);
+
+        for (String input : expected.keySet()) {
+            String expectedResult = expected.get(input);
+            String result = testInstance.changeQuotes(input);
 
             assertEquals(expectedResult, result);
         }
