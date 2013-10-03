@@ -27,12 +27,12 @@ import publy.Console;
 import publy.data.PublicationType;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
-import publy.data.bibitem.FieldData;
 import publy.data.bibitem.Type;
 import publy.data.settings.GeneralSettings;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
 import publy.io.BibItemWriter;
+import publy.io.bibtex.BibtexBibItemWriter;
 
 /**
  *
@@ -41,9 +41,11 @@ import publy.io.BibItemWriter;
 public class HTMLBibItemWriter extends BibItemWriter {
 
     private static final String indent = "          ";
+    private BibtexBibItemWriter bibtexWriter;
 
     public HTMLBibItemWriter(BufferedWriter out, Settings settings) {
         super(out, settings);
+        bibtexWriter = new BibtexBibItemWriter(out, settings);
     }
 
     @Override
@@ -626,60 +628,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write(indent + "  <pre class=\"bibtex\">");
         out.newLine();
 
-        // Item type
-        out.write("@" + item.getOriginalType() + "{" + item.getId() + ",");
-        out.newLine();
-
-        // The first field should omit the connecting ",".
-        boolean first = true;
-
-        // Get the proper format for authors
-        if (item.anyNonEmpty("author")) {
-            out.write("  author={");
-
-            for (int i = 0; i < item.getAuthors().size(); i++) {
-                out.write(item.getAuthors().get(i).getName());
-
-                if (i < item.getAuthors().size() - 1) {
-                    out.write(" and ");
-                }
-            }
-
-            out.write("}");
-
-            first = false;
-        }
-
-        for (String field : FieldData.getMandatoryFields(item.getType())) {
-            if (!field.equals("author")) {
-                if (first) {
-                    first = false;
-                } else {
-                    out.write(",");
-                    out.newLine();
-                }
-
-                out.write("  " + field + "={" + item.get(field) + "}");
-            }
-        }
-
-        for (String field : FieldData.getOptionalFields(item.getType())) {
-            String v = item.get(field);
-
-            if (!field.equals("author") && v != null && !v.isEmpty()) {
-                if (first) {
-                    first = false;
-                } else {
-                    out.write(",");
-                    out.newLine();
-                }
-
-                out.write("  " + field + "={" + v + "}");
-            }
-        }
-
-        out.newLine(); // No comma after the last element
-        out.write("}</pre>");
+        bibtexWriter.write(item);
+        
+        out.write("</pre>");
         out.newLine();
 
         out.write(indent + "</div>");
