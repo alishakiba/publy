@@ -2179,34 +2179,6 @@ public class HTMLBibItemWriterTest {
         }
     }
 
-    @Test
-    public void testChangeQuotes() {
-        System.out.println("changeQuotes");
-
-        HashMap<String, String> expected = new LinkedHashMap<>();
-
-        // Simple tests
-        expected.put("O'Rourke", "O’Rourke");
-        expected.put("This is `simple'.", "This is ‘simple’.");
-        expected.put("``This is also simple.''", "“This is also simple.”");
-        expected.put("As is ``this\".", "As is “this”.");
-
-        // Ignore quotes in HTML tags
-        expected.put("<span class=\"author\">O'Rourke</span>", "<span class=\"author\">O’Rourke</span>");
-        expected.put("<a href=\"http://www.google.com\">O'Rourke</a>", "<a href=\"http://www.google.com\">O’Rourke</a>");
-        expected.put("<span class=\"title\">On ``simple'' graphs</span>", "<span class=\"title\">On “simple” graphs</span>");
-        expected.put("<span class=\"title\">On ``simple\" graphs</span>", "<span class=\"title\">On “simple” graphs</span>");
-
-        HTMLBibItemWriter testInstance = new HTMLBibItemWriter(null, null);
-
-        for (String input : expected.keySet()) {
-            String expectedResult = expected.get(input);
-            String result = testInstance.changeQuotes(input);
-
-            assertEquals(expectedResult, result);
-        }
-    }
-
     private String removeTags(String html) {
         return html.replaceAll("<[^>]*>", "");
     }

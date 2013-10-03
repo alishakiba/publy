@@ -225,7 +225,7 @@ public abstract class BibItemWriter {
     }
 
     protected String processString(String string) {
-        return removeBraces(LatexToUnicode.convertToUnicode(string));
+        return changeQuotes(removeBraces(LatexToUnicode.convertToUnicode(string)));
     }
 
     /**
@@ -360,5 +360,74 @@ public abstract class BibItemWriter {
         }
 
         return result.toString();
+    }
+    
+    private enum ChangeQuotesState {
+        DEFAULT, IN_TAG, AFTER_QUOTE, AFTER_GRAVE;
+    }
+    
+    protected String changeQuotes(String string) {
+        StringBuilder sb = new StringBuilder(string.length());
+        ChangeQuotesState state = ChangeQuotesState.DEFAULT;
+
+        for (char c : string.toCharArray()) {
+            if (state == ChangeQuotesState.AFTER_GRAVE) {
+                // Single or double quote?
+                if (c == '`') {
+                    // Double `` -> U+201C (left double quotation mark)
+                    sb.append('\u201C');
+                    // state is reset at the end of the loop
+                } else {
+                    // Single ` -> U+2018 (left single quotation mark)
+                    sb.append('\u2018');
+                    state = ChangeQuotesState.DEFAULT; // Reset state here so current char gets processed regularly
+                }
+            } else if (state == ChangeQuotesState.AFTER_QUOTE) {
+                // Single or double quote?
+                if (c == '\'') {
+                    // Double '' -> U+201D (right double quotation mark)
+                    sb.append('\u201D');
+                    // state is reset at the end of the loop
+                } else {
+                    // Single ' -> U+2019 (right single quotation mark)
+                    sb.append('\u2019');
+                    state = ChangeQuotesState.DEFAULT; // Reset state here so current char gets processed regularly
+                }
+            }
+
+            if (state == ChangeQuotesState.DEFAULT) {
+                // Regular case
+                switch (c) {
+                    case '<': // HTML tag open
+                        state = ChangeQuotesState.IN_TAG;
+                        sb.append(c);
+                        break;
+                    case '"': // Single " -> U+201D (right double quotation mark)
+                        sb.append('\u201D');
+                        break;
+                    case '`': // Single or double `
+                        state = ChangeQuotesState.AFTER_GRAVE;
+                        break;
+                    case '\'': // Single or double '
+                        state = ChangeQuotesState.AFTER_QUOTE;
+                        break;
+                    default:
+                        sb.append(c);
+                        break;
+                }
+            } else if (state == ChangeQuotesState.IN_TAG) {
+                // In an HTML tag
+                if (c == '>') {
+                    // Close the tag
+                    state = ChangeQuotesState.DEFAULT;
+                }
+
+                sb.append(c);
+            } else {
+                state = ChangeQuotesState.DEFAULT;
+            }
+        }
+
+        return sb.toString();
     }
 }
