@@ -17,6 +17,9 @@ package publy.io.bibtex;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.FieldData;
 import publy.data.settings.Settings;
@@ -58,23 +61,12 @@ public class BibtexBibItemWriter extends BibItemWriter {
             first = false;
         }
 
-        for (String field : FieldData.getMandatoryFields(item.getType())) {
-            if (!field.equals("author")) {
-                if (first) {
-                    first = false;
-                } else {
-                    out.write(",");
-                    out.newLine();
-                }
+        Set<String> fieldsToPrint = getFieldsToPrint(item);
 
-                out.write("  " + field + "={" + item.get(field) + "}");
-            }
-        }
-
-        for (String field : FieldData.getOptionalFields(item.getType())) {
+        for (String field : fieldsToPrint) {
             String v = item.get(field);
 
-            if (!field.equals("author") && v != null && !v.isEmpty()) {
+            if (v != null && !v.isEmpty()) {
                 if (first) {
                     first = false;
                 } else {
@@ -89,5 +81,30 @@ public class BibtexBibItemWriter extends BibItemWriter {
         out.newLine();
         out.write("}");
         out.newLine();
+    }
+
+    private Set<String> getFieldsToPrint(BibItem item) {
+        Set<String> fieldsToPrint = new LinkedHashSet<>();
+        
+        for (String field : FieldData.getMandatoryFields(item.getType())) {
+            if (field.contains(";")) {
+                fieldsToPrint.addAll(Arrays.asList(field.split(";")));
+            } else {
+                fieldsToPrint.add(field);
+            }
+        }
+        
+        for (String field : FieldData.getOptionalFields(item.getType())) {
+            if (field.contains(";")) {
+                fieldsToPrint.addAll(Arrays.asList(field.split(";")));
+            } else {
+                fieldsToPrint.add(field);
+            }
+        }
+        
+        // We already printed author
+        fieldsToPrint.remove("author");
+        
+        return fieldsToPrint;
     }
 }
