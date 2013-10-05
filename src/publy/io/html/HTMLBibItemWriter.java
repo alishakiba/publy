@@ -50,7 +50,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     @Override
     public void write(BibItem item) throws IOException {
-        writeTitleAndAbstractHTML(item);
+        writeTitleAndAuthorsHTML(item);
 
         if (item.anyNonEmpty("status")) {
             writeStatus(item);
