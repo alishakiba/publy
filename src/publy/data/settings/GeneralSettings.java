@@ -36,7 +36,7 @@ public class GeneralSettings {
     // Identification
     private List<String> myNames = Arrays.asList("me");
     // Author info
-    private NameDisplay nameDisplay = NameDisplay.ABBREVIATED;
+    private NameDisplay nameDisplay = NameDisplay.FULL;
     private boolean reverseNames = false;
     private boolean listAllAuthors = true;
     // Publication Structure

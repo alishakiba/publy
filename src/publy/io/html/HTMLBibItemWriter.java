@@ -111,7 +111,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         if (item.getType() != Type.UNPUBLISHED) {
             output(indent + "<span class=\"note\">", item.get("note"), ".</span><br>", true);
         }
-        
+
         writeLinks(item);
     }
 
@@ -222,7 +222,6 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeUnpublished(BibItem item) throws IOException {
-        output("<span class=\"howpublished\">", item.get("howpublished"), "</span>, ");
         output("<span class=\"note\">", item.get("note"), "</span>, ");
     }
 
@@ -231,17 +230,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             writeTitleAndAbstractHTML(item);
         }
 
-        // Don't add an authors line if it's just me and I just want to list co-authors
-        if (settings.getGeneralSettings().listAllAuthors() || item.getAuthors().size() > 1 || (item.getAuthors().size() == 1 && !item.getAuthors().get(0).isMe(settings.getGeneralSettings().getMyNames(), settings.getGeneralSettings().getNameDisplay(), settings.getGeneralSettings().reverseNames()))) {
-            String authors = formatAuthors(item);
-
-            if (authors.endsWith(".</span>") || authors.endsWith(".</a>")) {
-                // Don't double up on periods (occurs when author names are abbreviated and reversed)
-                output(indent, authors, "<br>", true);
-            } else {
-                output(indent, authors, ".<br>", true);
-            }
-        }
+        writeAuthors(item);
 
         if (!settings.getGeneralSettings().titleFirst()) {
             writeTitleAndAbstractHTML(item);
@@ -301,37 +290,64 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
     }
 
-    @Override
-    protected String formatAuthors(BibItem item) {
-        String author = item.get("author");
+    protected void writeAuthors(BibItem item) throws IOException {
+        boolean useEditor;
 
-        if (author == null) {
-            Console.error("No authors found for entry \"%s\".", item.getId());
-            return "";
+        if (item.anyNonEmpty("author")) {
+            useEditor = false;
+        } else if (item.anyNonEmpty("editor")) {
+            useEditor = true;
         } else {
-            List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
-            GeneralSettings gs = settings.getGeneralSettings();
+            Console.error("No author information found for entry \"%s\".", item.getId());
+            return;
+        }
 
-            for (Author a : item.getAuthors()) {
-                if (a == null) {
-                    Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), author);
+        List<Author> authorList = (useEditor ? item.getEditors() : item.getAuthors());
+
+        // Don't add an authors line if it's just me and I just want to list co-authors
+        if (settings.getGeneralSettings().listAllAuthors() || authorList.size() > 1 || (authorList.size() == 1 && !authorList.get(0).isMe(settings.getGeneralSettings().getMyNames(), settings.getGeneralSettings().getNameDisplay(), settings.getGeneralSettings().reverseNames()))) {
+            String authors = formatAuthors(item, authorList);
+
+            if (useEditor) {
+                if (authorList.size() > 1) {
+                    output(indent, authors, ", editors.<br>", true);
                 } else {
-                    if (gs.listAllAuthors() || !a.isMe(gs.getMyNames(), gs.getNameDisplay(), gs.reverseNames())) {
-                        authorLinks.add(a.getLinkedAndFormattedHtmlName(gs.getNameDisplay(), gs.reverseNames()));
-                    }
+                    output(indent, authors, ", editor.<br>", true);
+                }
+            } else {
+                if (authors.endsWith(".</span>") || authors.endsWith(".</a>")) {
+                    // Don't double up on periods (occurs when author names are abbreviated and reversed)
+                    output(indent, authors, "<br>", true);
+                } else {
+                    output(indent, authors, ".<br>", true);
                 }
             }
+        }
+    }
 
-            if (gs.listAllAuthors()) {
+    protected String formatAuthors(BibItem item, List<Author> authorList) {
+        List<String> authorLinks = new ArrayList<>(authorList.size());
+        GeneralSettings gs = settings.getGeneralSettings();
+
+        for (Author a : authorList) {
+            if (a == null) {
+                Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), (authorList == item.getAuthors() ? item.get("author") : item.get("editor")));
+            } else {
+                if (gs.listAllAuthors() || !a.isMe(gs.getMyNames(), gs.getNameDisplay(), gs.reverseNames())) {
+                    authorLinks.add(a.getLinkedAndFormattedHtmlName(gs.getNameDisplay(), gs.reverseNames()));
+                }
+            }
+        }
+
+        if (gs.listAllAuthors()) {
+            return formatNames(authorLinks);
+        } else {
+            if (authorLinks.size() == authorList.size()) {
+                Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), (authorList == item.getAuthors() ? item.get("author") : item.get("editor")));
+
                 return formatNames(authorLinks);
             } else {
-                if (authorLinks.size() == item.getAuthors().size()) {
-                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
-
-                    return formatNames(authorLinks);
-                } else {
-                    return "With " + formatNames(authorLinks);
-                }
+                return "With " + formatNames(authorLinks);
             }
         }
     }
@@ -629,7 +645,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.newLine();
 
         bibtexWriter.write(item);
-        
+
         out.write("</pre>");
         out.newLine();
 

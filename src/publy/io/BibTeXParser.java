@@ -61,7 +61,7 @@ public class BibTeXParser {
 
         for (BibItem item : items) {
             expandAbbreviations(item, abbreviations);
-            replaceAuthors(item, authors);
+            replaceAuthorsAndEditors(item, authors);
         }
 
         return items;
@@ -326,15 +326,19 @@ public class BibTeXParser {
         }
     }
 
-    private static void replaceAuthors(BibItem item, Map<String, Author> authors) {
-        // Replace authors
-        String author = item.get("author");
+    private static void replaceAuthorsAndEditors(BibItem item, Map<String, Author> authors) {
+        replaceAuthors(item, authors, "author", item.getAuthors());
+        replaceAuthors(item, authors, "editor", item.getEditors());
+    }
+    
+    private static void replaceAuthors(BibItem item, Map<String, Author> authors, String field, List<Author> authorList) {
+        String fieldValue = item.get(field);
 
-        if (author != null && !author.isEmpty()) {
-            String[] paperAuthors = author.split(" and ");
+        if (fieldValue != null && !fieldValue.isEmpty()) {
+            String[] names = fieldValue.split(" and ");
 
-            for (String paperAuthor : paperAuthors) {
-                Matcher matcher = authorPattern.matcher(paperAuthor);
+            for (String name : names) {
+                Matcher matcher = authorPattern.matcher(name);
 
                 if (matcher.find()) {
                     Author a = authors.get(matcher.group(1));
@@ -342,28 +346,28 @@ public class BibTeXParser {
                     if (a == null) {
                         Console.error("Author abbreviation \"%s\" is used, but never defined.", matcher.group(1));
                     } else {
-                        item.getAuthors().add(a);
+                        authorList.add(a);
                     }
                 } else {
-                    item.getAuthors().add(new Author(paperAuthor));
+                    authorList.add(new Author(name));
                 }
             }
 
             // Update the author field
-            StringBuilder newAuthors = new StringBuilder();
+            StringBuilder newFieldValue = new StringBuilder();
             boolean first = true;
 
-            for (Author a : item.getAuthors()) {
+            for (Author a : authorList) {
                 if (first) {
                     first = false;
                 } else {
-                    newAuthors.append(" and ");
+                    newFieldValue.append(" and ");
                 }
 
-                newAuthors.append(a.getName());
+                newFieldValue.append(a.getName());
             }
 
-            item.put("author", newAuthors.toString());
+            item.put(field, newFieldValue.toString());
         }
     }
 

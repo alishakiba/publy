@@ -32,6 +32,7 @@ public class BibItem {
     private HashMap<String, String> values;
     private HashMap<String, String> shortValues;
     private List<Author> authors;
+    private List<Author> editors;
 
     public BibItem(String originalType, String id) {
         this.type = Type.fromString(originalType);
@@ -41,6 +42,7 @@ public class BibItem {
         values = new LinkedHashMap<>();
         shortValues = new LinkedHashMap<>();
         authors = new ArrayList<>();
+        editors = new ArrayList<>();
 
         handleSpecialTypes(originalType);
     }
@@ -151,6 +153,15 @@ public class BibItem {
     public void setAuthors(Author... authors) {
         this.authors.clear();
         this.authors.addAll(Arrays.asList(authors));
+    }
+    
+    public List<Author> getEditors() {
+        return editors;
+    }
+
+    public void setEditors(Author... editors) {
+        this.editors.clear();
+        this.editors.addAll(Arrays.asList(editors));
     }
 
     public boolean anyNonEmpty(String field) {
