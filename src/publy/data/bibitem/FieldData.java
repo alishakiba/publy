@@ -62,7 +62,7 @@ public class FieldData {
         optionalFields.put(Type.ONLINE, Arrays.asList("organization", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "urldate"));
         optionalFields.put(Type.PATENT, Arrays.asList("holder", "type", "address", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.PROCEEDINGS, Arrays.asList("editor", "publisher", "volume", "number", "series", "organization", "address", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
-        optionalFields.put(Type.INPROCEEDINGS, Arrays.asList("editor", "publisher", "volume", "number", "series", "organization", "address", "pages", "isbn", "chapter", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
+        optionalFields.put(Type.INPROCEEDINGS, Arrays.asList("editor", "publisher", "volume", "number", "series", "organization", "address", "pages", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.REPORT, Arrays.asList("number", "address", "isrn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.THESIS, Arrays.asList("address", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.UNPUBLISHED, Arrays.asList("howpublished", "address", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
