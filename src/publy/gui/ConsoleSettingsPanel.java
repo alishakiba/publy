@@ -56,6 +56,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
         warnCheckBox.setSelected(settings.isShowWarnings());
         missingReferencesCheckBox.setSelected(settings.isWarnMissingReferences());
         notAuthorCheckBox.setSelected(settings.isWarnNotAuthor());
+        noCategoryCheckBox.setSelected(settings.isWarnNoCategoryForItem());
         
         // Progress
         progressCheckBox.setSelected(settings.isShowLogs());
@@ -67,6 +68,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
     private void updateEnabledStates() {
         missingReferencesCheckBox.setEnabled(settings.isShowWarnings());
         notAuthorCheckBox.setEnabled(settings.isShowWarnings());
+        noCategoryCheckBox.setSelected(settings.isWarnNoCategoryForItem());
     }
     
     /**
