@@ -17,6 +17,8 @@ package publy.io.plain;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import publy.Console;
+import publy.data.Author;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.Type;
 import publy.data.settings.Settings;
@@ -86,7 +88,12 @@ public class PlainBibItemWriter extends BibItemWriter {
                     throw new AssertionError("Item \"" + item.getId() + "\" has an unexpected publication type: " + item.getType());
             }
 
-            output(formatDate(item), ".", true);
+            if ((item.getType() == Type.PROCEEDINGS || item.getType() == Type.INPROCEEDINGS) && item.anyNonEmpty("address")) {
+                // The year has already been written
+                out.newLine();
+            } else {
+                output(formatDate(item), ".", true);
+            }
         }
 
         // Write note (unpublished uses note as the publication info)
@@ -114,7 +121,21 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     protected void writeInBook(BibItem item) throws IOException {
-        writeVolume(item, true, ". ");
+        // Only add chapter and pages here if volume is present
+        if (item.anyNonEmpty("volume") && item.anyNonEmpty("chapter", "pages")) {
+            writeVolume(item, true, "");
+
+            if (item.anyNonEmpty("chapter")) {
+                out.write(", ");
+                writeChapter(item, false);
+            }
+
+            output(", ", formatPages(item, true), "");
+            out.write(". ");
+        } else {
+            writeVolume(item, true, ". ");
+        }
+
         writePublisherAndEdition(item);
     }
 
@@ -125,10 +146,14 @@ public class PlainBibItemWriter extends BibItemWriter {
 
     protected void writeInCollection(BibItem item) throws IOException {
         out.write("In ");
-        output(item.get("editor"), ", editor, "); // TODO: proper name formatting
+
+        if (item.anyNonEmpty("editor")) {
+            output(formatAuthors(item, true, Author.NameOutputType.PLAINTEXT), ", ");
+        }
+
         output(item.get("booktitle"));
 
-        if (item.anyNonEmpty("volume", "series")) {
+        if (item.anyNonEmpty("volume", "series", "number")) {
             out.write(", ");
             writeVolume(item, false, "");
         }
@@ -139,21 +164,19 @@ public class PlainBibItemWriter extends BibItemWriter {
         }
 
         output(", ", formatPages(item, true), "");
-        out.write(".");
+        out.write(". ");
 
-        if (item.anyNonEmpty("publisher", "edition")) {
-            out.write(" ");
-            writePublisherAndEdition(item);
-        }
+        writePublisherAndEdition(item);
     }
 
     protected void writeManual(BibItem item) throws IOException {
         output(item.get("organization"), ", ");
+        output(item.get("address"), ", ");
 
         String edition = item.get("edition");
 
         if (edition != null && !edition.isEmpty()) {
-            if (item.anyNonEmpty("organization")) {
+            if (item.anyNonEmpty("organization", "address")) {
                 output(toLowerCase(edition), " edition, ");
             } else {
                 output(toTitleCase(edition), " edition, ");
@@ -175,15 +198,69 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     protected void writeProceedings(BibItem item) throws IOException {
-        writeVolume(item, true, ", ");
-        output(item.get("address"), ", ");
+        if (!item.anyNonEmpty("address") && (item.anyNonEmpty("publisher") || (item.anyNonEmpty("editor") && item.anyNonEmpty("organization")))) {
+            writeVolume(item, true, ". ");
+        } else {
+            writeVolume(item, true, ", ");
+        }
+
+        if (item.anyNonEmpty("address")) {
+            output(item.get("address"), ", ");
+            output(formatDate(item), ". ");
+
+            if (item.anyNonEmpty("editor")) {
+                if (item.anyNonEmpty("publisher")) {
+                    output(item.get("organization"), ", ");
+                } else {
+                    output(item.get("organization"), ".");
+                }
+            }
+
+            output(item.get("publisher"), ".");
+        } else {
+            if (item.anyNonEmpty("editor")) {
+                output(item.get("organization"), ", ");
+            }
+
+            output(item.get("publisher"), ", ");
+        }
     }
 
     protected void writeInProceedings(BibItem item) throws IOException {
-        output("In ", item.get("booktitle"), ", ");
-        writeVolume(item, false, ", ");
-        output(formatPages(item, true), ", ");
-        output(item.get("address"), ", ");
+        out.write("In ");
+
+        output(formatAuthors(item, true, Author.NameOutputType.PLAINTEXT), ", ");
+
+        output(item.get("booktitle"));
+
+        if (item.anyNonEmpty("volume", "number", "series")) {
+            out.write(", ");
+            writeVolume(item, false, "");
+        }
+
+        output(", ", formatPages(item, true), "");
+
+        if (!item.anyNonEmpty("address") && item.anyNonEmpty("publisher", "organization")) {
+            out.write(". ");
+        } else {
+            out.write(", ");
+        }
+
+        if (item.anyNonEmpty("address")) {
+            output(item.get("address"), ", ");
+            output(formatDate(item), ". ");
+
+            if (item.anyNonEmpty("publisher")) {
+                output(item.get("organization"), ", ");
+            } else {
+                output(item.get("organization"), ".");
+            }
+
+            output(item.get("publisher"), ".");
+        } else {
+            output(item.get("organization"), ", ");
+            output(item.get("publisher"), ", ");
+        }
     }
 
     protected void writeReport(BibItem item) throws IOException {
@@ -202,18 +279,65 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     protected void writeUnpublished(BibItem item) throws IOException {
-        output(item.get("howpublished"), ", ");
         output(item.get("note"), ", ");
     }
 
     private void writeTitleAndAuthors(BibItem item) throws IOException {
         if (settings.getGeneralSettings().titleFirst()) {
-            output(formatTitle(item), ".", true);
+            writeTitle(item);
+        }
+
+        writeAuthors(item);
+
+        if (!settings.getGeneralSettings().titleFirst()) {
+            writeTitle(item);
+        }
+    }
+
+    private void writeTitle(BibItem item) throws IOException {
+        output(formatTitle(item));
+
+        if (item.getType() == Type.INBOOK && !item.anyNonEmpty("volume")) {
+            if (item.anyNonEmpty("chapter")) {
+                out.write(", ");
+                writeChapter(item, false);
+            }
+
+            output(", ", formatPages(item, true), "");
+        }
+
+        out.write(".");
+        out.newLine();
+    }
+
+    private void writeAuthors(BibItem item) throws IOException {
+        boolean useEditor;
+
+        if (item.getType() == Type.PROCEEDINGS) {
+            // Proceedings never prints the author
+            if (item.anyNonEmpty("editor")) {
+                useEditor = true;
+            } else if (item.anyNonEmpty("organization")) {
+                output(item.get("organization"), ".", true);
+                return;
+            } else {
+                Console.error("No editor or organization found for entry \"%s\".", item.getId());
+                return;
+            }
+        } else {
+            if (item.anyNonEmpty("author")) {
+                useEditor = false;
+            } else if (item.anyNonEmpty("editor")) {
+                useEditor = true;
+            } else {
+                Console.error("No author information found for entry \"%s\".", item.getId());
+                return;
+            }
         }
 
         // Don't add an authors line if it's just me and I just want to list co-authors
         if (settings.getGeneralSettings().listAllAuthors() || item.getAuthors().size() > 1) {
-            String authors = formatAuthors(item);
+            String authors = formatAuthors(item, useEditor, Author.NameOutputType.PLAINTEXT);
 
             if (authors.endsWith(".")) {
                 // Don't double up on periods when author names are abbreviated and reversed
@@ -221,10 +345,6 @@ public class PlainBibItemWriter extends BibItemWriter {
             } else {
                 output(authors, ".", true);
             }
-        }
-
-        if (!settings.getGeneralSettings().titleFirst()) {
-            output(formatTitle(item), ".", true);
         }
     }
 
@@ -247,17 +367,13 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     protected void writePublisherAndEdition(BibItem item) throws IOException {
-        String publisher = item.get("publisher");
-        String edition = item.get("edition");
+        output(item.get("publisher"), ", ");
+        output(item.get("address"), ", ");
 
-        if (publisher != null && !publisher.isEmpty()) {
-            output(publisher, ", ");
-
-            if (edition != null && !edition.isEmpty()) {
-                output(toLowerCase(edition), " edition, ");
-            }
-        } else if (edition != null && !edition.isEmpty()) {
-            output(toTitleCase(edition), " edition, ");
+        if (item.anyNonEmpty("publisher", "address")) {
+            output(toLowerCase(item.get("edition")), " edition, ");
+        } else {
+            output(toTitleCase(item.get("edition")), " edition, ");
         }
     }
 

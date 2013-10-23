@@ -51,38 +51,52 @@ public abstract class BibItemWriter {
         }
     }
 
-    protected String formatAuthors(BibItem item) {
-        String author = item.get("author");
+    protected String formatAuthors(BibItem item, boolean editors, Author.NameOutputType type) {
+        List<Author> authorList = (editors ? item.getEditors() : item.getAuthors());
+        List<String> authors = new ArrayList<>(authorList.size());
+        GeneralSettings gs = settings.getGeneralSettings();
 
-        if (author == null) {
-            Console.error("No authors found for entry \"%s\".", item.getId());
-            return "";
-        } else {
-            List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
-            GeneralSettings gs = settings.getGeneralSettings();
-
-            for (Author a : item.getAuthors()) {
-                if (a == null) {
-                    Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), author);
+        // Collect the formatted names of all authors that need to be printed
+        for (Author a : authorList) {
+            if (a == null) {
+                if (editors) {
+                    Console.error("Null editor found for entry \"%s\".%n(Editors: \"%s\")", item.getId(), item.get("editor"));
                 } else {
-                    if (gs.listAllAuthors() || !a.isMe(gs.getMyNames(), gs.getNameDisplay(), gs.reverseNames())) {
-                        authorLinks.add(a.getFormattedName(gs.getNameDisplay(), gs.reverseNames()));
-                    }
+                    Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), item.get("author"));
                 }
-            }
-
-            if (gs.listAllAuthors()) {
-                return formatNames(authorLinks);
             } else {
-                if (authorLinks.size() == item.getAuthors().size()) {
-                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
-
-                    return formatNames(authorLinks);
-                } else {
-                    return "With " + formatNames(authorLinks);
+                if (gs.listAllAuthors() || !a.isMe(gs.getMyNames(), gs.getNameDisplay(), gs.reverseNames())) {
+                    authors.add(a.getFormattedName(gs.getNameDisplay(), gs.reverseNames(), type));
                 }
             }
         }
+        
+        // Connect these names in the proper way
+        String result = formatNames(authors);
+
+        // Add "With" if necessary
+        if (!gs.listAllAuthors()) {
+            if (authors.size() == authorList.size()) {
+                if (editors) {
+                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the editors of entry \"%s\" match your name.%n(Editors: \"%s\")", item.getId(), item.get("editor"));
+                } else {
+                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), item.get("author"));
+                }
+            } else {
+                result =  "With " + result;
+            }
+        }
+        
+        // Add the ", editors" postfix
+        if (editors && !authors.isEmpty()) {
+            if (authors.size() > 1) {
+                result += ", editors";
+            } else {
+                result += ", editor";
+            }
+        }
+        
+        return result;
     }
 
     protected String formatNames(List<String> names) {
@@ -252,6 +266,10 @@ public abstract class BibItemWriter {
     }
 
     private String changeCase(String s, boolean title) {
+        if (s == null || s.isEmpty()) {
+            return "";
+        }
+
         StringBuilder sb = new StringBuilder();
         int level = 0;
         boolean first = true;
@@ -286,7 +304,7 @@ public abstract class BibItemWriter {
                         } else {
                             sb.append(c);
                         }
-                        
+
                         first = false;
                         break;
                 }
@@ -361,11 +379,12 @@ public abstract class BibItemWriter {
 
         return result.toString();
     }
-    
+
     private enum ChangeQuotesState {
+
         DEFAULT, IN_TAG, AFTER_QUOTE, AFTER_GRAVE;
     }
-    
+
     protected String changeQuotes(String string) {
         StringBuilder sb = new StringBuilder(string.length());
         ChangeQuotesState state = ChangeQuotesState.DEFAULT;

@@ -16,9 +16,7 @@
 package publy.io.plain;
 
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +29,8 @@ import publy.data.bibitem.FieldData;
 import publy.data.bibitem.Type;
 import publy.io.html.HTMLBibItemWriter;
 import static org.junit.Assert.*;
-import org.junit.Before;
+import publy.data.Author;
+import publy.io.html.HTMLTestUtils;
 
 /**
  *
@@ -40,7 +39,6 @@ import org.junit.Before;
 public class PlainBibItemWriterTest {
 
     private static final HashMap<String, String> fieldDefaults;
-    private static final HashMap<Type, String> methodNames;
 
     static {
         fieldDefaults = new HashMap<>();
@@ -66,61 +64,56 @@ public class PlainBibItemWriterTest {
         fieldDefaults.put("type", "Typo");
         fieldDefaults.put("volume", "1337");
         fieldDefaults.put("year", "2010");
-
-        methodNames = new HashMap<>();
-
-        methodNames.put(Type.ARTICLE, "writeArticle");
-        methodNames.put(Type.BOOK, "writeBook");
-        methodNames.put(Type.INBOOK, "writeInBook");
-        methodNames.put(Type.BOOKLET, "writeBooklet");
-        methodNames.put(Type.INCOLLECTION, "writeInCollection");
-        methodNames.put(Type.MANUAL, "writeManual");
-        methodNames.put(Type.MISC, "writeMisc");
-        methodNames.put(Type.ONLINE, "writeOnline");
-        methodNames.put(Type.PATENT, "writePatent");
-        methodNames.put(Type.PROCEEDINGS, "writeProceedings");
-        methodNames.put(Type.INPROCEEDINGS, "writeInProceedings");
-        methodNames.put(Type.REPORT, "writeReport");
-        methodNames.put(Type.THESIS, "writeThesis");
-        methodNames.put(Type.UNPUBLISHED, "writeUnpublished");
     }
 
     public PlainBibItemWriterTest() {
     }
     private StringWriter htmlOutput = new StringWriter();
     private BufferedWriter htmlBuffer = new BufferedWriter(htmlOutput);
-    private HTMLBibItemWriter htmlWriter = new HTMLBibItemWriter(htmlBuffer, null);
+    private HTMLBibItemWriter htmlWriter = new HTMLBibItemWriter(htmlBuffer, HTMLTestUtils.getBibtexSettings());
 
-    private String runHtmlWriterMethod(Type type, BibItem item) throws Exception {
-        // Ugly reflection hack to call methods with protected access
-        Method method = htmlWriter.getClass().getDeclaredMethod(methodNames.get(type), BibItem.class);
-        method.setAccessible(true);
-        method.invoke(htmlWriter, item);
-
+    private String runHtmlWriterMethod(BibItem item) throws Exception {
+        htmlWriter.write(item);
         htmlBuffer.flush();
 
-        String output = htmlOutput.getBuffer().toString().replaceAll("<[^>]*>", "").replaceAll("&ndash;", "-").trim();
+        String output = htmlOutput.getBuffer().toString();
+        output = addPeriodAfterTitle(output, item.get("title"));
+        output = output.replaceAll("<[^>]*>", "").replaceAll("&ndash;", "-");
+        output = output.replaceAll("\\s+", " ").trim(); // Reduce whitespace
 
         // Clear the output
         htmlOutput.getBuffer().delete(0, htmlOutput.getBuffer().length());
 
         return output;
     }
+
+    private static String addPeriodAfterTitle(String input, String title) {
+        int index = input.toLowerCase().indexOf(title.toLowerCase());
+
+        if (index < 0) {
+            return input;
+        } else {
+            int nextNewLine = input.indexOf("<br>", index);
+
+            StringBuilder sb = new StringBuilder(input);
+            sb.insert(nextNewLine, '.');
+            return sb.toString();
+        }
+    }
     private StringWriter textOutput = new StringWriter();
     private BufferedWriter textBuffer = new BufferedWriter(textOutput);
-    private PlainBibItemWriter textWriter = new PlainBibItemWriter(textBuffer, null);
+    private PlainBibItemWriter textWriter = new PlainBibItemWriter(textBuffer, HTMLTestUtils.getBibtexSettings());
 
-    private String runTextWriterMethod(Type type, BibItem item) throws Exception {
-        Method method = textWriter.getClass().getDeclaredMethod(methodNames.get(type), BibItem.class);
-        method.invoke(textWriter, item);
-
+    private String runTextWriterMethod(BibItem item) throws Exception {
+        textWriter.write(item);
         textBuffer.flush();
 
-        String output = textOutput.getBuffer().toString().trim();
-        
+        String output = textOutput.getBuffer().toString();
+        output = output.replaceAll("\\s+", " ").trim(); // Reduce whitespace
+
         // Clear the output
         textOutput.getBuffer().delete(0, textOutput.getBuffer().length());
-        
+
         return output;
     }
 
@@ -135,7 +128,7 @@ public class PlainBibItemWriterTest {
                 included.add(req);
             }
         }
-        
+
         List<String> option = new ArrayList<>(fieldDefaults.keySet());
         option.retainAll(FieldData.getOptionalFields(type));
         option.removeAll(included);
@@ -147,7 +140,7 @@ public class PlainBibItemWriterTest {
 
         // Generate a test including all ignored fields
         addExample(examples, type, fieldDefaults.keySet());
-        
+
         if (type == Type.REPORT) {
             BibItem exampleReport = new BibItem("techreport", "techreport");
             exampleReport.put("author", fieldDefaults.get("author"));
@@ -162,7 +155,7 @@ public class PlainBibItemWriterTest {
             msThesis.put("school", fieldDefaults.get("school"));
             msThesis.put("year", fieldDefaults.get("year"));
             examples.add(msThesis);
-            
+
             BibItem phdThesis = new BibItem("phdthesis", "phdthesis");
             phdThesis.put("author", fieldDefaults.get("author"));
             phdThesis.put("title", fieldDefaults.get("title"));
@@ -200,8 +193,35 @@ public class PlainBibItemWriterTest {
         for (String field : included) {
             example.put(field, fieldDefaults.get(field));
         }
+        
+        setAuthors(example);
+        setEditors(example);
 
         examples.add(example);
+    }
+    
+    private static void setAuthors(BibItem item) {
+        String author = item.get("author");
+
+        if (author != null && !author.isEmpty()) {
+            String[] paperAuthors = author.split(" and ");
+
+            for (String paperAuthor : paperAuthors) {
+                item.getAuthors().add(new Author(paperAuthor));
+            }
+        }
+    }
+
+    private static void setEditors(BibItem item) {
+        String editor = item.get("editor");
+
+        if (editor != null && !editor.isEmpty()) {
+            String[] names = editor.split(" and ");
+
+            for (String name : names) {
+                item.getEditors().add(new Author(name));
+            }
+        }
     }
 
     @Test
@@ -211,14 +231,16 @@ public class PlainBibItemWriterTest {
 
             for (BibItem item : items) {
                 try {
-                    String expected = runHtmlWriterMethod(type, item);
-                    String result = runTextWriterMethod(type, item);
+                    String expected = runHtmlWriterMethod(item);
+                    String result = runTextWriterMethod(item);
 
-                    assertEquals(expected, result);
+                    assertEquals(item.toString(), expected, result);
                 } catch (Exception ex) {
-                    fail("writeArticle threw Exception on input:\n" + item + "\nException:\n" + ex);
+                    fail("write threw Exception on input:\n" + item + "\nException:\n" + ex);
                 }
             }
+            
+            System.out.println("PlainBibItemWriter - Tests for " + type + " were successful");
         }
     }
 }
