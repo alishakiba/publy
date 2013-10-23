@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import publy.data.Author;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.FieldData;
 import publy.data.settings.Settings;
@@ -49,7 +50,7 @@ public class BibtexBibItemWriter extends BibItemWriter {
             out.write("  author={");
 
             for (int i = 0; i < item.getAuthors().size(); i++) {
-                out.write(item.getAuthors().get(i).getName());
+                out.write(item.getAuthors().get(i).getName(Author.NameOutputType.LATEX));
 
                 if (i < item.getAuthors().size() - 1) {
                     out.write(" and ");

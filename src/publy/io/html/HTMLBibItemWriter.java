@@ -21,14 +21,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import publy.Console;
 import publy.data.PublicationType;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.Type;
-import publy.data.settings.GeneralSettings;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
 import publy.io.BibItemWriter;
@@ -104,7 +102,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     throw new AssertionError("Item \"" + item.getId() + "\" has an unexpected publication type: " + item.getType());
             }
 
-            output("<span class=\"date\">", formatDate(item), "</span>.<br>", true);
+            if (!((item.getType() == Type.PROCEEDINGS || item.getType() == Type.INPROCEEDINGS) && item.anyNonEmpty("address"))) {
+                output("<span class=\"date\">", formatDate(item), "</span>.<br>", true);
+            }
         }
 
         // Write note (unpublished uses note as the publication info)
@@ -134,7 +134,20 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeInBook(BibItem item) throws IOException {
-        writeVolume(item, true, ". ");
+        if (item.anyNonEmpty("volume") && item.anyNonEmpty("chapter", "pages")) {
+            writeVolume(item, true, "");
+
+            if (item.anyNonEmpty("chapter")) {
+                out.write(", ");
+                writeChapter(item, false);
+            }
+
+            output(", <span class=\"pages\">", formatPages(item, true), "</span>");
+            out.write(". ");
+        } else {
+            writeVolume(item, true, ". ");
+        }
+
         writePublisherAndEdition(item);
     }
 
@@ -145,10 +158,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     protected void writeInCollection(BibItem item) throws IOException {
         out.write("In ");
-        output("<span class=\"editor\">", item.get("editor"), ", editor, </span>"); // TODO: proper name formatting
+
+        if (item.anyNonEmpty("editor")) {
+            output("<span class=\"editor\">", formatAuthors(item, true, Author.NameOutputType.LINKED_HTML), ", </span>");
+        }
+
         output("<span class=\"booktitle\">", item.get("booktitle"), "</span>");
 
-        if (item.anyNonEmpty("volume", "series")) {
+        if (item.anyNonEmpty("volume", "series", "number")) {
             out.write(", ");
             writeVolume(item, false, "");
         }
@@ -159,21 +176,21 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         output(", <span class=\"pages\">", formatPages(item, true), "</span>");
-        out.write(".");
+        out.write(". ");
 
-        if (item.anyNonEmpty("publisher", "edition")) {
-            out.write(" ");
+        if (item.anyNonEmpty("publisher", "address", "edition")) {
             writePublisherAndEdition(item);
         }
     }
 
     protected void writeManual(BibItem item) throws IOException {
         output("<span class=\"organization\">", item.get("organization"), "</span>, ");
+        output("<span class=\"address\">", item.get("address"), "</span>, ");
 
         String edition = item.get("edition");
 
         if (edition != null && !edition.isEmpty()) {
-            if (item.anyNonEmpty("organization")) {
+            if (item.anyNonEmpty("organization", "address")) {
                 output("<span class=\"edition\">", toLowerCase(edition), " edition</span>, ");
             } else {
                 output("<span class=\"edition\">", toTitleCase(edition), " edition</span>, ");
@@ -195,15 +212,74 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeProceedings(BibItem item) throws IOException {
-        writeVolume(item, true, ", ");
-        output("<span class=\"address\">", item.get("address"), "</span>, ");
+        String notesConnective;
+
+        if (item.anyNonEmpty("address")) {
+            notesConnective = ", ";
+        } else {
+            // There should be a period if anything follows notes
+            if (item.anyNonEmpty("publisher") || (item.anyNonEmpty("organization") && item.anyNonEmpty("editor"))) {
+                notesConnective = ". ";
+            } else {
+                notesConnective = ", ";
+            }
+        }
+
+        writeVolume(item, true, notesConnective);
+
+        if (item.anyNonEmpty("address")) {
+            output("<span class=\"address\">", item.get("address"), "</span>, ");
+            output("<span class=\"date\">", formatDate(item), "</span>.<br>", true);
+
+            if (item.anyNonEmpty("publisher")) {
+                if (item.anyNonEmpty("editor")) {
+                    output("<span class=\"organization\">", item.get("organization"), "</span>, ");
+                }
+                output("<span class=\"publisher\">", item.get("publisher"), "</span>. ");
+            } else if (item.anyNonEmpty("editor")) {
+                output("<span class=\"organization\">", item.get("organization"), "</span>. ");
+            }
+        } else {
+            if (item.anyNonEmpty("editor")) {
+                output("<span class=\"organization\">", item.get("organization"), "</span>, ");
+            }
+            output("<span class=\"publisher\">", item.get("publisher"), "</span>, ");
+        }
     }
 
     protected void writeInProceedings(BibItem item) throws IOException {
-        output("In <span class=\"booktitle\">", item.get("booktitle"), "</span>, ");
-        writeVolume(item, false, ", ");
-        output("<span class=\"pages\">", formatPages(item, true), "</span>, ");
-        output("<span class=\"address\">", item.get("address"), "</span>, ");
+        out.write("In ");
+
+        if (item.anyNonEmpty("editor")) {
+            output("<span class=\"editor\">", formatAuthors(item, true, Author.NameOutputType.LINKED_HTML), ", </span>");
+        }
+
+        output("<span class=\"booktitle\">", item.get("booktitle"), "</span>");
+
+        if (item.anyNonEmpty("volume", "number", "series")) {
+            out.write(", ");
+            writeVolume(item, false, "");
+        }
+
+        output(", <span class=\"pages\">", formatPages(item, true), "</span>");
+
+        if (item.anyNonEmpty("address")) {
+            output(", <span class=\"address\">", item.get("address"), "</span>, ");
+            output("<span class=\"date\">", formatDate(item), "</span>.<br>", true);
+
+            if (item.anyNonEmpty("publisher")) {
+                output("<span class=\"organization\">", item.get("organization"), "</span>, ");
+                output("<span class=\"publisher\">", item.get("publisher"), "</span>. ");
+            } else {
+                output("<span class=\"organization\">", item.get("organization"), "</span>. ");
+            }
+        } else if (item.anyNonEmpty("publisher", "organization")) {
+            out.write(". ");
+            output("<span class=\"organization\">", item.get("organization"), "</span>, ");
+            output("<span class=\"publisher\">", item.get("publisher"), "</span>, ");
+        } else {
+            out.write(", ");
+        }
     }
 
     protected void writeReport(BibItem item) throws IOException {
@@ -240,23 +316,43 @@ public class HTMLBibItemWriter extends BibItemWriter {
     protected void writeTitleAndAbstractHTML(BibItem item) throws IOException {
         out.write(indent);
 
+        String title = formatTitle(item);
+
+        if (item.getType() == Type.INBOOK && !item.anyNonEmpty("volume")) {
+            if (item.anyNonEmpty("chapter")) {
+                title += ", <span class=\"chapter\">";
+
+                if (item.anyNonEmpty("type")) {
+                    title += toLowerCase(item.get("type"));
+                } else {
+                    title += "chapter";
+                }
+
+                title += " " + item.get("chapter") + "</span>";
+            }
+
+            if (item.anyNonEmpty("pages")) {
+                title += ", <span class=\"pages\">" + formatPages(item, true) + "</span>";
+            }
+        }
+
         // Title
         if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
-            output("<h3 class=\"title abstract-toggle\">", formatTitle(item), "</h3>");
+            output("<h3 class=\"title abstract-toggle\">", title, "</h3>");
         } else if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && includePaper(item)) {
             try {
                 String href = (new URI(null, null, item.get("paper"), null)).toString();
 
                 out.write("<a href=\"" + href + "\">");
-                output("<h3 class=\"title\">", formatTitle(item), "</h3>");
+                output("<h3 class=\"title\">", title, "</h3>");
                 out.write("</a>");
                 checkExistance(item.get("paper"), "paper", item);
             } catch (URISyntaxException ex) {
                 Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
-                output("<h3 class=\"title\">", formatTitle(item), "</h3>");
+                output("<h3 class=\"title\">", title, "</h3>");
             }
         } else {
-            output("<h3 class=\"title\">", formatTitle(item), "</h3>");
+            output("<h3 class=\"title\">", title, "</h3>");
         }
 
         // Add text if I presented this paper
@@ -293,61 +389,39 @@ public class HTMLBibItemWriter extends BibItemWriter {
     protected void writeAuthors(BibItem item) throws IOException {
         boolean useEditor;
 
-        if (item.anyNonEmpty("author")) {
-            useEditor = false;
-        } else if (item.anyNonEmpty("editor")) {
-            useEditor = true;
+        if (item.getType() == Type.PROCEEDINGS) {
+            // Proceedings never prints the author
+            if (item.anyNonEmpty("editor")) {
+                useEditor = true;
+            } else if (item.anyNonEmpty("organization")) {
+                output(indent + "<span class=\"organization\">", item.get("organization"), "</span>.<br>", true);
+                return;
+            } else {
+                Console.error("No editor or organization found for entry \"%s\".", item.getId());
+                return;
+            }
         } else {
-            Console.error("No author information found for entry \"%s\".", item.getId());
-            return;
+            if (item.anyNonEmpty("author")) {
+                useEditor = false;
+            } else if (item.anyNonEmpty("editor")) {
+                useEditor = true;
+            } else {
+                Console.error("No author information found for entry \"%s\".", item.getId());
+                return;
+            }
         }
 
         List<Author> authorList = (useEditor ? item.getEditors() : item.getAuthors());
 
         // Don't add an authors line if it's just me and I just want to list co-authors
         if (settings.getGeneralSettings().listAllAuthors() || authorList.size() > 1 || (authorList.size() == 1 && !authorList.get(0).isMe(settings.getGeneralSettings().getMyNames(), settings.getGeneralSettings().getNameDisplay(), settings.getGeneralSettings().reverseNames()))) {
-            String authors = formatAuthors(item, authorList);
+            String authors = formatAuthors(item, useEditor, Author.NameOutputType.LINKED_HTML);
 
-            if (useEditor) {
-                if (authorList.size() > 1) {
-                    output(indent, authors, ", editors.<br>", true);
-                } else {
-                    output(indent, authors, ", editor.<br>", true);
-                }
+            if (authors.endsWith(".</span>") || authors.endsWith(".</a>")) {
+                // Don't double up on periods (occurs when author names are abbreviated and reversed)
+                output(indent, authors, "<br>", true);
             } else {
-                if (authors.endsWith(".</span>") || authors.endsWith(".</a>")) {
-                    // Don't double up on periods (occurs when author names are abbreviated and reversed)
-                    output(indent, authors, "<br>", true);
-                } else {
-                    output(indent, authors, ".<br>", true);
-                }
-            }
-        }
-    }
-
-    protected String formatAuthors(BibItem item, List<Author> authorList) {
-        List<String> authorLinks = new ArrayList<>(authorList.size());
-        GeneralSettings gs = settings.getGeneralSettings();
-
-        for (Author a : authorList) {
-            if (a == null) {
-                Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), (authorList == item.getAuthors() ? item.get("author") : item.get("editor")));
-            } else {
-                if (gs.listAllAuthors() || !a.isMe(gs.getMyNames(), gs.getNameDisplay(), gs.reverseNames())) {
-                    authorLinks.add(a.getLinkedAndFormattedHtmlName(gs.getNameDisplay(), gs.reverseNames()));
-                }
-            }
-        }
-
-        if (gs.listAllAuthors()) {
-            return formatNames(authorLinks);
-        } else {
-            if (authorLinks.size() == authorList.size()) {
-                Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), (authorList == item.getAuthors() ? item.get("author") : item.get("editor")));
-
-                return formatNames(authorLinks);
-            } else {
-                return "With " + formatNames(authorLinks);
+                output(indent, authors, ".<br>", true);
             }
         }
     }
@@ -371,17 +445,17 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writePublisherAndEdition(BibItem item) throws IOException {
-        String publisher = item.get("publisher");
+        output("<span class=\"publisher\">", item.get("publisher"), "</span>, ");
+        output("<span class=\"address\">", item.get("address"), "</span>, ");
+
         String edition = item.get("edition");
 
-        if (publisher != null && !publisher.isEmpty()) {
-            output("<span class=\"publisher\">", publisher, "</span>, ");
-
-            if (item.anyNonEmpty("edition")) {
+        if (edition != null && !edition.isEmpty()) {
+            if (item.anyNonEmpty("publisher", "address")) {
                 output("<span class=\"edition\">", toLowerCase(edition), " edition</span>, ");
+            } else {
+                output("<span class=\"edition\">", toTitleCase(edition), " edition</span>, ");
             }
-        } else if (edition != null && !edition.isEmpty()) {
-            output("<span class=\"edition\">", toTitleCase(edition), " edition</span>, ");
         }
     }
 
@@ -671,7 +745,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write("  author={");
 
             for (int i = 0; i < item.getAuthors().size(); i++) {
-                out.write(item.getAuthors().get(i).getName());
+                out.write(item.getAuthors().get(i).getName(Author.NameOutputType.LATEX));
 
                 if (i < item.getAuthors().size() - 1) {
                     out.write(" and ");

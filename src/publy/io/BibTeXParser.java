@@ -294,11 +294,11 @@ public class BibTeXParser {
             author.setGroup(group);
 
             if (htmlName != null) {
-                author.setHtmlName(htmlName);
+                author.setName(Author.NameOutputType.HTML, htmlName);
             }
 
             if (plaintextName != null) {
-                author.setPlaintextName(plaintextName);
+                author.setName(Author.NameOutputType.PLAINTEXT, plaintextName);
             }
 
             authors.put(shortName, author);
@@ -364,7 +364,7 @@ public class BibTeXParser {
                     newFieldValue.append(" and ");
                 }
 
-                newFieldValue.append(a.getName());
+                newFieldValue.append(a.getName(Author.NameOutputType.LATEX));
             }
 
             item.put(field, newFieldValue.toString());

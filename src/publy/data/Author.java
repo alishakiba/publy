@@ -16,7 +16,9 @@
 package publy.data;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import publy.Console;
 import publy.data.settings.GeneralSettings;
 
@@ -26,12 +28,15 @@ import publy.data.settings.GeneralSettings;
  */
 public class Author {
 
+    public enum NameOutputType {
+
+        LATEX, PLAINTEXT, HTML, LINKED_HTML;
+    }
     private String abbreviation; // The abbreviation associated with this author in the bibtex file
     private String firstName = "", lastName = "", vonPart = "", juniorPart = ""; // The four parts of this name
-    private String latexName; // Name as given in the input bibtex file
-    private String plaintextName, htmlName; // Possible name overrides from the bibtex file
     private String url; // The url associated with this author
     private String group; // The group associated with this author
+    private final Map<NameOutputType, String> nameOverrides;
 
     public Author(String name) {
         this(name, name);
@@ -39,7 +44,8 @@ public class Author {
 
     public Author(String abbreviation, String name) {
         this.abbreviation = abbreviation;
-        this.latexName = name;
+        nameOverrides = new EnumMap<>(NameOutputType.class);
+        nameOverrides.put(NameOutputType.LATEX, name);
         splitName(name);
     }
 
@@ -63,11 +69,47 @@ public class Author {
         return juniorPart;
     }
 
-    public String getName() {
-        return latexName;
+    public String getName(NameOutputType type) {
+        return nameOverrides.get(type);
     }
 
-    public String getFormattedName(GeneralSettings.NameDisplay display, boolean reversed) {
+    public String setName(NameOutputType type, String name) {
+        return nameOverrides.put(type, name);
+    }
+
+    public String getFormattedName(GeneralSettings.NameDisplay display, boolean reversed, NameOutputType type) {
+        // If the type is linked HTML, get the regular HTML name first
+        String override = nameOverrides.get((type == NameOutputType.LINKED_HTML ? NameOutputType.HTML : type));
+        String name;
+
+        if (override == null) {
+            name = formatName(display, reversed);
+        } else {
+            if (override.contains("~NAME~")) {
+                name = override.replaceAll("~NAME~", formatName(display, reversed));
+            } else {
+                name = override;
+            }
+        }
+
+        if (type == NameOutputType.LINKED_HTML) {
+            String classes = "author";
+
+            if (group != null && !group.isEmpty()) {
+                classes += " " + group;
+            }
+
+            if (url != null && !url.isEmpty()) {
+                name = "<a href=\"" + url + "\" class=\"" + classes + "\">" + name + "</a>";
+            } else {
+                name = "<span class=\"" + classes + "\">" + name + "</span>";
+            }
+        }
+
+        return name;
+    }
+
+    private String formatName(GeneralSettings.NameDisplay display, boolean reversed) {
         // First von Last, Jr OR von Last, First, Jr
         String name = "";
 
@@ -93,64 +135,6 @@ public class Author {
         return name;
     }
 
-    public String getPlaintextName() {
-        return plaintextName;
-    }
-
-    public void setPlaintextName(String plaintextName) {
-        this.plaintextName = plaintextName;
-    }
-
-    public String getFormattedPlaintextName(GeneralSettings.NameDisplay display, boolean reversed) {
-        String fname = getFormattedName(display, reversed);
-        
-        if (plaintextName == null) {
-            return fname;
-        } else {
-            if (plaintextName.contains("~NAME~")) {
-                return plaintextName.replaceAll("~NAME~", fname);
-            } else {
-                return plaintextName;
-            }
-        }
-    }
-
-    public String getHtmlName() {
-        return htmlName;
-    }
-
-    public void setHtmlName(String htmlName) {
-        this.htmlName = htmlName;
-    }
-
-    public String getFormattedHtmlName(GeneralSettings.NameDisplay display, boolean reversed) {
-        String fname = getFormattedName(display, reversed);
-        
-        if (htmlName == null) {
-            return fname;
-        } else {
-            if (htmlName.contains("~NAME~")) {
-                return htmlName.replaceAll("~NAME~", fname);
-            } else {
-                return htmlName;
-            }
-        }
-    }
-
-    public String getLinkedAndFormattedHtmlName(GeneralSettings.NameDisplay display, boolean reversed) {
-        String classes = "author";
-        
-        if (group != null && !group.isEmpty()) {
-            classes += " " + group;
-        }
-        
-        if (url != null && !url.isEmpty()) {
-            return "<a href=\"" + url + "\" class=\"" + classes + "\">" + getFormattedHtmlName(display, reversed) + "</a>";
-        } else {
-            return "<span class=\"" + classes + "\">" + getFormattedHtmlName(display, reversed) + "</span>";
-        }
-    }
-
     public String getUrl() {
         return url;
     }
@@ -169,11 +153,11 @@ public class Author {
 
     public boolean isMe(List<String> myNames, GeneralSettings.NameDisplay display, boolean reversed) {
         for (String name : myNames) {
-            if (latexName.equals(name) || abbreviation.equals(name) || getFormattedName(display, reversed).equals(name)) {
+            if (nameOverrides.get(NameOutputType.LATEX).equals(name) || abbreviation.equals(name) || getFormattedName(display, reversed, NameOutputType.PLAINTEXT).equals(name)) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -401,6 +385,6 @@ public class Author {
 
     @Override
     public String toString() {
-        return "Author{" + "abbreviation=\"" + abbreviation + "\", latexName=\"" + latexName + "\", plaintextname=\"" + plaintextName + "\", htmlName=\"" + htmlName + "\", url=\"" + url + "\"}";
+        return nameOverrides.get(NameOutputType.LATEX);
     }
 }
