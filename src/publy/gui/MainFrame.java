@@ -144,6 +144,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         bottomPanel.add(buttonPanel, java.awt.BorderLayout.LINE_END);
 
+        consoleTextPane.setEditable(false);
         consoleScrollPane.setViewportView(consoleTextPane);
 
         bottomPanel.add(consoleScrollPane, java.awt.BorderLayout.CENTER);
