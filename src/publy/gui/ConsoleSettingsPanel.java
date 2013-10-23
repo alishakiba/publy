@@ -68,7 +68,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
     private void updateEnabledStates() {
         missingReferencesCheckBox.setEnabled(settings.isShowWarnings());
         notAuthorCheckBox.setEnabled(settings.isShowWarnings());
-        noCategoryCheckBox.setSelected(settings.isWarnNoCategoryForItem());
+        noCategoryCheckBox.setEnabled(settings.isShowWarnings());
     }
     
     /**

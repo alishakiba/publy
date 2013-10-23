@@ -164,7 +164,10 @@ public class MainFrame extends javax.swing.JFrame {
         consoleTextPane.setText("");
 
         Publy.generatePublicationList(settings);
-        
+
+        // Move to the top of the console output
+        consoleTextPane.setCaretPosition(0);
+
         // Change cursor back
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_generateButtonActionPerformed
