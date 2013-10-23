@@ -1,0 +1,129 @@
+/*
+ * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package publy.data.settings;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import publy.data.category.OutputCategory;
+import publy.data.category.conditions.FieldEqualsCondition;
+import publy.data.category.conditions.TypeCondition;
+
+/**
+ *
+ * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ */
+public class CategorySettings {
+
+    private List<OutputCategory> allCategories = new ArrayList<>();
+    private List<OutputCategory> activeCategories = new ArrayList<>();
+
+    public static CategorySettings defaultSettings() {
+        CategorySettings result = new CategorySettings();
+
+        // Default categories
+        // BOOK
+        OutputCategory books = new OutputCategory("Books", "Books", new TypeCondition(false, "book"));
+        books.getFieldConditions().add(new FieldEqualsCondition(true, "status", "submitted"));
+        // CHAPTER
+        OutputCategory chapters = new OutputCategory("Chapters", "Chapters in Books", new TypeCondition(false, "incollection"));
+        chapters.getFieldConditions().add(new FieldEqualsCondition(true, "status", "submitted"));
+        // CONFERENCE
+        OutputCategory conference = new OutputCategory("Conference", "Conference papers", new TypeCondition(false, "inproceedings", "conference"));
+        conference.getFieldConditions().add(new FieldEqualsCondition(true, "status", "submitted"));
+        // JOURNAL
+        OutputCategory journal = new OutputCategory("Journal", "Journal papers", new TypeCondition(false, "article"));
+        journal.getFieldConditions().add(new FieldEqualsCondition(true, "status", "submitted"));
+        // OTHER
+        OutputCategory other = new OutputCategory("Other", "Other", new TypeCondition(false, "*"));
+        other.getFieldConditions().add(new FieldEqualsCondition(true, "status", "submitted"));
+        // SUBMITTED
+        OutputCategory submitted = new OutputCategory("Submitted", "Currently under review", new TypeCondition(false, "*"));
+        submitted.getFieldConditions().add(new FieldEqualsCondition(false, "status", "submitted"));
+        // TALK
+        OutputCategory talks = new OutputCategory("Talks", "Invited Talks", new TypeCondition(false, "talk"));
+        talks.getFieldConditions().add(new FieldEqualsCondition(true, "status", "submitted"));
+        // THESIS
+        OutputCategory theses = new OutputCategory("Theses", "Theses", new TypeCondition(false, "mastersthesis", "phdthesis"));
+        theses.getFieldConditions().add(new FieldEqualsCondition(true, "status", "submitted"));
+        // UNPUBLISHED
+        OutputCategory unpublished = new OutputCategory("Unpublished", "Unpublished manuscripts", new TypeCondition(false, "unpublished"));
+
+        result.setAllCategories(Arrays.asList(books, chapters, conference, journal, other, submitted, talks, theses, unpublished));
+        
+        // Active categories
+        result.setActiveCategories(Arrays.asList(journal, conference, chapters, theses));
+
+        return result;
+    }
+
+    public List<OutputCategory> getAllCategories() {
+        return allCategories;
+    }
+
+    public void setAllCategories(List<OutputCategory> allCategories) {
+        this.allCategories = new ArrayList<>(allCategories);
+    }
+
+    /**
+     * Adds a category to the collection of all possible categories. Does not
+     * automatically activate this category.
+     *
+     * @param category
+     */
+    public void addCategory(OutputCategory category) {
+        allCategories.add(category);
+    }
+
+    /**
+     * Deactivates this category and removes it from the list of all possible
+     * categories.
+     *
+     * @param category
+     */
+    public void removeCategory(OutputCategory category) {
+        allCategories.remove(category);
+        activeCategories.remove(category);
+    }
+
+    public List<OutputCategory> getActiveCategories() {
+        return activeCategories;
+    }
+
+    public void setActiveCategories(List<OutputCategory> activeCategories) {
+        this.activeCategories = new ArrayList<>(activeCategories);
+    }
+
+    /**
+     * Adds this category to the list of active categories. The category should
+     * already exist in the list of all possible categories.
+     *
+     * @see #addCategory(publy.data.category.OutputCategory)
+     * @param category
+     */
+    public void activate(OutputCategory category) {
+        activeCategories.add(category);
+    }
+
+    /**
+     * Removes this category from the list of active categories.
+     *
+     * @param category
+     */
+    public void deactivate(OutputCategory category) {
+        activeCategories.remove(category);
+    }
+}
