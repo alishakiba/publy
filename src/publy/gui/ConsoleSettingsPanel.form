@@ -32,8 +32,8 @@
                                   <Component id="missingReferencesCheckBox" min="-2" max="-2" attributes="0"/>
                                   <Component id="warnCheckBox" min="-2" max="-2" attributes="0"/>
                                   <Component id="notAuthorCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="noCategoryCheckBox" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <Component id="warnHeader" min="-2" max="-2" attributes="0"/>
@@ -81,6 +81,8 @@
               <Component id="missingReferencesCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="notAuthorCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="noCategoryCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="progressHeader" min="-2" max="-2" attributes="0"/>
@@ -110,7 +112,7 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="warnCheckBox">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Show warnings"/>
+        <Property name="text" type="java.lang.String" value="Show warnings:"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="warnCheckBoxActionPerformed"/>
@@ -118,7 +120,7 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="missingReferencesCheckBox">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Warn when a referenced file does not exist"/>
+        <Property name="text" type="java.lang.String" value="When a referenced file does not exist"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="missingReferencesCheckBoxActionPerformed"/>
@@ -133,7 +135,7 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="notAuthorCheckBox">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Warn when a paper was not written by you"/>
+        <Property name="text" type="java.lang.String" value="When a paper was not written by you"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="notAuthorCheckBoxActionPerformed"/>
@@ -160,6 +162,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="stackTraceCheckBoxActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="noCategoryCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="When a publication does not fit any category"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="noCategoryCheckBoxActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

@@ -20,13 +20,16 @@ import com.beust.jcommander.ParameterException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import publy.data.bibitem.BibItem;
+import publy.data.category.OutputCategory;
 import publy.data.settings.Settings;
 import publy.gui.MainFrame;
 import publy.gui.UIConstants;
@@ -205,15 +208,15 @@ public class Publy {
         if (arguments.isSilent()) {
             settings.getConsoleSettings().setShowLogs(false);
         }
-        
+
         if (arguments.isHidewarnings()) {
             settings.getConsoleSettings().setShowWarnings(false);
         }
-        
+
         if (arguments.isDebug()) {
             settings.getConsoleSettings().setShowStackTraces(true);
         }
-        
+
         Console.setSettings(settings.getConsoleSettings());
     }
 
@@ -258,37 +261,91 @@ public class Publy {
                 Console.except(ex, "Exception while parsing publications list:");
             }
 
-            if (items != null && settings.getHtmlSettings().generateTextVersion()) {
-                try {
-                    PublicationListWriter writer = new PlainPublicationListWriter(settings);
-                    writer.writePublicationList(items, settings.getFileSettings().getPlainTextTarget());
-                    Console.log("Plain text publication list written successfully.");
-                } catch (Exception | AssertionError ex) {
-                    Console.except(ex, "Exception while writing plain text publication list:");
-                }
-            }
-
-            if (items != null && settings.getHtmlSettings().generateBibtexVersion()) {
-                try {
-                    PublicationListWriter writer = new BibtexPublicationListWriter(settings);
-                    writer.writePublicationList(items, settings.getFileSettings().getBibtexTarget());
-                    Console.log("BibTeX publication list written successfully.");
-                } catch (Exception | AssertionError ex) {
-                    Console.except(ex, "Exception while writing BibTeX publication list:");
-                }
-            }
-
+            // Categorize the publications
             if (items != null) {
+                List<OutputCategory> categories = categorizePapers(settings, items);
+
+                if (settings.getHtmlSettings().generateTextVersion()) {
+                    try {
+                        PublicationListWriter writer = new PlainPublicationListWriter(settings);
+                        writer.writePublicationList(categories, settings.getFileSettings().getPlainTextTarget());
+                        Console.log("Plain text publication list written successfully.");
+                    } catch (Exception | AssertionError ex) {
+                        Console.except(ex, "Exception while writing plain text publication list:");
+                    }
+                }
+
+                if (settings.getHtmlSettings().generateBibtexVersion()) {
+                    try {
+                        PublicationListWriter writer = new BibtexPublicationListWriter(settings);
+                        writer.writePublicationList(categories, settings.getFileSettings().getBibtexTarget());
+                        Console.log("BibTeX publication list written successfully.");
+                    } catch (Exception | AssertionError ex) {
+                        Console.except(ex, "Exception while writing BibTeX publication list:");
+                    }
+                }
+
                 try {
                     PublicationListWriter writer = new HTMLPublicationListWriter(settings);
-                    writer.writePublicationList(items, settings.getFileSettings().getTarget());
+                    writer.writePublicationList(categories, settings.getFileSettings().getTarget());
                     Console.log("HTML publication list written successfully.");
                 } catch (Exception | AssertionError ex) {
                     Console.except(ex, "Exception while writing HTML publication list:");
                 }
+
             }
 
             Console.log("Done.");
         }
+    }
+
+    private static List<OutputCategory> categorizePapers(Settings settings, List<BibItem> items) {
+        // Create the list of empty categories
+        List<OutputCategory> categories = new ArrayList<>(settings.getCategorySettings().getActiveCategories().size());
+
+        for (OutputCategory c : settings.getCategorySettings().getActiveCategories()) {
+            try {
+                categories.add((OutputCategory) c.clone());
+            } catch (CloneNotSupportedException ex) {
+                // Should never happen
+                Console.except(ex, "Category \"%s\" could not be copied.", c.getShortName());
+            }
+        }
+
+        // Assign each paper to the correct category
+        // Make a copy so the categories can remove items without removing them from the main list
+        List<BibItem> tempItems = new ArrayList<>(items);
+
+        for (OutputCategory c : categories) {
+            c.populate(tempItems);
+        }
+
+        // Remove empty categories
+        ListIterator<OutputCategory> it = categories.listIterator();
+
+        while (it.hasNext()) {
+            OutputCategory c = it.next();
+
+            if (c.getItems().isEmpty()) {
+                it.remove();
+            }
+        }
+
+        // Warn for remaining items
+        if (!tempItems.isEmpty()) {
+            String ids = "";
+
+            for (BibItem item : tempItems) {
+                ids += "\"" + item.getId() + "\", ";
+            }
+
+            ids = ids.substring(0, ids.length() - 2); // Cut off the last ", "
+
+            Console.warn(Console.WarningType.ITEM_DOES_NOT_FIT_ANY_CATEGORY, "%d entries did not fit any category:%n%s", tempItems.size(), ids);
+        }
+
+
+
+        return categories;
     }
 }

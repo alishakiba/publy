@@ -25,6 +25,7 @@ public class ConsoleSettings {
     private boolean showWarnings = true;
     private boolean warnMissingReferences = true;
     private boolean warnNotAuthor = true;
+    private boolean warnNoCategoryForItem = true;
     // Log
     private boolean showLogs = true;
     // Debug
@@ -52,6 +53,14 @@ public class ConsoleSettings {
 
     public void setWarnNotAuthor(boolean warnNotAuthor) {
         this.warnNotAuthor = warnNotAuthor;
+    }
+
+    public boolean isWarnNoCategoryForItem() {
+        return warnNoCategoryForItem;
+    }
+
+    public void setWarnNoCategoryForItem(boolean warnNoCategoryForItem) {
+        this.warnNoCategoryForItem = warnNoCategoryForItem;
     }
 
     public boolean isShowLogs() {

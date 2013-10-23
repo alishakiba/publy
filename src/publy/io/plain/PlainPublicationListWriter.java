@@ -19,6 +19,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import publy.data.bibitem.BibItem;
 import publy.data.category.OutputCategory;
 import publy.data.settings.GeneralSettings;
@@ -40,7 +41,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
     }
 
     @Override
-    protected void writePublicationList(BufferedWriter out) throws IOException {
+    protected void writePublicationList(List<OutputCategory> categories, BufferedWriter out) throws IOException {
         itemWriter = new PlainBibItemWriter(out, settings);
 
         // Initialize the count
@@ -48,7 +49,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
             if (settings.getGeneralSettings().reverseNumbering()) {
                 count = 0;
 
-                for (OutputCategory c : getCategories()) {
+                for (OutputCategory c : categories) {
                     count += c.getItems().size();
                 }
             } else {
@@ -57,7 +58,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         }
 
         // Write the body
-        for (OutputCategory c : getCategories()) {
+        for (OutputCategory c : categories) {
             writeCategory(c, out);
         }
         

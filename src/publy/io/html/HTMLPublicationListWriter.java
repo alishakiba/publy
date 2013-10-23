@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import publy.Console;
@@ -56,7 +57,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     @Override
-    protected void writePublicationList(BufferedWriter out) throws IOException {
+    protected void writePublicationList(List<OutputCategory> categories, BufferedWriter out) throws IOException {
         itemWriter = new HTMLBibItemWriter(out, settings);
 
         // Initialize the count
@@ -64,7 +65,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             if (settings.getGeneralSettings().reverseNumbering()) {
                 count = 0;
 
-                for (OutputCategory c : getCategories()) {
+                for (OutputCategory c : categories) {
                     count += c.getItems().size();
                 }
             } else {
@@ -109,18 +110,18 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         // Navigation?
         if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP
                 || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM) {
-            writeNavigation(out);
+            writeNavigation(categories, out);
         }
 
         out.newLine();
-        for (OutputCategory c : getCategories()) {
-            writeCategory(c, out);
+        for (OutputCategory c : categories) {
+            writeCategory(c, categories, out);
         }
 
         // Navigation?
         if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM
                 || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
-            writeNavigation(out);
+            writeNavigation(categories, out);
         }
 
         // Credit line and last modified
@@ -212,7 +213,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
     }
 
-    private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
+    private void writeCategory(OutputCategory c, List<OutputCategory> categories, BufferedWriter out) throws IOException {
         // Section start
         out.write("    <div id=\"" + c.getShortName().toLowerCase() + "\" class=\"section\">");
         out.newLine();
@@ -220,7 +221,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         // Navigation?
         if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_TITLE
                 || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
-            writeNavigation(c, out);
+            writeNavigation(categories, c, out);
         }
 
         // Section title
@@ -229,7 +230,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
         // Navigation?
         if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.AFTER_SECTION_TITLE) {
-            writeNavigation(c, out);
+            writeNavigation(categories, c, out);
         }
 
         // Note
@@ -298,17 +299,17 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.newLine();
     }
 
-    private void writeNavigation(BufferedWriter out) throws IOException {
-        writeNavigation(null, out);
+    private void writeNavigation(List<OutputCategory> categories, BufferedWriter out) throws IOException {
+        writeNavigation(categories, null, out);
     }
 
-    private void writeNavigation(OutputCategory current, BufferedWriter out) throws IOException {
+    private void writeNavigation(List<OutputCategory> categories, OutputCategory current, BufferedWriter out) throws IOException {
         out.newLine();
         out.write("      <p class=\"navigation\">");
         out.newLine();
 
-        for (int i = 0; i < getCategories().size(); i++) {
-            OutputCategory c = getCategories().get(i);
+        for (int i = 0; i < categories.size(); i++) {
+            OutputCategory c = categories.get(i);
 
             if (c == current) {
                 out.write("        <span class=\"current\">" + c.getShortName() + "</span>");
