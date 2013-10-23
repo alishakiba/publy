@@ -256,7 +256,7 @@ public class Publy {
 
             try {
                 items = BibTeXParser.parseFile(settings.getFileSettings().getPublications());
-                Console.log("Publications list \"%s\" parsed successfully.", settings.getFileSettings().getPublications().getFileName());
+                Console.log("Publications list \"%s\" parsed.", settings.getFileSettings().getPublications().getFileName());
             } catch (Exception | AssertionError ex) {
                 Console.except(ex, "Exception while parsing publications list:");
             }
@@ -269,7 +269,7 @@ public class Publy {
                     try {
                         PublicationListWriter writer = new PlainPublicationListWriter(settings);
                         writer.writePublicationList(categories, settings.getFileSettings().getPlainTextTarget());
-                        Console.log("Plain text publication list written successfully.");
+                        Console.log("Plain text publication list written.");
                     } catch (Exception | AssertionError ex) {
                         Console.except(ex, "Exception while writing plain text publication list:");
                     }
@@ -279,7 +279,7 @@ public class Publy {
                     try {
                         PublicationListWriter writer = new BibtexPublicationListWriter(settings);
                         writer.writePublicationList(categories, settings.getFileSettings().getBibtexTarget());
-                        Console.log("BibTeX publication list written successfully.");
+                        Console.log("BibTeX publication list written.");
                     } catch (Exception | AssertionError ex) {
                         Console.except(ex, "Exception while writing BibTeX publication list:");
                     }
@@ -288,7 +288,7 @@ public class Publy {
                 try {
                     PublicationListWriter writer = new HTMLPublicationListWriter(settings);
                     writer.writePublicationList(categories, settings.getFileSettings().getTarget());
-                    Console.log("HTML publication list written successfully.");
+                    Console.log("HTML publication list written.");
                 } catch (Exception | AssertionError ex) {
                     Console.except(ex, "Exception while writing HTML publication list:");
                 }
