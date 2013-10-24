@@ -38,7 +38,6 @@ public class BibTeXParser {
     // Patterns for author and abbreviation parsing
     private static final Pattern shortPattern = Pattern.compile("short=\"([^\"]*)\"");
     private static final Pattern fullPattern = Pattern.compile("full=\"([^\"]*)\"");
-    private static final Pattern abbPattern = Pattern.compile("abbr=\"([^\"]*)\"");
     private static final Pattern namePattern = Pattern.compile(" name=\"([^\"]*)\"");
     private static final Pattern htmlPattern = Pattern.compile("htmlname=\"([^\"]*)\"");
     private static final Pattern plainPattern = Pattern.compile("plaintextname=\"([^\"]*)\"");
@@ -335,7 +334,7 @@ public class BibTeXParser {
         String fieldValue = item.get(field);
 
         if (fieldValue != null && !fieldValue.isEmpty()) {
-            String[] names = fieldValue.split(" and ");
+            String[] names = fieldValue.split(" [aA][nN][dD] "); // " and ", ignoring case
 
             for (String name : names) {
                 Matcher matcher = authorPattern.matcher(name);
