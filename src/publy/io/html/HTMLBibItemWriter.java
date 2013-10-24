@@ -623,6 +623,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
             divOpened = true;
         }
 
+        // ISSN link
+        if (item.anyNonEmpty("issn")) {
+            String link = "http://www.worldcat.org/issn/" + item.get("issn");
+            writeLink(divOpened, link, "ISSN");
+            divOpened = true;
+        }
+        
         // ISBN link
         if (item.anyNonEmpty("isbn")) {
             String link = "http://www.worldcat.org/isbn/" + item.get("isbn");
