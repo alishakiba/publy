@@ -17,7 +17,6 @@ package publy.io.plain;
 
 import java.io.BufferedWriter;
 import java.io.StringWriter;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -70,7 +69,7 @@ public class PlainBibItemWriterTest {
     }
     private StringWriter htmlOutput = new StringWriter();
     private BufferedWriter htmlBuffer = new BufferedWriter(htmlOutput);
-    private HTMLBibItemWriter htmlWriter = new HTMLBibItemWriter(htmlBuffer, HTMLTestUtils.getBibtexSettings());
+    private HTMLBibItemWriter htmlWriter = new HTMLBibItemWriter(htmlBuffer, null, HTMLTestUtils.getBibtexSettings());
 
     private String runHtmlWriterMethod(BibItem item) throws Exception {
         htmlWriter.write(item);

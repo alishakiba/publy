@@ -88,7 +88,7 @@ public class HTMLTestUtils {
         // Initialize writers
         output = new StringWriter();
         buffer = new BufferedWriter(output);
-        testInstance = new HTMLBibItemWriter(buffer, bibtexSettings);
+        testInstance = new HTMLBibItemWriter(buffer, null, bibtexSettings);
     }
     
     public static Settings getBibtexSettings() {
