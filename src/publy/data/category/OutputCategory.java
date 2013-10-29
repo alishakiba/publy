@@ -36,6 +36,8 @@ public class OutputCategory implements Cloneable {
     private List<FieldCondition> fieldConditions;
     // Bibitems in this category
     private List<BibItem> items;
+    // Fields that should be ignored for this category
+    private List<String> ignoredFields;
 
     public OutputCategory(String shortName, String name, TypeCondition typeCondition) {
         this.shortName = shortName;
@@ -46,6 +48,7 @@ public class OutputCategory implements Cloneable {
         fieldConditions = new ArrayList<>();
         
         items = new ArrayList<>();
+        ignoredFields = new ArrayList<>();
     }
     
     public String getShortName() {
@@ -90,6 +93,14 @@ public class OutputCategory implements Cloneable {
     
     public List<BibItem> getItems() {
         return items;
+    }
+
+    public List<String> getIgnoredFields() {
+        return ignoredFields;
+    }
+
+    public void setIgnoredFields(List<String> ignoredFields) {
+        this.ignoredFields = ignoredFields;
     }
 
     /**

@@ -58,7 +58,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     }
 
     private void applyStyles() {
-        UIStyles.applyHeaderStyle(catSelectionHeader, activeHeader, inactiveHeader, nameHeader, noteHeader, filtersHeader);
+        UIStyles.applyHeaderStyle(catSelectionHeader, activeHeader, inactiveHeader, nameHeader, noteHeader, ignoredFieldsHeader, filtersHeader);
         UIStyles.applyHeaderStyle((TitledBorder) catPanel.getBorder());
     }
 
@@ -107,6 +107,9 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         filtersHeader = new javax.swing.JLabel();
         filtersSeparator = new javax.swing.JSeparator();
         editFiltersButton = new javax.swing.JButton();
+        ignoredFieldsHeader = new javax.swing.JLabel();
+        ignoredFieldsSeparator = new javax.swing.JSeparator();
+        ignoredFieldsTextField = new javax.swing.JTextField();
         catSelectionHeader = new javax.swing.JLabel();
         catSeparator = new javax.swing.JSeparator();
         inButton = new javax.swing.JButton();
@@ -195,6 +198,21 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        ignoredFieldsHeader.setText("Ignored Fields");
+
+        ignoredFieldsTextField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                ignoredFieldsTextFieldTextChanged(e);
+            }
+            public void removeUpdate(DocumentEvent e) {
+                ignoredFieldsTextFieldTextChanged(e);
+            }
+            public void changedUpdate(DocumentEvent e) {
+                //Plain text components do not fire these events
+            }
+        });
+        ignoredFieldsTextField.setEnabled(false);
+
         javax.swing.GroupLayout catPanelLayout = new javax.swing.GroupLayout(catPanel);
         catPanel.setLayout(catPanelLayout);
         catPanelLayout.setHorizontalGroup(
@@ -223,7 +241,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                                         .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(shortNameTextField)
                                             .addComponent(fullNameTextField)))
-                                    .addComponent(noteTextField)))))
+                                    .addComponent(noteTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)))))
                     .addGroup(catPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,7 +252,17 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                             .addGroup(catPanelLayout.createSequentialGroup()
                                 .addComponent(filtersHeader)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(filtersSeparator)))))
+                                .addComponent(filtersSeparator))))
+                    .addGroup(catPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(catPanelLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(ignoredFieldsTextField))
+                            .addGroup(catPanelLayout.createSequentialGroup()
+                                .addComponent(ignoredFieldsHeader)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(ignoredFieldsSeparator)))))
                 .addContainerGap())
         );
         catPanelLayout.setVerticalGroup(
@@ -260,11 +288,17 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                 .addComponent(noteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(ignoredFieldsHeader)
+                    .addComponent(ignoredFieldsSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ignoredFieldsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(filtersHeader)
                     .addComponent(filtersSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(editFiltersButton)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         catSelectionHeader.setText("Category selection");
@@ -427,6 +461,12 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
             selectedCategory.setHtmlNote(noteTextField.getText());
         }
     }
+    
+    private void ignoredFieldsTextFieldTextChanged(DocumentEvent evt) {
+        if (selectedCategory != null) {
+            selectedCategory.setIgnoredFields(UIStyles.parseDisplayString(ignoredFieldsTextField.getText()));
+        }
+    }
 
     private void fullNameTextFieldTextChanged(DocumentEvent evt) {
         if (selectedCategory != null) {
@@ -457,6 +497,10 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         // Note
         noteTextField.setText(active ? c.getHtmlNote() : "");
         noteTextField.setEnabled(active);
+        
+        // Ignored fields
+        ignoredFieldsTextField.setText(active ? UIStyles.convertToDisplayString(c.getIgnoredFields()) : "");
+        ignoredFieldsTextField.setEnabled(active);
 
         // Filters
         editFiltersButton.setEnabled(active);
@@ -628,6 +672,9 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     private javax.swing.JSeparator filtersSeparator;
     private javax.swing.JLabel fullNameLabel;
     private javax.swing.JTextField fullNameTextField;
+    private javax.swing.JLabel ignoredFieldsHeader;
+    private javax.swing.JSeparator ignoredFieldsSeparator;
+    private javax.swing.JTextField ignoredFieldsTextField;
     private javax.swing.JButton inButton;
     private javax.swing.JList<OutputCategory> inCatList;
     private javax.swing.JScrollPane inCatScrollPane;

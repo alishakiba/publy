@@ -17,6 +17,8 @@ package publy.gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
@@ -57,7 +59,7 @@ public class UIStyles {
             Font current = borders[0].getTitleFont();
             
             if (current == null) {
-                current = UIManager.getDefaults().getFont("TitledBorder.font");;
+                current = UIManager.getDefaults().getFont("TitledBorder.font");
             }
             
             headerFont = current.deriveFont(HEADER_FONT_STYLE);
@@ -67,5 +69,36 @@ public class UIStyles {
             border.setTitleFont(headerFont);
             border.setTitleColor(HEADER_TEXT_COLOR);
         }
+    }
+    
+    /**
+     * Converts the given list of strings to a single string that can be displayed in a text field.
+     * @param values
+     * @return 
+     */
+    static String convertToDisplayString(List<String> values) {
+        StringBuilder text = new StringBuilder();
+        boolean first = true;
+
+        for (String val : values) {
+            if (first) {
+                first = false;
+            } else {
+                text.append(';');
+            }
+
+            text.append(val);
+        }
+
+        return text.toString();
+    }
+    
+    /**
+     * Parses the given display string and converts it to a list of values.
+     * @param value
+     * @return 
+     */
+    static List<String> parseDisplayString(String value) {
+        return Arrays.asList(value.split(";"));
     }
 }

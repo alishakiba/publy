@@ -173,7 +173,7 @@
                                               <Component id="fullNameTextField" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <Component id="noteTextField" max="32767" attributes="0"/>
+                                      <Component id="noteTextField" pref="296" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -190,6 +190,20 @@
                                   <Component id="filtersHeader" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="filtersSeparator" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                                  <Component id="ignoredFieldsTextField" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="ignoredFieldsHeader" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="ignoredFieldsSeparator" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -225,12 +239,19 @@
                   <Component id="noteTextField" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="ignoredFieldsHeader" min="-2" max="-2" attributes="0"/>
+                      <Component id="ignoredFieldsSeparator" min="-2" pref="7" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="ignoredFieldsTextField" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="filtersHeader" min="-2" max="-2" attributes="0"/>
                       <Component id="filtersSeparator" min="-2" pref="7" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="editFiltersButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -301,6 +322,21 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editFiltersButtonActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="ignoredFieldsHeader">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Ignored Fields"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSeparator" name="ignoredFieldsSeparator">
+        </Component>
+        <Component class="javax.swing.JTextField" name="ignoredFieldsTextField">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="ignoredFieldsTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        ignoredFieldsTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        ignoredFieldsTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
