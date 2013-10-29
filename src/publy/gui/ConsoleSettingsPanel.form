@@ -120,7 +120,7 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="missingReferencesCheckBox">
       <Properties>
-        <Property name="text" type="java.lang.String" value="When a referenced file does not exist"/>
+        <Property name="text" type="java.lang.String" value="When a referenced file or publication does not exist"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="missingReferencesCheckBoxActionPerformed"/>

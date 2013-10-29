@@ -102,7 +102,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
             }
         });
 
-        missingReferencesCheckBox.setText("When a referenced file does not exist");
+        missingReferencesCheckBox.setText("When a referenced file or publication does not exist");
         missingReferencesCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 missingReferencesCheckBoxActionPerformed(evt);

@@ -27,6 +27,7 @@ import publy.data.PublicationType;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.Type;
+import publy.data.category.OutputCategory;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
 import publy.io.BibItemWriter;
@@ -40,10 +41,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private static final String indent = "          ";
     private BibtexBibItemWriter bibtexWriter;
+    private List<OutputCategory> categories;
 
-    public HTMLBibItemWriter(BufferedWriter out, Settings settings) {
+    public HTMLBibItemWriter(BufferedWriter out, List<OutputCategory> categories, Settings settings) {
         super(out, settings);
         bibtexWriter = new BibtexBibItemWriter(out, settings);
+        this.categories = categories;
     }
 
     @Override
@@ -697,6 +700,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
                 if (target.startsWith("#")) {
                     // Link to another paper, good as-is
+                    checkIdExistance(target.substring(1), attribute, item);
                 } else if (target.contains(":")) {
                     // Most file systems prohibit colons in file names, so
                     // it seems safe to assume that this indicates an
@@ -814,7 +818,23 @@ public class HTMLBibItemWriter extends BibItemWriter {
         Path file = settings.getFileSettings().getTarget().resolveSibling(path);
 
         if (Files.notExists(file)) {
-            Console.warn(Console.WarningType.MISSING_REFERENCE, "The file \"%s\" that is linked in attribute \"%s\" of publication \"%s\" cannot be found at \"%s\".", path, attr, item.getId(), file);
+            Console.warn(Console.WarningType.MISSING_REFERENCE, "File \"%s\" (linked in attribute \"%s\" of publication \"%s\") cannot be found at \"%s\".", path, attr, item.getId(), file);
         }
+    }
+
+    /**
+     * Checks whether a BibItem with the given id exists, gives a warning when it doesn't.
+     * @param id 
+     */
+    private void checkIdExistance(String id, String attr, BibItem item) {
+        for (OutputCategory cat : categories) {
+            for (BibItem i : cat.getItems()) {
+                if (i.getId().equals(id)) {
+                    return;
+                }
+            }
+        }
+        
+        Console.warn(Console.WarningType.MISSING_REFERENCE, "Publication \"%s\" (linked in attribute \"%s\" of publication \"%s\") is not in the final list.", id, attr, item.getId());
     }
 }
