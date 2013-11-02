@@ -143,11 +143,11 @@ public abstract class BibItemWriter {
     }
 
     protected String formatPages(BibItem item) {
-        String pages = item.get("pages");
-
-        if (pages == null || pages.isEmpty()) {
+        if (!isPresent(item, "pages")) {
             return "";
         } else {
+            String pages = item.get("pages");
+            
             if (pages.contains("-") || pages.contains("+") || pages.contains(",")) {
                 return "pages " + pages;
             } else {
@@ -158,19 +158,18 @@ public abstract class BibItemWriter {
 
     protected String formatDate(BibItem item) {
         String year = item.get("year");
-        String month = item.get("month");
 
         if (year == null || year.isEmpty()) {
-            if (month == null || month.isEmpty()) {
+            if (!isPresent(item, "month")) {
                 return "";
             } else {
-                return formatMonth(month);
+                return formatMonth(item.get("month"));
             }
         } else {
-            if (month == null || month.isEmpty()) {
+            if (!isPresent(item, "month")) {
                 return year;
             } else {
-                return formatMonth(month) + " " + year;
+                return formatMonth(item.get("month")) + " " + year;
             }
         }
     }
@@ -460,6 +459,14 @@ public abstract class BibItemWriter {
         }
 
         return sb.toString();
+    }
+    
+    protected String get(BibItem item, String field) {
+        if (ignoredFields.contains(field)) {
+            return "";
+        } else {
+            return item.get(field);
+        }
     }
     
     protected boolean isPresent(BibItem item, String field) {
