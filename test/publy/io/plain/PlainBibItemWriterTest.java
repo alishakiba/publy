@@ -18,6 +18,7 @@ package publy.io.plain;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -103,6 +104,7 @@ public class PlainBibItemWriterTest {
         String expected = null;
         
         try {
+            textWriter.setIgnoredFields(Collections.<String>emptySet());
             textWriter.write(compare);
             textBuffer.flush();
             expected = textOutput.getBuffer().toString();
@@ -115,7 +117,8 @@ public class PlainBibItemWriterTest {
 
         // Test
         try {
-            textWriter.write(input, ignoredFields);
+            textWriter.setIgnoredFields(ignoredFields);
+            textWriter.write(input);
             textBuffer.flush();
             String result = textOutput.getBuffer().toString();
 

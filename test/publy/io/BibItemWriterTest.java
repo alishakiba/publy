@@ -269,7 +269,7 @@ public class BibItemWriterTest {
         }
 
         @Override
-        public void write(BibItem item, Set<String> ignoredFields) throws IOException {
+        public void write(BibItem item) throws IOException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }

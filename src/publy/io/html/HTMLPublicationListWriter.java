@@ -267,7 +267,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
         out.newLine();
 
-        Set<String> ignoredFields = new HashSet<>(c.getIgnoredFields());
+        itemWriter.setIgnoredFields(new HashSet<>(c.getIgnoredFields()));
         
         // The actual entries
         for (BibItem item : c.getItems()) {
@@ -281,7 +281,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
             out.newLine();
 
-            itemWriter.write(item, ignoredFields);
+            itemWriter.write(item);
 
             out.write("        </li>");
             out.newLine();

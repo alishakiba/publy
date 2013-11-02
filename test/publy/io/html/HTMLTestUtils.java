@@ -19,6 +19,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -97,6 +98,8 @@ public class HTMLTestUtils {
     }
 
     public static void testWithDefaultValues(Type type, Properties prop) {
+        testInstance.setIgnoredFields(Collections.<String>emptySet());
+
         for (String key : prop.stringPropertyNames()) {
             if (key.endsWith("_fields")) {
                 String test = key.substring(0, key.length() - "_fields".length());
@@ -119,26 +122,30 @@ public class HTMLTestUtils {
     }
 
     public static void test(HashMap<BibItem, String> expected) {
+        testInstance.setIgnoredFields(Collections.<String>emptySet());
+
         for (BibItem input : expected.keySet()) {
             test(input, expected.get(input));
         }
     }
 
     public static void test(BibItem input, String expected) {
+        TestUtils.setAuthors(input);
+        TestUtils.setEditors(input);
+
         try {
-            TestUtils.setAuthors(input);
-            TestUtils.setEditors(input);
             testInstance.write(input);
             buffer.flush();
-            String result = process(output.getBuffer().toString(), input);
-
-            assertEquals(input.toString(), expected, result);
         } catch (IOException ex) {
             fail("IOException on input:\n" + input + "\nException:\n" + ex);
         }
 
+        String result = process(output.getBuffer().toString(), input);
+
         // Clear the output
         output.getBuffer().delete(0, output.getBuffer().length());
+
+        assertEquals(input.toString(), expected, result);
     }
 
     public static void testIgnore(BibItem input, Set<String> ignoredFields) {
@@ -155,32 +162,38 @@ public class HTMLTestUtils {
         TestUtils.setEditors(compare);
 
         // Get the expected output
-        String expected = null;
-        
+        String expected;
+
+        testInstance.setIgnoredFields(Collections.<String>emptySet());
+
         try {
             testInstance.write(compare);
             buffer.flush();
-            expected = output.getBuffer().toString();
         } catch (IOException ex) {
             fail("IOException on base item:\n" + compare + "\nException:\n" + ex);
         }
-        
+
+        expected = output.getBuffer().toString();
+
         // Clear the output
         output.getBuffer().delete(0, output.getBuffer().length());
 
         // Test
-        try {
-            testInstance.write(input, ignoredFields);
-            buffer.flush();
-            String result = output.getBuffer().toString();
+        testInstance.setIgnoredFields(ignoredFields);
 
-            assertEquals(input.toString() + "Ignored: " + ignoredFields + "\n", expected, result);
+        try {
+            testInstance.write(input);
+            buffer.flush();
         } catch (IOException ex) {
             fail("IOException on input:\n" + input + "\nException:\n" + ex);
         }
 
+        String result = output.getBuffer().toString();
+
         // Clear the output
         output.getBuffer().delete(0, output.getBuffer().length());
+
+        assertEquals(input.toString() + "Ignored: " + ignoredFields + "\n", expected, result);
     }
 
     private static String process(String output, BibItem input) {

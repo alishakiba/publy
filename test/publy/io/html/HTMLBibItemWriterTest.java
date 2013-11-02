@@ -11,7 +11,6 @@ import java.util.Set;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import publy.data.bibitem.BibItem;
-import publy.data.bibitem.FieldData;
 import publy.data.bibitem.Type;
 import publy.io.TestUtils;
 
