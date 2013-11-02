@@ -83,7 +83,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         out.newLine();
         out.newLine();
         
-        Set<String> ignoredFields = new HashSet<>(c.getIgnoredFields());
+        itemWriter.setIgnoredFields(new HashSet<>(c.getIgnoredFields()));
 
         for (BibItem item : c.getItems()) {
             // Write the appropriate number
@@ -98,7 +98,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
                 }
             }
 
-            itemWriter.write(item, ignoredFields);
+            itemWriter.write(item);
             out.newLine();
         }
 

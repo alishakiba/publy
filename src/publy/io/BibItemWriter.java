@@ -35,16 +35,22 @@ public abstract class BibItemWriter {
 
     protected BufferedWriter out;
     protected Settings settings;
+    protected Set<String> ignoredFields;
 
     public BibItemWriter(BufferedWriter out, Settings settings) {
         this.out = out;
         this.settings = settings;
+        ignoredFields = Collections.<String>emptySet();
     }
 
-    public abstract void write(BibItem item, Set<String> ignoredFields) throws IOException;
-    
-    public void write(BibItem item) throws IOException {
-        write (item, Collections.<String>emptySet());
+    public abstract void write(BibItem item) throws IOException;
+
+    public Set<String> getIgnoredFields() {
+        return ignoredFields;
+    }
+
+    public void setIgnoredFields(Set<String> ignoredFields) {
+        this.ignoredFields = ignoredFields;
     }
 
     protected String formatTitle(BibItem item) {
@@ -454,5 +460,29 @@ public abstract class BibItemWriter {
         }
 
         return sb.toString();
+    }
+    
+    protected boolean isPresent(BibItem item, String field) {
+        return !ignoredFields.contains(field) && item.get(field) != null && !item.get(field).isEmpty();
+    }
+    
+    protected boolean anyPresent(BibItem item, String... fields) {
+        for (String field : fields) {
+            if (!ignoredFields.contains(field) && item.get(field) != null && !item.get(field).isEmpty()) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    protected boolean allPresent(BibItem item, String... fields) {
+        for (String field : fields) {
+            if (ignoredFields.contains(field) || item.get(field) == null || item.get(field).isEmpty()) {
+                return false;
+            }
+        }
+        
+        return true;
     }
 }

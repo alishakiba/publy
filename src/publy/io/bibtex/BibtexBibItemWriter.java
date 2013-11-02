@@ -37,7 +37,7 @@ public class BibtexBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(BibItem item, Set<String> ignoredFields) throws IOException {
+    public void write(BibItem item) throws IOException {
         // Item type
         out.write("@" + item.getOriginalType() + "{" + item.getId() + ",");
         out.newLine();
@@ -46,7 +46,7 @@ public class BibtexBibItemWriter extends BibItemWriter {
         boolean first = true;
 
         // Get the proper format for authors
-        if (item.anyNonEmpty("author")) {
+        if (isPresent(item, "author")) {
             out.write("  author={");
 
             for (int i = 0; i < item.getAuthors().size(); i++) {

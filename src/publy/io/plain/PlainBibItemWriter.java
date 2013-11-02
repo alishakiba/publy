@@ -36,10 +36,10 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(BibItem item, Set<String> ignoredFields) throws IOException {
+    public void write(BibItem item) throws IOException {
         writeTitleAndAuthors(item);
 
-        if (item.anyNonEmpty("status")) {
+        if (isPresent(item, "status")) {
             writeStatus(item);
         } else {
             switch (item.getType()) {
@@ -89,7 +89,7 @@ public class PlainBibItemWriter extends BibItemWriter {
                     throw new AssertionError("Item \"" + item.getId() + "\" has an unexpected publication type: " + item.getType());
             }
 
-            if ((item.getType() == Type.PROCEEDINGS || item.getType() == Type.INPROCEEDINGS) && item.anyNonEmpty("address")) {
+            if ((item.getType() == Type.PROCEEDINGS || item.getType() == Type.INPROCEEDINGS) && isPresent(item, "address")) {
                 // The year has already been written
                 out.newLine();
             } else {
@@ -106,7 +106,7 @@ public class PlainBibItemWriter extends BibItemWriter {
     protected void writeArticle(BibItem item) throws IOException {
         output(item.get("journal"), ", ");
 
-        if (item.anyNonEmpty("volume", "number")) {
+        if (anyPresent(item, "volume", "number")) {
             output(item.get("volume"));
             output("(", item.get("number"), ")");
             output(":", formatPages(item, false), "");
@@ -123,10 +123,10 @@ public class PlainBibItemWriter extends BibItemWriter {
 
     protected void writeInBook(BibItem item) throws IOException {
         // Only add chapter and pages here if volume is present
-        if (item.anyNonEmpty("volume") && item.anyNonEmpty("chapter", "pages")) {
+        if (isPresent(item, "volume") && anyPresent(item, "chapter", "pages")) {
             writeVolume(item, true, "");
 
-            if (item.anyNonEmpty("chapter")) {
+            if (isPresent(item, "chapter")) {
                 out.write(", ");
                 writeChapter(item, false);
             }
@@ -148,18 +148,18 @@ public class PlainBibItemWriter extends BibItemWriter {
     protected void writeInCollection(BibItem item) throws IOException {
         out.write("In ");
 
-        if (item.anyNonEmpty("editor")) {
+        if (isPresent(item, "editor")) {
             output(formatAuthors(item, true, Author.NameOutputType.PLAINTEXT), ", ");
         }
 
         output(item.get("booktitle"));
 
-        if (item.anyNonEmpty("volume", "series", "number")) {
+        if (anyPresent(item, "volume", "series", "number")) {
             out.write(", ");
             writeVolume(item, false, "");
         }
 
-        if (item.anyNonEmpty("chapter")) {
+        if (isPresent(item, "chapter")) {
             out.write(", ");
             writeChapter(item, false);
         }
@@ -177,7 +177,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         String edition = item.get("edition");
 
         if (edition != null && !edition.isEmpty()) {
-            if (item.anyNonEmpty("organization", "address")) {
+            if (anyPresent(item, "organization", "address")) {
                 output(toLowerCase(edition), " edition, ");
             } else {
                 output(toTitleCase(edition), " edition, ");
@@ -199,18 +199,18 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     protected void writeProceedings(BibItem item) throws IOException {
-        if (!item.anyNonEmpty("address") && (item.anyNonEmpty("publisher") || (item.anyNonEmpty("editor") && item.anyNonEmpty("organization")))) {
+        if (!isPresent(item, "address") && (isPresent(item, "publisher") || (isPresent(item, "editor") && isPresent(item, "organization")))) {
             writeVolume(item, true, ". ");
         } else {
             writeVolume(item, true, ", ");
         }
 
-        if (item.anyNonEmpty("address")) {
+        if (isPresent(item, "address")) {
             output(item.get("address"), ", ");
             output(formatDate(item), ". ");
 
-            if (item.anyNonEmpty("editor")) {
-                if (item.anyNonEmpty("publisher")) {
+            if (isPresent(item, "editor")) {
+                if (isPresent(item, "publisher")) {
                     output(item.get("organization"), ", ");
                 } else {
                     output(item.get("organization"), ".");
@@ -219,7 +219,7 @@ public class PlainBibItemWriter extends BibItemWriter {
 
             output(item.get("publisher"), ".");
         } else {
-            if (item.anyNonEmpty("editor")) {
+            if (isPresent(item, "editor")) {
                 output(item.get("organization"), ", ");
             }
 
@@ -234,24 +234,24 @@ public class PlainBibItemWriter extends BibItemWriter {
 
         output(item.get("booktitle"));
 
-        if (item.anyNonEmpty("volume", "number", "series")) {
+        if (anyPresent(item, "volume", "number", "series")) {
             out.write(", ");
             writeVolume(item, false, "");
         }
 
         output(", ", formatPages(item, true), "");
 
-        if (!item.anyNonEmpty("address") && item.anyNonEmpty("publisher", "organization")) {
+        if (!isPresent(item, "address") && anyPresent(item, "publisher", "organization")) {
             out.write(". ");
         } else {
             out.write(", ");
         }
 
-        if (item.anyNonEmpty("address")) {
+        if (isPresent(item, "address")) {
             output(item.get("address"), ", ");
             output(formatDate(item), ". ");
 
-            if (item.anyNonEmpty("publisher")) {
+            if (isPresent(item, "publisher")) {
                 output(item.get("organization"), ", ");
             } else {
                 output(item.get("organization"), ".");
@@ -298,8 +298,8 @@ public class PlainBibItemWriter extends BibItemWriter {
     private void writeTitle(BibItem item) throws IOException {
         output(formatTitle(item));
 
-        if (item.getType() == Type.INBOOK && !item.anyNonEmpty("volume")) {
-            if (item.anyNonEmpty("chapter")) {
+        if (item.getType() == Type.INBOOK && !isPresent(item, "volume")) {
+            if (isPresent(item, "chapter")) {
                 out.write(", ");
                 writeChapter(item, false);
             }
@@ -316,9 +316,9 @@ public class PlainBibItemWriter extends BibItemWriter {
 
         if (item.getType() == Type.PROCEEDINGS) {
             // Proceedings never prints the author
-            if (item.anyNonEmpty("editor")) {
+            if (isPresent(item, "editor")) {
                 useEditor = true;
-            } else if (item.anyNonEmpty("organization")) {
+            } else if (isPresent(item, "organization")) {
                 output(item.get("organization"), ".", true);
                 return;
             } else {
@@ -326,9 +326,9 @@ public class PlainBibItemWriter extends BibItemWriter {
                 return;
             }
         } else {
-            if (item.anyNonEmpty("author")) {
+            if (isPresent(item, "author")) {
                 useEditor = false;
-            } else if (item.anyNonEmpty("editor")) {
+            } else if (isPresent(item, "editor")) {
                 useEditor = true;
             } else {
                 Console.error("No author information found for entry \"%s\".", item.getId());
@@ -371,7 +371,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         output(item.get("publisher"), ", ");
         output(item.get("address"), ", ");
 
-        if (item.anyNonEmpty("publisher", "address")) {
+        if (anyPresent(item, "publisher", "address")) {
             output(toLowerCase(item.get("edition")), " edition, ");
         } else {
             output(toTitleCase(item.get("edition")), " edition, ");

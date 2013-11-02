@@ -164,23 +164,6 @@ public class BibItem {
         this.editors.addAll(Arrays.asList(editors));
     }
 
-    public boolean anyNonEmpty(String field) {
-        String v = values.get(field);
-        return (v != null && !v.isEmpty());
-    }
-
-    public boolean anyNonEmpty(String... fields) {
-        for (String field : fields) {
-            String v = values.get(field);
-
-            if (v != null && !v.isEmpty()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public String getBibTeX() {
         StringBuilder sb = new StringBuilder();
 
@@ -209,5 +192,17 @@ public class BibItem {
     @Override
     public String toString() {
         return getBibTeX();
+    }
+    
+    private boolean anyNonEmpty(String... fields) {
+        for (String field : fields) {
+            String v = values.get(field);
+
+            if (v != null && !v.isEmpty()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
