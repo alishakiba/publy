@@ -17,6 +17,7 @@ package publy.io.plain;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.Set;
 import publy.Console;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
@@ -35,7 +36,7 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(BibItem item) throws IOException {
+    public void write(BibItem item, Set<String> ignoredFields) throws IOException {
         writeTitleAndAuthors(item);
 
         if (item.anyNonEmpty("status")) {

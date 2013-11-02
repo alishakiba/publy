@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import publy.data.Author;
@@ -90,7 +91,7 @@ public class HTMLTestUtils {
         buffer = new BufferedWriter(output);
         testInstance = new HTMLBibItemWriter(buffer, null, bibtexSettings);
     }
-    
+
     public static Settings getBibtexSettings() {
         return bibtexSettings;
     }
@@ -140,6 +141,48 @@ public class HTMLTestUtils {
         output.getBuffer().delete(0, output.getBuffer().length());
     }
 
+    public static void testIgnore(BibItem input, Set<String> ignoredFields) {
+        // Build the comparable bibitem
+        BibItem compare = new BibItem(input.getOriginalType(), input.getId());
+
+        for (String field : input.getFields()) {
+            if (!ignoredFields.contains(field)) {
+                compare.put(field, input.get(field));
+            }
+        }
+
+        setAuthors(compare);
+        setEditors(compare);
+
+        // Get the expected output
+        String expected = null;
+        
+        try {
+            testInstance.write(compare);
+            buffer.flush();
+            expected = output.getBuffer().toString();
+        } catch (IOException ex) {
+            fail("IOException on base item:\n" + compare + "\nException:\n" + ex);
+        }
+        
+        // Clear the output
+        output.getBuffer().delete(0, output.getBuffer().length());
+
+        // Test
+        try {
+            testInstance.write(input, ignoredFields);
+            buffer.flush();
+            String result = output.getBuffer().toString();
+
+            assertEquals(input.toString() + "Ignored: " + ignoredFields + "\n", expected, result);
+        } catch (IOException ex) {
+            fail("IOException on input:\n" + input + "\nException:\n" + ex);
+        }
+
+        // Clear the output
+        output.getBuffer().delete(0, output.getBuffer().length());
+    }
+
     private static String process(String output, BibItem input) {
         // Because the title is on a line by itself, we don't add a period where bibtex does
         String pretty = addPeriodAfterTitle(output, input.get("title"));
@@ -171,7 +214,7 @@ public class HTMLTestUtils {
             return input;
         } else {
             int nextNewLine = input.indexOf("<br>", index);
-            
+
             StringBuilder sb = new StringBuilder(input);
             sb.insert(nextNewLine, '.');
             return sb.toString();

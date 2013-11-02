@@ -25,7 +25,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import publy.Console;
@@ -265,6 +267,8 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
         out.newLine();
 
+        Set<String> ignoredFields = new HashSet<>(c.getIgnoredFields());
+        
         // The actual entries
         for (BibItem item : c.getItems()) {
             if (settings.getGeneralSettings().reverseNumbering()) {
@@ -277,7 +281,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
             out.newLine();
 
-            itemWriter.write(item);
+            itemWriter.write(item, ignoredFields);
 
             out.write("        </li>");
             out.newLine();
