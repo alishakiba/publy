@@ -143,7 +143,7 @@ public class TestUtils {
         examples.add(example);
     }
 
-    private static void setAuthors(BibItem item) {
+    public static void setAuthors(BibItem item) {
         String author = item.get("author");
 
         if (author != null && !author.isEmpty()) {
@@ -155,7 +155,7 @@ public class TestUtils {
         }
     }
 
-    private static void setEditors(BibItem item) {
+    public static void setEditors(BibItem item) {
         String editor = item.get("editor");
 
         if (editor != null && !editor.isEmpty()) {
@@ -193,5 +193,17 @@ public class TestUtils {
             included.remove(next);
             fields.add(next);
         }
+    }
+
+    public static Set<String> getMandatoryFields(Type type) {
+        Set<String> result = new HashSet<>();
+        for (String req : FieldData.getMandatoryFields(type)) {
+            if (req.contains(";")) {
+                result.add(req.substring(0, req.indexOf(';')));
+            } else {
+                result.add(req);
+            }
+        }
+        return result;
     }
 }

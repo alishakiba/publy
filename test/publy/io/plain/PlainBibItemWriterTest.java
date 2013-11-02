@@ -16,7 +16,10 @@
 package publy.io.plain;
 
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.junit.Test;
 import publy.data.bibitem.BibItem;
@@ -82,6 +85,48 @@ public class PlainBibItemWriterTest {
 
         return output;
     }
+    
+    public void testIgnore(BibItem input, Set<String> ignoredFields) {
+        // Build the comparable bibitem
+        BibItem compare = new BibItem(input.getOriginalType(), input.getId());
+
+        for (String field : input.getFields()) {
+            if (!ignoredFields.contains(field)) {
+                compare.put(field, input.get(field));
+            }
+        }
+
+        TestUtils.setAuthors(compare);
+        TestUtils.setEditors(compare);
+
+        // Get the expected output
+        String expected = null;
+        
+        try {
+            textWriter.write(compare);
+            textBuffer.flush();
+            expected = textOutput.getBuffer().toString();
+        } catch (IOException ex) {
+            fail("IOException on base item:\n" + compare + "\nException:\n" + ex);
+        }
+        
+        // Clear the output
+        textOutput.getBuffer().delete(0, textOutput.getBuffer().length());
+
+        // Test
+        try {
+            textWriter.write(input, ignoredFields);
+            textBuffer.flush();
+            String result = textOutput.getBuffer().toString();
+
+            assertEquals(input.toString() + "Ignored: " + ignoredFields + "\n", expected, result);
+        } catch (IOException ex) {
+            fail("IOException on input:\n" + input + "\nException:\n" + ex);
+        }
+
+        // Clear the output
+        textOutput.getBuffer().delete(0, textOutput.getBuffer().length());
+    }
 
     @Test
     public void testWrites() {
@@ -100,6 +145,27 @@ public class PlainBibItemWriterTest {
             }
 
             System.out.println("PlainBibItemWriter - Tests for " + type + " were successful");
+        }
+    }
+    
+    @Test
+    public void testWriteIgnore() {
+        System.out.println("writeIgnore");
+
+        for (Type type : Type.values()) {
+            Set<BibItem> items = TestUtils.generateExampleBibitems(type);
+            Set<String> mandatoryFields = TestUtils.getMandatoryFields(type);
+            
+            for (BibItem item : items) {
+                Set<String> optionalFields = new HashSet<>(item.getFields());
+                optionalFields.removeAll(mandatoryFields);
+                
+                List<Set<String>> subsets = TestUtils.getAllSubsets(optionalFields);
+                
+                for (Set<String> set : subsets) {
+                    testIgnore(item, set);
+                }
+            }
         }
     }
 }
