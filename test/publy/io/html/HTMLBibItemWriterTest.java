@@ -4,10 +4,16 @@ package publy.io.html;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import publy.data.bibitem.BibItem;
+import publy.data.bibitem.FieldData;
 import publy.data.bibitem.Type;
+import publy.io.TestUtils;
 
 /**
  *
@@ -39,5 +45,40 @@ public class HTMLBibItemWriterTest {
                 fail("IOException when reading properties file.");
             }
         }
+    }
+    
+    @Test
+    public void testWriteIgnore() {
+        System.out.println("writeIgnore");
+
+        for (Type type : Type.values()) {
+            Set<BibItem> items = TestUtils.generateExampleBibitems(type);
+            Set<String> mandatoryFields = getMandatoryFields(type);
+            
+            for (BibItem item : items) {
+                Set<String> optionalFields = new HashSet<>(item.getFields());
+                optionalFields.removeAll(mandatoryFields);
+                
+                List<Set<String>> subsets = TestUtils.getAllSubsets(optionalFields);
+                
+                for (Set<String> set : subsets) {
+                    HTMLTestUtils.testIgnore(item, set);
+                }
+            }
+        }
+    }
+
+    private Set<String> getMandatoryFields(Type type) {
+        Set<String> result = new HashSet<>();
+        
+        for (String req : FieldData.getMandatoryFields(type)) {
+            if (req.contains(";")) {
+                result.add(req.substring(0, req.indexOf(';'))); // Only use the first option
+            } else {
+                result.add(req);
+            }
+        }
+        
+        return result;
     }
 }

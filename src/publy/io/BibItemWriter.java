@@ -18,7 +18,9 @@ package publy.io;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import publy.Console;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
@@ -39,7 +41,11 @@ public abstract class BibItemWriter {
         this.settings = settings;
     }
 
-    public abstract void write(BibItem item) throws IOException;
+    public abstract void write(BibItem item, Set<String> ignoredFields) throws IOException;
+    
+    public void write(BibItem item) throws IOException {
+        write (item, Collections.<String>emptySet());
+    }
 
     protected String formatTitle(BibItem item) {
         String title = item.get("title");

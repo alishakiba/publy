@@ -22,6 +22,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Set;
 import publy.Console;
 import publy.data.PublicationType;
 import publy.data.Author;
@@ -50,7 +51,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(BibItem item) throws IOException {
+    public void write(BibItem item, Set<String> ignoredFields) throws IOException {
         writeTitleAndAuthorsHTML(item);
 
         if (item.anyNonEmpty("status")) {

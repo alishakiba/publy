@@ -19,7 +19,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import publy.data.bibitem.BibItem;
 import publy.data.category.OutputCategory;
 import publy.data.settings.GeneralSettings;
@@ -80,6 +82,8 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         out.write(c.getName() + ".");
         out.newLine();
         out.newLine();
+        
+        Set<String> ignoredFields = new HashSet<>(c.getIgnoredFields());
 
         for (BibItem item : c.getItems()) {
             // Write the appropriate number
@@ -94,7 +98,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
                 }
             }
 
-            itemWriter.write(item);
+            itemWriter.write(item, ignoredFields);
             out.newLine();
         }
 

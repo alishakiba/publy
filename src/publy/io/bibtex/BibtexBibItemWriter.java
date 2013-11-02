@@ -37,7 +37,7 @@ public class BibtexBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    public void write(BibItem item) throws IOException {
+    public void write(BibItem item, Set<String> ignoredFields) throws IOException {
         // Item type
         out.write("@" + item.getOriginalType() + "{" + item.getId() + ",");
         out.newLine();
