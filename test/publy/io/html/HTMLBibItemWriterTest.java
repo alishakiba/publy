@@ -53,7 +53,7 @@ public class HTMLBibItemWriterTest {
 
         for (Type type : Type.values()) {
             Set<BibItem> items = TestUtils.generateExampleBibitems(type);
-            Set<String> mandatoryFields = getMandatoryFields(type);
+            Set<String> mandatoryFields = TestUtils.getMandatoryFields(type);
             
             for (BibItem item : items) {
                 Set<String> optionalFields = new HashSet<>(item.getFields());
@@ -66,19 +66,5 @@ public class HTMLBibItemWriterTest {
                 }
             }
         }
-    }
-
-    private Set<String> getMandatoryFields(Type type) {
-        Set<String> result = new HashSet<>();
-        
-        for (String req : FieldData.getMandatoryFields(type)) {
-            if (req.contains(";")) {
-                result.add(req.substring(0, req.indexOf(';'))); // Only use the first option
-            } else {
-                result.add(req);
-            }
-        }
-        
-        return result;
     }
 }

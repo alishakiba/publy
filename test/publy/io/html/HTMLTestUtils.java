@@ -25,13 +25,13 @@ import java.util.Properties;
 import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import publy.data.Author;
 import publy.data.PublicationType;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.Type;
 import publy.data.settings.GeneralSettings;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
+import publy.io.TestUtils;
 
 /**
  *
@@ -126,8 +126,8 @@ public class HTMLTestUtils {
 
     public static void test(BibItem input, String expected) {
         try {
-            setAuthors(input);
-            setEditors(input);
+            TestUtils.setAuthors(input);
+            TestUtils.setEditors(input);
             testInstance.write(input);
             buffer.flush();
             String result = process(output.getBuffer().toString(), input);
@@ -151,8 +151,8 @@ public class HTMLTestUtils {
             }
         }
 
-        setAuthors(compare);
-        setEditors(compare);
+        TestUtils.setAuthors(compare);
+        TestUtils.setEditors(compare);
 
         // Get the expected output
         String expected = null;
@@ -218,30 +218,6 @@ public class HTMLTestUtils {
             StringBuilder sb = new StringBuilder(input);
             sb.insert(nextNewLine, '.');
             return sb.toString();
-        }
-    }
-
-    private static void setAuthors(BibItem item) {
-        String author = item.get("author");
-
-        if (author != null && !author.isEmpty()) {
-            String[] paperAuthors = author.split(" and ");
-
-            for (String paperAuthor : paperAuthors) {
-                item.getAuthors().add(new Author(paperAuthor));
-            }
-        }
-    }
-
-    private static void setEditors(BibItem item) {
-        String editor = item.get("editor");
-
-        if (editor != null && !editor.isEmpty()) {
-            String[] names = editor.split(" and ");
-
-            for (String name : names) {
-                item.getEditors().add(new Author(name));
-            }
         }
     }
 }
