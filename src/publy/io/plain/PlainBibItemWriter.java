@@ -17,7 +17,6 @@ package publy.io.plain;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.Set;
 import publy.Console;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
@@ -99,16 +98,16 @@ public class PlainBibItemWriter extends BibItemWriter {
 
         // Write note (unpublished uses note as the publication info)
         if (item.getType() != Type.UNPUBLISHED) {
-            output(item.get("note"), ".", true);
+            output(get(item, "note"), ".", true);
         }
     }
 
     protected void writeArticle(BibItem item) throws IOException {
-        output(item.get("journal"), ", ");
+        output(get(item, "journal"), ", ");
 
         if (anyPresent(item, "volume", "number")) {
-            output(item.get("volume"));
-            output("(", item.get("number"), ")");
+            output(get(item, "volume"));
+            output("(", get(item, "number"), ")");
             output(":", formatPages(item, false), "");
             out.write(", ");
         } else {
@@ -141,8 +140,8 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     protected void writeBooklet(BibItem item) throws IOException {
-        output(item.get("howpublished"), ", ");
-        output(item.get("address"), ", ");
+        output(get(item, "howpublished"), ", ");
+        output(get(item, "address"), ", ");
     }
 
     protected void writeInCollection(BibItem item) throws IOException {
@@ -152,7 +151,7 @@ public class PlainBibItemWriter extends BibItemWriter {
             output(formatAuthors(item, true, Author.NameOutputType.PLAINTEXT), ", ");
         }
 
-        output(item.get("booktitle"));
+        output(get(item, "booktitle"));
 
         if (anyPresent(item, "volume", "series", "number")) {
             out.write(", ");
@@ -171,10 +170,10 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     protected void writeManual(BibItem item) throws IOException {
-        output(item.get("organization"), ", ");
-        output(item.get("address"), ", ");
+        output(get(item, "organization"), ", ");
+        output(get(item, "address"), ", ");
 
-        String edition = item.get("edition");
+        String edition = get(item, "edition");
 
         if (edition != null && !edition.isEmpty()) {
             if (anyPresent(item, "organization", "address")) {
@@ -186,8 +185,8 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     protected void writeMisc(BibItem item) throws IOException {
-        output(item.get("howpublished"), ", ");
-        output(item.get("address"), ", ");
+        output(get(item, "howpublished"), ", ");
+        output(get(item, "address"), ", ");
     }
 
     protected void writeOnline(BibItem item) throws IOException {
@@ -206,33 +205,35 @@ public class PlainBibItemWriter extends BibItemWriter {
         }
 
         if (isPresent(item, "address")) {
-            output(item.get("address"), ", ");
+            output(get(item, "address"), ", ");
             output(formatDate(item), ". ");
 
             if (isPresent(item, "editor")) {
                 if (isPresent(item, "publisher")) {
-                    output(item.get("organization"), ", ");
+                    output(get(item, "organization"), ", ");
                 } else {
-                    output(item.get("organization"), ".");
+                    output(get(item, "organization"), ".");
                 }
             }
 
-            output(item.get("publisher"), ".");
+            output(get(item, "publisher"), ".");
         } else {
             if (isPresent(item, "editor")) {
-                output(item.get("organization"), ", ");
+                output(get(item, "organization"), ", ");
             }
 
-            output(item.get("publisher"), ", ");
+            output(get(item, "publisher"), ", ");
         }
     }
 
     protected void writeInProceedings(BibItem item) throws IOException {
         out.write("In ");
 
-        output(formatAuthors(item, true, Author.NameOutputType.PLAINTEXT), ", ");
+        if (isPresent(item, "editor")) {
+            output(formatAuthors(item, true, Author.NameOutputType.PLAINTEXT), ", ");
+        }
 
-        output(item.get("booktitle"));
+        output(get(item, "booktitle"));
 
         if (anyPresent(item, "volume", "number", "series")) {
             out.write(", ");
@@ -248,39 +249,39 @@ public class PlainBibItemWriter extends BibItemWriter {
         }
 
         if (isPresent(item, "address")) {
-            output(item.get("address"), ", ");
+            output(get(item, "address"), ", ");
             output(formatDate(item), ". ");
 
             if (isPresent(item, "publisher")) {
-                output(item.get("organization"), ", ");
+                output(get(item, "organization"), ", ");
             } else {
-                output(item.get("organization"), ".");
+                output(get(item, "organization"), ".");
             }
 
-            output(item.get("publisher"), ".");
+            output(get(item, "publisher"), ".");
         } else {
-            output(item.get("organization"), ", ");
-            output(item.get("publisher"), ", ");
+            output(get(item, "organization"), ", ");
+            output(get(item, "publisher"), ", ");
         }
     }
 
     protected void writeReport(BibItem item) throws IOException {
-        output(toTitleCase(item.get("type")));
-        output(" ", item.get("number"), "");
+        output(toTitleCase(get(item, "type")));
+        output(" ", get(item, "number"), "");
         out.write(", ");
 
-        output(item.get("institution"), ", ");
-        output(item.get("address"), ", ");
+        output(get(item, "institution"), ", ");
+        output(get(item, "address"), ", ");
     }
 
     protected void writeThesis(BibItem item) throws IOException {
-        output(item.get("type"), ", ");
-        output(item.get("school"), ", ");
-        output(item.get("address"), ", ");
+        output(get(item, "type"), ", ");
+        output(get(item, "school"), ", ");
+        output(get(item, "address"), ", ");
     }
 
     protected void writeUnpublished(BibItem item) throws IOException {
-        output(item.get("note"), ", ");
+        output(get(item, "note"), ", ");
     }
 
     private void writeTitleAndAuthors(BibItem item) throws IOException {
@@ -319,7 +320,7 @@ public class PlainBibItemWriter extends BibItemWriter {
             if (isPresent(item, "editor")) {
                 useEditor = true;
             } else if (isPresent(item, "organization")) {
-                output(item.get("organization"), ".", true);
+                output(get(item, "organization"), ".", true);
                 return;
             } else {
                 Console.error("No editor or organization found for entry \"%s\".", item.getId());
@@ -350,9 +351,9 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     private void writeVolume(BibItem item, boolean capitalize, String connective) throws IOException {
-        String volume = item.get("volume");
-        String series = item.get("series");
-        String number = item.get("number");
+        String volume = get(item, "volume");
+        String series = get(item, "series");
+        String number = get(item, "number");
 
         if (volume != null && !volume.isEmpty()) {
             output((capitalize ? "Volume " : "volume "), volume, "");
@@ -368,19 +369,19 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     protected void writePublisherAndEdition(BibItem item) throws IOException {
-        output(item.get("publisher"), ", ");
-        output(item.get("address"), ", ");
+        output(get(item, "publisher"), ", ");
+        output(get(item, "address"), ", ");
 
         if (anyPresent(item, "publisher", "address")) {
-            output(toLowerCase(item.get("edition")), " edition, ");
+            output(toLowerCase(get(item, "edition")), " edition, ");
         } else {
-            output(toTitleCase(item.get("edition")), " edition, ");
+            output(toTitleCase(get(item, "edition")), " edition, ");
         }
     }
 
     protected void writeChapter(BibItem item, boolean capitalize) throws IOException {
-        String type = item.get("type");
-        String chapter = item.get("chapter");
+        String type = get(item, "type");
+        String chapter = get(item, "chapter");
 
         if (chapter != null && !chapter.isEmpty()) {
             if (type != null && !type.isEmpty()) {
@@ -394,27 +395,27 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     private void writeStatus(BibItem item) throws IOException {
-        String title;
+        String venue;
 
         switch (item.getType()) {
             case ARTICLE:
-                title = item.get("journal");
+                venue = get(item, "journal");
                 break;
             case INPROCEEDINGS:
-                title = item.get("booktitle");
+                venue = get(item, "booktitle");
 
-                if (title.startsWith("Proceedings of ")) {
-                    title = title.substring("Proceedings of ".length());
+                if (venue.startsWith("Proceedings of ")) {
+                    venue = venue.substring("Proceedings of ".length());
                 }
 
                 break;
             default:
-                title = null;
+                venue = null;
                 break;
         }
 
-        if (title == null) {
-            switch (item.get("status")) {
+        if (venue == null) {
+            switch (get(item, "status")) {
                 case "submitted":
                     output("Submitted for review.", true);
                     break;
@@ -425,27 +426,27 @@ public class PlainBibItemWriter extends BibItemWriter {
                     output("Accepted for publication, pending minor revisions.", true);
                     break;
                 default:
-                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized status: \"" + item.get("status") + "\"");
+                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized status: \"" + get(item, "status") + "\"");
             }
         } else {
-            switch (item.get("status")) {
+            switch (get(item, "status")) {
                 case "submitted":
-                    output("Submitted to ", title, ".", true);
+                    output("Submitted to ", venue, ".", true);
                     break;
                 case "accepted":
-                    output("Accepted to ", title, ".", true);
+                    output("Accepted to ", venue, ".", true);
                     break;
                 case "acceptedrev":
-                    output("Accepted, pending minor revisions, to ", title, ".", true);
+                    output("Accepted, pending minor revisions, to ", venue, ".", true);
                     break;
                 default:
-                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized status: \"" + item.get("status") + "\"");
+                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized status: \"" + get(item, "status") + "\"");
             }
         }
     }
 
     protected String formatPages(BibItem item, boolean verbose) {
-        String pages = (verbose ? super.formatPages(item) : item.get("pages"));
+        String pages = (verbose ? super.formatPages(item) : get(item, "pages"));
 
         if (pages == null) {
             pages = "";

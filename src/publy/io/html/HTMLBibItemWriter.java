@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Set;
 import publy.Console;
 import publy.data.PublicationType;
 import publy.data.Author;
@@ -113,18 +112,18 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Write note (unpublished uses note as the publication info)
         if (item.getType() != Type.UNPUBLISHED) {
-            output(indent + "<span class=\"note\">", item.get("note"), ".</span><br>", true);
+            output(indent + "<span class=\"note\">", get(item, "note"), ".</span><br>", true);
         }
 
         writeLinks(item);
     }
 
     protected void writeArticle(BibItem item) throws IOException {
-        output("<span class=\"journal\">", item.get("journal"), "</span>, ");
+        output("<span class=\"journal\">", get(item, "journal"), "</span>, ");
 
         if (anyPresent(item, "volume", "number")) {
-            output("<span class=\"volume\">", item.get("volume"), "</span>");
-            output("<span class=\"number\">(", item.get("number"), ")</span>");
+            output("<span class=\"volume\">", get(item, "volume"), "</span>");
+            output("<span class=\"number\">(", get(item, "number"), ")</span>");
             output(":<span class=\"pages\">", formatPages(item, false), "</span>");
             out.write(", ");
         } else {
@@ -156,8 +155,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeBooklet(BibItem item) throws IOException {
-        output("<span class=\"howpublished\">", item.get("howpublished"), "</span>, ");
-        output("<span class=\"address\">", item.get("address"), "</span>, ");
+        output("<span class=\"howpublished\">", get(item, "howpublished"), "</span>, ");
+        output("<span class=\"address\">", get(item, "address"), "</span>, ");
     }
 
     protected void writeInCollection(BibItem item) throws IOException {
@@ -167,7 +166,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             output("<span class=\"editor\">", formatAuthors(item, true, Author.NameOutputType.LINKED_HTML), ", </span>");
         }
 
-        output("<span class=\"booktitle\">", item.get("booktitle"), "</span>");
+        output("<span class=\"booktitle\">", get(item, "booktitle"), "</span>");
 
         if (anyPresent(item, "volume", "series", "number")) {
             out.write(", ");
@@ -188,10 +187,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeManual(BibItem item) throws IOException {
-        output("<span class=\"organization\">", item.get("organization"), "</span>, ");
-        output("<span class=\"address\">", item.get("address"), "</span>, ");
+        output("<span class=\"organization\">", get(item, "organization"), "</span>, ");
+        output("<span class=\"address\">", get(item, "address"), "</span>, ");
 
-        String edition = item.get("edition");
+        String edition = get(item, "edition");
 
         if (edition != null && !edition.isEmpty()) {
             if (anyPresent(item, "organization", "address")) {
@@ -203,8 +202,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeMisc(BibItem item) throws IOException {
-        output(item.get("howpublished"), ", ");
-        output(item.get("address"), ", ");
+        output(get(item, "howpublished"), ", ");
+        output(get(item, "address"), ", ");
     }
 
     protected void writeOnline(BibItem item) throws IOException {
@@ -232,22 +231,22 @@ public class HTMLBibItemWriter extends BibItemWriter {
         writeVolume(item, true, notesConnective);
 
         if (isPresent(item, "address")) {
-            output("<span class=\"address\">", item.get("address"), "</span>, ");
+            output("<span class=\"address\">", get(item, "address"), "</span>, ");
             output("<span class=\"date\">", formatDate(item), "</span>.<br>", true);
 
             if (isPresent(item, "publisher")) {
                 if (isPresent(item, "editor")) {
-                    output("<span class=\"organization\">", item.get("organization"), "</span>, ");
+                    output("<span class=\"organization\">", get(item, "organization"), "</span>, ");
                 }
-                output("<span class=\"publisher\">", item.get("publisher"), "</span>. ");
+                output("<span class=\"publisher\">", get(item, "publisher"), "</span>. ");
             } else if (isPresent(item, "editor")) {
-                output("<span class=\"organization\">", item.get("organization"), "</span>. ");
+                output("<span class=\"organization\">", get(item, "organization"), "</span>. ");
             }
         } else {
             if (isPresent(item, "editor")) {
-                output("<span class=\"organization\">", item.get("organization"), "</span>, ");
+                output("<span class=\"organization\">", get(item, "organization"), "</span>, ");
             }
-            output("<span class=\"publisher\">", item.get("publisher"), "</span>, ");
+            output("<span class=\"publisher\">", get(item, "publisher"), "</span>, ");
         }
     }
 
@@ -258,7 +257,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             output("<span class=\"editor\">", formatAuthors(item, true, Author.NameOutputType.LINKED_HTML), ", </span>");
         }
 
-        output("<span class=\"booktitle\">", item.get("booktitle"), "</span>");
+        output("<span class=\"booktitle\">", get(item, "booktitle"), "</span>");
 
         if (anyPresent(item, "volume", "number", "series")) {
             out.write(", ");
@@ -268,41 +267,41 @@ public class HTMLBibItemWriter extends BibItemWriter {
         output(", <span class=\"pages\">", formatPages(item, true), "</span>");
 
         if (isPresent(item, "address")) {
-            output(", <span class=\"address\">", item.get("address"), "</span>, ");
+            output(", <span class=\"address\">", get(item, "address"), "</span>, ");
             output("<span class=\"date\">", formatDate(item), "</span>.<br>", true);
 
             if (isPresent(item, "publisher")) {
-                output("<span class=\"organization\">", item.get("organization"), "</span>, ");
-                output("<span class=\"publisher\">", item.get("publisher"), "</span>. ");
+                output("<span class=\"organization\">", get(item, "organization"), "</span>, ");
+                output("<span class=\"publisher\">", get(item, "publisher"), "</span>. ");
             } else {
-                output("<span class=\"organization\">", item.get("organization"), "</span>. ");
+                output("<span class=\"organization\">", get(item, "organization"), "</span>. ");
             }
         } else if (anyPresent(item, "publisher", "organization")) {
             out.write(". ");
-            output("<span class=\"organization\">", item.get("organization"), "</span>, ");
-            output("<span class=\"publisher\">", item.get("publisher"), "</span>, ");
+            output("<span class=\"organization\">", get(item, "organization"), "</span>, ");
+            output("<span class=\"publisher\">", get(item, "publisher"), "</span>, ");
         } else {
             out.write(", ");
         }
     }
 
     protected void writeReport(BibItem item) throws IOException {
-        output("<span class=\"type\">", toTitleCase(item.get("type")), "</span>");
-        output(" <span class=\"number\">", item.get("number"), "</span>");
+        output("<span class=\"type\">", toTitleCase(get(item, "type")), "</span>");
+        output(" <span class=\"number\">", get(item, "number"), "</span>");
         out.write(", ");
 
-        output("<span class=\"institution\">", item.get("institution"), "</span>, ");
-        output("<span class=\"address\">", item.get("address"), "</span>, ");
+        output("<span class=\"institution\">", get(item, "institution"), "</span>, ");
+        output("<span class=\"address\">", get(item, "address"), "</span>, ");
     }
 
     protected void writeThesis(BibItem item) throws IOException {
-        output("<span class=\"type\">", item.get("type"), "</span>, ");
-        output("<span class=\"school\">", item.get("school"), "</span>, ");
-        output("<span class=\"address\">", item.get("address"), "</span>, ");
+        output("<span class=\"type\">", get(item, "type"), "</span>, ");
+        output("<span class=\"school\">", get(item, "school"), "</span>, ");
+        output("<span class=\"address\">", get(item, "address"), "</span>, ");
     }
 
     protected void writeUnpublished(BibItem item) throws IOException {
-        output("<span class=\"note\">", item.get("note"), "</span>, ");
+        output("<span class=\"note\">", get(item, "note"), "</span>, ");
     }
 
     protected void writeTitleAndAuthorsHTML(BibItem item) throws IOException {
@@ -327,12 +326,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 title += ", <span class=\"chapter\">";
 
                 if (isPresent(item, "type")) {
-                    title += toLowerCase(item.get("type"));
+                    title += toLowerCase(get(item, "type"));
                 } else {
                     title += "chapter";
                 }
 
-                title += " " + item.get("chapter") + "</span>";
+                title += " " + get(item, "chapter") + "</span>";
             }
 
             if (isPresent(item, "pages")) {
@@ -345,12 +344,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
             output("<h3 class=\"title abstract-toggle\">", title, "</h3>");
         } else if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && includePaper(item)) {
             try {
-                String href = (new URI(null, null, item.get("paper"), null)).toString();
+                String href = (new URI(null, null, get(item, "paper"), null)).toString();
 
                 out.write("<a href=\"" + href + "\">");
                 output("<h3 class=\"title\">", title, "</h3>");
                 out.write("</a>");
-                checkExistance(item.get("paper"), "paper", item);
+                checkExistance(get(item, "paper"), "paper", item);
             } catch (URISyntaxException ex) {
                 Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
                 output("<h3 class=\"title\">", title, "</h3>");
@@ -360,7 +359,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         // Add text if I presented this paper
-        if ("yes".equals(item.get("presented"))) {
+        if ("yes".equals(get(item, "presented"))) {
             output(" ", settings.getHtmlSettings().getPresentedText(), "");
         }
 
@@ -380,7 +379,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write("<div class=\"abstract\">");
             out.newLine();
             out.write(indent + "  <span class=\"abstractword\">Abstract: </span>");
-            output(item.get("abstract"));
+            output(get(item, "abstract"));
             out.newLine();
             out.write(indent + "</div></div>");
             out.newLine();
@@ -398,7 +397,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             if (isPresent(item, "editor")) {
                 useEditor = true;
             } else if (isPresent(item, "organization")) {
-                output(indent + "<span class=\"organization\">", item.get("organization"), "</span>.<br>", true);
+                output(indent + "<span class=\"organization\">", get(item, "organization"), "</span>.<br>", true);
                 return;
             } else {
                 Console.error("No editor or organization found for entry \"%s\".", item.getId());
@@ -431,9 +430,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private void writeVolume(BibItem item, boolean capitalize, String connective) throws IOException {
-        String volume = item.get("volume");
-        String series = item.get("series");
-        String number = item.get("number");
+        String volume = get(item, "volume");
+        String series = get(item, "series");
+        String number = get(item, "number");
 
         if (volume != null && !volume.isEmpty()) {
             output("<span class=\"volume\">" + (capitalize ? "Volume " : "volume "), volume, "</span>");
@@ -449,10 +448,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writePublisherAndEdition(BibItem item) throws IOException {
-        output("<span class=\"publisher\">", item.get("publisher"), "</span>, ");
-        output("<span class=\"address\">", item.get("address"), "</span>, ");
+        output("<span class=\"publisher\">", get(item, "publisher"), "</span>, ");
+        output("<span class=\"address\">", get(item, "address"), "</span>, ");
 
-        String edition = item.get("edition");
+        String edition = get(item, "edition");
 
         if (edition != null && !edition.isEmpty()) {
             if (anyPresent(item, "publisher", "address")) {
@@ -464,8 +463,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeChapter(BibItem item, boolean capitalize) throws IOException {
-        String type = item.get("type");
-        String chapter = item.get("chapter");
+        String type = get(item, "type");
+        String chapter = get(item, "chapter");
 
         if (chapter != null && !chapter.isEmpty()) {
             out.write("<span class=\"chapter\">");
@@ -487,10 +486,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         switch (item.getType()) {
             case ARTICLE:
-                title = item.get("journal");
+                title = get(item, "journal");
                 break;
             case INPROCEEDINGS:
-                title = item.get("booktitle");
+                title = get(item, "booktitle");
 
                 if (title.startsWith("Proceedings of ")) {
                     title = title.substring("Proceedings of ".length());
@@ -505,7 +504,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write(indent);
 
         if (title == null) {
-            switch (item.get("status")) {
+            switch (get(item, "status")) {
                 case "submitted":
                     output("Submitted for review.<br>", true);
                     break;
@@ -516,10 +515,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     output("Accepted for publication, pending minor revisions.<br>", true);
                     break;
                 default:
-                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized status: \"" + item.get("status") + "\"");
+                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized status: \"" + get(item, "status") + "\"");
             }
         } else {
-            switch (item.get("status")) {
+            switch (get(item, "status")) {
                 case "submitted":
                     output("Submitted to <span class=\"booktitle\">", title, "</span>.<br>", true);
                     break;
@@ -530,13 +529,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     output("Accepted, pending minor revisions, to <span class=\"booktitle\">", title, "</span>.<br>", true);
                     break;
                 default:
-                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized status: \"" + item.get("status") + "\"");
+                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized status: \"" + get(item, "status") + "\"");
             }
         }
     }
 
     protected String formatPages(BibItem item, boolean verbose) {
-        String pages = (verbose ? super.formatPages(item) : item.get("pages"));
+        String pages = (verbose ? super.formatPages(item) : get(item, "pages"));
 
         if (pages == null) {
             pages = "";
@@ -582,7 +581,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         // Paper link
         if (includePaper(item) && settings.getHtmlSettings().getTitleTarget() != HTMLSettings.TitleLinkTarget.PAPER) {
             try {
-                String link = (new URI(null, null, item.get("paper"), null)).toString();
+                String link = (new URI(null, null, get(item, "paper"), null)).toString();
                 String text;
 
                 // Use the extension as link text, or "Paper" if no extension is found
@@ -602,7 +601,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 writeLink(divOpened, link, text);
                 divOpened = true;
 
-                checkExistance(item.get("paper"), "paper", item);
+                checkExistance(get(item, "paper"), "paper", item);
             } catch (URISyntaxException ex) {
                 Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
             }
@@ -610,13 +609,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // arXiv link
         if (isPresent(item, "arxiv")) {
-            writeLink(divOpened, "http://arxiv.org/abs/" + item.get("arxiv"), "arXiv");
+            writeLink(divOpened, "http://arxiv.org/abs/" + get(item, "arxiv"), "arXiv");
             divOpened = true;
         }
 
         // DOI link
         if (isPresent(item, "doi")) {
-            String link = item.get("doi");
+            String link = get(item, "doi");
 
             // Add the general DOI part if necessary 
             if (!link.startsWith("http://dx.doi.org/")) {
@@ -629,21 +628,21 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // ISSN link
         if (isPresent(item, "issn")) {
-            String link = "http://www.worldcat.org/issn/" + item.get("issn");
+            String link = "http://www.worldcat.org/issn/" + get(item, "issn");
             writeLink(divOpened, link, "ISSN");
             divOpened = true;
         }
         
         // ISBN link
         if (isPresent(item, "isbn")) {
-            String link = "http://www.worldcat.org/isbn/" + item.get("isbn");
+            String link = "http://www.worldcat.org/isbn/" + get(item, "isbn");
             writeLink(divOpened, link, "ISBN");
             divOpened = true;
         }
 
         // URL link
         if (isPresent(item, "url")) {
-            String link = item.get("url");
+            String link = get(item, "url");
             writeLink(divOpened, link, "URL");
             divOpened = true;
         }
@@ -690,7 +689,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         String attribute = (i == -1 ? "link" : "link" + i);
 
         if (isPresent(item, attribute)) {
-            String link = item.get(attribute);
+            String link = get(item, attribute);
             int divider = link.indexOf('|');
 
             if (divider == -1) {
@@ -777,16 +776,16 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 out.newLine();
             }
 
-            out.write("  " + field + "={" + item.get(field) + "}");
+            out.write("  " + field + "={" + get(item, field) + "}");
         }
 
         out.write(",");
         out.newLine();
         out.write("  journal={CoRR},");
         out.newLine();
-        out.write("  volume={abs/" + item.get("arxiv") + "},");
+        out.write("  volume={abs/" + get(item, "arxiv") + "},");
         out.newLine();
-        out.write("  ee={http://arxiv.org/abs/" + item.get("arxiv") + "}");
+        out.write("  ee={http://arxiv.org/abs/" + get(item, "arxiv") + "}");
 
         out.newLine(); // No comma after the last element
         out.write("}</pre>");

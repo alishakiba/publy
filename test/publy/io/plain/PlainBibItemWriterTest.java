@@ -86,7 +86,7 @@ public class PlainBibItemWriterTest {
 
         return output;
     }
-    
+
     public void testIgnore(BibItem input, Set<String> ignoredFields) {
         // Build the comparable bibitem
         BibItem compare = new BibItem(input.getOriginalType(), input.getId());
@@ -102,7 +102,7 @@ public class PlainBibItemWriterTest {
 
         // Get the expected output
         String expected = null;
-        
+
         try {
             textWriter.setIgnoredFields(Collections.<String>emptySet());
             textWriter.write(compare);
@@ -111,7 +111,7 @@ public class PlainBibItemWriterTest {
         } catch (IOException ex) {
             fail("IOException on base item:\n" + compare + "\nException:\n" + ex);
         }
-        
+
         // Clear the output
         textOutput.getBuffer().delete(0, textOutput.getBuffer().length());
 
@@ -150,24 +150,22 @@ public class PlainBibItemWriterTest {
             System.out.println("PlainBibItemWriter - Tests for " + type + " were successful");
         }
     }
-    
+
     @Test
     public void testWriteIgnore() {
         System.out.println("writeIgnore");
 
         for (Type type : Type.values()) {
-            Set<BibItem> items = TestUtils.generateExampleBibitems(type);
+            BibItem item = TestUtils.getFullBibItem(type);
             Set<String> mandatoryFields = TestUtils.getMandatoryFields(type);
-            
-            for (BibItem item : items) {
-                Set<String> optionalFields = new HashSet<>(item.getFields());
-                optionalFields.removeAll(mandatoryFields);
-                
-                List<Set<String>> subsets = TestUtils.getAllSubsets(optionalFields);
-                
-                for (Set<String> set : subsets) {
-                    testIgnore(item, set);
-                }
+
+            Set<String> optionalFields = new HashSet<>(item.getFields());
+            optionalFields.removeAll(mandatoryFields);
+
+            List<Set<String>> subsets = TestUtils.getAllSubsets(optionalFields);
+
+            for (Set<String> set : subsets) {
+                testIgnore(item, set);
             }
         }
     }

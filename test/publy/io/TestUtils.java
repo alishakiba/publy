@@ -206,4 +206,32 @@ public class TestUtils {
         }
         return result;
     }
+
+    public static BibItem getFullBibItem(Type type) {
+        // Find all fields to use
+        Set<String> included = new LinkedHashSet<>();
+
+        for (String req : FieldData.getMandatoryFields(type)) {
+            if (req.contains(";")) {
+                included.add(req.substring(0, req.indexOf(';'))); // Only use the first option
+            } else {
+                included.add(req);
+            }
+        }
+        
+        included.addAll(FieldData.getOptionalFields(type));
+        included.retainAll(fieldDefaults.keySet());
+        
+        // Build an item with these fields
+        BibItem example = new BibItem(type.toString(), "test");
+
+        for (String field : included) {
+            example.put(field, fieldDefaults.get(field));
+        }
+
+        setAuthors(example);
+        setEditors(example);
+        
+        return example;
+    }
 }

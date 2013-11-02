@@ -34,7 +34,7 @@ public class HTMLBibItemWriterTest {
             if (type == Type.ONLINE || type == Type.PATENT) {
                 continue;
             }
-            
+
             try (InputStream in = HTMLBibItemWriterTest.class.getResource(type + "_test.properties").openStream()) {
                 Properties props = new Properties();
                 props.load(in);
@@ -45,24 +45,22 @@ public class HTMLBibItemWriterTest {
             }
         }
     }
-    
+
     @Test
     public void testWriteIgnore() {
         System.out.println("writeIgnore");
 
         for (Type type : Type.values()) {
-            Set<BibItem> items = TestUtils.generateExampleBibitems(type);
+            BibItem item = TestUtils.getFullBibItem(type);
             Set<String> mandatoryFields = TestUtils.getMandatoryFields(type);
-            
-            for (BibItem item : items) {
-                Set<String> optionalFields = new HashSet<>(item.getFields());
-                optionalFields.removeAll(mandatoryFields);
-                
-                List<Set<String>> subsets = TestUtils.getAllSubsets(optionalFields);
-                
-                for (Set<String> set : subsets) {
-                    HTMLTestUtils.testIgnore(item, set);
-                }
+
+            Set<String> optionalFields = new HashSet<>(item.getFields());
+            optionalFields.removeAll(mandatoryFields);
+
+            List<Set<String>> subsets = TestUtils.getAllSubsets(optionalFields);
+
+            for (Set<String> set : subsets) {
+                HTMLTestUtils.testIgnore(item, set);
             }
         }
     }
