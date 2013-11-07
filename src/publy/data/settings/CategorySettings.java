@@ -38,12 +38,15 @@ public class CategorySettings {
         // BOOK
         OutputCategory books = new OutputCategory("Books", "Books", new TypeCondition(false, "book"));
         books.getFieldConditions().add(new FieldEqualsCondition(true, "status", "submitted"));
+        books.getIgnoredFields().addAll(Arrays.asList("address"));
         // CHAPTER
         OutputCategory chapters = new OutputCategory("Chapters", "Chapters in Books", new TypeCondition(false, "incollection"));
         chapters.getFieldConditions().add(new FieldEqualsCondition(true, "status", "submitted"));
+        chapters.getIgnoredFields().addAll(Arrays.asList("address"));
         // CONFERENCE
         OutputCategory conference = new OutputCategory("Conference", "Conference papers", new TypeCondition(false, "inproceedings", "conference"));
         conference.getFieldConditions().add(new FieldEqualsCondition(true, "status", "submitted"));
+        conference.getIgnoredFields().addAll(Arrays.asList("address", "publisher", "editor", "volume", "number", "series"));
         // JOURNAL
         OutputCategory journal = new OutputCategory("Journal", "Journal papers", new TypeCondition(false, "article"));
         journal.getFieldConditions().add(new FieldEqualsCondition(true, "status", "submitted"));
@@ -65,7 +68,7 @@ public class CategorySettings {
         result.setAllCategories(Arrays.asList(books, chapters, conference, journal, other, submitted, talks, theses, unpublished));
         
         // Active categories
-        result.setActiveCategories(Arrays.asList(journal, conference, chapters, theses));
+        result.setActiveCategories(Arrays.asList(journal, conference, books, chapters, theses, other));
 
         return result;
     }
