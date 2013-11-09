@@ -123,6 +123,9 @@ public class SettingsWriter {
 
             out.write("        </fieldConditions>");
             out.newLine();
+            
+            // ignored fields
+            output(out, 8, "ignoredFields", makeCData(c.getIgnoredFields()));
 
             out.write("      </category>");
             out.newLine();
@@ -324,14 +327,14 @@ public class SettingsWriter {
     private static String makeCData(List<String> content) {
         StringBuilder sb = new StringBuilder();
 
-        if (content != null) {
+        if (content != null && !content.isEmpty()) {
             for (String part : content) {
                 sb.append(';');
                 sb.append(part);
             }
+            
+            sb.deleteCharAt(0);
         }
-
-        sb.deleteCharAt(0);
 
         return "<![CDATA[" + sb.toString() + "]]>";
     }

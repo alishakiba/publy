@@ -19,6 +19,7 @@
         <fieldConditions>
           <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
+        <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
       <category>
         <shortName><![CDATA[Chapters]]></shortName>
@@ -28,6 +29,7 @@
         <fieldConditions>
           <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
+        <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
       <category>
         <shortName><![CDATA[Conference]]></shortName>
@@ -38,6 +40,7 @@
           <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
           <FieldContainsCondition inverted="true" field="booktitle"><![CDATA[CCCG;EuroCG]]></FieldContainsCondition>
         </fieldConditions>
+        <ignoredFields><![CDATA[volume;series]]></ignoredFields>
       </category>
       <category>
         <shortName><![CDATA[Journal]]></shortName>
@@ -47,6 +50,7 @@
         <fieldConditions>
           <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
+        <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
       <category>
         <shortName><![CDATA[Other]]></shortName>
@@ -56,6 +60,7 @@
         <fieldConditions>
           <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
+        <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
       <category>
         <shortName><![CDATA[Submitted]]></shortName>
@@ -65,6 +70,7 @@
         <fieldConditions>
           <FieldEqualsCondition inverted="false" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
+        <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
       <category>
         <shortName><![CDATA[Talks]]></shortName>
@@ -74,6 +80,7 @@
         <fieldConditions>
           <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
+        <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
       <category>
         <shortName><![CDATA[Theses]]></shortName>
@@ -83,6 +90,7 @@
         <fieldConditions>
           <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
+        <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
       <category>
         <shortName><![CDATA[Unpublished]]></shortName>
@@ -91,6 +99,7 @@
         <TypeCondition inverted="false"><![CDATA[unpublished]]></TypeCondition>
         <fieldConditions>
         </fieldConditions>
+        <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
       <category>
         <shortName><![CDATA[Abstracts]]></shortName>
@@ -100,6 +109,7 @@
         <fieldConditions>
           <FieldContainsCondition inverted="false" field="booktitle"><![CDATA[CCCG;EuroCG]]></FieldContainsCondition>
         </fieldConditions>
+        <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
     </allCategories>
     <activeCategories>0;3;2;9;1;7</activeCategories>
@@ -135,6 +145,8 @@
     <showWarnings>true</showWarnings>
     <warnMissingReferences>true</warnMissingReferences>
     <warnNotAuthor>false</warnNotAuthor>
+    <warnNoCategoryForItem>true</warnNoCategoryForItem>
+    <warnMandatoryFieldIgnored>true</warnMandatoryFieldIgnored>
     <showLogs>true</showLogs>
     <showStackTraces>false</showStackTraces>
   </consoleSettings>

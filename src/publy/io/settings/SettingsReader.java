@@ -162,26 +162,6 @@ public class SettingsReader extends DefaultHandler {
             case "FieldContainsCondition":
                 newCondition = new FieldContainsCondition(false, null, null);
                 break;
-
-            //// DEBUG - skip print
-            case "allCategories":
-            case "shortName":
-            case "name":
-            case "htmlNote":
-            case "fieldConditions":
-            case "activeCategories":
-                break;
-            //// DEBUG
-
-            default:
-                String attrString = "";
-
-                for (int i = 0; i < attrs.getLength(); i++) {
-                    attrString += attrs.getQName(i) + "=\"" + attrs.getValue(i) + "\" ";
-                }
-
-                System.out.println("Open  - CATEGORY_SETTINGS - " + qName + " + " + attrString);
-                break;
         }
 
         if (newCondition != null) {
@@ -285,6 +265,9 @@ public class SettingsReader extends DefaultHandler {
                 break;
             case "htmlNote":
                 currentCategory.setHtmlNote(text);
+                break;
+            case "ignoredFields":
+                currentCategory.setIgnoredFields(Arrays.asList(text.split(";")));
                 break;
 
             // Conditions
