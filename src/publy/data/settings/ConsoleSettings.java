@@ -26,6 +26,7 @@ public class ConsoleSettings {
     private boolean warnMissingReferences = true;
     private boolean warnNotAuthor = true;
     private boolean warnNoCategoryForItem = true;
+    private boolean warnMandatoryFieldIgnored = true;
     // Log
     private boolean showLogs = true;
     // Debug
@@ -61,6 +62,14 @@ public class ConsoleSettings {
 
     public void setWarnNoCategoryForItem(boolean warnNoCategoryForItem) {
         this.warnNoCategoryForItem = warnNoCategoryForItem;
+    }
+    
+    public boolean isWarnMandatoryFieldIgnored() {
+        return warnMandatoryFieldIgnored;
+    }
+
+    public void setWarnMandatoryFieldIgnored(boolean warnMandatoryFieldIgnored) {
+        this.warnMandatoryFieldIgnored = warnMandatoryFieldIgnored;
     }
 
     public boolean isShowLogs() {
