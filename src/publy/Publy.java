@@ -29,6 +29,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import publy.data.bibitem.BibItem;
+import publy.data.bibitem.FieldData;
 import publy.data.category.OutputCategory;
 import publy.data.settings.Settings;
 import publy.gui.MainFrame;
@@ -265,6 +266,10 @@ public class Publy {
             if (items != null) {
                 List<OutputCategory> categories = categorizePapers(settings, items);
 
+                if (settings.getConsoleSettings().isShowWarnings() && settings.getConsoleSettings().isWarnMandatoryFieldIgnored()) {
+                    warnForMandatoryIgnoredFields(categories);
+                }
+
                 if (settings.getHtmlSettings().generateTextVersion()) {
                     try {
                         PublicationListWriter writer = new PlainPublicationListWriter(settings);
@@ -344,8 +349,28 @@ public class Publy {
             Console.warn(Console.WarningType.ITEM_DOES_NOT_FIT_ANY_CATEGORY, "%d entries did not fit any category:%n%s", tempItems.size(), ids);
         }
 
-
-
         return categories;
+    }
+
+    private static void warnForMandatoryIgnoredFields(List<OutputCategory> categories) {
+        for (OutputCategory c : categories) {
+            for (String ignored : c.getIgnoredFields()) {
+                String itemIDs = "";
+
+                for (BibItem item : c.getItems()) {
+                    if (FieldData.getMandatoryFields(item.getType()).contains(ignored)) {
+                        if (itemIDs.isEmpty()) {
+                            itemIDs += item.getId();
+                        } else {
+                            itemIDs += ", " + item.getId();
+                        }
+                    }
+                }
+
+                if (!itemIDs.isEmpty()) {
+                    Console.warn(Console.WarningType.MANDATORY_FIELD_IGNORED, "Category \"%s\" ignores field \"%s\", which is mandatory for the following entries:%n%s.%nThese entries may not display properly.", c.getShortName(), ignored, itemIDs);
+                }
+            }
+        }
     }
 }

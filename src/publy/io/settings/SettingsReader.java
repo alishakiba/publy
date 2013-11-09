@@ -408,6 +408,12 @@ public class SettingsReader extends DefaultHandler {
             case "warnNotAuthor":
                 settings.getConsoleSettings().setWarnNotAuthor(Boolean.parseBoolean(text));
                 break;
+            case "warnNoCategoryForItem":
+                settings.getConsoleSettings().setWarnNoCategoryForItem(Boolean.parseBoolean(text));
+                break;
+            case "warnMandatoryFieldIgnored":
+                settings.getConsoleSettings().setWarnMandatoryFieldIgnored(Boolean.parseBoolean(text));
+                break;
             case "showLogs":
                 settings.getConsoleSettings().setShowLogs(Boolean.parseBoolean(text));
                 break;

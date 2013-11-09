@@ -32,7 +32,7 @@ import publy.gui.ConsoleFrame;
 public class Console {
 
     public enum WarningType {
-        MISSING_REFERENCE, NOT_AUTHORED_BY_USER, ITEM_DOES_NOT_FIT_ANY_CATEGORY, OTHER;
+        MISSING_REFERENCE, NOT_AUTHORED_BY_USER, ITEM_DOES_NOT_FIT_ANY_CATEGORY, MANDATORY_FIELD_IGNORED, OTHER;
     }
     
     private static final SimpleAttributeSet logAttributes;
@@ -166,6 +166,8 @@ public class Console {
                     return settings.isWarnNotAuthor();
                 case ITEM_DOES_NOT_FIT_ANY_CATEGORY:
                     return settings.isWarnNoCategoryForItem();
+                case MANDATORY_FIELD_IGNORED:
+                    return settings.isWarnMandatoryFieldIgnored();
                 case OTHER:
                     return true;
                 default:
