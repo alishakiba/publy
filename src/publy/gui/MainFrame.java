@@ -102,7 +102,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        cancelButton.setText("Cancel");
+        cancelButton.setText("Don't save");
         cancelButton.setToolTipText("Closes the application without saving any changes to the settings.");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

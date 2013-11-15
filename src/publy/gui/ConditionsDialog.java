@@ -176,7 +176,7 @@ public class ConditionsDialog extends javax.swing.JDialog {
 
         fieldConditionsScrollPane.setViewportView(fieldConditionsPanel);
 
-        cancelButton.setText("Cancel");
+        cancelButton.setText("Don't save");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
@@ -233,7 +233,7 @@ public class ConditionsDialog extends javax.swing.JDialog {
                                 .addComponent(typeTextField))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(testButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 189, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
                                 .addComponent(okButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cancelButton)))))
