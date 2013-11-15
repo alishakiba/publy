@@ -205,7 +205,7 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="cancelButton">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Cancel"/>
+                    <Property name="text" type="java.lang.String" value="Don&apos;t save"/>
                     <Property name="toolTipText" type="java.lang.String" value="Closes the application without saving any changes to the settings."/>
                   </Properties>
                   <Events>
