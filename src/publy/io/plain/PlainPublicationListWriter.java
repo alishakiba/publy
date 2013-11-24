@@ -21,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import publy.data.bibitem.BibItem;
 import publy.data.category.OutputCategory;
 import publy.data.settings.GeneralSettings;
