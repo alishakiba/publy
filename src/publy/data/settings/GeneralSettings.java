@@ -53,7 +53,7 @@ public class GeneralSettings {
         this.myNames = myNames;
     }
 
-    public boolean listAllAuthors() {
+    public boolean isListAllAuthors() {
         return listAllAuthors;
     }
 
@@ -69,7 +69,7 @@ public class GeneralSettings {
         this.nameDisplay = nameDisplay;
     }
 
-    public boolean reverseNames() {
+    public boolean isReverseNames() {
         return reverseNames;
     }
 
@@ -77,7 +77,7 @@ public class GeneralSettings {
         this.reverseNames = reverseNames;
     }
 
-    public boolean titleFirst() {
+    public boolean isTitleFirst() {
         return titleFirst;
     }
 
@@ -93,7 +93,7 @@ public class GeneralSettings {
         this.numbering = numbering;
     }
 
-    public boolean reverseNumbering() {
+    public boolean isReverseNumbering() {
         return reverseNumbering;
     }
 

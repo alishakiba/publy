@@ -270,7 +270,7 @@ public class Publy {
                     warnForMandatoryIgnoredFields(categories);
                 }
 
-                if (settings.getHtmlSettings().generateTextVersion()) {
+                if (settings.getHtmlSettings().isGenerateTextVersion()) {
                     try {
                         PublicationListWriter writer = new PlainPublicationListWriter(settings);
                         writer.writePublicationList(categories, settings.getFileSettings().getPlainTextTarget());
@@ -280,7 +280,7 @@ public class Publy {
                     }
                 }
 
-                if (settings.getHtmlSettings().generateBibtexVersion()) {
+                if (settings.getHtmlSettings().isGenerateBibtexVersion()) {
                     try {
                         PublicationListWriter writer = new BibtexPublicationListWriter(settings);
                         writer.writePublicationList(categories, settings.getFileSettings().getBibtexTarget());

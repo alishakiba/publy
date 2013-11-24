@@ -285,13 +285,13 @@ public class PlainBibItemWriter extends BibItemWriter {
     }
 
     private void writeTitleAndAuthors(BibItem item) throws IOException {
-        if (settings.getGeneralSettings().titleFirst()) {
+        if (settings.getGeneralSettings().isTitleFirst()) {
             writeTitle(item);
         }
 
         writeAuthors(item);
 
-        if (!settings.getGeneralSettings().titleFirst()) {
+        if (!settings.getGeneralSettings().isTitleFirst()) {
             writeTitle(item);
         }
     }
@@ -338,7 +338,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         }
 
         // Don't add an authors line if it's just me and I just want to list co-authors
-        if (settings.getGeneralSettings().listAllAuthors() || item.getAuthors().size() > 1) {
+        if (settings.getGeneralSettings().isListAllAuthors() || item.getAuthors().size() > 1) {
             String authors = formatAuthors(item, useEditor, Author.NameOutputType.PLAINTEXT);
 
             if (authors.endsWith(".")) {

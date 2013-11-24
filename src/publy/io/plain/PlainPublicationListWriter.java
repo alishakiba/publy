@@ -48,7 +48,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
 
         // Initialize the count
         if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL) {
-            if (settings.getGeneralSettings().reverseNumbering()) {
+            if (settings.getGeneralSettings().isReverseNumbering()) {
                 count = 0;
 
                 for (OutputCategory c : categories) {
@@ -72,7 +72,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
     private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
         // Reset the count if necessary
         if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.LOCAL) {
-            if (settings.getGeneralSettings().reverseNumbering()) {
+            if (settings.getGeneralSettings().isReverseNumbering()) {
                 count = c.getItems().size();
             } else {
                 count = 1;
@@ -91,7 +91,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
                 out.write(count + ".");
                 out.newLine();
 
-                if (settings.getGeneralSettings().reverseNumbering()) {
+                if (settings.getGeneralSettings().isReverseNumbering()) {
                     count--;
                 } else {
                     count++;

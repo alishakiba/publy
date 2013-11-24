@@ -64,7 +64,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
         // Initialize the count
         if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL) {
-            if (settings.getGeneralSettings().reverseNumbering()) {
+            if (settings.getGeneralSettings().isReverseNumbering()) {
                 count = 0;
 
                 for (OutputCategory c : categories) {
@@ -84,16 +84,16 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
 
         // Alternate version links
-        if (settings.getHtmlSettings().linkToAlternateVersions() && (settings.getHtmlSettings().generateTextVersion() || settings.getHtmlSettings().generateBibtexVersion())) {
+        if (settings.getHtmlSettings().isLinkToAlternateVersions() && (settings.getHtmlSettings().isGenerateTextVersion() || settings.getHtmlSettings().isGenerateBibtexVersion())) {
             Path htmlDir = settings.getFileSettings().getTarget().getParent();
 
             out.write("    <p id=\"alternates\">This list is also available as <a href=\"");
 
-            if (settings.getHtmlSettings().generateTextVersion()) {
+            if (settings.getHtmlSettings().isGenerateTextVersion()) {
                 out.write(htmlDir.relativize(settings.getFileSettings().getPlainTextTarget()).toString());
                 out.write("\" rel=\"alternate\">plain text</a>");
 
-                if (settings.getHtmlSettings().generateBibtexVersion()) {
+                if (settings.getHtmlSettings().isGenerateBibtexVersion()) {
                     out.write(" or <a href=\"");
                     out.write(htmlDir.relativize(settings.getFileSettings().getBibtexTarget()).toString());
                     out.write("\" rel=\"alternate\">BibTeX</a>.");
@@ -252,17 +252,17 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         } else if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.LOCAL) {
             out.write("      <ol class=\"section-list\">");
             // Reset the count
-            if (settings.getGeneralSettings().reverseNumbering()) {
+            if (settings.getGeneralSettings().isReverseNumbering()) {
                 count = c.getItems().size();
                 // There is limited browser support for the reversed attribute, so we'll add values manually if needed
             } else {
                 count = 0;
             }
-        } else if (settings.getGeneralSettings().reverseNumbering()) { // GLOBAL reversed
-            assert settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL && settings.getGeneralSettings().reverseNumbering();
+        } else if (settings.getGeneralSettings().isReverseNumbering()) { // GLOBAL reversed
+            assert settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL && settings.getGeneralSettings().isReverseNumbering();
             out.write("      <ol class=\"section-list\">");
         } else { // GLOBAL, not reversed
-            assert settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL && !settings.getGeneralSettings().reverseNumbering();
+            assert settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL && !settings.getGeneralSettings().isReverseNumbering();
             out.write("      <ol class=\"section-list\" start=\"" + count + "\">");
         }
         out.newLine();
@@ -271,7 +271,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         
         // The actual entries
         for (BibItem item : c.getItems()) {
-            if (settings.getGeneralSettings().reverseNumbering()) {
+            if (settings.getGeneralSettings().isReverseNumbering()) {
                 out.write("        <li id=\"" + item.getId() + "\" value=\"" + count + "\" class=\"bibentry " + item.getOriginalType() + "\">");
                 count--;
             } else {

@@ -83,7 +83,7 @@ public class HTMLSettings {
     // Google analytics
     private String googleAnalyticsUser = null;
 
-    public boolean generateBibtexVersion() {
+    public boolean isGenerateBibtexVersion() {
         return generateBibtexVersion;
     }
 
@@ -91,7 +91,7 @@ public class HTMLSettings {
         this.generateBibtexVersion = generateBibtexVersion;
     }
 
-    public boolean generateTextVersion() {
+    public boolean isGenerateTextVersion() {
         return generateTextVersion;
     }
 
@@ -99,7 +99,7 @@ public class HTMLSettings {
         this.generateTextVersion = generateTextVersion;
     }
 
-    public boolean linkToAlternateVersions() {
+    public boolean isLinkToAlternateVersions() {
         return linkToAlternateVersions;
     }
 

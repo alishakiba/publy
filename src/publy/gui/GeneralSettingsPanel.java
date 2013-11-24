@@ -82,13 +82,13 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                 throw new AssertionError("Unknown name display: " + settings.getNameDisplay());
         }
 
-        reverseNamesCheckBox.setSelected(settings.reverseNames());
+        reverseNamesCheckBox.setSelected(settings.isReverseNames());
         reverseNamesCheckBox.setEnabled(settings.getNameDisplay() != GeneralSettings.NameDisplay.NONE);
         
-        listOnlyCoauthorsCheckBox.setSelected(!settings.listAllAuthors()); // Negation, since the meaning is opposite
+        listOnlyCoauthorsCheckBox.setSelected(!settings.isListAllAuthors()); // Negation, since the meaning is opposite
 
         // Title first
-        titleFirstCheckBox.setSelected(settings.titleFirst());
+        titleFirstCheckBox.setSelected(settings.isTitleFirst());
 
         // Numbering
         switch (settings.getNumbering()) {
@@ -105,7 +105,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                 throw new AssertionError("Unknown numbering: " + settings.getNumbering());
         }
 
-        reverseNumberingCheckBox.setSelected(settings.reverseNumbering());
+        reverseNumberingCheckBox.setSelected(settings.isReverseNumbering());
         reverseNumberingCheckBox.setEnabled(settings.getNumbering() != GeneralSettings.Numbering.NONE);
     }
 
