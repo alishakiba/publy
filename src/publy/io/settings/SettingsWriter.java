@@ -166,11 +166,11 @@ public class SettingsWriter {
 
         output(out, 4, "myNames", makeCData(format.getMyNames()));
         output(out, 4, "nameDisplay", makeString(format.getNameDisplay()));
-        output(out, 4, "reverseNames", makeString(format.reverseNames()));
-        output(out, 4, "listAllAuthors", makeString(format.listAllAuthors()));
-        output(out, 4, "titleFirst", makeString(format.titleFirst()));
+        output(out, 4, "reverseNames", makeString(format.isReverseNames()));
+        output(out, 4, "listAllAuthors", makeString(format.isListAllAuthors()));
+        output(out, 4, "titleFirst", makeString(format.isTitleFirst()));
         output(out, 4, "numbering", makeString(format.getNumbering()));
-        output(out, 4, "reverseNumbering", makeString(format.reverseNumbering()));
+        output(out, 4, "reverseNumbering", makeString(format.isReverseNumbering()));
 
         out.write("  </generalSettings>");
         out.newLine();
@@ -184,9 +184,9 @@ public class SettingsWriter {
         out.write("  <htmlSettings>");
         out.newLine();
 
-        output(out, 4, "generateTextVersion", makeString(settings.generateTextVersion()));
-        output(out, 4, "generateBibtexVersion", makeString(settings.generateBibtexVersion()));
-        output(out, 4, "linkToAlternateVersions", makeString(settings.linkToAlternateVersions()));
+        output(out, 4, "generateTextVersion", makeString(settings.isGenerateTextVersion()));
+        output(out, 4, "generateBibtexVersion", makeString(settings.isGenerateBibtexVersion()));
+        output(out, 4, "linkToAlternateVersions", makeString(settings.isLinkToAlternateVersions()));
         output(out, 4, "navPlacement", makeString(settings.getNavPlacement()));
         output(out, 4, "includeAbstract", makeString(settings.getIncludeAbstract()));
         output(out, 4, "includeBibtex", makeString(settings.getIncludeBibtex()));

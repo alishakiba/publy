@@ -56,10 +56,10 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     
     private void populateValues() {
         // Links
-        linkToTextCheckBox.setSelected(settings.generateTextVersion());
-        linkToBibtexCheckBox.setSelected(settings.generateBibtexVersion());
-        insertLinksCheckBox.setSelected(settings.linkToAlternateVersions());
-        insertLinksCheckBox.setEnabled(settings.generateTextVersion() || settings.generateBibtexVersion());
+        linkToTextCheckBox.setSelected(settings.isGenerateTextVersion());
+        linkToBibtexCheckBox.setSelected(settings.isGenerateBibtexVersion());
+        insertLinksCheckBox.setSelected(settings.isLinkToAlternateVersions());
+        insertLinksCheckBox.setEnabled(settings.isGenerateTextVersion() || settings.isGenerateBibtexVersion());
         
         // Navigation
         navigationComboBox.setSelectedItem(settings.getNavPlacement());
@@ -375,7 +375,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
 
     private void linkToTextCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkToTextCheckBoxActionPerformed
         settings.setGenerateTextVersion(linkToTextCheckBox.isSelected());
-        insertLinksCheckBox.setEnabled(settings.generateTextVersion() || settings.generateBibtexVersion());
+        insertLinksCheckBox.setEnabled(settings.isGenerateTextVersion() || settings.isGenerateBibtexVersion());
     }//GEN-LAST:event_linkToTextCheckBoxActionPerformed
 
     private void abstractComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abstractComboBoxActionPerformed
@@ -408,7 +408,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
 
     private void linkToBibtexCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkToBibtexCheckBoxActionPerformed
         settings.setGenerateBibtexVersion(linkToBibtexCheckBox.isSelected());
-        insertLinksCheckBox.setEnabled(settings.generateTextVersion() || settings.generateBibtexVersion());
+        insertLinksCheckBox.setEnabled(settings.isGenerateTextVersion() || settings.isGenerateBibtexVersion());
     }//GEN-LAST:event_linkToBibtexCheckBoxActionPerformed
 
     private void titleLinkComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_titleLinkComboBoxActionPerformed

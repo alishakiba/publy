@@ -77,8 +77,8 @@ public abstract class BibItemWriter {
                     Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), item.get("author"));
                 }
             } else {
-                if (gs.listAllAuthors() || !a.isMe(gs.getMyNames(), gs.getNameDisplay(), gs.reverseNames())) {
-                    authors.add(a.getFormattedName(gs.getNameDisplay(), gs.reverseNames(), type));
+                if (gs.isListAllAuthors() || !a.isMe(gs.getMyNames(), gs.getNameDisplay(), gs.isReverseNames())) {
+                    authors.add(a.getFormattedName(gs.getNameDisplay(), gs.isReverseNames(), type));
                 }
             }
         }
@@ -87,7 +87,7 @@ public abstract class BibItemWriter {
         String result = formatNames(authors);
 
         // Add "With" if necessary
-        if (!gs.listAllAuthors()) {
+        if (!gs.isListAllAuthors()) {
             if (authors.size() == authorList.size()) {
                 if (editors) {
                     Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the editors of entry \"%s\" match your name.%n(Editors: \"%s\")", item.getId(), item.get("editor"));
