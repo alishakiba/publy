@@ -60,26 +60,12 @@ public class SettingsReader extends DefaultHandler {
     private Condition currentCondition;
     private String activeCategories;
 
-    //// DEBUG
-    public static void main(String[] args) throws Exception {
-        parseSettings();
-    }
-    //// DEBUG
-
     private SettingsReader(Settings settings) {
         this.settings = settings;
     }
-
+    
     public static Settings parseSettings() throws ParserConfigurationException, SAXException, IOException {
-        return parseSettings(ResourceLocator.getFullPath(DEFAULT_SETTINGS_LOCATION));
-    }
-
-    public static Settings parseSettings(Path settingsLocation) throws ParserConfigurationException, SAXException, IOException {
         Settings settings = null;
-
-        if (settingsLocation != null) {
-            settingsFile = settingsLocation;
-        }
 
         if (Files.exists(settingsFile)) {
             settings = new Settings();
@@ -89,6 +75,10 @@ public class SettingsReader extends DefaultHandler {
         return settings;
     }
 
+    public static void setSettingsFile(Path settingsFile) {
+        SettingsReader.settingsFile = settingsFile;
+    }
+    
     public static Path getSettingsFile() {
         return settingsFile;
     }

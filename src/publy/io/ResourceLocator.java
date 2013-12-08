@@ -69,9 +69,10 @@ public class ResourceLocator {
     }
 
     /**
-     * Returns a path to the given file that is relative to the base directory.
-     * When the file is
-     * <code>null</code>, an empty path is returned instead.
+     * Returns a String representing the path to the given file that is relative
+     * to the base directory. If this is not possible, the original path is cast
+     * to a String and returned, unless the path is
+     * <code>null</code>, in which case an empty String is returned instead.
      *
      * @param path
      * @return
@@ -80,7 +81,11 @@ public class ResourceLocator {
         if (path == null) {
             return "";
         } else {
-            return baseDirectory.relativize(path).toString();
+            try {
+                return baseDirectory.relativize(path).toString();
+            } catch (IllegalArgumentException ex) {
+                return path.toString();
+            }
         }
     }
 
