@@ -49,7 +49,7 @@ import publy.io.settings.SettingsReader;
 public class Publy {
 
     private static Settings settings = null;
-    private static Throwable exception = null;
+    private static Throwable settingsParseException = null;
 
     /**
      * @param args the command line arguments
@@ -140,10 +140,10 @@ public class Publy {
     private static void runInCommandlineMode(CommandLineArguments arguments) {
         if (settings == null) {
             // Notify the user
-            if (exception == null) {
+            if (settingsParseException == null) {
                 Console.error("No configuration information was found. Please set up your preferences by running Publy with the \"--gui\" option.");
             } else {
-                Console.except(exception, "An exception occurred while parsing the configuration:");
+                Console.except(settingsParseException, "An exception occurred while parsing the configuration:");
             }
         } else {
             applyCommandlineOverwites(arguments);
@@ -152,25 +152,22 @@ public class Publy {
     }
 
     private static void readSettings(String settingsLocation) {
-        if (settingsLocation == null || settingsLocation.isEmpty()) {
-            // Parse the settings in the default location
-            try {
-                settings = SettingsReader.parseSettings();
-            } catch (ParserConfigurationException | SAXException | IOException ex) {
-                exception = ex;
-            }
-        } else {
+        // Change the default settings location, if another location was specified
+        if (settingsLocation != null && !settingsLocation.isEmpty()) {
             Path settingsFile = ResourceLocator.getFullPath(settingsLocation);
 
             if (Files.exists(settingsFile)) {
-                try {
-                    settings = SettingsReader.parseSettings(settingsFile);
-                } catch (ParserConfigurationException | SAXException | IOException ex) {
-                    exception = ex;
-                }
+                SettingsReader.setSettingsFile(settingsFile);
             } else {
                 Console.error("The configuration file \"%s\" could not be found at \"%s\".", settingsLocation, settingsFile);
+                return;
             }
+        }
+
+        try {
+            settings = SettingsReader.parseSettings();
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            settingsParseException = ex;
         }
     }
 
@@ -188,7 +185,7 @@ public class Publy {
     }
 
     private static void notifyForMissingSettings() {
-        if (exception == null) {
+        if (settingsParseException == null) {
             JOptionPane.showMessageDialog(null, "No configuration information was found. Please set up your preferences.", "Publy - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null, "An exception occurred while parsing the configuration. Loading the default configuration.", "Publy - Launching Settings Window", JOptionPane.ERROR_MESSAGE);
@@ -224,7 +221,7 @@ public class Publy {
     private static void launchGUI() {
         // Variables need to be final in order to be shared
         final Settings guiSettings = (settings == null ? Settings.defaultSettings() : settings);
-        final Throwable guiException = exception;
+        final Throwable guiException = settingsParseException;
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
@@ -262,8 +259,8 @@ public class Publy {
                 Console.except(ex, "Exception while parsing publications list:");
             }
 
-            // Categorize the publications
             if (items != null) {
+                // Categorize the publications
                 List<OutputCategory> categories = categorizePapers(settings, items);
 
                 if (settings.getConsoleSettings().isShowWarnings() && settings.getConsoleSettings().isWarnMandatoryFieldIgnored()) {
