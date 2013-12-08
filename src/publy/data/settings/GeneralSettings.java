@@ -100,4 +100,9 @@ public class GeneralSettings {
     public void setReverseNumbering(boolean reverseNumbering) {
         this.reverseNumbering = reverseNumbering;
     }
+
+    @Override
+    public String toString() {
+        return "GeneralSettings{" + "myNames=" + myNames + ", nameDisplay=" + nameDisplay + ", reverseNames=" + reverseNames + ", listAllAuthors=" + listAllAuthors + ", titleFirst=" + titleFirst + ", numbering=" + numbering + ", reverseNumbering=" + reverseNumbering + '}';
+    }
 }
