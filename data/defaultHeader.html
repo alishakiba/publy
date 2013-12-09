@@ -1,0 +1,41 @@
+<!DOCTYPE html> 
+<html>
+  <head>
+    <title>Publications</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Functional stylesheet - necessary for correct behaviour -->
+    <link rel="stylesheet" href="interactive.css" type="text/css">
+    
+    <!-- Formatting: replace or edit this to get a nicer look -->
+    <link rel="stylesheet" href="minimalstyle.css" type="text/css">
+    
+    <!-- Hide interactive elements for users who have JavaScript disabled -->
+    <noscript>
+      <style type="text/css">
+        button.abstract-toggle, button.bibtex-toggle { display: none; }
+        h3.abstract-toggle { cursor: auto; }
+      </style>
+    </noscript>
+    
+    <!-- jQuery framework - necessary for all included JavaScript -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    
+    <!-- Main JavaScript file -->
+    <script src="base.js"></script>
+    
+    <!-- Include MathJax to convert LaTeX formulas to HTML on the fly -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </head>
+  <body>
+    <noscript><p>Some elements on this site, including collapsible abstracts and bibliographic information, require JavaScript. Use a JavaScript-enabled browser for the best experience.</p></noscript>
+	
