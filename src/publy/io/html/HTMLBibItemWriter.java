@@ -632,7 +632,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             writeLink(divOpened, link, "ISSN");
             divOpened = true;
         }
-        
+
         // ISBN link
         if (isPresent(item, "isbn")) {
             String link = "http://www.worldcat.org/isbn/" + get(item, "isbn");
@@ -781,11 +781,24 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         out.write(",");
         out.newLine();
-        out.write("  journal={CoRR},");
+        out.write("  journal={ArXiv e-prints},");
         out.newLine();
-        out.write("  volume={abs/" + get(item, "arxiv") + "},");
+        out.write("  archivePrefix={arXiv},");
         out.newLine();
-        out.write("  ee={http://arxiv.org/abs/" + get(item, "arxiv") + "}");
+        out.write("  eprint={" + get(item, "arxiv") + "},");
+        out.newLine();
+
+        if (isPresent(item, "primaryClass")) {
+            out.write("  primaryClass={" + get(item, "primaryClass") + "},");
+            out.newLine();
+            out.write(String.format("  note={\\href{http://arxiv.org/abs/%s}{arXiv:%s} [%s]},", get(item, "arxiv"), get(item, "arxiv"), get(item, "primaryClass")));
+            out.newLine();
+        } else {
+            out.write(String.format("  note={\\href{http://arxiv.org/abs/%s}{arXiv:%s}},", get(item, "arxiv"), get(item, "arxiv")));
+            out.newLine();
+        }
+
+        out.write(String.format("  url={http://arxiv.org/abs/%s}", get(item, "arxiv")));
 
         out.newLine(); // No comma after the last element
         out.write("}</pre>");
@@ -823,8 +836,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     /**
-     * Checks whether a BibItem with the given id exists, gives a warning when it doesn't.
-     * @param id 
+     * Checks whether a BibItem with the given id exists, gives a warning when
+     * it doesn't.
+     *
+     * @param id
      */
     private void checkIdExistance(String id, String attr, BibItem item) {
         for (OutputCategory cat : categories) {
@@ -834,7 +849,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 }
             }
         }
-        
+
         Console.warn(Console.WarningType.MISSING_REFERENCE, "Publication \"%s\" (linked in attribute \"%s\" of publication \"%s\") is not in the final list.", id, attr, item.getId());
     }
 }
