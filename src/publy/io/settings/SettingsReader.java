@@ -141,16 +141,16 @@ public class SettingsReader extends DefaultHandler {
 
             // Conditions
             case "TypeCondition":
-                newCondition = new TypeCondition(false, null);
+                newCondition = new TypeCondition(false, (String) null);
                 break;
             case "FieldExistsCondition":
                 newCondition = new FieldExistsCondition(false, null);
                 break;
             case "FieldEqualsCondition":
-                newCondition = new FieldEqualsCondition(false, null, null);
+                newCondition = new FieldEqualsCondition(false, null, (String) null);
                 break;
             case "FieldContainsCondition":
-                newCondition = new FieldContainsCondition(false, null, null);
+                newCondition = new FieldContainsCondition(false, null, (String) null);
                 break;
         }
 
