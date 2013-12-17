@@ -37,6 +37,8 @@ public abstract class PublicationListWriter {
     }
 
     public void writePublicationList(List<OutputCategory> categories, Path target) throws IOException {
+        Files.createDirectories(target.getParent());
+        
         try (BufferedWriter out = Files.newBufferedWriter(target, Charset.forName("UTF-8"))) {
             writePublicationList(categories, out);
         }
