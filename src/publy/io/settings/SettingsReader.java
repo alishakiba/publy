@@ -63,7 +63,7 @@ public class SettingsReader extends DefaultHandler {
     private SettingsReader(Settings settings) {
         this.settings = settings;
     }
-    
+
     public static Settings parseSettings() throws ParserConfigurationException, SAXException, IOException {
         Settings settings = null;
 
@@ -78,7 +78,7 @@ public class SettingsReader extends DefaultHandler {
     public static void setSettingsFile(Path settingsFile) {
         SettingsReader.settingsFile = settingsFile;
     }
-    
+
     public static Path getSettingsFile() {
         return settingsFile;
     }
@@ -311,6 +311,9 @@ public class SettingsReader extends DefaultHandler {
                 break;
             case "titleFirst":
                 settings.getGeneralSettings().setTitleFirst(Boolean.parseBoolean(text));
+                break;
+            case "singleLine":
+                settings.getGeneralSettings().setSingleLine(Boolean.parseBoolean(text));
                 break;
             case "numbering":
                 settings.getGeneralSettings().setNumbering(GeneralSettings.Numbering.valueOf(text));

@@ -157,20 +157,21 @@ public class SettingsWriter {
         out.newLine();
     }
 
-    private static void writeGeneralSettings(GeneralSettings format, BufferedWriter out) throws IOException {
+    private static void writeGeneralSettings(GeneralSettings settings, BufferedWriter out) throws IOException {
         out.write("  <!-- General settings -->");
         out.newLine();
 
         out.write("  <generalSettings>");
         out.newLine();
 
-        output(out, 4, "myNames", makeCData(format.getMyNames()));
-        output(out, 4, "nameDisplay", makeString(format.getNameDisplay()));
-        output(out, 4, "reverseNames", makeString(format.isReverseNames()));
-        output(out, 4, "listAllAuthors", makeString(format.isListAllAuthors()));
-        output(out, 4, "titleFirst", makeString(format.isTitleFirst()));
-        output(out, 4, "numbering", makeString(format.getNumbering()));
-        output(out, 4, "reverseNumbering", makeString(format.isReverseNumbering()));
+        output(out, 4, "myNames", makeCData(settings.getMyNames()));
+        output(out, 4, "nameDisplay", makeString(settings.getNameDisplay()));
+        output(out, 4, "reverseNames", makeString(settings.isReverseNames()));
+        output(out, 4, "listAllAuthors", makeString(settings.isListAllAuthors()));
+        output(out, 4, "titleFirst", makeString(settings.isTitleFirst()));
+        output(out, 4, "singleLine", makeString(settings.isSingleLine()));
+        output(out, 4, "numbering", makeString(settings.getNumbering()));
+        output(out, 4, "reverseNumbering", makeString(settings.isReverseNumbering()));
 
         out.write("  </generalSettings>");
         out.newLine();

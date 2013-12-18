@@ -41,6 +41,7 @@ public class GeneralSettings {
     private boolean listAllAuthors = true;
     // Publication Structure
     private boolean titleFirst = true;
+    private boolean singleLine = false;
     // Numbering
     private Numbering numbering = Numbering.NONE;
     private boolean reverseNumbering = false;
@@ -83,6 +84,14 @@ public class GeneralSettings {
 
     public void setTitleFirst(boolean titleFirst) {
         this.titleFirst = titleFirst;
+    }
+
+    public boolean isSingleLine() {
+        return singleLine;
+    }
+
+    public void setSingleLine(boolean singleLine) {
+        this.singleLine = singleLine;
     }
 
     public Numbering getNumbering() {
