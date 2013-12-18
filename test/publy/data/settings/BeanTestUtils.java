@@ -208,7 +208,7 @@ public class BeanTestUtils {
         // Check that the field has value val
         Object declaringClassInstance = getSettingsPart(readSettings, declaringClass);
         Object result = field.get(declaringClassInstance);
-        assertThat(result, is(val));
+        assertThat("Field " + field, result, is(val));
     }
 
     private static Object getSettingsPart(Settings settings, Object declaringClass) {
