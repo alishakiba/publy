@@ -89,6 +89,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         // Title first
         titleFirstCheckBox.setSelected(settings.isTitleFirst());
+        // TODO: newlines
 
         // Numbering
         switch (settings.getNumbering()) {
@@ -140,6 +141,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         yourNameLabel = new javax.swing.JLabel();
         yourNameSeparator = new javax.swing.JSeparator();
         yourNameTextField = new javax.swing.JTextField();
+        newlinesCheckbox = new javax.swing.JCheckBox();
 
         numGroup.add(numNoneRadioButton);
         numNoneRadioButton.setText("None");
@@ -170,9 +172,9 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         authorLabel.setText("Author information");
 
-        numLabel.setText("Publication numbering");
+        numLabel.setText("Numbering");
 
-        titleFirstLabel.setText("Title placement");
+        titleFirstLabel.setText("Formatting");
 
         titleFirstCheckBox.setText("Title before authors");
         titleFirstCheckBox.addItemListener(new java.awt.event.ItemListener() {
@@ -244,6 +246,13 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         });
         yourNameTextField.setToolTipText("Semicolon-separated list of names or author abbreviations from the BibTeX file that denote you.");
 
+        newlinesCheckbox.setText("Spread over multiple lines");
+        newlinesCheckbox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                newlinesCheckboxItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -251,21 +260,6 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(numNoneRadioButton)
-                                .addGap(18, 18, 18)
-                                .addComponent(numLocalRadioButton)
-                                .addGap(18, 18, 18)
-                                .addComponent(numGlobalRadioButton)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(titleFirstCheckBox)
-                                    .addComponent(reverseNumberingCheckBox))
-                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,10 +277,6 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(numLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(numSeparator))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(authorLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(authorSeparator))
@@ -302,6 +292,31 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                                 .addGap(10, 10, 10)
                                 .addComponent(yourNameTextField)))
                         .addContainerGap())))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(titleFirstCheckBox)
+                    .addComponent(newlinesCheckbox))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(numLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(numSeparator))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(numNoneRadioButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(numLocalRadioButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(numGlobalRadioButton))
+                            .addComponent(reverseNumberingCheckBox))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -332,6 +347,8 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                     .addComponent(titleFirstLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(titleFirstCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(newlinesCheckbox)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(numLabel)
@@ -414,6 +431,14 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_reverseNamesCheckBoxItemStateChanged
 
+    private void newlinesCheckboxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_newlinesCheckboxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            // TODO
+        } else if (evt.getStateChange() == ItemEvent.SELECTED) {
+            // TODO
+        }
+    }//GEN-LAST:event_newlinesCheckboxItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton abbrFirstNameRadioButton;
     private javax.swing.JLabel authorLabel;
@@ -422,6 +447,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel firstNameLabel;
     private javax.swing.JRadioButton fullFirstNameRadioButton;
     private javax.swing.JCheckBox listOnlyCoauthorsCheckBox;
+    private javax.swing.JCheckBox newlinesCheckbox;
     private javax.swing.JRadioButton noFirstNameRadioButton;
     private javax.swing.JRadioButton numGlobalRadioButton;
     private javax.swing.ButtonGroup numGroup;
