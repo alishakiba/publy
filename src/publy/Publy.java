@@ -294,7 +294,6 @@ public class Publy {
                 } catch (Exception | AssertionError ex) {
                     Console.except(ex, "Exception while writing HTML publication list:");
                 }
-
             }
 
             Console.log("Done.");
