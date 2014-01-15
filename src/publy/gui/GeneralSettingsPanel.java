@@ -42,6 +42,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form GeneralSettingsPanel
+     * @param settings
      */
     public GeneralSettingsPanel(GeneralSettings settings) {
         this.settings = settings;
@@ -89,7 +90,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         // Title first
         titleFirstCheckBox.setSelected(settings.isTitleFirst());
-        // TODO: newlines
+        newlinesCheckbox.setSelected(settings.isUseNewLines());
 
         // Numbering
         switch (settings.getNumbering()) {
@@ -433,9 +434,9 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
     private void newlinesCheckboxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_newlinesCheckboxItemStateChanged
         if (evt.getStateChange() == ItemEvent.DESELECTED) {
-            // TODO
+            settings.setUseNewLines(false);
         } else if (evt.getStateChange() == ItemEvent.SELECTED) {
-            // TODO
+            settings.setUseNewLines(true);
         }
     }//GEN-LAST:event_newlinesCheckboxItemStateChanged
 
