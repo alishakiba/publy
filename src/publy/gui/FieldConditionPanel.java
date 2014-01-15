@@ -58,8 +58,6 @@ public class FieldConditionPanel extends javax.swing.JPanel {
      * Creates new form FieldConditionPanel.
      *
      * @param condition The condition edited by this panel.
-     * @param conditions The full list of conditions.
-     * @param index The index of this condition in the list.
      */
     public FieldConditionPanel(FieldCondition condition) {
         this.condition = condition;

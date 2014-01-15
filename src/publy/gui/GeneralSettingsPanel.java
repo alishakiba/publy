@@ -28,7 +28,7 @@ import publy.data.settings.GeneralSettings;
  */
 public class GeneralSettingsPanel extends javax.swing.JPanel {
 
-    private GeneralSettings settings;
+    private final GeneralSettings settings;
 
     /**
      * Empty constructor, for use in the NetBeans GUI editor.

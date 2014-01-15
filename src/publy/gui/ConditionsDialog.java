@@ -43,11 +43,13 @@ import publy.io.BibTeXParser;
  */
 public class ConditionsDialog extends javax.swing.JDialog {
 
-    private OutputCategory category;
-    private TypeCondition typeCondition;
+    private final OutputCategory category;
+    private final TypeCondition typeCondition;
 
     /**
      * Creates new form ConditionsDialog
+     * @param parent
+     * @param category
      */
     public ConditionsDialog(java.awt.Frame parent, OutputCategory category) {
         super(parent, true);

@@ -30,19 +30,21 @@ import publy.io.ResourceLocator;
  */
 public class FileSettingsPanel extends javax.swing.JPanel {
 
-    private FileSettings settings;
+    private final FileSettings settings;
 
     /**
      * Empty constructor, for use in the NetBeans GUI editor.
      */
     public FileSettingsPanel() {
         // Don't initialize settings, as NetBeans will error on ResourceLocator
+        settings = null;
         initComponents();
         applyStyles();
     }
 
     /**
      * Creates new form FileSettingsPanel
+     * @param settings
      */
     public FileSettingsPanel(FileSettings settings) {
         this.settings = settings;

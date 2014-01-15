@@ -32,7 +32,7 @@ import publy.data.settings.CategorySettings;
  */
 public class CategorySettingsPanel extends javax.swing.JPanel {
 
-    private CategorySettings settings;
+    private final CategorySettings settings;
     private DefaultListModel<OutputCategory> inListModel;
     private DefaultListModel<OutputCategory> outListModel;
     private OutputCategory selectedCategory = null;

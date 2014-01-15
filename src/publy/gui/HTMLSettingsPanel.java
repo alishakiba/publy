@@ -28,7 +28,7 @@ import publy.data.settings.HTMLSettings;
  */
 public class HTMLSettingsPanel extends javax.swing.JPanel {
 
-    private HTMLSettings settings;
+    private final HTMLSettings settings;
 
     /**
      * Empty constructor, for use in the NetBeans GUI editor.
