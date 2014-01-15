@@ -27,10 +27,11 @@ import publy.io.settings.SettingsWriter;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    private Settings settings;
+    private final Settings settings;
 
     /**
      * Creates new form MainFrame
+     * @param settings
      */
     public MainFrame(Settings settings) {
         this.settings = settings;

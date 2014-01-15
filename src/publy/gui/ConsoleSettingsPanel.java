@@ -23,7 +23,7 @@ import publy.data.settings.ConsoleSettings;
  */
 public class ConsoleSettingsPanel extends javax.swing.JPanel {
 
-    private ConsoleSettings settings;
+    private final ConsoleSettings settings;
     
     /**
      * Empty constructor, for use in the NetBeans GUI editor.
@@ -38,6 +38,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form FileSettingsPanel
+     * @param settings
      */
     public ConsoleSettingsPanel(ConsoleSettings settings) {
         this.settings = settings;
