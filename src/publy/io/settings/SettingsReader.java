@@ -312,8 +312,8 @@ public class SettingsReader extends DefaultHandler {
             case "titleFirst":
                 settings.getGeneralSettings().setTitleFirst(Boolean.parseBoolean(text));
                 break;
-            case "singleLine":
-                settings.getGeneralSettings().setSingleLine(Boolean.parseBoolean(text));
+            case "useNewLines":
+                settings.getGeneralSettings().setUseNewLines(Boolean.parseBoolean(text));
                 break;
             case "numbering":
                 settings.getGeneralSettings().setNumbering(GeneralSettings.Numbering.valueOf(text));

@@ -169,7 +169,7 @@ public class SettingsWriter {
         output(out, 4, "reverseNames", makeString(settings.isReverseNames()));
         output(out, 4, "listAllAuthors", makeString(settings.isListAllAuthors()));
         output(out, 4, "titleFirst", makeString(settings.isTitleFirst()));
-        output(out, 4, "singleLine", makeString(settings.isSingleLine()));
+        output(out, 4, "useNewLines", makeString(settings.isUseNewLines()));
         output(out, 4, "numbering", makeString(settings.getNumbering()));
         output(out, 4, "reverseNumbering", makeString(settings.isReverseNumbering()));
 
