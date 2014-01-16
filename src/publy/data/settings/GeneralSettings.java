@@ -41,7 +41,7 @@ public class GeneralSettings {
     private boolean listAllAuthors = true;
     // Publication Structure
     private boolean titleFirst = true;
-    private boolean useNewLines = false;
+    private boolean useNewLines = true;
     // Numbering
     private Numbering numbering = Numbering.NONE;
     private boolean reverseNumbering = false;
