@@ -53,6 +53,7 @@ public class HTMLTestUtils {
         gs.setReverseNames(false);
         gs.setListAllAuthors(true);
         gs.setTitleFirst(false);
+        gs.setUseNewLines(false);
         gs.setNumbering(GeneralSettings.Numbering.NONE);
 
         HTMLSettings hs = bibtexSettings.getHtmlSettings();
@@ -197,10 +198,7 @@ public class HTMLTestUtils {
     }
 
     private static String process(String output, BibItem input) {
-        // Because the title is on a line by itself, we don't add a period where bibtex does
-        String pretty = addPeriodAfterTitle(output, input.get("title"));
-
-        pretty = trim(removeTags(pretty));
+        String pretty = trim(removeTags(output));
 
         // We print more information for @misc
         if (input.getType() == Type.MISC) {
@@ -216,21 +214,7 @@ public class HTMLTestUtils {
     }
 
     private static String trim(String input) {
-        String reduced = input.replaceAll("\\s+", " ");
+        String reduced = input.replaceAll(" +", " ");
         return reduced.trim();
-    }
-
-    private static String addPeriodAfterTitle(String input, String title) {
-        int index = input.toLowerCase().indexOf(title.toLowerCase());
-
-        if (index < 0) {
-            return input;
-        } else {
-            int nextNewLine = input.indexOf("<br>", index);
-
-            StringBuilder sb = new StringBuilder(input);
-            sb.insert(nextNewLine, '.');
-            return sb.toString();
-        }
     }
 }

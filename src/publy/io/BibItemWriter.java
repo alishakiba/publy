@@ -243,7 +243,7 @@ public abstract class BibItemWriter {
             out.write(processString(string));
             out.write(connective);
 
-            if (newLine) {
+            if (newLine && settings.getGeneralSettings().isUseNewLines()) {
                 out.newLine();
             }
         }

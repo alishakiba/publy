@@ -122,6 +122,7 @@
     <reverseNames>true</reverseNames>
     <listAllAuthors>false</listAllAuthors>
     <titleFirst>false</titleFirst>
+    <useNewLines>false</useNewLines>
     <numbering>GLOBAL</numbering>
     <reverseNumbering>true</reverseNumbering>
   </generalSettings>
@@ -135,7 +136,7 @@
     <includeAbstract>ALL</includeAbstract>
     <includeBibtex>ARXIV</includeBibtex>
     <includePaper>ARXIV</includePaper>
-    <titleTarget>ABSTRACT</titleTarget>
+    <titleTarget>PAPER</titleTarget>
     <presentedText><![CDATA[]]></presentedText>
     <googleAnalyticsUser><![CDATA[]]></googleAnalyticsUser>
   </htmlSettings>
