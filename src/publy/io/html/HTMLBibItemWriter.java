@@ -40,8 +40,8 @@ import publy.io.bibtex.BibtexBibItemWriter;
 public class HTMLBibItemWriter extends BibItemWriter {
 
     private static final String indent = "          ";
-    private BibtexBibItemWriter bibtexWriter;
-    private List<OutputCategory> categories;
+    private final BibtexBibItemWriter bibtexWriter;
+    private final List<OutputCategory> categories;
 
     public HTMLBibItemWriter(BufferedWriter out, List<OutputCategory> categories, Settings settings) {
         super(out, settings);
@@ -106,13 +106,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
             }
 
             if (!((item.getType() == Type.PROCEEDINGS || item.getType() == Type.INPROCEEDINGS) && isPresent(item, "address"))) {
-                output("<span class=\"date\">", formatDate(item), "</span>.<br>", true);
+                output("<span class=\"date\">", formatDate(item), "</span>.", true);
             }
         }
 
         // Write note (unpublished uses note as the publication info)
         if (item.getType() != Type.UNPUBLISHED) {
-            output(indent + "<span class=\"note\">", get(item, "note"), ".</span><br>", true);
+            output(indent + "<span class=\"note\">", get(item, "note"), ".</span>", true);
         }
 
         writeLinks(item);
@@ -232,7 +232,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         if (isPresent(item, "address")) {
             output("<span class=\"address\">", get(item, "address"), "</span>, ");
-            output("<span class=\"date\">", formatDate(item), "</span>.<br>", true);
+            output("<span class=\"date\">", formatDate(item), "</span>.", true);
 
             if (isPresent(item, "publisher")) {
                 if (isPresent(item, "editor")) {
@@ -268,7 +268,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         if (isPresent(item, "address")) {
             output(", <span class=\"address\">", get(item, "address"), "</span>, ");
-            output("<span class=\"date\">", formatDate(item), "</span>.<br>", true);
+            output("<span class=\"date\">", formatDate(item), "</span>.", true);
 
             if (isPresent(item, "publisher")) {
                 output("<span class=\"organization\">", get(item, "organization"), "</span>, ");
@@ -306,17 +306,17 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     protected void writeTitleAndAuthorsHTML(BibItem item) throws IOException {
         if (settings.getGeneralSettings().isTitleFirst()) {
-            writeTitleAndAbstractHTML(item);
+            writeTitle(item);
         }
 
         writeAuthors(item);
 
         if (!settings.getGeneralSettings().isTitleFirst()) {
-            writeTitleAndAbstractHTML(item);
+            writeTitle(item);
         }
     }
 
-    protected void writeTitleAndAbstractHTML(BibItem item) throws IOException {
+    protected void writeTitle(BibItem item) throws IOException {
         out.write(indent);
 
         String title = formatTitle(item);
@@ -363,8 +363,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
             output(" ", settings.getHtmlSettings().getPresentedText(), "");
         }
 
-        // Abstract if included
-        if (includeAbstract(item)) {
+        // Abstract if necessary
+        if (includeAbstract(item) && settings.getGeneralSettings().isUseNewLines()) {
             // Show \ hide link for the abstract
             if (settings.getHtmlSettings().getTitleTarget() != HTMLSettings.TitleLinkTarget.ABSTRACT) {
                 out.newLine();
@@ -374,19 +374,24 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write("<br>");
             out.newLine();
 
-            // Actual abstract
-            out.write(indent + "<div class=\"abstract-container\">");
-            out.write("<div class=\"abstract\">");
-            out.newLine();
-            out.write(indent + "  <span class=\"abstractword\">Abstract: </span>");
-            output(get(item, "abstract"));
-            out.newLine();
-            out.write(indent + "</div></div>");
-            out.newLine();
-        } else {
+            writeAbstract(item);
+        } else if (settings.getGeneralSettings().isUseNewLines()) {
             out.write("<br>");
             out.newLine();
+        } else {
+            out.write('.');
         }
+    }
+
+    protected void writeAbstract(BibItem item) throws IOException {
+        out.write(indent + "<div class=\"abstract-container\">");
+        out.write("<div class=\"abstract\">");
+        out.newLine();
+        out.write(indent + "  <span class=\"abstractword\">Abstract: </span>");
+        output(get(item, "abstract"));
+        out.newLine();
+        out.write(indent + "</div></div>");
+        out.newLine();
     }
 
     protected void writeAuthors(BibItem item) throws IOException {
@@ -397,7 +402,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             if (isPresent(item, "editor")) {
                 useEditor = true;
             } else if (isPresent(item, "organization")) {
-                output(indent + "<span class=\"organization\">", get(item, "organization"), "</span>.<br>", true);
+                output(indent + "<span class=\"organization\">", get(item, "organization"), "</span>.", true);
                 return;
             } else {
                 Console.error("No editor or organization found for entry \"%s\".", item.getId());
@@ -422,9 +427,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
             if (authors.endsWith(".</span>") || authors.endsWith(".</a>")) {
                 // Don't double up on periods (occurs when author names are abbreviated and reversed)
-                output(indent, authors, "<br>", true);
+                output(indent, authors, "", true);
             } else {
-                output(indent, authors, ".<br>", true);
+                output(indent, authors, ".", true);
             }
         }
     }
@@ -506,13 +511,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
         if (title == null) {
             switch (get(item, "status")) {
                 case "submitted":
-                    output("Submitted for review.<br>", true);
+                    output("Submitted for review.", true);
                     break;
                 case "accepted":
-                    output("Accepted for publication.<br>", true);
+                    output("Accepted for publication.", true);
                     break;
                 case "acceptedrev":
-                    output("Accepted for publication, pending minor revisions.<br>", true);
+                    output("Accepted for publication, pending minor revisions.", true);
                     break;
                 default:
                     throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized status: \"" + get(item, "status") + "\"");
@@ -520,13 +525,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
         } else {
             switch (get(item, "status")) {
                 case "submitted":
-                    output("Submitted to <span class=\"booktitle\">", title, "</span>.<br>", true);
+                    output("Submitted to <span class=\"booktitle\">", title, "</span>.", true);
                     break;
                 case "accepted":
-                    output("Accepted to <span class=\"booktitle\">", title, "</span>.<br>", true);
+                    output("Accepted to <span class=\"booktitle\">", title, "</span>.", true);
                     break;
                 case "acceptedrev":
-                    output("Accepted, pending minor revisions, to <span class=\"booktitle\">", title, "</span>.<br>", true);
+                    output("Accepted, pending minor revisions, to <span class=\"booktitle\">", title, "</span>.", true);
                     break;
                 default:
                     throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized status: \"" + get(item, "status") + "\"");
@@ -660,18 +665,31 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.newLine();
         }
 
+        // Abstract link 
+        if (includeAbstract(item)
+                && !settings.getGeneralSettings().isUseNewLines()
+                && settings.getHtmlSettings().getTitleTarget() != HTMLSettings.TitleLinkTarget.ABSTRACT) {
+            writeToggleLink("abstract", "Abstract");
+            out.newLine();
+        }
+
         // BibTeX link
         if (includeBibtex || includeArxivBibtex) {
             // Show / hide link
             writeToggleLink("bibtex", "BibTeX");
             out.newLine();
+        }
 
-            // Actual bibtex
-            if (includeBibtex) {
-                writeBibtexHTML(item);
-            } else {
-                writeArxivBibtexHTML(item);
-            }
+        // Actual abstract
+        if (includeAbstract(item) && !settings.getGeneralSettings().isUseNewLines()) {
+            writeAbstract(item);
+        }
+
+        // Actual BibTeX
+        if (includeBibtex) {
+            writeBibtexHTML(item);
+        } else if (includeArxivBibtex) {
+            writeArxivBibtexHTML(item);
         }
     }
 
@@ -851,5 +869,23 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         Console.warn(Console.WarningType.MISSING_REFERENCE, "Publication \"%s\" (linked in attribute \"%s\" of publication \"%s\") is not in the final list.", id, attr, item.getId());
+    }
+
+    @Override
+    protected void output(String prefix, String string, String connective, boolean newLine) throws IOException {
+        if (string != null && !string.isEmpty()) {
+            out.write(prefix);
+            out.write(processString(string));
+            out.write(connective);
+
+            if (newLine) {
+                if (settings.getGeneralSettings().isUseNewLines()) {
+                    out.write("<br>"); // Add a new line in both the web page and source file
+                    out.newLine();
+                } else {
+                    out.write(' ');
+                }
+            }
+        }
     }
 }

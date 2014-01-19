@@ -49,9 +49,9 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     public static final String DEFAULT_GAJS_LOCATION = "data/ga.js";
     public static final String DEFAULT_HEADER_LOCATION = "data/defaultHeader.html";
     public static final String DEFAULT_FOOTER_LOCATION = "data/defaultFooter.html";
+    private final static Pattern LINK_PATTERN = Pattern.compile("(href|src)\\s*=\\s*\"([^\"]*)\"");
     private HTMLBibItemWriter itemWriter;
     private int count;
-    private Pattern linkPattern = Pattern.compile("(href|src)\\s*=\\s*\"([^\"]*)\"");
 
     public HTMLPublicationListWriter(Settings settings) {
         super(settings);
@@ -159,7 +159,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                 // Copy referenced files from the data directory to the output directory
                 if (line.contains("href") || line.contains("src")) {
                     // See if this is a reference to a file in the data directory
-                    Matcher m = linkPattern.matcher(line);
+                    Matcher m = LINK_PATTERN.matcher(line);
 
                     while (m.find()) {
                         String path = m.group(2);
@@ -173,7 +173,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
     }
 
-    private void ensureReferencedFileExists(String file) throws IOException {
+    private void ensureReferencedFileExists(String file) {
         try {
             // First strip anything following a '#', as that's most likely a link inside the document
             String strippedFile = file;

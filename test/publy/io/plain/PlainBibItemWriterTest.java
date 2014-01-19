@@ -47,29 +47,15 @@ public class PlainBibItemWriterTest {
         htmlBuffer.flush();
 
         String output = htmlOutput.getBuffer().toString();
-        output = addPeriodAfterTitle(output, item.get("title"));
         output = output.replaceAll("<[^>]*>", "").replaceAll("&ndash;", "-");
-        output = output.replaceAll("\\s+", " ").trim(); // Reduce whitespace
+        output = output.replaceAll(" +", " ").trim(); // Reduce whitespace
 
         // Clear the output
         htmlOutput.getBuffer().delete(0, htmlOutput.getBuffer().length());
 
         return output;
     }
-
-    private static String addPeriodAfterTitle(String input, String title) {
-        int index = input.toLowerCase().indexOf(title.toLowerCase());
-
-        if (index < 0) {
-            return input;
-        } else {
-            int nextNewLine = input.indexOf("<br>", index);
-
-            StringBuilder sb = new StringBuilder(input);
-            sb.insert(nextNewLine, '.');
-            return sb.toString();
-        }
-    }
+    
     private StringWriter textOutput = new StringWriter();
     private BufferedWriter textBuffer = new BufferedWriter(textOutput);
     private PlainBibItemWriter textWriter = new PlainBibItemWriter(textBuffer, HTMLTestUtils.getBibtexSettings());
@@ -79,7 +65,7 @@ public class PlainBibItemWriterTest {
         textBuffer.flush();
 
         String output = textOutput.getBuffer().toString();
-        output = output.replaceAll("\\s+", " ").trim(); // Reduce whitespace
+        output = output.replaceAll(" +", " ").trim(); // Reduce whitespace
 
         // Clear the output
         textOutput.getBuffer().delete(0, textOutput.getBuffer().length());
@@ -143,6 +129,7 @@ public class PlainBibItemWriterTest {
 
                     assertEquals(item.toString(), expected, result);
                 } catch (Exception ex) {
+                    ex.printStackTrace();
                     fail("write threw Exception on input:\n" + item + "\nException:\n" + ex);
                 }
             }
