@@ -648,8 +648,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
         // URL link
         if (isPresent(item, "url")) {
             String link = get(item, "url");
-            writeLink(divOpened, link, "URL");
-            divOpened = true;
+
+            // Don't add this link if it points to the arxiv and the item already has an arxiv link
+            if (!(link.startsWith("http://arxiv.org/abs/") && isPresent(item, "arxiv"))) {
+                writeLink(divOpened, link, "URL");
+                divOpened = true;
+            }
         }
 
         // Other user-specified links
