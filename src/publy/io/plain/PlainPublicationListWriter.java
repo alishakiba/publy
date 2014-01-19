@@ -88,7 +88,12 @@ public class PlainPublicationListWriter extends PublicationListWriter {
             // Write the appropriate number
             if (settings.getGeneralSettings().getNumbering() != GeneralSettings.Numbering.NONE) {
                 out.write(count + ".");
-                out.newLine();
+                
+                if (settings.getGeneralSettings().isUseNewLines()) {
+                    out.newLine();
+                } else {
+                    out.write(' ');
+                }
 
                 if (settings.getGeneralSettings().isReverseNumbering()) {
                     count--;

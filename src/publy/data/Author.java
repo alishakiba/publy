@@ -151,16 +151,16 @@ public class Author {
         this.group = group;
     }
 
-    public boolean isMe(List<String> myNames, GeneralSettings.NameDisplay display, boolean reversed) {
-        for (String name : myNames) {
-            if (nameOverrides.get(NameOutputType.LATEX).equals(name) || abbreviation.equals(name) || getFormattedName(display, reversed, NameOutputType.PLAINTEXT).equals(name)) {
+    public boolean isMe(GeneralSettings gs) {
+        for (String name : gs.getMyNames()) {
+            if (nameOverrides.get(NameOutputType.LATEX).equals(name) || abbreviation.equals(name) || getFormattedName(gs.getNameDisplay(), gs.isReverseNames(), NameOutputType.PLAINTEXT).equals(name)) {
                 return true;
             }
         }
 
         return false;
     }
-
+    
     private String formatFirstName(GeneralSettings.NameDisplay display) {
         switch (display) {
             case NONE:

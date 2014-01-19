@@ -77,12 +77,12 @@ public abstract class BibItemWriter {
                     Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), item.get("author"));
                 }
             } else {
-                if (gs.isListAllAuthors() || !a.isMe(gs.getMyNames(), gs.getNameDisplay(), gs.isReverseNames())) {
+                if (gs.isListAllAuthors() || !a.isMe(gs)) {
                     authors.add(a.getFormattedName(gs.getNameDisplay(), gs.isReverseNames(), type));
                 }
             }
         }
-        
+
         // Connect these names in the proper way
         String result = formatNames(authors);
 
@@ -95,10 +95,10 @@ public abstract class BibItemWriter {
                     Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), item.get("author"));
                 }
             } else {
-                result =  "With " + result;
+                result = "With " + result;
             }
         }
-        
+
         // Add the ", editors" postfix
         if (editors && !authors.isEmpty()) {
             if (authors.size() > 1) {
@@ -107,7 +107,7 @@ public abstract class BibItemWriter {
                 result += ", editor";
             }
         }
-        
+
         return result;
     }
 
@@ -147,7 +147,7 @@ public abstract class BibItemWriter {
             return "";
         } else {
             String pages = item.get("pages");
-            
+
             if (pages.contains("-") || pages.contains("+") || pages.contains(",")) {
                 return "pages " + pages;
             } else {
@@ -243,9 +243,17 @@ public abstract class BibItemWriter {
             out.write(processString(string));
             out.write(connective);
 
-            if (newLine && settings.getGeneralSettings().isUseNewLines()) {
-                out.newLine();
+            if (newLine) {
+                newline();
             }
+        }
+    }
+
+    protected void newline() throws IOException {
+        if (settings.getGeneralSettings().isUseNewLines()) {
+            out.newLine();
+        } else {
+            out.write(' ');
         }
     }
 
@@ -460,7 +468,7 @@ public abstract class BibItemWriter {
 
         return sb.toString();
     }
-    
+
     protected String get(BibItem item, String field) {
         if (ignoredFields.contains(field)) {
             return "";
@@ -468,28 +476,28 @@ public abstract class BibItemWriter {
             return item.get(field);
         }
     }
-    
+
     protected boolean isPresent(BibItem item, String field) {
         return !ignoredFields.contains(field) && item.get(field) != null && !item.get(field).isEmpty();
     }
-    
+
     protected boolean anyPresent(BibItem item, String... fields) {
         for (String field : fields) {
             if (!ignoredFields.contains(field) && item.get(field) != null && !item.get(field).isEmpty()) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     protected boolean allPresent(BibItem item, String... fields) {
         for (String field : fields) {
             if (ignoredFields.contains(field) || item.get(field) == null || item.get(field).isEmpty()) {
                 return false;
             }
         }
-        
+
         return true;
     }
 }

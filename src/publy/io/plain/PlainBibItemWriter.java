@@ -90,7 +90,7 @@ public class PlainBibItemWriter extends BibItemWriter {
 
             if ((item.getType() == Type.PROCEEDINGS || item.getType() == Type.INPROCEEDINGS) && isPresent(item, "address")) {
                 // The year has already been written
-                out.newLine();
+                newline();
             } else {
                 output(formatDate(item), ".", true);
             }
@@ -308,8 +308,7 @@ public class PlainBibItemWriter extends BibItemWriter {
             output(", ", formatPages(item, true), "");
         }
 
-        out.write(".");
-        out.newLine();
+        output(".", true);
     }
 
     private void writeAuthors(BibItem item) throws IOException {
@@ -338,7 +337,9 @@ public class PlainBibItemWriter extends BibItemWriter {
         }
 
         // Don't add an authors line if it's just me and I just want to list co-authors
-        if (settings.getGeneralSettings().isListAllAuthors() || item.getAuthors().size() > 1) {
+        if (settings.getGeneralSettings().isListAllAuthors()
+                || item.getAuthors().size() > 1
+                || (item.getAuthors().size() == 1 && !item.getAuthors().get(0).isMe(settings.getGeneralSettings()))) {
             String authors = formatAuthors(item, useEditor, Author.NameOutputType.PLAINTEXT);
 
             if (authors.endsWith(".")) {
