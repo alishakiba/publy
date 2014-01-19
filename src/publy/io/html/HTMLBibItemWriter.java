@@ -422,7 +422,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         List<Author> authorList = (useEditor ? item.getEditors() : item.getAuthors());
 
         // Don't add an authors line if it's just me and I just want to list co-authors
-        if (settings.getGeneralSettings().isListAllAuthors() || authorList.size() > 1 || (authorList.size() == 1 && !authorList.get(0).isMe(settings.getGeneralSettings().getMyNames(), settings.getGeneralSettings().getNameDisplay(), settings.getGeneralSettings().isReverseNames()))) {
+        if (settings.getGeneralSettings().isListAllAuthors() || authorList.size() > 1 || (authorList.size() == 1 && !authorList.get(0).isMe(settings.getGeneralSettings()))) {
             String authors = formatAuthors(item, useEditor, Author.NameOutputType.LINKED_HTML);
 
             if (authors.endsWith(".</span>") || authors.endsWith(".</a>")) {
@@ -872,20 +872,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     @Override
-    protected void output(String prefix, String string, String connective, boolean newLine) throws IOException {
-        if (string != null && !string.isEmpty()) {
-            out.write(prefix);
-            out.write(processString(string));
-            out.write(connective);
-
-            if (newLine) {
-                if (settings.getGeneralSettings().isUseNewLines()) {
-                    out.write("<br>"); // Add a new line in both the web page and source file
-                    out.newLine();
-                } else {
-                    out.write(' ');
-                }
-            }
+    protected void newline() throws IOException {
+        if (settings.getGeneralSettings().isUseNewLines()) {
+            out.write("<br>"); // Add a new line in both the web page and source file
+            out.newLine();
+        } else {
+            out.write(' ');
         }
     }
 }
