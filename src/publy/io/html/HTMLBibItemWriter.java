@@ -806,10 +806,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("  eprint={" + get(item, "arxiv") + "},");
         out.newLine();
 
-        if (isPresent(item, "primaryClass")) {
-            out.write("  primaryClass={" + get(item, "primaryClass") + "},");
+        if (isPresent(item, "primaryclass")) {
+            out.write("  primaryClass={" + get(item, "primaryclass") + "},");
             out.newLine();
-            out.write(String.format("  note={\\href{http://arxiv.org/abs/%s}{arXiv:%s} [%s]},", get(item, "arxiv"), get(item, "arxiv"), get(item, "primaryClass")));
+            out.write(String.format("  note={\\href{http://arxiv.org/abs/%s}{arXiv:%s} [%s]},", get(item, "arxiv"), get(item, "arxiv"), get(item, "primaryclass")));
             out.newLine();
         } else {
             out.write(String.format("  note={\\href{http://arxiv.org/abs/%s}{arXiv:%s}},", get(item, "arxiv"), get(item, "arxiv")));

@@ -82,7 +82,7 @@ public class PostProcessorTest {
         item3.put("journal", "Journal of Examples");
         item3.put("year", "2013");
         item3.put("arxiv", "1234.1234");
-        item3.put("primaryClass", "cs.cg");
+        item3.put("primaryclass", "cs.cg");
         item3.put("--testArxiv", "1234.1234");
         item3.put("--testClass", "cs.cg");
         
@@ -138,9 +138,9 @@ public class PostProcessorTest {
         item9.put("title", "Title");
         item9.put("journal", "Journal of Examples");
         item9.put("year", "2013");
-        item9.put("archivePrefix", "arXiv");
+        item9.put("archiveprefix", "arXiv");
         item9.put("eprint", "0707.3168");
-        item9.put("primaryClass", "hep-th");
+        item9.put("primaryclass", "hep-th");
         item9.put("--testArxiv", "0707.3168");
         item9.put("--testClass", "hep-th");
         
@@ -149,9 +149,9 @@ public class PostProcessorTest {
         item10.put("title", "Title");
         item10.put("journal", "Journal of Examples");
         item10.put("year", "2013");
-        item10.put("archivePrefix", "Snarxiv"); // NOT arxiv
+        item10.put("archiveprefix", "Snarxiv"); // NOT arxiv
         item10.put("eprint", "0707.3168");
-        item10.put("primaryClass", "hep-th");
+        item10.put("primaryclass", "hep-th");
         item10.put("--testArxiv", "");
         item10.put("--testClass", "hep-th");
         
@@ -173,12 +173,30 @@ public class PostProcessorTest {
         item12.put("--testArxiv", "1110.6473");
         item12.put("--testClass", "");
         
-        BibItem items[] = new BibItem[] {item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12};
+        BibItem item13 = new BibItem("article", "test");
+        item13.put("author", "Thor, Au");
+        item13.put("title", "Title");
+        item13.put("journal", "Journal of Examples");
+        item13.put("year", "2013");
+        item13.put("eprint", "http://arxiv.org/abs/1110.6473");
+        item13.put("--testArxiv", "1110.6473");
+        item13.put("--testClass", "");
+        
+        BibItem item14 = new BibItem("article", "test");
+        item14.put("author", "Thor, Au");
+        item14.put("title", "Title");
+        item14.put("journal", "Journal of Examples");
+        item14.put("year", "2013");
+        item14.put("eprint", "http://test.org/abs/1110.6473"); // Not arxiv
+        item14.put("--testArxiv", "");
+        item14.put("--testClass", "");
+        
+        BibItem items[] = new BibItem[] {item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item14};
         
         for (BibItem item : items) {
             PostProcessor.detectArxiv(item);
             assertEquals("arXiv mismatch: " + item, item.get("--testArxiv"), (item.get("arxiv") == null ? "" : item.get("arxiv")));
-            assertEquals("class mismatch: " + item, item.get("--testClass"), (item.get("primaryClass") == null ? "" : item.get("primaryClass")));
+            assertEquals("class mismatch: " + item, item.get("--testClass"), (item.get("primaryclass") == null ? "" : item.get("primaryclass")));
         }
     }
     
