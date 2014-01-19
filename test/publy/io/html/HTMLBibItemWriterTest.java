@@ -64,24 +64,4 @@ public class HTMLBibItemWriterTest {
             }
         }
     }
-    
-    @Test
-    public void testWriteNewlines() {
-        System.out.println("writeNewlines");
-
-        for (Type type : Type.values()) {
-            if (type == Type.ONLINE || type == Type.PATENT) {
-                continue;
-            }
-
-            try (InputStream in = HTMLBibItemWriterTest.class.getResource(type + "_test.properties").openStream()) {
-                Properties props = new Properties();
-                props.load(in);
-                HTMLTestUtils.testWithDefaultValues(type, props);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                fail("IOException when reading properties file.");
-            }
-        }
-    }
 }
