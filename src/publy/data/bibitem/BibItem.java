@@ -30,7 +30,6 @@ public class BibItem {
     private Type type;
     private String originalType;
     private HashMap<String, String> values;
-    private HashMap<String, String> shortValues;
     private List<Author> authors;
     private List<Author> editors;
 
@@ -40,7 +39,6 @@ public class BibItem {
         this.id = id;
 
         values = new LinkedHashMap<>();
-        shortValues = new LinkedHashMap<>();
         authors = new ArrayList<>();
         editors = new ArrayList<>();
 
@@ -51,7 +49,6 @@ public class BibItem {
         switch (originalType) {
             case "mastersthesis":
                 values.put("type", "Master's thesis");
-                // TODO: set short values too?
                 break;
             case "phdthesis":
                 values.put("type", "PhD thesis");
@@ -80,20 +77,6 @@ public class BibItem {
 
     public void put(String attr, String value) {
         values.put(attr, value);
-    }
-
-    public String getShort(String attr) {
-        String shortValue = shortValues.get(attr);
-
-        if (shortValue == null) {
-            return values.get(attr);
-        } else {
-            return shortValue;
-        }
-    }
-
-    public void putShort(String attr, String value) {
-        shortValues.put(attr, value);
     }
 
     public Set<String> getFields() {
