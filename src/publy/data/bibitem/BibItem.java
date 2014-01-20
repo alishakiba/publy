@@ -84,13 +84,10 @@ public class BibItem {
     }
 
     public boolean checkMandatoryFields() {
-        boolean complete = true;
         List<String> missingFields = null;
 
         for (String field : FieldData.getMandatoryFields(type)) {
             if (!anyNonEmpty(field.split(";"))) {
-                complete = false;
-
                 if (missingFields == null) {
                     missingFields = new ArrayList<>();
                 }
@@ -100,7 +97,7 @@ public class BibItem {
         }
 
         // Nice error
-        if (!complete) {
+        if (missingFields != null) {
             if (missingFields.size() == 1) {
                 Console.error("Item \"%s\" is missing mandatory field \"%s\".", id, missingFields.get(0));
             } else {
@@ -126,7 +123,7 @@ public class BibItem {
             }
         }
 
-        return complete;
+        return missingFields != null;
     }
 
     public List<Author> getAuthors() {
