@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ public enum PublicationType {
         } else if (type == NONE) {
             return false;
         } else {
-            if (item.anyNonEmpty("status")) {
+            if (item.get("status") != null && !item.get("status").isEmpty()) {
                 if (type == PUBLISHED) {
                     return false;
                 } else {
@@ -64,7 +64,7 @@ public enum PublicationType {
                             return false;
                         } else {
                             // Type is ARXIV
-                            return item.anyNonEmpty("arxiv");
+                            return item.get("arxiv") != null && !item.get("arxiv").isEmpty();
                         }
                     }
                 }

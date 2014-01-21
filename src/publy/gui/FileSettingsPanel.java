@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,19 +30,21 @@ import publy.io.ResourceLocator;
  */
 public class FileSettingsPanel extends javax.swing.JPanel {
 
-    private FileSettings settings;
+    private final FileSettings settings;
 
     /**
      * Empty constructor, for use in the NetBeans GUI editor.
      */
     public FileSettingsPanel() {
         // Don't initialize settings, as NetBeans will error on ResourceLocator
+        settings = null;
         initComponents();
         applyStyles();
     }
 
     /**
      * Creates new form FileSettingsPanel
+     * @param settings
      */
     public FileSettingsPanel(FileSettings settings) {
         this.settings = settings;

@@ -13,7 +13,7 @@ body {
     margin: 0;
 }
 
-.booktitle {
+.booktitle, .journal {
     font-style: italic;
 }
 
@@ -27,4 +27,8 @@ body {
 
 .links {
     display: inline-block;
+}
+
+button {
+    margin: 0;
 }

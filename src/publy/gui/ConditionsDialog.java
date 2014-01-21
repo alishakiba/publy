@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import publy.Console;
 import publy.data.bibitem.BibItem;
 import publy.data.category.OutputCategory;
 import publy.data.category.conditions.FieldCondition;
@@ -44,11 +43,13 @@ import publy.io.BibTeXParser;
  */
 public class ConditionsDialog extends javax.swing.JDialog {
 
-    private OutputCategory category;
-    private TypeCondition typeCondition;
+    private final OutputCategory category;
+    private final TypeCondition typeCondition;
 
     /**
      * Creates new form ConditionsDialog
+     * @param parent
+     * @param category
      */
     public ConditionsDialog(java.awt.Frame parent, OutputCategory category) {
         super(parent, true);
@@ -79,7 +80,7 @@ public class ConditionsDialog extends javax.swing.JDialog {
             typeLabel.setText(typeLabel.getText().substring(0, 1).toUpperCase() + typeLabel.getText().substring(1));
         }
 
-        typeTextField.setText(makeString(typeCondition.getTypes()));
+        typeTextField.setText(UIStyles.convertToDisplayString(typeCondition.getTypes()));
 
         // Field conditions
         for (int i = 0; i < category.getFieldConditions().size(); i++) {
@@ -97,23 +98,6 @@ public class ConditionsDialog extends javax.swing.JDialog {
         }
 
         fieldConditionsPanel.revalidate();
-    }
-
-    private String makeString(List<String> values) {
-        StringBuilder text = new StringBuilder();
-        boolean first = true;
-
-        for (String val : values) {
-            if (first) {
-                first = false;
-            } else {
-                text.append(';');
-            }
-
-            text.append(val);
-        }
-
-        return text.toString();
     }
 
     private List<FieldCondition> getFieldConditions() {
@@ -194,7 +178,7 @@ public class ConditionsDialog extends javax.swing.JDialog {
 
         fieldConditionsScrollPane.setViewportView(fieldConditionsPanel);
 
-        cancelButton.setText("Cancel");
+        cancelButton.setText("Don't save");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
@@ -251,7 +235,7 @@ public class ConditionsDialog extends javax.swing.JDialog {
                                 .addComponent(typeTextField))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(testButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 189, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
                                 .addComponent(okButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cancelButton)))))
@@ -289,7 +273,7 @@ public class ConditionsDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void typeTextFieldTextChanged(DocumentEvent e) {
-        typeCondition.setTypes(typeTextField.getText().split(";"));
+        typeCondition.setTypes(UIStyles.parseDisplayString(typeTextField.getText()));
     }
 
     private void addConditionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addConditionButtonActionPerformed

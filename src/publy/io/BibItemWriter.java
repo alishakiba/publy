@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,12 @@ package publy.io;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import publy.Console;
-import publy.data.bibitem.Article;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
-import publy.data.bibitem.Book;
-import publy.data.bibitem.InCollection;
-import publy.data.bibitem.InProceedings;
-import publy.data.bibitem.InvitedTalk;
-import publy.data.bibitem.MastersThesis;
-import publy.data.bibitem.PhDThesis;
-import publy.data.bibitem.Unpublished;
 import publy.data.settings.GeneralSettings;
 import publy.data.settings.Settings;
 
@@ -41,58 +35,23 @@ public abstract class BibItemWriter {
 
     protected BufferedWriter out;
     protected Settings settings;
+    protected Set<String> ignoredFields;
 
     public BibItemWriter(BufferedWriter out, Settings settings) {
         this.out = out;
         this.settings = settings;
+        ignoredFields = Collections.<String>emptySet();
     }
 
-    public void write(BibItem item) throws IOException {
-        switch (item.getType()) {
-            case "article":
-                writeArticle((Article) item);
-                break;
-            case "book":
-                writeBook((Book) item);
-                break;
-            case "inproceedings":
-                writeInProceedings((InProceedings) item);
-                break;
-            case "mastersthesis":
-                writeMastersThesis((MastersThesis) item);
-                break;
-            case "phdthesis":
-                writePhDThesis((PhDThesis) item);
-                break;
-            case "incollection":
-                writeInCollection((InCollection) item);
-                break;
-            case "talk":
-                writeInvitedTalk((InvitedTalk) item);
-                break;
-            case "unpublished":
-                writeUnpublished((Unpublished) item);
-                break;
-            default:
-                throw new AssertionError("Unrecognized BibItem type: " + item.getType());
-        }
+    public abstract void write(BibItem item) throws IOException;
+
+    public Set<String> getIgnoredFields() {
+        return ignoredFields;
     }
 
-    protected abstract void writeArticle(Article item) throws IOException;
-
-    protected abstract void writeBook(Book item) throws IOException;
-
-    protected abstract void writeInProceedings(InProceedings item) throws IOException;
-
-    protected abstract void writeMastersThesis(MastersThesis item) throws IOException;
-
-    protected abstract void writePhDThesis(PhDThesis item) throws IOException;
-
-    protected abstract void writeInCollection(InCollection item) throws IOException;
-
-    protected abstract void writeInvitedTalk(InvitedTalk item) throws IOException;
-
-    protected abstract void writeUnpublished(Unpublished item) throws IOException;
+    public void setIgnoredFields(Set<String> ignoredFields) {
+        this.ignoredFields = ignoredFields;
+    }
 
     protected String formatTitle(BibItem item) {
         String title = item.get("title");
@@ -100,42 +59,56 @@ public abstract class BibItemWriter {
         if (title == null || title.isEmpty()) {
             return "";
         } else {
-            return changeCaseT(title);
+            return toTitleCase(title);
         }
     }
 
-    protected String formatAuthors(BibItem item) {
-        String author = item.get("author");
-        
-        if (author == null) {
-            Console.error("No authors found for entry \"%s\".", item.getId());
-            return "";
-        } else {
-            List<String> authorLinks = new ArrayList<>(item.getAuthors().size());
-            GeneralSettings gs = settings.getGeneralSettings();
+    protected String formatAuthors(BibItem item, boolean editors, Author.NameOutputType type) {
+        List<Author> authorList = (editors ? item.getEditors() : item.getAuthors());
+        List<String> authors = new ArrayList<>(authorList.size());
+        GeneralSettings gs = settings.getGeneralSettings();
 
-            for (Author a : item.getAuthors()) {
-                if (a == null) {
-                    Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), author);
+        // Collect the formatted names of all authors that need to be printed
+        for (Author a : authorList) {
+            if (a == null) {
+                if (editors) {
+                    Console.error("Null editor found for entry \"%s\".%n(Editors: \"%s\")", item.getId(), item.get("editor"));
                 } else {
-                    if (gs.listAllAuthors() || !a.isMe(gs.getMyNames(), gs.getNameDisplay(), gs.reverseNames())) {
-                        authorLinks.add(a.getFormattedName(gs.getNameDisplay(), gs.reverseNames()));
-                    }
+                    Console.error("Null author found for entry \"%s\".%n(Authors: \"%s\")", item.getId(), item.get("author"));
                 }
-            }
-
-            if (gs.listAllAuthors()) {
-                return formatNames(authorLinks);
             } else {
-                if (authorLinks.size() == item.getAuthors().size()) {
-                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), author);
-
-                    return formatNames(authorLinks);
-                } else {
-                    return "With " + formatNames(authorLinks);
+                if (gs.isListAllAuthors() || !a.isMe(gs)) {
+                    authors.add(a.getFormattedName(gs.getNameDisplay(), gs.isReverseNames(), type));
                 }
             }
         }
+
+        // Connect these names in the proper way
+        String result = formatNames(authors);
+
+        // Add "With" if necessary
+        if (!gs.isListAllAuthors()) {
+            if (authors.size() == authorList.size()) {
+                if (editors) {
+                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the editors of entry \"%s\" match your name.%n(Editors: \"%s\")", item.getId(), item.get("editor"));
+                } else {
+                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), item.get("author"));
+                }
+            } else {
+                result = "With " + result;
+            }
+        }
+
+        // Add the ", editors" postfix
+        if (editors && !authors.isEmpty()) {
+            if (authors.size() > 1) {
+                result += ", editors";
+            } else {
+                result += ", editor";
+            }
+        }
+
+        return result;
     }
 
     protected String formatNames(List<String> names) {
@@ -170,11 +143,11 @@ public abstract class BibItemWriter {
     }
 
     protected String formatPages(BibItem item) {
-        String pages = item.get("pages");
-
-        if (pages == null || pages.isEmpty()) {
+        if (!isPresent(item, "pages")) {
             return "";
         } else {
+            String pages = item.get("pages");
+
             if (pages.contains("-") || pages.contains("+") || pages.contains(",")) {
                 return "pages " + pages;
             } else {
@@ -185,20 +158,62 @@ public abstract class BibItemWriter {
 
     protected String formatDate(BibItem item) {
         String year = item.get("year");
-        String month = item.get("month");
 
         if (year == null || year.isEmpty()) {
-            if (month == null || month.isEmpty()) {
+            if (!isPresent(item, "month")) {
                 return "";
             } else {
-                return month;
+                return formatMonth(item.get("month"));
             }
         } else {
-            if (month == null || month.isEmpty()) {
+            if (!isPresent(item, "month")) {
                 return year;
             } else {
-                return month + " " + year;
+                return formatMonth(item.get("month")) + " " + year;
             }
+        }
+    }
+
+    protected String formatMonth(String month) {
+        switch (month) {
+            case "jan":
+            case "1":
+                return "January";
+            case "feb":
+            case "2":
+                return "February";
+            case "mar":
+            case "3":
+                return "March";
+            case "apr":
+            case "4":
+                return "April";
+            case "may":
+            case "5":
+                return "May";
+            case "jun":
+            case "6":
+                return "June";
+            case "jul":
+            case "7":
+                return "July";
+            case "aug":
+            case "8":
+                return "August";
+            case "sep":
+            case "9":
+                return "September";
+            case "oct":
+            case "10":
+                return "October";
+            case "nov":
+            case "11":
+                return "November";
+            case "dec":
+            case "12":
+                return "December";
+            default:
+                return month;
         }
     }
 
@@ -206,16 +221,20 @@ public abstract class BibItemWriter {
         output("", string, "", false);
     }
 
+    protected void output(String string, boolean newLine) throws IOException {
+        output("", string, "", newLine);
+    }
+
     protected void output(String string, String connective) throws IOException {
         output("", string, connective, false);
     }
 
-    protected void output(String prefix, String string, String connective) throws IOException {
-        output(prefix, string, connective, false);
-    }
-
     protected void output(String string, String connective, boolean newLine) throws IOException {
         output("", string, connective, newLine);
+    }
+
+    protected void output(String prefix, String string, String connective) throws IOException {
+        output(prefix, string, connective, false);
     }
 
     protected void output(String prefix, String string, String connective, boolean newLine) throws IOException {
@@ -225,16 +244,51 @@ public abstract class BibItemWriter {
             out.write(connective);
 
             if (newLine) {
-                out.newLine();
+                newline();
             }
         }
     }
-    
-    protected String processString(String string) {
-        return removeBraces(LatexToUnicode.convertToUnicode(string));
+
+    protected void newline() throws IOException {
+        if (settings.getGeneralSettings().isUseNewLines()) {
+            out.newLine();
+        } else {
+            out.write(' ');
+        }
     }
 
-    protected String changeCaseT(String s) {
+    protected String processString(String string) {
+        return changeQuotes(removeBraces(LatexToUnicode.convertToUnicode(string)));
+    }
+
+    /**
+     * Converts the given string to title case. The first character is set in
+     * upper case, while the remaining characters are set in lower case.
+     * Characters between braces remain untouched.
+     *
+     * @param s
+     * @return
+     */
+    protected String toTitleCase(String s) {
+        return changeCase(s, true);
+    }
+
+    /**
+     * Converts the given string to lower case. Characters between braces remain
+     * untouched.
+     *
+     * @param s
+     * @return
+     */
+    protected String toLowerCase(String s) {
+        return changeCase(s, false);
+    }
+
+    private String changeCase(String s, boolean title) {
+        if (s == null || s.isEmpty()) {
+            return "";
+        }
+
         StringBuilder sb = new StringBuilder();
         int level = 0;
         boolean first = true;
@@ -261,17 +315,16 @@ public abstract class BibItemWriter {
                         break;
                     default:
                         if (level == 0) {
-                            if (first) {
+                            if (first && title) {
                                 sb.append(Character.toUpperCase(c));
-                                first = false;
                             } else {
                                 sb.append(Character.toLowerCase(c));
                             }
                         } else {
                             sb.append(c);
-                            first = false;
                         }
 
+                        first = false;
                         break;
                 }
             }
@@ -344,5 +397,107 @@ public abstract class BibItemWriter {
         }
 
         return result.toString();
+    }
+
+    private enum ChangeQuotesState {
+
+        DEFAULT, IN_TAG, AFTER_QUOTE, AFTER_GRAVE;
+    }
+
+    protected String changeQuotes(String string) {
+        StringBuilder sb = new StringBuilder(string.length());
+        ChangeQuotesState state = ChangeQuotesState.DEFAULT;
+
+        for (char c : string.toCharArray()) {
+            if (state == ChangeQuotesState.AFTER_GRAVE) {
+                // Single or double quote?
+                if (c == '`') {
+                    // Double `` -> U+201C (left double quotation mark)
+                    sb.append('\u201C');
+                    // state is reset at the end of the loop
+                } else {
+                    // Single ` -> U+2018 (left single quotation mark)
+                    sb.append('\u2018');
+                    state = ChangeQuotesState.DEFAULT; // Reset state here so current char gets processed regularly
+                }
+            } else if (state == ChangeQuotesState.AFTER_QUOTE) {
+                // Single or double quote?
+                if (c == '\'') {
+                    // Double '' -> U+201D (right double quotation mark)
+                    sb.append('\u201D');
+                    // state is reset at the end of the loop
+                } else {
+                    // Single ' -> U+2019 (right single quotation mark)
+                    sb.append('\u2019');
+                    state = ChangeQuotesState.DEFAULT; // Reset state here so current char gets processed regularly
+                }
+            }
+
+            if (state == ChangeQuotesState.DEFAULT) {
+                // Regular case
+                switch (c) {
+                    case '<': // HTML tag open
+                        state = ChangeQuotesState.IN_TAG;
+                        sb.append(c);
+                        break;
+                    case '"': // Single " -> U+201D (right double quotation mark)
+                        sb.append('\u201D');
+                        break;
+                    case '`': // Single or double `
+                        state = ChangeQuotesState.AFTER_GRAVE;
+                        break;
+                    case '\'': // Single or double '
+                        state = ChangeQuotesState.AFTER_QUOTE;
+                        break;
+                    default:
+                        sb.append(c);
+                        break;
+                }
+            } else if (state == ChangeQuotesState.IN_TAG) {
+                // In an HTML tag
+                if (c == '>') {
+                    // Close the tag
+                    state = ChangeQuotesState.DEFAULT;
+                }
+
+                sb.append(c);
+            } else {
+                state = ChangeQuotesState.DEFAULT;
+            }
+        }
+
+        return sb.toString();
+    }
+
+    protected String get(BibItem item, String field) {
+        if (ignoredFields.contains(field)) {
+            return "";
+        } else {
+            return item.get(field);
+        }
+    }
+
+    protected boolean isPresent(BibItem item, String field) {
+        return !ignoredFields.contains(field) && item.get(field) != null && !item.get(field).isEmpty();
+    }
+
+    protected boolean anyPresent(BibItem item, String... fields) {
+        for (String field : fields) {
+            if (!ignoredFields.contains(field) && item.get(field) != null && !item.get(field).isEmpty()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected boolean allPresent(BibItem item, String... fields) {
+        for (String field : fields) {
+            if (ignoredFields.contains(field) || item.get(field) == null || item.get(field).isEmpty()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

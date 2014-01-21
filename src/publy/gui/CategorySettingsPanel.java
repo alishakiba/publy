@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import publy.data.settings.CategorySettings;
  */
 public class CategorySettingsPanel extends javax.swing.JPanel {
 
-    private CategorySettings settings;
+    private final CategorySettings settings;
     private DefaultListModel<OutputCategory> inListModel;
     private DefaultListModel<OutputCategory> outListModel;
     private OutputCategory selectedCategory = null;
@@ -58,7 +58,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     }
 
     private void applyStyles() {
-        UIStyles.applyHeaderStyle(catSelectionHeader, nameHeader, noteHeader, filtersHeader);
+        UIStyles.applyHeaderStyle(catSelectionHeader, activeHeader, inactiveHeader, nameHeader, noteHeader, ignoredFieldsHeader, filtersHeader);
         UIStyles.applyHeaderStyle((TitledBorder) catPanel.getBorder());
     }
 
@@ -107,6 +107,9 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         filtersHeader = new javax.swing.JLabel();
         filtersSeparator = new javax.swing.JSeparator();
         editFiltersButton = new javax.swing.JButton();
+        ignoredFieldsHeader = new javax.swing.JLabel();
+        ignoredFieldsSeparator = new javax.swing.JSeparator();
+        ignoredFieldsTextField = new javax.swing.JTextField();
         catSelectionHeader = new javax.swing.JLabel();
         catSeparator = new javax.swing.JSeparator();
         inButton = new javax.swing.JButton();
@@ -118,6 +121,8 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         outCatList = new javax.swing.JList<OutputCategory>();
         newCategoryButton = new javax.swing.JButton();
         deleteCategoryButton = new javax.swing.JButton();
+        activeHeader = new javax.swing.JLabel();
+        inactiveHeader = new javax.swing.JLabel();
 
         inCatList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -193,6 +198,21 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        ignoredFieldsHeader.setText("Ignored Fields");
+
+        ignoredFieldsTextField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                ignoredFieldsTextFieldTextChanged(e);
+            }
+            public void removeUpdate(DocumentEvent e) {
+                ignoredFieldsTextFieldTextChanged(e);
+            }
+            public void changedUpdate(DocumentEvent e) {
+                //Plain text components do not fire these events
+            }
+        });
+        ignoredFieldsTextField.setEnabled(false);
+
         javax.swing.GroupLayout catPanelLayout = new javax.swing.GroupLayout(catPanel);
         catPanel.setLayout(catPanelLayout);
         catPanelLayout.setHorizontalGroup(
@@ -221,7 +241,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                                         .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(shortNameTextField)
                                             .addComponent(fullNameTextField)))
-                                    .addComponent(noteTextField)))))
+                                    .addComponent(noteTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)))))
                     .addGroup(catPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -232,7 +252,17 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                             .addGroup(catPanelLayout.createSequentialGroup()
                                 .addComponent(filtersHeader)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(filtersSeparator)))))
+                                .addComponent(filtersSeparator))))
+                    .addGroup(catPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(catPanelLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(ignoredFieldsTextField))
+                            .addGroup(catPanelLayout.createSequentialGroup()
+                                .addComponent(ignoredFieldsHeader)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(ignoredFieldsSeparator)))))
                 .addContainerGap())
         );
         catPanelLayout.setVerticalGroup(
@@ -258,11 +288,17 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                 .addComponent(noteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(ignoredFieldsHeader)
+                    .addComponent(ignoredFieldsSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ignoredFieldsTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(catPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(filtersHeader)
                     .addComponent(filtersSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(editFiltersButton)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         catSelectionHeader.setText("Category selection");
@@ -337,6 +373,10 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        activeHeader.setText("Active");
+
+        inactiveHeader.setText("Inactive");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -345,27 +385,33 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(inCatScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(outButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(upButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(downButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(catButtonSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
-                            .addComponent(inButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(outCatScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(deleteCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(newCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, 0))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(catSelectionHeader)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(catSeparator))
-                    .addComponent(catPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(catPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(activeHeader)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(inactiveHeader)
+                                .addGap(49, 49, 49))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(inCatScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(outButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(upButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(downButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(catButtonSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                                    .addComponent(inButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(outCatScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(deleteCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addComponent(newCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap())
         );
 
@@ -378,6 +424,10 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(catSelectionHeader)
                     .addComponent(catSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(activeHeader)
+                    .addComponent(inactiveHeader))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -396,7 +446,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(downButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(inCatScrollPane)
-                        .addComponent(outCatScrollPane)))
+                        .addComponent(outCatScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(catPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -409,6 +459,12 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     private void noteTextFieldTextChanged(DocumentEvent evt) {
         if (selectedCategory != null) {
             selectedCategory.setHtmlNote(noteTextField.getText());
+        }
+    }
+    
+    private void ignoredFieldsTextFieldTextChanged(DocumentEvent evt) {
+        if (selectedCategory != null) {
+            selectedCategory.setIgnoredFields(UIStyles.parseDisplayString(ignoredFieldsTextField.getText()));
         }
     }
 
@@ -441,6 +497,10 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         // Note
         noteTextField.setText(active ? c.getHtmlNote() : "");
         noteTextField.setEnabled(active);
+        
+        // Ignored fields
+        ignoredFieldsTextField.setText(active ? UIStyles.convertToDisplayString(c.getIgnoredFields()) : "");
+        ignoredFieldsTextField.setEnabled(active);
 
         // Filters
         editFiltersButton.setEnabled(active);
@@ -600,6 +660,7 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
         cd.setVisible(true);
     }//GEN-LAST:event_editFiltersButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel activeHeader;
     private javax.swing.JSeparator catButtonSeparator;
     private javax.swing.JPanel catPanel;
     private javax.swing.JLabel catSelectionHeader;
@@ -611,9 +672,13 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
     private javax.swing.JSeparator filtersSeparator;
     private javax.swing.JLabel fullNameLabel;
     private javax.swing.JTextField fullNameTextField;
+    private javax.swing.JLabel ignoredFieldsHeader;
+    private javax.swing.JSeparator ignoredFieldsSeparator;
+    private javax.swing.JTextField ignoredFieldsTextField;
     private javax.swing.JButton inButton;
     private javax.swing.JList<OutputCategory> inCatList;
     private javax.swing.JScrollPane inCatScrollPane;
+    private javax.swing.JLabel inactiveHeader;
     private javax.swing.JLabel nameHeader;
     private javax.swing.JSeparator nameSeparator;
     private javax.swing.JButton newCategoryButton;

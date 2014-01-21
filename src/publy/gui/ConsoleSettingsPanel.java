@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import publy.data.settings.ConsoleSettings;
  */
 public class ConsoleSettingsPanel extends javax.swing.JPanel {
 
-    private ConsoleSettings settings;
+    private final ConsoleSettings settings;
     
     /**
      * Empty constructor, for use in the NetBeans GUI editor.
@@ -38,6 +38,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form FileSettingsPanel
+     * @param settings
      */
     public ConsoleSettingsPanel(ConsoleSettings settings) {
         this.settings = settings;
@@ -56,6 +57,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
         warnCheckBox.setSelected(settings.isShowWarnings());
         missingReferencesCheckBox.setSelected(settings.isWarnMissingReferences());
         notAuthorCheckBox.setSelected(settings.isWarnNotAuthor());
+        noCategoryCheckBox.setSelected(settings.isWarnNoCategoryForItem());
         
         // Progress
         progressCheckBox.setSelected(settings.isShowLogs());
@@ -67,6 +69,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
     private void updateEnabledStates() {
         missingReferencesCheckBox.setEnabled(settings.isShowWarnings());
         notAuthorCheckBox.setEnabled(settings.isShowWarnings());
+        noCategoryCheckBox.setEnabled(settings.isShowWarnings());
     }
     
     /**
@@ -89,17 +92,18 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
         debugHeader = new javax.swing.JLabel();
         debugSeparator = new javax.swing.JSeparator();
         stackTraceCheckBox = new javax.swing.JCheckBox();
+        noCategoryCheckBox = new javax.swing.JCheckBox();
 
         warnHeader.setText("Warnings");
 
-        warnCheckBox.setText("Show warnings");
+        warnCheckBox.setText("Show warnings:");
         warnCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 warnCheckBoxActionPerformed(evt);
             }
         });
 
-        missingReferencesCheckBox.setText("Warn when a referenced file does not exist");
+        missingReferencesCheckBox.setText("When a referenced file or publication does not exist");
         missingReferencesCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 missingReferencesCheckBoxActionPerformed(evt);
@@ -108,7 +112,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
 
         progressHeader.setText("Progress");
 
-        notAuthorCheckBox.setText("Warn when a paper was not written by you");
+        notAuthorCheckBox.setText("When a paper was not written by you");
         notAuthorCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 notAuthorCheckBoxActionPerformed(evt);
@@ -131,6 +135,13 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        noCategoryCheckBox.setText("When a publication does not fit any category");
+        noCategoryCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                noCategoryCheckBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -149,8 +160,8 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(missingReferencesCheckBox)
                                     .addComponent(warnCheckBox)
-                                    .addComponent(notAuthorCheckBox))
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(notAuthorCheckBox)
+                                    .addComponent(noCategoryCheckBox)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(warnHeader)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -185,6 +196,8 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
                 .addComponent(missingReferencesCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(notAuthorCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(noCategoryCheckBox)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(progressHeader)
@@ -222,10 +235,15 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
         settings.setShowStackTraces(stackTraceCheckBox.isSelected());
     }//GEN-LAST:event_stackTraceCheckBoxActionPerformed
 
+    private void noCategoryCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noCategoryCheckBoxActionPerformed
+        settings.setWarnNoCategoryForItem(noCategoryCheckBox.isSelected());
+    }//GEN-LAST:event_noCategoryCheckBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel debugHeader;
     private javax.swing.JSeparator debugSeparator;
     private javax.swing.JCheckBox missingReferencesCheckBox;
+    private javax.swing.JCheckBox noCategoryCheckBox;
     private javax.swing.JCheckBox notAuthorCheckBox;
     private javax.swing.JCheckBox progressCheckBox;
     private javax.swing.JLabel progressHeader;

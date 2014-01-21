@@ -40,12 +40,14 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="invertCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="fieldTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="operationComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="valueTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="deleteButton" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="invertCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="fieldTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="operationComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="valueTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
           </Group>
