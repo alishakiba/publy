@@ -344,12 +344,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
             output("<h3 class=\"title abstract-toggle\">", title, "</h3>");
         } else if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && includePaper(item)) {
             try {
-                String href = (new URI(null, null, get(item, "paper"), null)).toString();
+                String href = (new URI(null, null, get(item, "file"), null)).toString();
 
                 out.write("<a href=\"" + href + "\">");
                 output("<h3 class=\"title\">", title, "</h3>");
                 out.write("</a>");
-                checkExistance(get(item, "paper"), "paper", item);
+                checkExistance(get(item, "file"), "file", item);
             } catch (URISyntaxException ex) {
                 Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
                 output("<h3 class=\"title\">", title, "</h3>");
@@ -586,7 +586,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         // Paper link
         if (includePaper(item) && settings.getHtmlSettings().getTitleTarget() != HTMLSettings.TitleLinkTarget.PAPER) {
             try {
-                String link = (new URI(null, null, get(item, "paper"), null)).toString();
+                String link = (new URI(null, null, get(item, "file"), null)).toString();
                 String text;
 
                 // Use the extension as link text, or "Paper" if no extension is found
@@ -606,7 +606,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 writeLink(divOpened, link, text);
                 divOpened = true;
 
-                checkExistance(get(item, "paper"), "paper", item);
+                checkExistance(get(item, "file"), "file", item);
             } catch (URISyntaxException ex) {
                 Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
             }
@@ -846,7 +846,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private boolean includePaper(BibItem item) {
-        return isPresent(item, "paper") && settings.getHtmlSettings().getIncludePaper().matches(item);
+        return isPresent(item, "file") && settings.getHtmlSettings().getIncludePaper().matches(item);
     }
 
     private void checkExistance(String path, String attr, BibItem item) {
