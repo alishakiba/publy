@@ -83,7 +83,7 @@ public class AboutPanel extends javax.swing.JPanel {
 
         legalHeader.setText("Legal stuff");
 
-        copyrightLabel.setText("Copyright © 2013 Sander Verdonschot.");
+        copyrightLabel.setText("Copyright © 2013-2014 Sander Verdonschot.");
 
         licensedLabel.setText("Licensed under the ");
 
@@ -142,21 +142,25 @@ public class AboutPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(versionHeader)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(versionSeparator))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(legalHeader)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(legalSeparator))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(attributionHeader)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(attributionSeparator))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(licensedLabel)
                                         .addGap(0, 0, 0)
                                         .addComponent(licenseLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(copyrightLabel))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(versionHeader)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(versionSeparator))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(copyrightLabel)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(checkLabel)
                                         .addGap(0, 0, 0)
@@ -167,15 +171,7 @@ public class AboutPanel extends javax.swing.JPanel {
                                         .addComponent(runningVersionLabel)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(versionLabel)))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(legalHeader)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(legalSeparator))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(attributionHeader)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(attributionSeparator)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
