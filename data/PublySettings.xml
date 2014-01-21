@@ -136,7 +136,7 @@
     <includeAbstract>ALL</includeAbstract>
     <includeBibtex>ARXIV</includeBibtex>
     <includePaper>ARXIV</includePaper>
-    <titleTarget>PAPER</titleTarget>
+    <titleTarget>NONE</titleTarget>
     <presentedText><![CDATA[]]></presentedText>
     <googleAnalyticsUser><![CDATA[]]></googleAnalyticsUser>
   </htmlSettings>
