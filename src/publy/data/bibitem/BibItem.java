@@ -123,7 +123,7 @@ public class BibItem {
             }
         }
 
-        return missingFields != null;
+        return missingFields == null;
     }
 
     public List<Author> getAuthors() {
