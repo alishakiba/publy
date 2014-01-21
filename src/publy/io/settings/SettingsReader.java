@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,26 +60,12 @@ public class SettingsReader extends DefaultHandler {
     private Condition currentCondition;
     private String activeCategories;
 
-    //// DEBUG
-    public static void main(String[] args) throws Exception {
-        parseSettings();
-    }
-    //// DEBUG
-
     private SettingsReader(Settings settings) {
         this.settings = settings;
     }
 
     public static Settings parseSettings() throws ParserConfigurationException, SAXException, IOException {
-        return parseSettings(ResourceLocator.getFullPath(DEFAULT_SETTINGS_LOCATION));
-    }
-
-    public static Settings parseSettings(Path settingsLocation) throws ParserConfigurationException, SAXException, IOException {
         Settings settings = null;
-
-        if (settingsLocation != null) {
-            settingsFile = settingsLocation;
-        }
 
         if (Files.exists(settingsFile)) {
             settings = new Settings();
@@ -87,6 +73,10 @@ public class SettingsReader extends DefaultHandler {
         }
 
         return settings;
+    }
+
+    public static void setSettingsFile(Path settingsFile) {
+        SettingsReader.settingsFile = settingsFile;
     }
 
     public static Path getSettingsFile() {
@@ -151,36 +141,16 @@ public class SettingsReader extends DefaultHandler {
 
             // Conditions
             case "TypeCondition":
-                newCondition = new TypeCondition(false, null);
+                newCondition = new TypeCondition(false, (String) null);
                 break;
             case "FieldExistsCondition":
                 newCondition = new FieldExistsCondition(false, null);
                 break;
             case "FieldEqualsCondition":
-                newCondition = new FieldEqualsCondition(false, null, null);
+                newCondition = new FieldEqualsCondition(false, null, (String) null);
                 break;
             case "FieldContainsCondition":
-                newCondition = new FieldContainsCondition(false, null, null);
-                break;
-
-            //// DEBUG - skip print
-            case "allCategories":
-            case "shortName":
-            case "name":
-            case "htmlNote":
-            case "fieldConditions":
-            case "activeCategories":
-                break;
-            //// DEBUG
-
-            default:
-                String attrString = "";
-
-                for (int i = 0; i < attrs.getLength(); i++) {
-                    attrString += attrs.getQName(i) + "=\"" + attrs.getValue(i) + "\" ";
-                }
-
-                System.out.println("Open  - CATEGORY_SETTINGS - " + qName + " + " + attrString);
+                newCondition = new FieldContainsCondition(false, null, (String) null);
                 break;
         }
 
@@ -286,6 +256,9 @@ public class SettingsReader extends DefaultHandler {
             case "htmlNote":
                 currentCategory.setHtmlNote(text);
                 break;
+            case "ignoredFields":
+                currentCategory.setIgnoredFields(Arrays.asList(text.split(";")));
+                break;
 
             // Conditions
             case "TypeCondition":
@@ -338,6 +311,9 @@ public class SettingsReader extends DefaultHandler {
                 break;
             case "titleFirst":
                 settings.getGeneralSettings().setTitleFirst(Boolean.parseBoolean(text));
+                break;
+            case "useNewLines":
+                settings.getGeneralSettings().setUseNewLines(Boolean.parseBoolean(text));
                 break;
             case "numbering":
                 settings.getGeneralSettings().setNumbering(GeneralSettings.Numbering.valueOf(text));
@@ -407,6 +383,12 @@ public class SettingsReader extends DefaultHandler {
                 break;
             case "warnNotAuthor":
                 settings.getConsoleSettings().setWarnNotAuthor(Boolean.parseBoolean(text));
+                break;
+            case "warnNoCategoryForItem":
+                settings.getConsoleSettings().setWarnNoCategoryForItem(Boolean.parseBoolean(text));
+                break;
+            case "warnMandatoryFieldIgnored":
+                settings.getConsoleSettings().setWarnMandatoryFieldIgnored(Boolean.parseBoolean(text));
                 break;
             case "showLogs":
                 settings.getConsoleSettings().setShowLogs(Boolean.parseBoolean(text));

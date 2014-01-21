@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ public class HTMLSettings {
     // Google analytics
     private String googleAnalyticsUser = null;
 
-    public boolean generateBibtexVersion() {
+    public boolean isGenerateBibtexVersion() {
         return generateBibtexVersion;
     }
 
@@ -91,7 +91,7 @@ public class HTMLSettings {
         this.generateBibtexVersion = generateBibtexVersion;
     }
 
-    public boolean generateTextVersion() {
+    public boolean isGenerateTextVersion() {
         return generateTextVersion;
     }
 
@@ -99,7 +99,7 @@ public class HTMLSettings {
         this.generateTextVersion = generateTextVersion;
     }
 
-    public boolean linkToAlternateVersions() {
+    public boolean isLinkToAlternateVersions() {
         return linkToAlternateVersions;
     }
 

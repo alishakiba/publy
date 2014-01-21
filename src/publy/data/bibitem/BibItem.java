@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package publy.data.bibitem;
 
-import publy.data.Venue;
 import publy.data.Author;
 import java.util.*;
 import java.util.Map.Entry;
@@ -25,30 +24,51 @@ import publy.Console;
  *
  * @author Sander
  */
-public abstract class BibItem {
+public class BibItem {
 
     private String id;
+    private Type type;
+    private String originalType;
     private HashMap<String, String> values;
-    private List<String> mandatoryFields;
-    private List<String> optionalFields;
     private List<Author> authors;
-    private Venue venue;
+    private List<Author> editors;
 
-    public BibItem() {
+    public BibItem(String originalType, String id) {
+        this.type = Type.fromString(originalType);
+        this.originalType = originalType;
+        this.id = id;
+
         values = new LinkedHashMap<>();
-        mandatoryFields = new ArrayList<>();
-        optionalFields = new ArrayList<>();
         authors = new ArrayList<>();
+        editors = new ArrayList<>();
+
+        handleSpecialTypes(originalType);
     }
 
-    public abstract String getType();
+    private void handleSpecialTypes(String originalType) {
+        switch (originalType) {
+            case "mastersthesis":
+                values.put("type", "Master's thesis");
+                break;
+            case "phdthesis":
+                values.put("type", "PhD thesis");
+                break;
+            case "techreport":
+                values.put("type", "technical report");
+                break;
+        }
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public String getOriginalType() {
+        return originalType;
+    }
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String get(String attr) {
@@ -63,37 +83,47 @@ public abstract class BibItem {
         return values.keySet();
     }
 
-    public List<String> getMandatoryFields() {
-        return mandatoryFields;
-    }
-
-    public void setMandatoryFields(String... mandatoryFields) {
-        this.mandatoryFields.clear();
-        this.mandatoryFields.addAll(Arrays.asList(mandatoryFields));
-    }
-
     public boolean checkMandatoryFields() {
-        boolean complete = true;
+        List<String> missingFields = null;
 
-        for (String field : mandatoryFields) {
-            String v = values.get(field);
+        for (String field : FieldData.getMandatoryFields(type)) {
+            if (!anyNonEmpty(field.split(";"))) {
+                if (missingFields == null) {
+                    missingFields = new ArrayList<>();
+                }
 
-            if (v == null || v.isEmpty()) {
-                complete = false;
-                Console.error("Item \"%s\" is missing mandatory field %s.", id, field);
+                missingFields.add(field.replaceAll(";", " or "));
             }
         }
 
-        return complete;
-    }
+        // Nice error
+        if (missingFields != null) {
+            if (missingFields.size() == 1) {
+                Console.error("Item \"%s\" is missing mandatory field \"%s\".", id, missingFields.get(0));
+            } else {
+                StringBuilder sb = new StringBuilder();
 
-    public List<String> getOptionalFields() {
-        return optionalFields;
-    }
+                for (int i = 0; i < missingFields.size(); i++) {
+                    if (i > 0) {
+                        if (missingFields.size() > 2) {
+                            sb.append(", ");
+                        } else {
+                            sb.append(" ");
+                        }
 
-    public void setOptionalFields(String... optionalFields) {
-        this.optionalFields.clear();
-        this.optionalFields.addAll(Arrays.asList(optionalFields));
+                        if (i == missingFields.size() - 1) {
+                            sb.append("and ");
+                        }
+                    }
+
+                    sb.append("\"").append(missingFields.get(i)).append("\"");
+                }
+
+                Console.error("Item \"%s\" is missing mandatory fields %s.", id, sb.toString());
+            }
+        }
+
+        return missingFields != null;
     }
 
     public List<Author> getAuthors() {
@@ -104,37 +134,21 @@ public abstract class BibItem {
         this.authors.clear();
         this.authors.addAll(Arrays.asList(authors));
     }
-
-    public Venue getVenue() {
-        return venue;
+    
+    public List<Author> getEditors() {
+        return editors;
     }
 
-    public void setVenue(Venue venue) {
-        this.venue = venue;
-    }
-
-    public boolean anyNonEmpty(String field) {
-        String v = values.get(field);
-        return (v != null && !v.isEmpty());
-    }
-
-    public boolean anyNonEmpty(String... fields) {
-        for (String field : fields) {
-            String v = values.get(field);
-
-            if (v != null && !v.isEmpty()) {
-                return true;
-            }
-        }
-
-        return false;
+    public void setEditors(Author... editors) {
+        this.editors.clear();
+        this.editors.addAll(Arrays.asList(editors));
     }
 
     public String getBibTeX() {
         StringBuilder sb = new StringBuilder();
 
         sb.append("@");
-        sb.append(getType());
+        sb.append(getOriginalType());
         sb.append(" {");
         sb.append(id);
         sb.append(",\n");
@@ -158,5 +172,17 @@ public abstract class BibItem {
     @Override
     public String toString() {
         return getBibTeX();
+    }
+    
+    private boolean anyNonEmpty(String... fields) {
+        for (String field : fields) {
+            String v = values.get(field);
+
+            if (v != null && !v.isEmpty()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

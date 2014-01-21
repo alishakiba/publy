@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -123,6 +123,9 @@ public class SettingsWriter {
 
             out.write("        </fieldConditions>");
             out.newLine();
+            
+            // ignored fields
+            output(out, 8, "ignoredFields", makeCData(c.getIgnoredFields()));
 
             out.write("      </category>");
             out.newLine();
@@ -154,20 +157,21 @@ public class SettingsWriter {
         out.newLine();
     }
 
-    private static void writeGeneralSettings(GeneralSettings format, BufferedWriter out) throws IOException {
+    private static void writeGeneralSettings(GeneralSettings settings, BufferedWriter out) throws IOException {
         out.write("  <!-- General settings -->");
         out.newLine();
 
         out.write("  <generalSettings>");
         out.newLine();
 
-        output(out, 4, "myNames", makeCData(format.getMyNames()));
-        output(out, 4, "nameDisplay", makeString(format.getNameDisplay()));
-        output(out, 4, "reverseNames", makeString(format.reverseNames()));
-        output(out, 4, "listAllAuthors", makeString(format.listAllAuthors()));
-        output(out, 4, "titleFirst", makeString(format.titleFirst()));
-        output(out, 4, "numbering", makeString(format.getNumbering()));
-        output(out, 4, "reverseNumbering", makeString(format.reverseNumbering()));
+        output(out, 4, "myNames", makeCData(settings.getMyNames()));
+        output(out, 4, "nameDisplay", makeString(settings.getNameDisplay()));
+        output(out, 4, "reverseNames", makeString(settings.isReverseNames()));
+        output(out, 4, "listAllAuthors", makeString(settings.isListAllAuthors()));
+        output(out, 4, "titleFirst", makeString(settings.isTitleFirst()));
+        output(out, 4, "useNewLines", makeString(settings.isUseNewLines()));
+        output(out, 4, "numbering", makeString(settings.getNumbering()));
+        output(out, 4, "reverseNumbering", makeString(settings.isReverseNumbering()));
 
         out.write("  </generalSettings>");
         out.newLine();
@@ -181,9 +185,9 @@ public class SettingsWriter {
         out.write("  <htmlSettings>");
         out.newLine();
 
-        output(out, 4, "generateTextVersion", makeString(settings.generateTextVersion()));
-        output(out, 4, "generateBibtexVersion", makeString(settings.generateBibtexVersion()));
-        output(out, 4, "linkToAlternateVersions", makeString(settings.linkToAlternateVersions()));
+        output(out, 4, "generateTextVersion", makeString(settings.isGenerateTextVersion()));
+        output(out, 4, "generateBibtexVersion", makeString(settings.isGenerateBibtexVersion()));
+        output(out, 4, "linkToAlternateVersions", makeString(settings.isLinkToAlternateVersions()));
         output(out, 4, "navPlacement", makeString(settings.getNavPlacement()));
         output(out, 4, "includeAbstract", makeString(settings.getIncludeAbstract()));
         output(out, 4, "includeBibtex", makeString(settings.getIncludeBibtex()));
@@ -207,6 +211,8 @@ public class SettingsWriter {
         output(out, 4, "showWarnings", makeString(settings.isShowWarnings()));
         output(out, 4, "warnMissingReferences", makeString(settings.isWarnMissingReferences()));
         output(out, 4, "warnNotAuthor", makeString(settings.isWarnNotAuthor()));
+        output(out, 4, "warnNoCategoryForItem", makeString(settings.isWarnNoCategoryForItem()));
+        output(out, 4, "warnMandatoryFieldIgnored", makeString(settings.isWarnMandatoryFieldIgnored()));
         output(out, 4, "showLogs", makeString(settings.isShowLogs()));
         output(out, 4, "showStackTraces", makeString(settings.isShowStackTraces()));
 
@@ -322,14 +328,14 @@ public class SettingsWriter {
     private static String makeCData(List<String> content) {
         StringBuilder sb = new StringBuilder();
 
-        if (content != null) {
+        if (content != null && !content.isEmpty()) {
             for (String part : content) {
                 sb.append(';');
                 sb.append(part);
             }
+            
+            sb.deleteCharAt(0);
         }
-
-        sb.deleteCharAt(0);
 
         return "<![CDATA[" + sb.toString() + "]]>";
     }

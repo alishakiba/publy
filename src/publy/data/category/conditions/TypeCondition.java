@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +57,6 @@ public class TypeCondition extends Condition {
 
     @Override
     public boolean internalMatches(BibItem item) {
-        return types.contains(item.getType()) || types.contains("*");
+        return types.contains(item.getOriginalType()) || types.contains("*");
     }
 }

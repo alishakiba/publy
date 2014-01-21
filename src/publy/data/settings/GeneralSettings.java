@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,11 +36,12 @@ public class GeneralSettings {
     // Identification
     private List<String> myNames = Arrays.asList("me");
     // Author info
-    private NameDisplay nameDisplay = NameDisplay.ABBREVIATED;
+    private NameDisplay nameDisplay = NameDisplay.FULL;
     private boolean reverseNames = false;
     private boolean listAllAuthors = true;
     // Publication Structure
     private boolean titleFirst = true;
+    private boolean useNewLines = true;
     // Numbering
     private Numbering numbering = Numbering.NONE;
     private boolean reverseNumbering = false;
@@ -53,7 +54,7 @@ public class GeneralSettings {
         this.myNames = myNames;
     }
 
-    public boolean listAllAuthors() {
+    public boolean isListAllAuthors() {
         return listAllAuthors;
     }
 
@@ -69,7 +70,7 @@ public class GeneralSettings {
         this.nameDisplay = nameDisplay;
     }
 
-    public boolean reverseNames() {
+    public boolean isReverseNames() {
         return reverseNames;
     }
 
@@ -77,12 +78,20 @@ public class GeneralSettings {
         this.reverseNames = reverseNames;
     }
 
-    public boolean titleFirst() {
+    public boolean isTitleFirst() {
         return titleFirst;
     }
 
     public void setTitleFirst(boolean titleFirst) {
         this.titleFirst = titleFirst;
+    }
+
+    public boolean isUseNewLines() {
+        return useNewLines;
+    }
+
+    public void setUseNewLines(boolean useNewLines) {
+        this.useNewLines = useNewLines;
     }
 
     public Numbering getNumbering() {
@@ -93,11 +102,16 @@ public class GeneralSettings {
         this.numbering = numbering;
     }
 
-    public boolean reverseNumbering() {
+    public boolean isReverseNumbering() {
         return reverseNumbering;
     }
 
     public void setReverseNumbering(boolean reverseNumbering) {
         this.reverseNumbering = reverseNumbering;
+    }
+
+    @Override
+    public String toString() {
+        return "GeneralSettings{" + "myNames=" + myNames + ", nameDisplay=" + nameDisplay + ", reverseNames=" + reverseNames + ", listAllAuthors=" + listAllAuthors + ", titleFirst=" + titleFirst + ", numbering=" + numbering + ", reverseNumbering=" + reverseNumbering + '}';
     }
 }

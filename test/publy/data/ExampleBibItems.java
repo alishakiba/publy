@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,7 @@
 package publy.data;
 
 import java.util.ArrayList;
-import publy.data.bibitem.Article;
 import publy.data.bibitem.BibItem;
-import publy.data.bibitem.InCollection;
-import publy.data.bibitem.InProceedings;
-import publy.data.bibitem.InvitedTalk;
-import publy.data.bibitem.MastersThesis;
 
 /**
  *
@@ -33,8 +28,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         super(32);
         BibItem item;
 
-        item = new InProceedings();
-        item.setId("bose2014flipping");
+        item = new BibItem("inproceedings",
+                "bose2014flipping");
         item.put("title", "Flipping Edge-Labelled Triangulations");
         item.put("author", "Bose, Prosenjit and Lubiw, Anna and Pathak, Vinayak and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the 25th ACM-SIAM Symposium on Discrete Algorithms (SODA14)");
@@ -44,8 +39,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("status", "submitted");
         add(item);
 
-        item = new InProceedings();
-        item.setId("barba2014new");
+        item = new BibItem("inproceedings",
+                "barba2014new");
         item.put("title", "New and Improved Spanning Ratios for {Y}ao Graphs");
         item.put("author", "Barba, Luis and Bose, Prosenjit and Damian, Mirela and Fagerberg, Rolf and O'Rourke, Joseph and van Renssen, Andr\\'e and Taslakian, Perouz and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the 25th ACM-SIAM Symposium on Discrete Algorithms (SODA14)");
@@ -56,8 +51,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("status", "submitted");
         add(item);
 
-        item = new InProceedings();
-        item.setId("morin2013average");
+        item = new BibItem("inproceedings",
+                "morin2013average");
         item.put("title", "On the Average Number of Edges in Theta Graphs");
         item.put("author", "Morin, Pat and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the 11th Meeting on Analytic Algorithmics and Combinatorics (ANALCO14)");
@@ -68,8 +63,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("status", "submitted");
         add(item);
 
-        item = new InProceedings();
-        item.setId("barba2013inverse");
+        item = new BibItem("inproceedings",
+                "barba2013inverse");
         item.put("title", "The Inverse Barycenter Problem");
         item.put("author", "Barba, Luis and De Carufel, Jean-Lou and Fleischer, Rudolf and Kawamura, Akitoshi and Korman, Matias and Okamoto, Yoshio and Tang, Yuan and Tokuyama, Takeshi and Verdonschot, Sander and Wang, Tianhao");
         item.put("booktitle", "Proceedings of the 24th International Symposium on Algorithms and Computation (ISAAC 2013)");
@@ -79,8 +74,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("status", "submitted");
         add(item);
 
-        item = new InProceedings();
-        item.setId("aichholzer2013theta3");
+        item = new BibItem("inproceedings",
+                "aichholzer2013theta3");
         item.put("title", "Theta-3 is connected");
         item.put("author", "Aichholzer, Oswin and Bae, Sang Won and Barba, Luis and Bose, Prosenjit and Korman, Matias and van Renssen, Andr\\'e and Taslakian, Perouz and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the 25th Canadian Conference on Computational Geometry (CCCG 2013)");
@@ -92,8 +87,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("presented", "yes");
         add(item);
 
-        item = new InProceedings();
-        item.setId("bose2013spanning");
+        item = new BibItem("inproceedings",
+                "bose2013spanning");
         item.put("title", "On the Spanning Ratio of Theta-Graphs");
         item.put("author", "Bose, Prosenjit and van Renssen, Andr\\'e and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the 13th Algorithms and Data Structures Symposium (WADS 2013)");
@@ -102,8 +97,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("paper", "publications/papers/2013/Bose, van Renssen, Verdonschot - On the spanning ratio of theta-graphs.pdf");
         add(item);
 
-        item = new InProceedings();
-        item.setId("barba2013stretch");
+        item = new BibItem("inproceedings",
+                "barba2013stretch");
         item.put("title", "On the stretch factor of the Theta-4 graph");
         item.put("author", "Barba, Luis and Bose, Prosenjit and De Carufel, Jean-Lou and van Renssen, Andr\\'e and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the 13th Algorithms and Data Structures Symposium (WADS 2013)");
@@ -113,8 +108,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("arxiv", "1303.5473");
         add(item);
 
-        item = new InProceedings();
-        item.setId("bose2013theta5");
+        item = new BibItem("inproceedings",
+                "bose2013theta5");
         item.put("title", "The {$\\theta_5$}-graph is a spanner");
         item.put("author", "Bose, Prosenjit and Morin, Pat and van Renssen, Andr\\'e and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the 39th International Workshop on Graph-Theoretic Concepts in Computer Science (WG 2013)");
@@ -126,8 +121,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("presented", "yes");
         add(item);
 
-        item = new InProceedings();
-        item.setId("bose2012competitive2");
+        item = new BibItem("inproceedings",
+                "bose2012competitive2");
         item.put("title", "Competitive Routing on a Bounded-Degree Plane Spanner");
         item.put("author", "Bose, Prosenjit and Fagerberg, Rolf and van Renssen, Andr\\'e and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the 24th Canadian Conference on Computational Geometry (CCCG 2012)");
@@ -139,8 +134,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("presented", "yes");
         add(item);
 
-        item = new InProceedings();
-        item.setId("bose2012optimal");
+        item = new BibItem("inproceedings",
+                "bose2012optimal");
         item.put("title", "Optimal Bounds on Theta-Graphs: More is not Always Better");
         item.put("author", "Bose, Prosenjit and De Carufel, Jean-Lou and Morin, Pat and van Renssen, Andr\\'e and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the 24th Canadian Conference on Computational Geometry (CCCG 2012)");
@@ -150,8 +145,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("paper", "publications/papers/2012/Bose, Morin, van Renssen, Verdonschot - Optimal Bounds on Theta-Graphs More is not Always Better (CCCG).pdf");
         add(item);
 
-        item = new InProceedings();
-        item.setId("buchin2012evolution");
+        item = new BibItem("inproceedings",
+                "buchin2012evolution");
         item.put("title", "Evolution Strategies for Optimizing Rectangular Cartograms");
         item.put("author", "Buchin, Kevin and Speckmann, Bettina and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the 7th International Conference on Geographic Information Science (GIScience 2012)");
@@ -166,8 +161,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("presented", "yes");
         add(item);
 
-        item = new Article();
-        item.setId("buchin2012number");
+        item = new BibItem("article",
+                "buchin2012number");
         item.put("title", "On the Number of Regular Edge Labelings");
         item.put("author", "Buchin, Kevin and Speckmann, Bettina and Verdonschot, Sander");
         item.put("journal", "Discrete Mathematics & Theoretical Computer Science");
@@ -178,8 +173,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("status", "submitted");
         add(item);
 
-        item = new InvitedTalk();
-        item.setId("dec2011tue");
+        item = new BibItem("talk",
+                "dec2011tue");
         item.put("title", "Making triangulations 4-connected using flips");
         item.put("year", "2011");
         item.put("month", "December");
@@ -188,8 +183,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("link", "Slides (pdf)|publications/slides/2011/FlipsPresentationTUe.pdf");
         add(item);
 
-        item = new Article();
-        item.setId("bose2012making");
+        item = new BibItem("article",
+                "bose2012making");
         item.put("title", "Making triangulations 4-connected using flips");
         item.put("author", "Bose, Prosenjit and Jansens, Dana and van Renssen, Andr\\'e and Saumell, Maria and Verdonschot, Sander");
         item.put("journal", "Computational Geometry: Theory and Applications special issue for CCCG 2011");
@@ -201,8 +196,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("link2", "Conference version|#bose2011making");
         add(item);
 
-        item = new InProceedings();
-        item.setId("bose2012plane");
+        item = new BibItem("inproceedings",
+                "bose2012plane");
         item.put("title", "On Plane Constrained Bounded-Degree Spanners");
         item.put("author", "Bose, Prosenjit and Fagerberg, Rolf and van Renssen, Andr\\'e and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the 10th Latin American Symposium on Theoretical Informatics (LATIN 2012)");
@@ -217,8 +212,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("presented", "yes");
         add(item);
 
-        item = new InCollection();
-        item.setId("bose2012history");
+        item = new BibItem("incollection",
+                "bose2012history");
         item.put("title", "A History of Flips in Combinatorial Triangulations");
         item.put("author", "Bose, Prosenjit and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the XIV Spanish Meeting on Computational Geometry (EGC 2011)");
@@ -234,8 +229,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("doi", "10.1007/978-3-642-34191-5_3");
         add(item);
 
-        item = new InProceedings();
-        item.setId("bose2012competitive");
+        item = new BibItem("inproceedings",
+                "bose2012competitive");
         item.put("title", "Competitive Routing in the Half-{$\\theta_6$}-Graph");
         item.put("author", "Bose, Prosenjit and Fagerberg, Rolf and van Renssen, Andr\\'e and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the 23rd ACM-SIAM Symposium on Discrete Algorithms (SODA 2012)");
@@ -246,8 +241,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("link3", "ACM|http://dl.acm.org/citation.cfm?id=2095116.2095220");
         add(item);
 
-        item = new InProceedings();
-        item.setId("deberg2011rectilinear");
+        item = new BibItem("inproceedings",
+                "deberg2011rectilinear");
         item.put("title", "On rectilinear partitions with minimum stabbing number");
         item.put("author", "de Berg, Mark and Khosravi, Amirali and Verdonschot, Sander and van der Weele, Vincent");
         item.put("booktitle", "Proceedings of the 12th Algorithms and Data Structures Symposium (WADS 2011)");
@@ -258,8 +253,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("doi", "10.1007/978-3-642-22300-6_26");
         add(item);
 
-        item = new InProceedings();
-        item.setId("bose2011making");
+        item = new BibItem("inproceedings",
+                "bose2011making");
         item.put("title", "Making triangulations 4-connected using flips");
         item.put("author", "Bose, Prosenjit and Jansens, Dana and van Renssen, Andr\\'e and Saumell, Maria and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the 23rd Canadian Conference on Computational Geometry (CCCG 2011)");
@@ -272,8 +267,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("link2", "Journal version|#bose2012making");
         add(item);
 
-        item = new InProceedings();
-        item.setId("buchin2011optimizing");
+        item = new BibItem("inproceedings",
+                "buchin2011optimizing");
         item.put("title", "Optimizing regular edge labelings");
         item.put("author", "Buchin, Kevin and Speckmann, Bettina and Verdonschot, Sander");
         item.put("booktitle", "Proceedings of the 18th International Symposium on Graph drawing (GD 2010)");
@@ -289,8 +284,8 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("link2", "Journal version|#buchin2012number");
         add(item);
 
-        item = new MastersThesis();
-        item.setId("verdonschot2010optimizing");
+        item = new BibItem("mastersthesis",
+                "verdonschot2010optimizing");
         item.put("author", "Verdonschot, Sander");
         item.put("title", "Optimizing Regular Edge Labelings");
         item.put("school", "Eindhoven University of Technology");

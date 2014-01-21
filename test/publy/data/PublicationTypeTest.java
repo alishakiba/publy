@@ -2,14 +2,12 @@
  */
 package publy.data;
 
-import publy.data.PublicationType;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import publy.data.bibitem.Article;
 import publy.data.bibitem.BibItem;
 
 /**
@@ -47,7 +45,7 @@ public class PublicationTypeTest {
         PublicationType[] types = new PublicationType[]{PublicationType.NONE, PublicationType.PUBLISHED, PublicationType.ACCEPTED, PublicationType.ARXIV, PublicationType.ALL};
         
         // ALL
-        BibItem submitted = new Article();
+        BibItem submitted = new BibItem("article", "test");
         submitted.put("author", "Thor, Au");
         submitted.put("title", "Title");
         submitted.put("journal", "Journal of Examples");
@@ -56,7 +54,7 @@ public class PublicationTypeTest {
         submitted.put("--test--", "4"); // Should match this type and up
         
         // ARXIV
-        BibItem submittedArxiv = new Article();
+        BibItem submittedArxiv = new BibItem("article", "test");
         submittedArxiv.put("author", "Thor, Au");
         submittedArxiv.put("title", "Title");
         submittedArxiv.put("journal", "Journal of Examples");
@@ -66,7 +64,7 @@ public class PublicationTypeTest {
         submittedArxiv.put("--test--", "3"); // Should match this type and up
         
         // ACCEPTED
-        BibItem accepted = new Article();
+        BibItem accepted = new BibItem("article", "test");
         accepted.put("author", "Thor, Au");
         accepted.put("title", "Title");
         accepted.put("journal", "Journal of Examples");
@@ -74,7 +72,7 @@ public class PublicationTypeTest {
         accepted.put("status", "accepted");
         accepted.put("--test--", "2"); // Should match this type and up
         
-        BibItem acceptedrev = new Article();
+        BibItem acceptedrev = new BibItem("article", "test");
         acceptedrev.put("author", "Thor, Au");
         acceptedrev.put("title", "Title");
         acceptedrev.put("journal", "Journal of Examples");
@@ -82,7 +80,7 @@ public class PublicationTypeTest {
         acceptedrev.put("status", "acceptedrev");
         acceptedrev.put("--test--", "2"); // Should match this type and up
         
-        BibItem acceptedArxiv = new Article();
+        BibItem acceptedArxiv = new BibItem("article", "test");
         acceptedArxiv.put("author", "Thor, Au");
         acceptedArxiv.put("title", "Title");
         acceptedArxiv.put("journal", "Journal of Examples");
@@ -92,14 +90,14 @@ public class PublicationTypeTest {
         acceptedArxiv.put("--test--", "2"); // Should match this type and up
         
         // PUBLISHED
-        BibItem published = new Article();
+        BibItem published = new BibItem("article", "test");
         published.put("author", "Thor, Au");
         published.put("title", "Title");
         published.put("journal", "Journal of Examples");
         published.put("year", "2013");
         published.put("--test--", "1"); // Should match this type and up
         
-        BibItem publishedArxiv = new Article();
+        BibItem publishedArxiv = new BibItem("article", "test");
         publishedArxiv.put("author", "Thor, Au");
         publishedArxiv.put("title", "Title");
         publishedArxiv.put("journal", "Journal of Examples");

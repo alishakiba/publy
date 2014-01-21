@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import publy.data.bibitem.BibItem;
 import publy.data.category.OutputCategory;
 import publy.data.settings.GeneralSettings;
@@ -40,15 +42,15 @@ public class PlainPublicationListWriter extends PublicationListWriter {
     }
 
     @Override
-    protected void writePublicationList(BufferedWriter out) throws IOException {
+    protected void writePublicationList(List<OutputCategory> categories, BufferedWriter out) throws IOException {
         itemWriter = new PlainBibItemWriter(out, settings);
 
         // Initialize the count
         if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL) {
-            if (settings.getGeneralSettings().reverseNumbering()) {
+            if (settings.getGeneralSettings().isReverseNumbering()) {
                 count = 0;
 
-                for (OutputCategory c : getCategories()) {
+                for (OutputCategory c : categories) {
                     count += c.getItems().size();
                 }
             } else {
@@ -57,7 +59,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         }
 
         // Write the body
-        for (OutputCategory c : getCategories()) {
+        for (OutputCategory c : categories) {
             writeCategory(c, out);
         }
         
@@ -69,7 +71,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
     private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
         // Reset the count if necessary
         if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.LOCAL) {
-            if (settings.getGeneralSettings().reverseNumbering()) {
+            if (settings.getGeneralSettings().isReverseNumbering()) {
                 count = c.getItems().size();
             } else {
                 count = 1;
@@ -79,14 +81,21 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         out.write(c.getName() + ".");
         out.newLine();
         out.newLine();
+        
+        itemWriter.setIgnoredFields(new HashSet<>(c.getIgnoredFields()));
 
         for (BibItem item : c.getItems()) {
             // Write the appropriate number
             if (settings.getGeneralSettings().getNumbering() != GeneralSettings.Numbering.NONE) {
                 out.write(count + ".");
-                out.newLine();
+                
+                if (settings.getGeneralSettings().isUseNewLines()) {
+                    out.newLine();
+                } else {
+                    out.write(' ');
+                }
 
-                if (settings.getGeneralSettings().reverseNumbering()) {
+                if (settings.getGeneralSettings().isReverseNumbering()) {
                     count--;
                 } else {
                     count++;

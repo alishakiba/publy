@@ -2,45 +2,66 @@
  */
 package publy.io.html;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import publy.data.bibitem.BibItem;
+import publy.data.bibitem.Type;
+import publy.io.TestUtils;
 
 /**
  *
  * @author Sander Verdonschot <sander.verdonschot at gmail.com>
  */
 public class HTMLBibItemWriterTest {
-    
+
     public HTMLBibItemWriterTest() {
     }
 
+    /**
+     * Test of write method, of class HTMLBibItemWriter.
+     */
     @Test
-    public void testChangeQuotes() {
-        System.out.println("changeQuotes");
-        
-        HashMap<String, String> expected = new LinkedHashMap<>();
-        
-        // Simple tests
-        expected.put("O'Rourke", "O’Rourke");
-        expected.put("This is `simple'.", "This is ‘simple’.");
-        expected.put("``This is also simple.''", "“This is also simple.”");
-        expected.put("As is ``this\".", "As is “this”.");
-        
-        // Ignore quotes in HTML tags
-        expected.put("<span class=\"author\">O'Rourke</span>", "<span class=\"author\">O’Rourke</span>");
-        expected.put("<a href=\"http://www.google.com\">O'Rourke</a>", "<a href=\"http://www.google.com\">O’Rourke</a>");
-        expected.put("<span class=\"title\">On ``simple'' graphs</span>", "<span class=\"title\">On “simple” graphs</span>");
-        expected.put("<span class=\"title\">On ``simple\" graphs</span>", "<span class=\"title\">On “simple” graphs</span>");
-        
-        HTMLBibItemWriter testInstance = new HTMLBibItemWriter(null, null);
-        
-        for (String input : expected.keySet()) {
-            String expectedResult = expected.get(input);
-            String result = testInstance.changeQuotes(input);
-            
-            assertEquals(expectedResult, result);
+    public void testWrite() {
+        System.out.println("write");
+
+        for (Type type : Type.values()) {
+            if (type == Type.ONLINE || type == Type.PATENT) {
+                continue;
+            }
+
+            try (InputStream in = HTMLBibItemWriterTest.class.getResource(type + "_test.properties").openStream()) {
+                Properties props = new Properties();
+                props.load(in);
+                HTMLTestUtils.testWithDefaultValues(type, props);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                fail("IOException when reading properties file.");
+            }
+        }
+    }
+
+    @Test
+    public void testWriteIgnore() {
+        System.out.println("writeIgnore");
+
+        for (Type type : Type.values()) {
+            BibItem item = TestUtils.getFullBibItem(type);
+            Set<String> mandatoryFields = TestUtils.getMandatoryFields(type);
+
+            Set<String> optionalFields = new HashSet<>(item.getFields());
+            optionalFields.removeAll(mandatoryFields);
+
+            List<Set<String>> subsets = TestUtils.getAllSubsets(optionalFields);
+
+            for (Set<String> set : subsets) {
+                HTMLTestUtils.testIgnore(item, set);
+            }
         }
     }
 }

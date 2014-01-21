@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,11 @@ import publy.io.settings.SettingsWriter;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    private Settings settings;
+    private final Settings settings;
 
     /**
      * Creates new form MainFrame
+     * @param settings
      */
     public MainFrame(Settings settings) {
         this.settings = settings;
@@ -102,7 +103,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        cancelButton.setText("Cancel");
+        cancelButton.setText("Don't save");
         cancelButton.setToolTipText("Closes the application without saving any changes to the settings.");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,6 +145,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         bottomPanel.add(buttonPanel, java.awt.BorderLayout.LINE_END);
 
+        consoleTextPane.setEditable(false);
         consoleScrollPane.setViewportView(consoleTextPane);
 
         bottomPanel.add(consoleScrollPane, java.awt.BorderLayout.CENTER);
@@ -163,7 +165,10 @@ public class MainFrame extends javax.swing.JFrame {
         consoleTextPane.setText("");
 
         Publy.generatePublicationList(settings);
-        
+
+        // Move to the top of the console output
+        consoleTextPane.setCaretPosition(0);
+
         // Change cursor back
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_generateButtonActionPerformed

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,18 @@ import com.beust.jcommander.ParameterException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
+import publy.algo.PostProcessor;
 import publy.data.bibitem.BibItem;
+import publy.data.bibitem.FieldData;
+import publy.data.category.OutputCategory;
 import publy.data.settings.Settings;
 import publy.gui.MainFrame;
 import publy.gui.UIConstants;
@@ -45,7 +50,7 @@ import publy.io.settings.SettingsReader;
 public class Publy {
 
     private static Settings settings = null;
-    private static Throwable exception = null;
+    private static Throwable settingsParseException = null;
 
     /**
      * @param args the command line arguments
@@ -136,10 +141,10 @@ public class Publy {
     private static void runInCommandlineMode(CommandLineArguments arguments) {
         if (settings == null) {
             // Notify the user
-            if (exception == null) {
+            if (settingsParseException == null) {
                 Console.error("No configuration information was found. Please set up your preferences by running Publy with the \"--gui\" option.");
             } else {
-                Console.except(exception, "An exception occurred while parsing the configuration:");
+                Console.except(settingsParseException, "An exception occurred while parsing the configuration:");
             }
         } else {
             applyCommandlineOverwites(arguments);
@@ -148,25 +153,22 @@ public class Publy {
     }
 
     private static void readSettings(String settingsLocation) {
-        if (settingsLocation == null || settingsLocation.isEmpty()) {
-            // Parse the settings in the default location
-            try {
-                settings = SettingsReader.parseSettings();
-            } catch (ParserConfigurationException | SAXException | IOException ex) {
-                exception = ex;
-            }
-        } else {
+        // Change the default settings location, if another location was specified
+        if (settingsLocation != null && !settingsLocation.isEmpty()) {
             Path settingsFile = ResourceLocator.getFullPath(settingsLocation);
 
             if (Files.exists(settingsFile)) {
-                try {
-                    settings = SettingsReader.parseSettings(settingsFile);
-                } catch (ParserConfigurationException | SAXException | IOException ex) {
-                    exception = ex;
-                }
+                SettingsReader.setSettingsFile(settingsFile);
             } else {
                 Console.error("The configuration file \"%s\" could not be found at \"%s\".", settingsLocation, settingsFile);
+                return;
             }
+        }
+
+        try {
+            settings = SettingsReader.parseSettings();
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            settingsParseException = ex;
         }
     }
 
@@ -184,7 +186,7 @@ public class Publy {
     }
 
     private static void notifyForMissingSettings() {
-        if (exception == null) {
+        if (settingsParseException == null) {
             JOptionPane.showMessageDialog(null, "No configuration information was found. Please set up your preferences.", "Publy - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null, "An exception occurred while parsing the configuration. Loading the default configuration.", "Publy - Launching Settings Window", JOptionPane.ERROR_MESSAGE);
@@ -205,22 +207,22 @@ public class Publy {
         if (arguments.isSilent()) {
             settings.getConsoleSettings().setShowLogs(false);
         }
-        
+
         if (arguments.isHidewarnings()) {
             settings.getConsoleSettings().setShowWarnings(false);
         }
-        
+
         if (arguments.isDebug()) {
             settings.getConsoleSettings().setShowStackTraces(true);
         }
-        
+
         Console.setSettings(settings.getConsoleSettings());
     }
 
     private static void launchGUI() {
         // Variables need to be final in order to be shared
         final Settings guiSettings = (settings == null ? Settings.defaultSettings() : settings);
-        final Throwable guiException = exception;
+        final Throwable guiException = settingsParseException;
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
@@ -253,42 +255,120 @@ public class Publy {
 
             try {
                 items = BibTeXParser.parseFile(settings.getFileSettings().getPublications());
-                Console.log("Publications list \"%s\" parsed successfully.", settings.getFileSettings().getPublications().getFileName());
+                Console.log("Publications list \"%s\" parsed.", settings.getFileSettings().getPublications().getFileName());
             } catch (Exception | AssertionError ex) {
                 Console.except(ex, "Exception while parsing publications list:");
             }
 
-            if (items != null && settings.getHtmlSettings().generateTextVersion()) {
-                try {
-                    PublicationListWriter writer = new PlainPublicationListWriter(settings);
-                    writer.writePublicationList(items, settings.getFileSettings().getPlainTextTarget());
-                    Console.log("Plain text publication list written successfully.");
-                } catch (Exception | AssertionError ex) {
-                    Console.except(ex, "Exception while writing plain text publication list:");
-                }
-            }
-
-            if (items != null && settings.getHtmlSettings().generateBibtexVersion()) {
-                try {
-                    PublicationListWriter writer = new BibtexPublicationListWriter(settings);
-                    writer.writePublicationList(items, settings.getFileSettings().getBibtexTarget());
-                    Console.log("BibTeX publication list written successfully.");
-                } catch (Exception | AssertionError ex) {
-                    Console.except(ex, "Exception while writing BibTeX publication list:");
-                }
-            }
-
             if (items != null) {
+                PostProcessor.postProcess(items);
+                
+                List<OutputCategory> categories = categorizePapers(settings, items);
+
+                if (settings.getConsoleSettings().isShowWarnings() && settings.getConsoleSettings().isWarnMandatoryFieldIgnored()) {
+                    warnForMandatoryIgnoredFields(categories);
+                }
+
+                if (settings.getHtmlSettings().isGenerateTextVersion()) {
+                    try {
+                        PublicationListWriter writer = new PlainPublicationListWriter(settings);
+                        writer.writePublicationList(categories, settings.getFileSettings().getPlainTextTarget());
+                        Console.log("Plain text publication list written.");
+                    } catch (Exception | AssertionError ex) {
+                        Console.except(ex, "Exception while writing plain text publication list:");
+                    }
+                }
+
+                if (settings.getHtmlSettings().isGenerateBibtexVersion()) {
+                    try {
+                        PublicationListWriter writer = new BibtexPublicationListWriter(settings);
+                        writer.writePublicationList(categories, settings.getFileSettings().getBibtexTarget());
+                        Console.log("BibTeX publication list written.");
+                    } catch (Exception | AssertionError ex) {
+                        Console.except(ex, "Exception while writing BibTeX publication list:");
+                    }
+                }
+
                 try {
                     PublicationListWriter writer = new HTMLPublicationListWriter(settings);
-                    writer.writePublicationList(items, settings.getFileSettings().getTarget());
-                    Console.log("HTML publication list written successfully.");
+                    writer.writePublicationList(categories, settings.getFileSettings().getTarget());
+                    Console.log("HTML publication list written.");
                 } catch (Exception | AssertionError ex) {
                     Console.except(ex, "Exception while writing HTML publication list:");
                 }
             }
 
             Console.log("Done.");
+        }
+    }
+
+    private static List<OutputCategory> categorizePapers(Settings settings, List<BibItem> items) {
+        // Create the list of empty categories
+        List<OutputCategory> categories = new ArrayList<>(settings.getCategorySettings().getActiveCategories().size());
+
+        for (OutputCategory c : settings.getCategorySettings().getActiveCategories()) {
+            try {
+                categories.add((OutputCategory) c.clone());
+            } catch (CloneNotSupportedException ex) {
+                // Should never happen
+                Console.except(ex, "Category \"%s\" could not be copied.", c.getShortName());
+            }
+        }
+
+        // Assign each paper to the correct category
+        // Make a copy so the categories can remove items without removing them from the main list
+        List<BibItem> tempItems = new ArrayList<>(items);
+
+        for (OutputCategory c : categories) {
+            c.populate(tempItems);
+        }
+
+        // Remove empty categories
+        ListIterator<OutputCategory> it = categories.listIterator();
+
+        while (it.hasNext()) {
+            OutputCategory c = it.next();
+
+            if (c.getItems().isEmpty()) {
+                it.remove();
+            }
+        }
+
+        // Warn for remaining items
+        if (!tempItems.isEmpty()) {
+            String ids = "";
+
+            for (BibItem item : tempItems) {
+                ids += "\"" + item.getId() + "\", ";
+            }
+
+            ids = ids.substring(0, ids.length() - 2); // Cut off the last ", "
+
+            Console.warn(Console.WarningType.ITEM_DOES_NOT_FIT_ANY_CATEGORY, "%d entries did not fit any category:%n%s", tempItems.size(), ids);
+        }
+
+        return categories;
+    }
+
+    private static void warnForMandatoryIgnoredFields(List<OutputCategory> categories) {
+        for (OutputCategory c : categories) {
+            for (String ignored : c.getIgnoredFields()) {
+                String itemIDs = "";
+
+                for (BibItem item : c.getItems()) {
+                    if (FieldData.getMandatoryFields(item.getType()).contains(ignored)) {
+                        if (itemIDs.isEmpty()) {
+                            itemIDs += item.getId();
+                        } else {
+                            itemIDs += ", " + item.getId();
+                        }
+                    }
+                }
+
+                if (!itemIDs.isEmpty()) {
+                    Console.warn(Console.WarningType.MANDATORY_FIELD_IGNORED, "Category \"%s\" ignores field \"%s\", which is mandatory for the following entries:%n%s.%nThese entries may not display properly.", c.getShortName(), ignored, itemIDs);
+                }
+            }
         }
     }
 }

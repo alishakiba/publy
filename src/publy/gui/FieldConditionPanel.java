@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package publy.gui;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ItemEvent;
-import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
@@ -59,8 +58,6 @@ public class FieldConditionPanel extends javax.swing.JPanel {
      * Creates new form FieldConditionPanel.
      *
      * @param condition The condition edited by this panel.
-     * @param conditions The full list of conditions.
-     * @param index The index of this condition in the list.
      */
     public FieldConditionPanel(FieldCondition condition) {
         this.condition = condition;
@@ -94,34 +91,17 @@ public class FieldConditionPanel extends javax.swing.JPanel {
             operationComboBox.setSelectedItem(Operation.EQUALS);
 
             valueTextField.setEnabled(true);
-            valueTextField.setText(makeString(((FieldEqualsCondition) condition).getValues()));
+            valueTextField.setText(UIStyles.convertToDisplayString(((FieldEqualsCondition) condition).getValues()));
         } else if (condition instanceof FieldContainsCondition) {
             operationComboBox.setSelectedItem(Operation.CONTAINS);
 
             valueTextField.setEnabled(true);
-            valueTextField.setText(makeString(((FieldContainsCondition) condition).getValues()));
+            valueTextField.setText(UIStyles.convertToDisplayString(((FieldContainsCondition) condition).getValues()));
         } else {
             throw new AssertionError("Unexpected condition type: " + condition.getClass());
         }
 
         initializing = false;
-    }
-
-    private String makeString(List<String> values) {
-        StringBuilder text = new StringBuilder();
-        boolean first = true;
-
-        for (String val : values) {
-            if (first) {
-                first = false;
-            } else {
-                text.append(';');
-            }
-
-            text.append(val);
-        }
-
-        return text.toString();
     }
 
     public FieldCondition getCondition() {
@@ -214,12 +194,13 @@ public class FieldConditionPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(2, 2, 2)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(invertCheckBox)
-                    .addComponent(fieldTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(operationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(valueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(deleteButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(invertCheckBox)
+                        .addComponent(fieldTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(operationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(valueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(2, 2, 2))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -243,11 +224,11 @@ public class FieldConditionPanel extends javax.swing.JPanel {
                     valueTextField.setEnabled(false);
                     break;
                 case EQUALS:
-                    condition = new FieldEqualsCondition(invertCheckBox.isSelected(), fieldTextField.getText(), valueTextField.getText().split(";"));
+                    condition = new FieldEqualsCondition(invertCheckBox.isSelected(), fieldTextField.getText(), UIStyles.parseDisplayString(valueTextField.getText()));
                     valueTextField.setEnabled(true);
                     break;
                 case CONTAINS:
-                    condition = new FieldContainsCondition(invertCheckBox.isSelected(), fieldTextField.getText(), valueTextField.getText().split(";"));
+                    condition = new FieldContainsCondition(invertCheckBox.isSelected(), fieldTextField.getText(), UIStyles.parseDisplayString(valueTextField.getText()));
                     valueTextField.setEnabled(true);
                     break;
                 default:
@@ -267,9 +248,9 @@ public class FieldConditionPanel extends javax.swing.JPanel {
     private void valueTextFieldTextChanged(DocumentEvent e) {
         if (!initializing) {
             if (condition instanceof FieldEqualsCondition) {
-                ((FieldEqualsCondition) condition).setValues(valueTextField.getText().split(";"));
+                ((FieldEqualsCondition) condition).setValues(UIStyles.parseDisplayString(valueTextField.getText()));
             } else if (condition instanceof FieldContainsCondition) {
-                ((FieldContainsCondition) condition).setValues(valueTextField.getText().split(";"));
+                ((FieldContainsCondition) condition).setValues(UIStyles.parseDisplayString(valueTextField.getText()));
             }
         }
     }
