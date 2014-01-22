@@ -15,7 +15,6 @@
  */
 package publy.algo;
 
-import java.util.List;
 import publy.data.bibitem.BibItem;
 
 /**
@@ -24,10 +23,8 @@ import publy.data.bibitem.BibItem;
  */
 public class PostProcessor {
 
-    public static void postProcess(List<BibItem> items) {
-        for (BibItem item : items) {
-            detectArxiv(item);
-        }
+    public static void postProcess(BibItem item) {
+        detectArxiv(item);
     }
 
     protected static void detectArxiv(BibItem item) {
