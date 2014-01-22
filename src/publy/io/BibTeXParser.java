@@ -58,6 +58,8 @@ public class BibTeXParser {
 
         parseFile(file, items, abbreviations, authors);
 
+        ensureAbbreviationsAreUnique(abbreviations, authors);
+
         for (BibItem item : items) {
             expandAbbreviations(item, abbreviations);
             replaceAuthorsAndEditors(item, authors);
@@ -325,11 +327,37 @@ public class BibTeXParser {
         }
     }
 
+    private static void ensureAbbreviationsAreUnique(HashMap<String, String> abbreviations, HashMap<String, Author> authors) {
+        Set<String> duplicate = abbreviations.keySet();
+        duplicate.retainAll(authors.keySet());
+
+        if (!duplicate.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            boolean first = true;
+            
+            for (String abbr : duplicate) {
+                if (!first) {
+                    sb.append(", ");
+                } else {
+                    first = false;
+                }
+                
+                sb.append('"').append(abbr).append('"');
+            }
+            
+            if (duplicate.size() == 1) {
+                Console.error("The abbreviation %s is used as both an author and a general abbreviation. This could lead to unspecified behaviour.", sb.toString());
+            } else {
+                Console.error("Some abbreviations are used as both an author and a general abbreviation. This could lead to unspecified behaviour. The abbreviations in question are:%n%s", sb.toString());
+            }
+        }
+    }
+
     private static void replaceAuthorsAndEditors(BibItem item, Map<String, Author> authors) {
         replaceAuthors(item, authors, "author", item.getAuthors());
         replaceAuthors(item, authors, "editor", item.getEditors());
     }
-    
+
     private static void replaceAuthors(BibItem item, Map<String, Author> authors, String field, List<Author> authorList) {
         String fieldValue = item.get(field);
 
