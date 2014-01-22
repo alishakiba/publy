@@ -261,8 +261,6 @@ public class Publy {
             }
 
             if (items != null) {
-                PostProcessor.postProcess(items);
-                
                 List<OutputCategory> categories = categorizePapers(settings, items);
 
                 if (settings.getConsoleSettings().isShowWarnings() && settings.getConsoleSettings().isWarnMandatoryFieldIgnored()) {

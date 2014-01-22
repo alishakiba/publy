@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import publy.Console;
+import publy.algo.PostProcessor;
 import publy.data.Pair;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
@@ -81,6 +82,8 @@ public class BibTeXParser {
                         if (ids.contains(item.getId())) {
                             Console.error("Duplicate publication identifier: %s", item.getId());
                         } else {
+                            PostProcessor.postProcess(item);
+                            
                             if (item.checkMandatoryFields()) {
                                 ids.add(item.getId());
                                 items.add(item);
