@@ -43,8 +43,6 @@ public class BibTeXParser {
     private static final Pattern plainPattern = Pattern.compile("plaintextname=\"([^\"]*)\"");
     private static final Pattern urlPattern = Pattern.compile("url=\"([^\"]*)\"");
     private static final Pattern groupPattern = Pattern.compile("group=\"([^\"]*)\"");
-    // Pattern for detecting an author link
-    private static final Pattern authorPattern = Pattern.compile("<([^<>]*)>");
     // Pattern for detecting an abbreviation
     private static final Pattern abbrPattern = Pattern.compile("<<([^>]*)>>");
 
@@ -61,7 +59,7 @@ public class BibTeXParser {
         ensureAbbreviationsAreUnique(abbreviations, authors);
 
         for (BibItem item : items) {
-            expandAbbreviations(item, abbreviations);
+            expandAbbreviations(item, abbreviations, authors);
             replaceAuthorsAndEditors(item, authors);
         }
 
@@ -328,27 +326,61 @@ public class BibTeXParser {
     }
 
     private static void ensureAbbreviationsAreUnique(HashMap<String, String> abbreviations, HashMap<String, Author> authors) {
-        Set<String> duplicate = abbreviations.keySet();
+        Set<String> duplicate = new HashSet<>(abbreviations.keySet());
         duplicate.retainAll(authors.keySet());
 
         if (!duplicate.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             boolean first = true;
-            
+
             for (String abbr : duplicate) {
                 if (!first) {
                     sb.append(", ");
                 } else {
                     first = false;
                 }
-                
+
                 sb.append('"').append(abbr).append('"');
             }
-            
+
             if (duplicate.size() == 1) {
                 Console.error("The abbreviation %s is used as both an author and a general abbreviation. This could lead to unspecified behaviour.", sb.toString());
             } else {
                 Console.error("Some abbreviations are used as both an author and a general abbreviation. This could lead to unspecified behaviour. The abbreviations in question are:%n%s", sb.toString());
+            }
+        }
+    }
+
+    private static void expandAbbreviations(BibItem item, Map<String, String> abbreviations, Map<String, Author> authors) {
+        for (String field : item.getFields()) {
+            String currentValue = item.get(field);
+
+            if (currentValue != null && !currentValue.isEmpty()) {
+                StringBuilder finalValue = new StringBuilder();
+                Matcher matcher = abbrPattern.matcher(currentValue);
+                int prevEnd = 0;
+
+                while (matcher.find()) {
+                    String abbreviation = matcher.group(1);
+                    int start = matcher.start();
+                    int end = matcher.end();
+
+                    finalValue.append(currentValue.substring(prevEnd, start));
+
+                    if (abbreviations.containsKey(abbreviation)) {
+                        finalValue.append(abbreviations.get(abbreviation));
+                    } else if (authors.containsKey(abbreviation)) {
+                        finalValue.append("<<").append(abbreviation).append(">>"); // Leave the author abbreviations
+                    } else {
+                        Console.error("Abbreviation \"%s\" is used, but never defined.", matcher.group(1));
+                    }
+
+                    prevEnd = end;
+                }
+
+                finalValue.append(currentValue.substring(prevEnd, currentValue.length()));
+
+                item.put(field, finalValue.toString());
             }
         }
     }
@@ -365,7 +397,7 @@ public class BibTeXParser {
             String[] names = fieldValue.split(" [aA][nN][dD] "); // " and ", ignoring case
 
             for (String name : names) {
-                Matcher matcher = authorPattern.matcher(name);
+                Matcher matcher = abbrPattern.matcher(name);
 
                 if (matcher.find()) {
                     Author a = authors.get(matcher.group(1));
@@ -376,7 +408,9 @@ public class BibTeXParser {
                         authorList.add(a);
                     }
                 } else {
-                    authorList.add(new Author(name));
+                    if (!name.trim().isEmpty()) {
+                        authorList.add(new Author(name));
+                    }
                 }
             }
 
@@ -395,38 +429,6 @@ public class BibTeXParser {
             }
 
             item.put(field, newFieldValue.toString());
-        }
-    }
-
-    private static void expandAbbreviations(BibItem item, Map<String, String> abbreviations) {
-        for (String field : item.getFields()) {
-            String currentValue = item.get(field);
-
-            if (currentValue != null && !currentValue.isEmpty()) {
-                StringBuilder finalValue = new StringBuilder();
-                Matcher matcher = abbrPattern.matcher(currentValue);
-                int prevEnd = 0;
-
-                while (matcher.find()) {
-                    String abbreviation = matcher.group(1);
-                    int start = matcher.start();
-                    int end = matcher.end();
-
-                    finalValue.append(currentValue.substring(prevEnd, start));
-
-                    if (abbreviations.containsKey(abbreviation)) {
-                        finalValue.append(abbreviations.get(abbreviation));
-                    } else {
-                        Console.error("Abbreviation \"%s\" is used, but never defined.", matcher.group(1));
-                    }
-
-                    prevEnd = end;
-                }
-
-                finalValue.append(currentValue.substring(prevEnd, currentValue.length()));
-
-                item.put(field, finalValue.toString());
-            }
         }
     }
 }
