@@ -15,6 +15,7 @@
  */
 package publy.algo;
 
+import java.util.HashMap;
 import publy.data.bibitem.BibItem;
 
 /**
@@ -23,8 +24,30 @@ import publy.data.bibitem.BibItem;
  */
 public class PostProcessor {
 
+    private static final HashMap<String, String> aliases; // key can be used instead of value
+    
+    static {
+        aliases = new HashMap<>();
+        aliases.put("journaltitle", "journal");
+    }
+    
     public static void postProcess(BibItem item) {
+        processAliases(item);
         detectArxiv(item);
+    }
+    
+    private static void processAliases(BibItem item) {
+        for (String field : aliases.keySet()) {
+            String value = item.get(field); // The possible alias
+            
+            if (value != null && !value.isEmpty()) {
+                String value2 = item.get(aliases.get(field)); // The field it replaces
+                
+                if (value2 == null || value2.isEmpty()) {
+                    item.put(aliases.get(field), value);
+                }
+            }
+        }
     }
 
     protected static void detectArxiv(BibItem item) {
