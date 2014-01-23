@@ -17,7 +17,6 @@ package publy.io.settings;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -35,6 +34,7 @@ import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
 import publy.gui.UIConstants;
 import publy.io.ResourceLocator;
+import publy.io.TempWriter;
 
 /**
  *
@@ -54,7 +54,7 @@ public class SettingsWriter {
             }
         }
 
-        try (BufferedWriter out = Files.newBufferedWriter(settingsFile, Charset.forName("UTF-8"))) {
+        try (TempWriter out = TempWriter.newTempWriter(settingsFile)) {
             // Write header
             out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             out.newLine();
@@ -70,6 +70,8 @@ public class SettingsWriter {
             // Write footer
             out.write("</plgsettings>");
             out.newLine();
+            
+            out.copyWrittenFileOnClose();
         }
     }
 
