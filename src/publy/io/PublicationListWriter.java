@@ -17,7 +17,6 @@ package publy.io;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -39,8 +38,9 @@ public abstract class PublicationListWriter {
     public void writePublicationList(List<OutputCategory> categories, Path target) throws IOException {
         Files.createDirectories(target.getParent());
         
-        try (BufferedWriter out = Files.newBufferedWriter(target, Charset.forName("UTF-8"))) {
+        try (TempWriter out = TempWriter.newTempWriter(target)) {
             writePublicationList(categories, out);
+            out.copyWrittenFileOnClose();
         }
     }
 

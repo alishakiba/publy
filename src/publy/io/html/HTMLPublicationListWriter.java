@@ -38,6 +38,7 @@ import publy.data.settings.Settings;
 import publy.gui.UIConstants;
 import publy.io.PublicationListWriter;
 import publy.io.ResourceLocator;
+import publy.io.TempWriter;
 
 /**
  *
@@ -177,7 +178,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         try {
             // First strip anything following a '#', as that's most likely a link inside the document
             String strippedFile = file;
-            
+
             if (strippedFile.contains("#")) {
                 strippedFile = strippedFile.substring(0, strippedFile.indexOf('#'));
             }
@@ -267,7 +268,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.newLine();
 
         itemWriter.setIgnoredFields(new HashSet<>(c.getIgnoredFields()));
-        
+
         // The actual entries
         for (BibItem item : c.getItems()) {
             if (settings.getGeneralSettings().isReverseNumbering()) {
@@ -345,11 +346,13 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                 Path gaJsTarget = settings.getFileSettings().getTarget().getParent().resolve(gaJs.getFileName());
 
                 try (BufferedReader reader = Files.newBufferedReader(gaJs, Charset.forName("UTF-8"));
-                        BufferedWriter writer = Files.newBufferedWriter(gaJsTarget, Charset.forName("UTF-8"))) {
+                        TempWriter writer = TempWriter.newTempWriter(gaJsTarget)) {
                     for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                         writer.write(line.replaceAll("~GAUSERACCOUNT~", settings.getHtmlSettings().getGoogleAnalyticsUser()));
                         writer.newLine();
                     }
+
+                    writer.copyWrittenFileOnClose();
                 }
             } else {
                 publy.Console.error("Cannot find Google Analytics JavaScript file \"%s\".", gaJs);
