@@ -21,7 +21,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import publy.data.ExampleBibItems;
 import publy.data.bibitem.BibItem;
-import publy.data.settings.GeneralSettings;
 
 /**
  *
