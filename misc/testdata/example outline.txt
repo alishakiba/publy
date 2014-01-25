@@ -1,0 +1,55 @@
+﻿Regular BibTeX:
+
+ - book (Spanner)
+ - journal paper (Fast Local)
+ - chapter in a book (Pat's hash tables chapter)
+ - PhD thesis (Jit's)
+ 
+Abstract, paper and arxiv:
+
+ - journal paper (flips)
+
+Status:
+
+ - submitted journal paper (vida's separator paper?)
+ - accepted conference paper (theta 5)
+ - acceptedrev journal paper (Pat's Robust Geometric Spanners)
+
+Links:
+
+ - book (web link) (Pat's algo)
+ - conference paper with slides and link to journal version (local and internal link) (flips)
+ 
+Other formats:
+ 
+ - Invited talk (multiple links) (Pat's randomized algorithms I, II, III)
+ - Eprint (average theta)
+
+
+
+================ Publy features
+
+- <author>
+- <abbr>
+-- The above defined author abbreviations can be used in the "author" field: author={<a> and <b> and <c>}
+-- The above defined general abbreviations can be used in the value of any field (so not in the type, identifier, or key), like so: field={Stuff <<abbreviation>> more stuff}
+-- There are a few optional additional fields:
+--  abstract: The full abstract of the paper
+--  pubstate: Either "submitted" for manuscripts under review, "accepted" for accepted but unpublished manuscripts, or "acceptedrev" for accepted with minor revisions; no pubstate indicates that it has been published
+--  arxiv: The arXiv.org identifier of a preprint of the paper:
+--    arxiv={1212.0570}
+--  The sub-category of the paper can be indicated in two ways:
+--    arxiv={1212.0570}
+--    primaryClass={cs.cg}
+--  or
+--    arxiv={1212.0570 [cs.cg]}
+--  doi: The DOI of the paper:
+--  presented: If this has the value "yes", this indicates that you gave the talk for this paper
+--  paper: A relative path locating a digital copy of the paper.
+--  link: An arbitrary link. Consists of an anchor text, followed by either a relative path locating a file on the website, a "#" followed by the bibtex identifier of another publication in this list, or a fully qualified url to an external resource. Examples:
+--    link={Anchor|images/anchor.png}
+--    link2={Slides (pdf)|slides/AwesomeTalk.pdf}
+--    link3={Full version|#fullversion}
+--    link4={Demonstration|http://www.youtube.com/watch?v=SomeVideo}
+--    link5={Corresponding author|mailto:author@example.com}
+
