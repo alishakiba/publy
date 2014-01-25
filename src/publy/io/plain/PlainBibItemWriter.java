@@ -38,7 +38,7 @@ public class PlainBibItemWriter extends BibItemWriter {
     public void write(BibItem item) throws IOException {
         writeTitleAndAuthors(item);
 
-        if (isPresent(item, "status")) {
+        if (isPresent(item, "pubstate")) {
             writeStatus(item);
         } else {
             switch (item.getType()) {
@@ -416,7 +416,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         }
 
         if (venue == null) {
-            switch (get(item, "status")) {
+            switch (get(item, "pubstate")) {
                 case "submitted":
                     output("Submitted for review.", true);
                     break;
@@ -427,10 +427,10 @@ public class PlainBibItemWriter extends BibItemWriter {
                     output("Accepted for publication, pending minor revisions.", true);
                     break;
                 default:
-                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized status: \"" + get(item, "status") + "\"");
+                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized pubstate: \"" + get(item, "pubstate") + "\"");
             }
         } else {
-            switch (get(item, "status")) {
+            switch (get(item, "pubstate")) {
                 case "submitted":
                     output("Submitted to ", venue, ".", true);
                     break;
@@ -441,7 +441,7 @@ public class PlainBibItemWriter extends BibItemWriter {
                     output("Accepted, pending minor revisions, to ", venue, ".", true);
                     break;
                 default:
-                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized status: \"" + get(item, "status") + "\"");
+                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized pubstate: \"" + get(item, "pubstate") + "\"");
             }
         }
     }

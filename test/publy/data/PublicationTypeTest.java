@@ -50,7 +50,7 @@ public class PublicationTypeTest {
         submitted.put("title", "Title");
         submitted.put("journal", "Journal of Examples");
         submitted.put("year", "2013");
-        submitted.put("status", "submitted");
+        submitted.put("pubstate", "submitted");
         submitted.put("--test--", "4"); // Should match this type and up
         
         // ARXIV
@@ -59,7 +59,7 @@ public class PublicationTypeTest {
         submittedArxiv.put("title", "Title");
         submittedArxiv.put("journal", "Journal of Examples");
         submittedArxiv.put("year", "2013");
-        submittedArxiv.put("status", "submitted");
+        submittedArxiv.put("pubstate", "submitted");
         submittedArxiv.put("arxiv", "X");
         submittedArxiv.put("--test--", "3"); // Should match this type and up
         
@@ -69,7 +69,7 @@ public class PublicationTypeTest {
         accepted.put("title", "Title");
         accepted.put("journal", "Journal of Examples");
         accepted.put("year", "2013");
-        accepted.put("status", "accepted");
+        accepted.put("pubstate", "accepted");
         accepted.put("--test--", "2"); // Should match this type and up
         
         BibItem acceptedrev = new BibItem("article", "test");
@@ -77,7 +77,7 @@ public class PublicationTypeTest {
         acceptedrev.put("title", "Title");
         acceptedrev.put("journal", "Journal of Examples");
         acceptedrev.put("year", "2013");
-        acceptedrev.put("status", "acceptedrev");
+        acceptedrev.put("pubstate", "acceptedrev");
         acceptedrev.put("--test--", "2"); // Should match this type and up
         
         BibItem acceptedArxiv = new BibItem("article", "test");
@@ -85,9 +85,33 @@ public class PublicationTypeTest {
         acceptedArxiv.put("title", "Title");
         acceptedArxiv.put("journal", "Journal of Examples");
         acceptedArxiv.put("year", "2013");
-        acceptedArxiv.put("status", "accepted");
+        acceptedArxiv.put("pubstate", "accepted");
         acceptedArxiv.put("arxiv", "X");
         acceptedArxiv.put("--test--", "2"); // Should match this type and up
+        
+        BibItem forthcoming = new BibItem("article", "test");
+        forthcoming.put("author", "Thor, Au");
+        forthcoming.put("title", "Title");
+        forthcoming.put("journal", "Journal of Examples");
+        forthcoming.put("year", "2013");
+        forthcoming.put("pubstate", "forthcoming");
+        forthcoming.put("--test--", "2"); // Should match this type and up
+        
+        BibItem inpress = new BibItem("article", "test");
+        inpress.put("author", "Thor, Au");
+        inpress.put("title", "Title");
+        inpress.put("journal", "Journal of Examples");
+        inpress.put("year", "2013");
+        inpress.put("pubstate", "inpress");
+        inpress.put("--test--", "2"); // Should match this type and up
+        
+        BibItem prepublished = new BibItem("article", "test");
+        prepublished.put("author", "Thor, Au");
+        prepublished.put("title", "Title");
+        prepublished.put("journal", "Journal of Examples");
+        prepublished.put("year", "2013");
+        prepublished.put("pubstate", "prepublished");
+        prepublished.put("--test--", "2"); // Should match this type and up
         
         // PUBLISHED
         BibItem published = new BibItem("article", "test");
@@ -105,7 +129,7 @@ public class PublicationTypeTest {
         publishedArxiv.put("arxiv", "X");
         publishedArxiv.put("--test--", "1"); // Should match this type and up
         
-        BibItem items[] = new BibItem[] {submitted, submittedArxiv, accepted, acceptedrev, acceptedArxiv, published, publishedArxiv};
+        BibItem items[] = new BibItem[] {submitted, submittedArxiv, prepublished, acceptedrev, acceptedArxiv, published, publishedArxiv};
         
         // Static method
         for (BibItem item : items) {
@@ -113,14 +137,7 @@ public class PublicationTypeTest {
                 boolean expResult = Integer.parseInt(item.get("--test--")) <= i;
                 boolean result = PublicationType.matches(types[i], item);
                 
-                if (expResult != result) {
-                    System.out.println("Wrong match!");
-                    System.out.println("TYPE: " + types[i]);
-                    System.out.println("ITEM:");
-                    System.out.println(item.toString());
-                }
-                
-                assertEquals(expResult, result);
+                assertEquals("Type: " + types[i] + ". Item: " + item.toString(), expResult, result);
             }
         }
         
@@ -130,14 +147,7 @@ public class PublicationTypeTest {
                 boolean expResult = Integer.parseInt(item.get("--test--")) <= i;
                 boolean result = types[i].matches(item);
                 
-                if (expResult != result) {
-                    System.out.println("Wrong match!");
-                    System.out.println("TYPE: " + types[i]);
-                    System.out.println("ITEM:");
-                    System.out.println(item.toString());
-                }
-                
-                assertEquals(expResult, result);
+                assertEquals("Type: " + types[i] + ". Item: " + item.toString(), expResult, result);
             }
         }
     }

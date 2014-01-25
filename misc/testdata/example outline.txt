@@ -35,7 +35,7 @@ Other formats:
 -- The above defined general abbreviations can be used in the value of any field (so not in the type, identifier, or key), like so: field={Stuff <<abbreviation>> more stuff}
 -- There are a few optional additional fields:
 --  abstract: The full abstract of the paper
---  status: Either "submitted" for manuscripts under review, "accepted" for accepted but unpublished manuscripts, or "acceptedrev" for accepted with minor revisions; no status indicates that it has been published
+--  pubstate: Either "submitted" for manuscripts under review, "accepted" for accepted but unpublished manuscripts, or "acceptedrev" for accepted with minor revisions; no pubstate indicates that it has been published
 --  arxiv: The arXiv.org identifier of a preprint of the paper:
 --    arxiv={1212.0570}
 --  The sub-category of the paper can be indicated in two ways:

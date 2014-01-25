@@ -36,7 +36,7 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("year", "2014");
         item.put("abstract", "The problem of computing the minimum number of flips to transform one triangulation of a convex polygon to another is not known to be in P or NP-complete. A flip sequence determines a one-to-one correspondence between the edges of the two triangulations. As a step towards understanding the source of difficulty, we investigate the problem when this edge correspondence is given, i.e., we want the flip distance between two edge labelled triangulations of a convex polygon. We give tight worst case bounds of $\\Theta(n \\log n)$ on the flip distance between edge labelled triangulations of a convex polygon, and edge-labelled combinatorial triangulations, in contrast to the $\\Theta(n)$ bounds for the unlabelled case. Our method is to reduce to sorting with restricted operations similar to the length-weighted reversals relevant in comparative genomics.  Our bounds imply a lower bound on a very general model of sorting that subsumes a previously known lower bound. We give an $O(\\log n)$-factor approximation algorithm for computing the flip distance between edge labelled triangulations of a convex polygon. We also consider simultaneous flips on edge-labelled triangulations. We prove an $O(\\log^2 n)$ upper bound and an $\\Omega(\\log n)$ lower bound on the worst case number of simultaneous flips, in contrast with the tight bound of $\\Theta(\\log n)$ for the unlabelled case proved in SODA '06.");
         item.put("file", "publications/papers/2014/Bose, Lubiw, Pathak, Verdonschot - Flipping Edge-Labelled Triangulations.pdf");
-        item.put("status", "submitted");
+        item.put("pubstate", "submitted");
         add(item);
 
         item = new BibItem("inproceedings",
@@ -48,7 +48,7 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("abstract", "For a set of points in the plane and a fixed integer $k > 0$, the Yao graph $Y_k$ partitions the space around each point into $k$ equiangular cones, and connects each point to a nearest neighbor in each cone. With the exception of $Y_5$, it is known for all Yao graphs whether or not they are geometric spanners. In this paper we resolve this gap and show that $Y_5$ is a $t$-spanner with spanning ratio $t$ less than 10.9. We also improve the known spanning ratio of all the Yao graphs for odd $k > 5$. Finally, we revisit the $Y_6$ graph, which plays a particularly important role as the transition between the graphs ($k > 6$) for which simple inductive proofs are known, and the graphs ($k \\le 6$) whose best spanning ratios are established by complex arguments. Here we reduce the known spanning ratio of $Y_6$ from $17.6$ to $5.8$.");
         item.put("file", "publications/papers/2014/Barba, Bose, Damian, Fagerberg, ORourke, van Renssen, Taslakian, Verdonschot - New and Improved Spanning Ratios on Yao Graphs.pdf");
         item.put("arxiv", "1307.5829");
-        item.put("status", "submitted");
+        item.put("pubstate", "submitted");
         add(item);
 
         item = new BibItem("inproceedings",
@@ -60,7 +60,7 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("abstract", "Theta graphs are important geometric graphs that have many applications, including wireless networking, motion planning, real-time animation, and minimum-spanning tree construction. We give closed form expressions for the average degree of theta graphs of a homogeneous Poisson point process over the plane. We then show that essentially the same bounds—with vanishing error terms—hold for theta graphs of finite sets of points that are uniformly distributed in a square. Finally, we show that the number of edges in a theta graph of points uniformly distributed in a square is concentrated around its expected value.");
         item.put("file", "publications/papers/2014/Morin, Verdonschot - On the Average Number of Edges in Theta Graphs.pdf");
         item.put("arxiv", "1304.3402");
-        item.put("status", "submitted");
+        item.put("pubstate", "submitted");
         add(item);
 
         item = new BibItem("inproceedings",
@@ -71,7 +71,7 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("year", "2013");
         item.put("abstract", "We study the inverse barycenter problem where we want to find locations for given weights on the boundary of a given region in $\\mathbb{R}^2$ realizing a given barycenter point. We show that there is always a solution if the weights are balanced, i.e., no weight is larger than half of the total weight, and that we can compute the placements efficiently for simple polygons. We also study the three-dimensional version of the problem.");
         item.put("file", "publications/papers/2013/Barba, De Carufel, Fleischer, Kawamura, Korman, Okamoto, Tang, Tokuyama, Verdonschot, Wang - The Inverse Barycenter Problem.pdf");
-        item.put("status", "submitted");
+        item.put("pubstate", "submitted");
         add(item);
 
         item = new BibItem("inproceedings",
@@ -170,7 +170,7 @@ public class ExampleBibItems extends ArrayList<BibItem> {
         item.put("abstract", "We prove that any irreducible triangulation on $n$ vertices has $O(4.6807^n)$ regular edge labelings and that there are irreducible triangulations on $n$ vertices with $\\Omega(3.0426^n)$ regular edge labelings.");
         item.put("file", "publications/papers/2012/Buchin, Speckmann, Verdonschot - On the Number of Regular Edge Labelings (DMTCS).pdf");
         item.put("link2", "Conference version|#buchin2011optimizing");
-        item.put("status", "submitted");
+        item.put("pubstate", "submitted");
         add(item);
 
         item = new BibItem("talk",

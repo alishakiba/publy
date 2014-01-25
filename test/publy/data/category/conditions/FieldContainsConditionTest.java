@@ -39,9 +39,9 @@ public class FieldContainsConditionTest {
         FieldCondition year = new FieldContainsCondition(false, "year", "201");
         FieldCondition pages = new FieldContainsCondition(false, "pages", "--1");
         FieldCondition booktitle = new FieldContainsCondition(false, "booktitle", "CCCG");
-        FieldCondition status = new FieldContainsCondition(false, "status", "submitted");
+        FieldCondition pubstate = new FieldContainsCondition(false, "pubstate", "submitted");
         
-        List<FieldCondition> conditions = Arrays.asList(year, pages, booktitle, status);
+        List<FieldCondition> conditions = Arrays.asList(year, pages, booktitle, pubstate);
 
         List<BibItem> items = new ExampleBibItems();
 
@@ -49,7 +49,7 @@ public class FieldContainsConditionTest {
             new boolean[] {true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true}, // year
             new boolean[] {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true,  false, false, true,  false}, // pages
             new boolean[] {false, false, false, false, true,  false, false, false, true,  true,  false, false, false, false, false, false, false, false, true,  false, false}, // booktitle
-            new boolean[] {true,  true,  true,  true,  false, false, false, false, false, false, false, true,  false, false, false, false, false, false, false, false, false}  // status
+            new boolean[] {true,  true,  true,  true,  false, false, false, false, false, false, false, true,  false, false, false, false, false, false, false, false, false}  // pubstate
         };
         
         for (int i = 0; i < conditions.size(); i++) {

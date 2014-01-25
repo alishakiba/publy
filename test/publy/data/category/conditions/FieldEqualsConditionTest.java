@@ -39,9 +39,9 @@ public class FieldEqualsConditionTest {
         FieldCondition year = new FieldEqualsCondition(false, "year", "2013", "2012");
         FieldCondition pages = new FieldEqualsCondition(false, "pages", "117--128");
         FieldCondition booktitle = new FieldEqualsCondition(false, "booktitle", "Proceedings of the 25th ACM-SIAM Symposium on Discrete Algorithms (SODA14)");
-        FieldCondition status = new FieldEqualsCondition(false, "status", "submitted");
+        FieldCondition pubstate = new FieldEqualsCondition(false, "pubstate", "submitted");
         
-        List<FieldCondition> conditions = Arrays.asList(year, pages, booktitle, status);
+        List<FieldCondition> conditions = Arrays.asList(year, pages, booktitle, pubstate);
 
         List<BibItem> items = new ExampleBibItems();
 
@@ -49,7 +49,7 @@ public class FieldEqualsConditionTest {
             new boolean[] {false, false, false, true,  true,  true,  true,  true,  true,  true,  true,  true,  false, true,  true,  true,  true,  false, false, false, false}, // year
             new boolean[] {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true,  false}, // pages
             new boolean[] {true,  true,  false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false}, // booktitle
-            new boolean[] {true,  true,  true,  true,  false, false, false, false, false, false, false, true,  false, false, false, false, false, false, false, false, false}  // status
+            new boolean[] {true,  true,  true,  true,  false, false, false, false, false, false, false, true,  false, false, false, false, false, false, false, false, false}  // pubstate
         };
         
         for (int i = 0; i < conditions.size(); i++) {

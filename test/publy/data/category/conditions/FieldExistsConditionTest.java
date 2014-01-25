@@ -39,9 +39,9 @@ public class FieldExistsConditionTest {
         FieldExistsCondition year = new FieldExistsCondition(false, "year");
         FieldExistsCondition pages = new FieldExistsCondition(false, "pages");
         FieldExistsCondition booktitle = new FieldExistsCondition(false, "booktitle");
-        FieldExistsCondition status = new FieldExistsCondition(false, "status");
+        FieldExistsCondition pubstate = new FieldExistsCondition(false, "pubstate");
         
-        List<FieldExistsCondition> conditions = Arrays.asList(year, pages, booktitle, status);
+        List<FieldExistsCondition> conditions = Arrays.asList(year, pages, booktitle, pubstate);
 
         List<BibItem> items = new ExampleBibItems();
 
@@ -49,7 +49,7 @@ public class FieldExistsConditionTest {
             new boolean[] {true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true }, // year
             new boolean[] {false, false, false, false, true,  false, false, false, true,  true,  true,  false, false, false, true,  true,  true,  true,  true,  true,  false}, // pages
             new boolean[] {true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  false, false, false, true,  true,  true,  true,  true,  true,  false}, // booktitle
-            new boolean[] {true,  true,  true,  true,  false, false, false, false, false, false, false, true,  false, false, false, false, false, false, false, false, false}  // status
+            new boolean[] {true,  true,  true,  true,  false, false, false, false, false, false, false, true,  false, false, false, false, false, false, false, false, false}  // pubstate
         };
         
         for (int i = 0; i < conditions.size(); i++) {

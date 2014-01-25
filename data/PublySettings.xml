@@ -17,7 +17,7 @@
         <htmlNote><![CDATA[]]></htmlNote>
         <TypeCondition inverted="false"><![CDATA[book]]></TypeCondition>
         <fieldConditions>
-          <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
+          <FieldEqualsCondition inverted="true" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
         <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
@@ -27,7 +27,7 @@
         <htmlNote><![CDATA[]]></htmlNote>
         <TypeCondition inverted="false"><![CDATA[incollection]]></TypeCondition>
         <fieldConditions>
-          <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
+          <FieldEqualsCondition inverted="true" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
         <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
@@ -37,7 +37,7 @@
         <htmlNote><![CDATA[]]></htmlNote>
         <TypeCondition inverted="false"><![CDATA[inproceedings;conference]]></TypeCondition>
         <fieldConditions>
-          <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
+          <FieldEqualsCondition inverted="true" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
           <FieldContainsCondition inverted="true" field="booktitle"><![CDATA[CCCG;EuroCG]]></FieldContainsCondition>
         </fieldConditions>
         <ignoredFields><![CDATA[volume;series]]></ignoredFields>
@@ -48,7 +48,7 @@
         <htmlNote><![CDATA[]]></htmlNote>
         <TypeCondition inverted="false"><![CDATA[article]]></TypeCondition>
         <fieldConditions>
-          <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
+          <FieldEqualsCondition inverted="true" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
         <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
@@ -58,7 +58,7 @@
         <htmlNote><![CDATA[]]></htmlNote>
         <TypeCondition inverted="false"><![CDATA[*]]></TypeCondition>
         <fieldConditions>
-          <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
+          <FieldEqualsCondition inverted="true" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
         <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
@@ -68,7 +68,7 @@
         <htmlNote><![CDATA[]]></htmlNote>
         <TypeCondition inverted="false"><![CDATA[*]]></TypeCondition>
         <fieldConditions>
-          <FieldEqualsCondition inverted="false" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
+          <FieldEqualsCondition inverted="false" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
         <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
@@ -78,7 +78,7 @@
         <htmlNote><![CDATA[]]></htmlNote>
         <TypeCondition inverted="false"><![CDATA[talk]]></TypeCondition>
         <fieldConditions>
-          <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
+          <FieldEqualsCondition inverted="true" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
         <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
@@ -88,7 +88,7 @@
         <htmlNote><![CDATA[]]></htmlNote>
         <TypeCondition inverted="false"><![CDATA[mastersthesis;phdthesis]]></TypeCondition>
         <fieldConditions>
-          <FieldEqualsCondition inverted="true" field="status"><![CDATA[submitted]]></FieldEqualsCondition>
+          <FieldEqualsCondition inverted="true" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
         <ignoredFields><![CDATA[]]></ignoredFields>
       </category>

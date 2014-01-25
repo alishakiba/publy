@@ -15,6 +15,8 @@
  */
 package publy.data;
 
+import java.util.HashSet;
+import java.util.Set;
 import publy.data.bibitem.BibItem;
 
 /**
@@ -24,6 +26,21 @@ import publy.data.bibitem.BibItem;
 public enum PublicationType {
 
     NONE, PUBLISHED, ACCEPTED, ARXIV, ALL;
+    
+    /**
+     * All <code>pubstate</code> values which are classified as ACCEPTED.
+     */
+    private static final Set<String> ACCEPTED_STATES;
+    
+    static {
+        ACCEPTED_STATES = new HashSet<>();
+        
+        ACCEPTED_STATES.add("accepted");
+        ACCEPTED_STATES.add("acceptedrev");
+        ACCEPTED_STATES.add("forthcoming");
+        ACCEPTED_STATES.add("inpress");
+        ACCEPTED_STATES.add("prepublished");
+    }
 
     @Override
     public String toString() {
@@ -53,23 +70,32 @@ public enum PublicationType {
         } else if (type == NONE) {
             return false;
         } else {
-            if (item.get("status") != null && !item.get("status").isEmpty()) {
+            // The type is either PUBLISHED, ACCEPTED, or ARXIV
+            String pubstate = item.get("pubstate");
+            
+            if (pubstate == null || pubstate.isEmpty()) {
+                // The paper has been published, matching all remaining types
+                return true;
+            } else {
+                // The paper has not been published
                 if (type == PUBLISHED) {
                     return false;
                 } else {
-                    if (item.get("status").startsWith("accepted")) {
+                    // The type is either ACCEPTED or ARXIV
+                    if (ACCEPTED_STATES.contains(pubstate)) {
+                        // The paper has been accepted, matching all remaining types
                         return true;
                     } else {
+                        // The paper has not been accepted
                         if (type == ACCEPTED) {
                             return false;
                         } else {
-                            // Type is ARXIV
-                            return item.get("arxiv") != null && !item.get("arxiv").isEmpty();
+                            // The type is ARXIV
+                            String arxiv = item.get("arxiv");
+                            return arxiv != null && !arxiv.isEmpty();
                         }
                     }
                 }
-            } else {
-                return true;
             }
         }
     }

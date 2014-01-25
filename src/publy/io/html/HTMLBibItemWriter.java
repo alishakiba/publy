@@ -53,7 +53,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     public void write(BibItem item) throws IOException {
         writeTitleAndAuthorsHTML(item);
 
-        if (isPresent(item, "status")) {
+        if (isPresent(item, "pubstate")) {
             writeStatus(item);
         } else {
             out.write(indent);
@@ -509,7 +509,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write(indent);
 
         if (title == null) {
-            switch (get(item, "status")) {
+            switch (get(item, "pubstate")) {
                 case "submitted":
                     output("Submitted for review.", true);
                     break;
@@ -520,10 +520,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     output("Accepted for publication, pending minor revisions.", true);
                     break;
                 default:
-                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized status: \"" + get(item, "status") + "\"");
+                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized pubstate: \"" + get(item, "pubstate") + "\"");
             }
         } else {
-            switch (get(item, "status")) {
+            switch (get(item, "pubstate")) {
                 case "submitted":
                     output("Submitted to <span class=\"booktitle\">", title, "</span>.", true);
                     break;
@@ -534,7 +534,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     output("Accepted, pending minor revisions, to <span class=\"booktitle\">", title, "</span>.", true);
                     break;
                 default:
-                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized status: \"" + get(item, "status") + "\"");
+                    throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized pubstate: \"" + get(item, "pubstate") + "\"");
             }
         }
     }
