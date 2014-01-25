@@ -63,7 +63,7 @@ public abstract class BibItemWriter {
         }
     }
 
-    protected String formatAuthors(BibItem item, boolean editors, Author.NameOutputType type) {
+    protected String formatAuthors(BibItem item, boolean editors, boolean includeLinks) {
         List<Author> authorList = (editors ? item.getEditors() : item.getAuthors());
         List<String> authors = new ArrayList<>(authorList.size());
         GeneralSettings gs = settings.getGeneralSettings();
@@ -78,7 +78,11 @@ public abstract class BibItemWriter {
                 }
             } else {
                 if (gs.isListAllAuthors() || !a.isMe(gs)) {
-                    authors.add(a.getFormattedName(gs.getNameDisplay(), gs.isReverseNames(), type));
+                    if (includeLinks) {
+                        authors.add(a.getLinkedHTMLName(gs.getNameDisplay(), gs.isReverseNames()));
+                    } else {
+                        authors.add(a.getFormattedName(gs.getNameDisplay(), gs.isReverseNames()));
+                    }
                 }
             }
         }

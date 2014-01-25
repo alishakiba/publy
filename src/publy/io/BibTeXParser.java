@@ -40,8 +40,6 @@ public class BibTeXParser {
     private static final Pattern shortPattern = Pattern.compile("short=\"([^\"]*)\"");
     private static final Pattern fullPattern = Pattern.compile("full=\"([^\"]*)\"");
     private static final Pattern namePattern = Pattern.compile(" name=\"([^\"]*)\"");
-    private static final Pattern htmlPattern = Pattern.compile("htmlname=\"([^\"]*)\"");
-    private static final Pattern plainPattern = Pattern.compile("plaintextname=\"([^\"]*)\"");
     private static final Pattern urlPattern = Pattern.compile("url=\"([^\"]*)\"");
     private static final Pattern groupPattern = Pattern.compile("group=\"([^\"]*)\"");
     // Pattern for detecting an abbreviation
@@ -248,7 +246,7 @@ public class BibTeXParser {
     }
 
     private static void parseAuthor(String line, Map<String, Author> authors) {
-        String shortName = null, name = null, plaintextName = null, htmlName = null, url = null, group = null;
+        String shortName = null, name = null, url = null, group = null;
 
         Matcher matcher = shortPattern.matcher(line);
 
@@ -260,18 +258,6 @@ public class BibTeXParser {
 
         if (matcher.find()) {
             name = matcher.group(1);
-        }
-
-        matcher = htmlPattern.matcher(line);
-
-        if (matcher.find()) {
-            htmlName = matcher.group(1);
-        }
-
-        matcher = plainPattern.matcher(line);
-
-        if (matcher.find()) {
-            plaintextName = matcher.group(1);
         }
 
         matcher = urlPattern.matcher(line);
@@ -294,14 +280,6 @@ public class BibTeXParser {
             Author author = new Author(shortName, name);
             author.setUrl(url);
             author.setGroup(group);
-
-            if (htmlName != null) {
-                author.setName(Author.NameOutputType.HTML, htmlName);
-            }
-
-            if (plaintextName != null) {
-                author.setName(Author.NameOutputType.PLAINTEXT, plaintextName);
-            }
 
             authors.put(shortName, author);
         }
@@ -428,7 +406,7 @@ public class BibTeXParser {
                     newFieldValue.append(" and ");
                 }
 
-                newFieldValue.append(a.getName(Author.NameOutputType.LATEX));
+                newFieldValue.append(a.getName());
             }
 
             item.put(field, newFieldValue.toString());

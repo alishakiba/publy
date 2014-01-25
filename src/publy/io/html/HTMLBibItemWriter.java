@@ -163,7 +163,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("In ");
 
         if (isPresent(item, "editor")) {
-            output("<span class=\"editor\">", formatAuthors(item, true, Author.NameOutputType.LINKED_HTML), ", </span>");
+            output("<span class=\"editor\">", formatAuthors(item, true, true), ", </span>");
         }
 
         output("<span class=\"booktitle\">", get(item, "booktitle"), "</span>");
@@ -254,7 +254,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("In ");
 
         if (isPresent(item, "editor")) {
-            output("<span class=\"editor\">", formatAuthors(item, true, Author.NameOutputType.LINKED_HTML), ", </span>");
+            output("<span class=\"editor\">", formatAuthors(item, true, true), ", </span>");
         }
 
         output("<span class=\"booktitle\">", get(item, "booktitle"), "</span>");
@@ -423,7 +423,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Don't add an authors line if it's just me and I just want to list co-authors
         if (settings.getGeneralSettings().isListAllAuthors() || authorList.size() > 1 || (authorList.size() == 1 && !authorList.get(0).isMe(settings.getGeneralSettings()))) {
-            String authors = formatAuthors(item, useEditor, Author.NameOutputType.LINKED_HTML);
+            String authors = formatAuthors(item, useEditor, true);
 
             if (authors.endsWith(".</span>") || authors.endsWith(".</a>")) {
                 // Don't double up on periods (occurs when author names are abbreviated and reversed)
@@ -804,7 +804,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write("  author={");
 
             for (int i = 0; i < item.getAuthors().size(); i++) {
-                out.write(item.getAuthors().get(i).getName(Author.NameOutputType.LATEX));
+                out.write(item.getAuthors().get(i).getName());
 
                 if (i < item.getAuthors().size() - 1) {
                     out.write(" and ");

@@ -148,7 +148,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         out.write("In ");
 
         if (isPresent(item, "editor")) {
-            output(formatAuthors(item, true, Author.NameOutputType.PLAINTEXT), ", ");
+            output(formatAuthors(item, true, false), ", ");
         }
 
         output(get(item, "booktitle"));
@@ -230,7 +230,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         out.write("In ");
 
         if (isPresent(item, "editor")) {
-            output(formatAuthors(item, true, Author.NameOutputType.PLAINTEXT), ", ");
+            output(formatAuthors(item, true, false), ", ");
         }
 
         output(get(item, "booktitle"));
@@ -340,7 +340,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         if (settings.getGeneralSettings().isListAllAuthors()
                 || item.getAuthors().size() > 1
                 || (item.getAuthors().size() == 1 && !item.getAuthors().get(0).isMe(settings.getGeneralSettings()))) {
-            String authors = formatAuthors(item, useEditor, Author.NameOutputType.PLAINTEXT);
+            String authors = formatAuthors(item, useEditor, false);
 
             if (authors.endsWith(".")) {
                 // Don't double up on periods when author names are abbreviated and reversed
