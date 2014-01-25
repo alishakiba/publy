@@ -50,7 +50,7 @@ public class BibtexBibItemWriter extends BibItemWriter {
             out.write("  author={");
 
             for (int i = 0; i < item.getAuthors().size(); i++) {
-                out.write(item.getAuthors().get(i).getName(Author.NameOutputType.LATEX));
+                out.write(item.getAuthors().get(i).getName());
 
                 if (i < item.getAuthors().size() - 1) {
                     out.write(" and ");
