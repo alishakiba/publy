@@ -417,32 +417,58 @@ public class PlainBibItemWriter extends BibItemWriter {
 
         if (venue == null) {
             switch (get(item, "pubstate")) {
+                case "inpreparation":
+                    output("In preparation.", true);
+                    break;
                 case "submitted":
                     output("Submitted for review.", true);
+                    break;
+                case "acceptedrev":
+                    output("Accepted for publication, pending minor revisions.", true);
                     break;
                 case "accepted":
                     output("Accepted for publication.", true);
                     break;
-                case "acceptedrev":
-                    output("Accepted for publication, pending minor revisions.", true);
+                case "forthcoming":
+                    output("Forthcoming.", true);
+                    break;
+                case "inpress":
+                    output("In press.", true);
+                    break;
+                case "prepublished":
+                    output("Pre-published.", true);
                     break;
                 default:
                     throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized pubstate: \"" + get(item, "pubstate") + "\"");
             }
         } else {
             switch (get(item, "pubstate")) {
-                case "submitted":
-                    output("Submitted to ", venue, ".", true);
+                case "inpreparation":
+                    output("In preparation for submission to ", false);
                     break;
-                case "accepted":
-                    output("Accepted to ", venue, ".", true);
+                case "submitted":
+                    output("Submitted to ", false);
                     break;
                 case "acceptedrev":
-                    output("Accepted, pending minor revisions, to ", venue, ".", true);
+                    output("Accepted, pending minor revisions, to ", false);
+                    break;
+                case "accepted":
+                    output("Accepted to ", false);
+                    break;
+                case "forthcoming":
+                    output("Forthcoming in ", false);
+                    break;
+                case "inpress":
+                    output("In press with ", false);
+                    break;
+                case "prepublished":
+                    output("Pre-published in ", false);
                     break;
                 default:
                     throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized pubstate: \"" + get(item, "pubstate") + "\"");
             }
+            
+            output(venue, true);
         }
     }
 
