@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plgsettings majorversion="0" minorversion="6">
+<plgsettings majorversion="0" minorversion="7">
   <!-- File settings -->
   <fileSettings>
-    <publications>misc/testdata/route.bib</publications>
+    <publications>misc/testdata/publications.bib</publications>
     <target>misc/test/test.html</target>
     <header>data/defaultHeader.html</header>
     <footer>data/defaultFooter.html</footer>
@@ -76,9 +76,10 @@
         <shortName><![CDATA[Talks]]></shortName>
         <name><![CDATA[Invited Talks]]></name>
         <htmlNote><![CDATA[]]></htmlNote>
-        <TypeCondition inverted="false"><![CDATA[talk]]></TypeCondition>
+        <TypeCondition inverted="false"><![CDATA[misc]]></TypeCondition>
         <fieldConditions>
           <FieldEqualsCondition inverted="true" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
+          <FieldEqualsCondition inverted="false" field="presented"><![CDATA[yes]]></FieldEqualsCondition>
         </fieldConditions>
         <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
@@ -112,12 +113,12 @@
         <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
     </allCategories>
-    <activeCategories>0;3;2;9;1;7;5</activeCategories>
+    <activeCategories>5;0;3;2;9;1;7;6</activeCategories>
   </categorySettings>
 
   <!-- General settings -->
   <generalSettings>
-    <myNames><![CDATA[Prosenjit Bose;Bose, Prosenjit]]></myNames>
+    <myNames><![CDATA[me]]></myNames>
     <nameDisplay>ABBREVIATED</nameDisplay>
     <reverseNames>true</reverseNames>
     <listAllAuthors>false</listAllAuthors>
@@ -132,7 +133,7 @@
     <generateTextVersion>true</generateTextVersion>
     <generateBibtexVersion>true</generateBibtexVersion>
     <linkToAlternateVersions>true</linkToAlternateVersions>
-    <navPlacement>BEFORE_SECTION_AND_BOTTOM</navPlacement>
+    <navPlacement>TOP_AND_BOTTOM</navPlacement>
     <includeAbstract>ALL</includeAbstract>
     <includeBibtex>ARXIV</includeBibtex>
     <includePaper>ARXIV</includePaper>
@@ -144,8 +145,8 @@
   <!-- Console settings -->
   <consoleSettings>
     <showWarnings>true</showWarnings>
-    <warnMissingReferences>true</warnMissingReferences>
-    <warnNotAuthor>false</warnNotAuthor>
+    <warnMissingReferences>false</warnMissingReferences>
+    <warnNotAuthor>true</warnNotAuthor>
     <warnNoCategoryForItem>true</warnNoCategoryForItem>
     <warnMandatoryFieldIgnored>true</warnMandatoryFieldIgnored>
     <showLogs>true</showLogs>
