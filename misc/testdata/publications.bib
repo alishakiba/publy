@@ -1,13 +1,9 @@
 -- Authors
 -- Format: <author short="Abbreviation for use in this file" name="Author's name, using LaTeX syntax for special characters">
 -- There are a few optional arguments:
---  htmlname: Publy supports most special characters given in LaTeX notation (i.e. \'e for é). However, in some cases it might be useful to specify exactly how the author's name should be rendered in HTML. Note that if this is specified, the name will appear exactly as given and no further formatting will be applied.
---  plaintextname: As htmlname, but for the plain text version.
---   Using the special text ~NAME~ in the htmlname or plaintextname will replace that part with the formatted name.
---   Example: <author short="padawan" name="Wan, Pada" plaintextname="_~NAME~_"> (this surrounds the name with underscores in the plain text file)
 --  url: the author's website
 --  group: a css class that will be applied to this author in the HTML file.
---   Example: <author short="padawan" name="Wan, Pada" url="http://cg.scs.carleton.ca/~pada/" group="student">
+-- Example: <author short="padawan" name="Wan, Pada" url="http://cg.scs.carleton.ca/~pada/" group="student">
 -- This author can be added to a publication by writing <<padawan>> in the author or editor field of a bibtex entry.
 <author short="me"         name="Verdonschot, Sander">
 <author short="oswin"      name="Aichholzer, Oswin"       url="http://www.ist.tugraz.at/staff/aichholzer/">
@@ -79,10 +75,14 @@
 -- There are a few additional optional fields. Most of these are only used in the HTML version:
 --  abstract: The full abstract of the paper.
 --  pubstate: The status of the manuscript. Possible values are:
---   "submitted" for manuscripts under review,
---   "accepted" for accepted but unpublished manuscripts, and
---   "acceptedrev" for accepted with minor revisions
---  arxiv: The arXiv.org identifier of a preprint of the paper: arxiv={1212.0570 [cs.cg]}
+--   "inpreparation" for manuscripts being prepared for publication,
+--   "submitted" for manuscripts submitted to a journal or conference,
+--   "accepted" for manuscripts accepted to a journal or conference,
+--   "acceptedrev" for manuscripts accepted to a journal or conference, conditional on minor modifications being made,
+--   "inpress" for manuscripts that are fully copy-edited and out of the author’s hands; it is in the final stages of the production process, and
+--   "prepublished" for manuscripts that are published in a preliminary form or location, such as an online version in advance of print publication.
+--   If pubstate is missing, it indicates that the manuscript has been published.
+--  arxiv: The identifier, and optionally primary class, of an arXiv.org preprint of the paper: arxiv={1212.0570 [cs.cg]}
 --  doi: The DOI of the paper: doi={10.1007/978-3-642-33024-7_3}
 --  presented: If this has the value "yes", this indicates that you gave the talk for this paper. You can specify text to append after the title of your publication in this case.
 --  file: A relative path locating a digital copy of the paper.
@@ -99,7 +99,7 @@
 -- Listed
 @inproceedings{barba2014new,
  title={New and Improved Spanning Ratios for {Y}ao Graphs},
- author={<luis> and <jit> and <mirelad> and <rolff> and <joeor> and <andre> and <perouz> and <me>},
+ author={<<luis>> and <<jit>> and <<mirelad>> and <<rolff>> and <<joeor>> and <<andre>> and <<perouz>> and <<me>>},
  booktitle={<<proc>> 25th <<soda>> (SODA14)},
  year={2014},
  abstract={For a set of points in the plane and a fixed integer $k > 0$, the Yao graph $Y_k$ partitions the space around each point into $k$ equiangular cones, and connects each point to a nearest neighbor in each cone. With the exception of $Y_5$, it is known for all Yao graphs whether or not they are geometric spanners. In this paper we resolve this gap and show that $Y_5$ is a $t$-spanner with spanning ratio $t$ less than 10.9. We also improve the known spanning ratio of all the Yao graphs for odd $k > 5$. Finally, we revisit the $Y_6$ graph, which plays a particularly important role as the transition between the graphs ($k > 6$) for which simple inductive proofs are known, and the graphs ($k \le 6$) whose best spanning ratios are established by complex arguments. Here we reduce the known spanning ratio of $Y_6$ from $17.6$ to $5.8$.},
@@ -110,7 +110,7 @@
 
 @inproceedings{morin2013average,
  title={On the Average Number of Edges in Theta Graphs},
- author={<pat> and <me>},
+ author={<<pat>> and <<me>>},
  booktitle={<<proc>> 11th <<analco>> (ANALCO14)},
  year={2014},
  abstract={Theta graphs are important geometric graphs that have many applications, including wireless networking, motion planning, real-time animation, and minimum-spanning tree construction. We give closed form expressions for the average degree of theta graphs of a homogeneous Poisson point process over the plane. We then show that essentially the same bounds—with vanishing error terms—hold for theta graphs of finite sets of points that are uniformly distributed in a square. Finally, we show that the number of edges in a theta graph of points uniformly distributed in a square is concentrated around its expected value.},
@@ -121,7 +121,7 @@
 
 @inproceedings{barba2013inverse,
   title={The Inverse Barycenter Problem},
-  author={<luis> and <jlou> and <rudolff> and <akitoshik> and <matias> and <yoshioo> and <yuant> and <takeshit> and <me> and <tianhaow>},
+  author={<<luis>> and <<jlou>> and <<rudolff>> and <<akitoshik>> and <<matias>> and <<yoshioo>> and <<yuant>> and <<takeshit>> and <<me>> and <<tianhaow>>},
   booktitle={<<proc>> 24th <<isaac>> (ISAAC 2013)},
   year={2013},
   abstract={We study the inverse barycenter problem where we want to find locations for given weights on the boundary of a given region in $\mathbb{R}^2$ realizing a given barycenter point. We show that there is always a solution if the weights are balanced, i.e., no weight is larger than half of the total weight, and that we can compute the placements efficiently for simple polygons. We also study the three-dimensional version of the problem.},
@@ -131,7 +131,7 @@
 
 @inproceedings{aichholzer2013theta3,
   title={Theta-3 is connected},
-  author={<oswin> and <sangwb> and <luis> and <jit> and <matias> and <andre> and <perouz> and <me>},
+  author={<<oswin>> and <<sangwb>> and <<luis>> and <<jit>> and <<matias>> and <<andre>> and <<perouz>> and <<me>>},
   booktitle={<<proc>> 25th <<cccg>> (CCCG 2013)},
   pages={205--210},
   year={2013},
@@ -143,7 +143,7 @@
 
 @inproceedings{bose2013spanning,
   title={On the Spanning Ratio of Theta-Graphs},
-  author={<jit> and <andre> and <me>},
+  author={<<jit>> and <<andre>> and <<me>>},
   booktitle={<<proc>> 13th <<wads>> (WADS 2013)},
   year={2013},
   abstract={We present improved upper bounds on the spanning ratio of a large family of $\theta$-graphs. A $\theta$-graph partitions the plane around each vertex into $m$ disjoint cones, each having aperture $\theta = 2 \pi/m$. We show that for any integer $k \geq 1$, $\theta$-graphs with $4k + 4$ cones have spanning ratio at most $1 + 2 \sin(\theta/2) / (\cos(\theta/2) - \sin(\theta/2))$. We also show that $\theta$-graphs with $4k + 3$ and $4k + 5$ cones have spanning ratio at most $\cos (\theta/4) / (\cos (\theta/2) - \sin (3\theta/4))$. This is a significant improvement on all families of $\theta$-graphs for which exact bounds are not known. For example, the spanning ratio of the $\theta$-graph with 7 cones is decreased from at most 7.5625 to at most 3.5132. We also improve the upper bounds on the competitiveness of the $\theta$-routing algorithm for these graphs to $1 + 2 \sin(\theta/2) / (\cos(\theta/2) - \sin(\theta/2))$ on $\theta$-graphs with $4k + 4$ cones and to $1 + 2 \sin(\theta/2) \cdot \cos (\theta/4) / (\cos (\theta/2) - \sin (3\theta/4))$ on $\theta$-graphs with $4k + 3$ and $4k + 5$ cones. For example, the routing ratio of the $\theta$-graph with 7 cones is decreased from at most 7.5625 to at most 4.0490.},
@@ -152,7 +152,7 @@
 
 @inproceedings{barba2013stretch,
   title={On the stretch factor of the Theta-4 graph},
-  author={<luis> and <jit> and <jlou> and <andre> and <me>},
+  author={<<luis>> and <<jit>> and <<jlou>> and <<andre>> and <<me>>},
   booktitle={<<proc>> 13th <<wads>> (WADS 2013)},
   year={2013},
   abstract={In this paper we show that the $\theta$-graph with 4 cones has constant stretch factor, i.e., there is a path between any pair of vertices in this graph whose length is at most a constant times the Euclidean distance between that pair of vertices. This is the last $\theta$-graph for which it was not known whether its stretch factor was bounded.},
@@ -162,7 +162,7 @@
 
 @inproceedings{bose2013theta5,
   title={The {$\theta_5$}-graph is a spanner},
-  author={<jit> and <pat> and <andre> and <me>},
+  author={<<jit>> and <<pat>> and <<andre>> and <<me>>},
   booktitle={<<proc>> 39th <<wg>> (WG 2013)},
   year={2013},
   abstract={We show that the $\theta$-graph with 5 cones is a geometric spanner with spanning ratio at most $\sqrt{50 + 22 \sqrt{5}} \approx 9.960$. This is the first constant upper bound on the spanning ratio of this graph. The upper bound uses a constructive argument, giving a, possibly non-planar, spanning path between any two vertices. We also give a lower bound on the spanning ratio of $\frac{1}{2}(11\sqrt{5} -17) \approx 3.798$.},
@@ -176,7 +176,7 @@
 
 @inproceedings{bose2012competitive2,
   title={Competitive Routing on a Bounded-Degree Plane Spanner},
-  author={<jit> and <rolff> and <andre> and <me>},
+  author={<<jit>> and <<rolff>> and <<andre>> and <<me>>},
   booktitle={<<proc>> 24th <<cccg>> (CCCG 2012)},
   pages={299--304},
   year={2012},
@@ -188,7 +188,7 @@
 
 @inproceedings{bose2012optimal,
   title={Optimal Bounds on Theta-Graphs: More is not Always Better},
-  author={<jit> and <jlou> and <pat> and <andre> and <me>},
+  author={<<jit>> and <<jlou>> and <<pat>> and <<andre>> and <<me>>},
   booktitle={<<proc>> 24th <<cccg>> (CCCG 2012)},
   pages={305--310},
   year={2012},
@@ -198,7 +198,7 @@
 
 @inproceedings{buchin2012evolution,
   title={Evolution Strategies for Optimizing Rectangular Cartograms},
-  author={<kevinb> and <bettina> and <me>},
+  author={<<kevinb>> and <<bettina>> and <<me>>},
   booktitle={<<proc>> 7th <<giscience>> (GIScience 2012)},
   volume={7478},
   series={<<lncs>>},
@@ -213,7 +213,7 @@
 
 @article{buchin2012number,
   title={On the Number of Regular Edge Labelings},
-  author={<kevinb> and <bettina> and <me>},
+  author={<<kevinb>> and <<bettina>> and <<me>>},
   journal={<<dmtcs>>},
   year={2012},
   abstract={We prove that any irreducible triangulation on $n$ vertices has $O(4.6807^n)$ regular edge labelings and that there are irreducible triangulations on $n$ vertices with $\Omega(3.0426^n)$ regular edge labelings.},
@@ -233,7 +233,7 @@
 
 @article{bose2012making,
   title={Making triangulations 4-connected using flips},
-  author={<jit> and <dana> and <andre> and <maria> and <me>},
+  author={<<jit>> and <<dana>> and <<andre>> and <<maria>> and <<me>>},
   journal={<<cgta>> special issue for CCCG 2011},
   year={2012},
   abstract={We show that any combinatorial triangulation on $n$ vertices can be transformed into a 4-connected one using at most $\lfloor(3n - 9)/5\rfloor$ edge flips. We also give an example of an infinite family of triangulations that requires this many flips to be made 4-connected, showing that our bound is tight. In addition, for $n \geq 19$, we improve the upper bound on the number of flips required to transform any 4-connected triangulation into the canonical triangulation (the triangulation with two dominant vertices), matching the known lower bound of $2n - 15$. Our results imply a new upper bound on the diameter of the flip graph of $5.2 n - 33.6$, improving on the previous best known bound of $6n - 30$.},
@@ -245,7 +245,7 @@
 
 @inproceedings{bose2012plane,
   title={On Plane Constrained Bounded-Degree Spanners},
-  author={<jit> and <rolff> and <andre> and <me>},
+  author={<<jit>> and <<rolff>> and <<andre>> and <<me>>},
   booktitle={<<proc>> 10th <<latin>> (LATIN 2012)},
   volume={7256},
   series={<<lncs>>},
@@ -260,7 +260,7 @@
 
 @incollection{bose2012history,
   title={A History of Flips in Combinatorial Triangulations},
-  author={<jit> and <me>},
+  author={<<jit>> and <<me>>},
   booktitle={<<proc>> XIV Spanish Meeting on Computational Geometry (EGC 2011)},
   volume={7579},
   series={<<lncs>>},
@@ -276,7 +276,7 @@
 
 @inproceedings{bose2012competitive,
   title={Competitive Routing in the Half-{$\theta_6$}-Graph},
-  author={<jit> and <rolff> and <andre> and <me>},
+  author={<<jit>> and <<rolff>> and <<andre>> and <<me>>},
   booktitle={<<proc>> 23rd <<soda>> (SODA 2012)},
   pages = {1319--1328},
   year={2012},
@@ -289,7 +289,7 @@
 
 @inproceedings{deberg2011rectilinear,
   title={On rectilinear partitions with minimum stabbing number},
-  author={<markdb> and <amirali> and <me> and <vincentvdw>},
+  author={<<markdb>> and <<amirali>> and <<me>> and <<vincentvdw>>},
   booktitle={<<proc>> 12th <<wads>> (WADS 2011)},
   pages = {302--313},
   year = {2011},
@@ -304,7 +304,7 @@
 
 @inproceedings{bose2011making,
   title={Making triangulations 4-connected using flips},
-  author={<jit> and <dana> and <andre> and <maria> and <me>},
+  author={<<jit>> and <<dana>> and <<andre>> and <<maria>> and <<me>>},
   booktitle={<<proc>> 23rd <<cccg>> (CCCG 2011)},
   pages = {241--247},
   year = {2011},
@@ -317,7 +317,7 @@
 
 @inproceedings{buchin2011optimizing,
   title={Optimizing regular edge labelings},
-  author={<kevinb> and <bettina> and <me>},
+  author={<<kevinb>> and <<bettina>> and <<me>>},
   booktitle={<<proc>> 18th <<gd>> (GD 2010)},
   series={<<lncs>>},
   volume={6502},
@@ -334,7 +334,7 @@
 -- 2010
 
 @mastersthesis{verdonschot2010optimizing,
-  author={<me>},
+  author={<<me>>},
   title={Optimizing Regular Edge Labelings},
   school={Eindhoven University of Technology},
   year={2010},
