@@ -16,6 +16,11 @@
 package publy.gui;
 
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import publy.Console;
 
 /**
  *
@@ -23,16 +28,37 @@ import java.awt.Font;
  */
 public class AboutPanel extends javax.swing.JPanel {
 
+    private BufferedImage background;
+
     /**
      * Creates new form AboutPanel
      */
     public AboutPanel() {
         initComponents();
         applyStyles();
+
+        try {
+            background = ImageIO.read(getClass().getResource("/publy/gui/resources/logo.png"));
+        } catch (IOException ex) {
+            Console.except(ex, "An exception occurred while loading background image.");
+        }
     }
 
     private void applyStyles() {
         UIStyles.applyHeaderStyle(versionHeader, legalHeader, attributionHeader);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        
+        // paint the background image and scale it to fill the entire space
+        int width = background.getWidth();
+        int height = background.getHeight();
+        int x = (getWidth() - width) / 2; // center horizontally
+        int y = getHeight() - height - 10;
+        
+        g.drawImage(background, x, y, width, height, this);
     }
 
     /**
@@ -44,7 +70,6 @@ public class AboutPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        logoLabel = new javax.swing.JLabel();
         versionHeader = new javax.swing.JLabel();
         versionSeparator = new javax.swing.JSeparator();
         versionLabel = new javax.swing.JLabel();
@@ -69,8 +94,6 @@ public class AboutPanel extends javax.swing.JPanel {
         jCommanderLink = new publy.gui.LinkLabel("JCommander", "http://jcommander.org/");
         creativeCommonsLink = new publy.gui.LinkLabel("Creative Commons BY-ND 3.0 license", "http://creativecommons.org/licenses/by-nd/3.0/");
         dotLabel1 = new javax.swing.JLabel();
-
-        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/logo.png"))); // NOI18N
 
         versionHeader.setText("Version info");
 
@@ -109,10 +132,6 @@ public class AboutPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
-                .addComponent(logoLabel)
-                .addContainerGap(14, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,8 +197,6 @@ public class AboutPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(logoLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(versionHeader)
                     .addGroup(layout.createSequentialGroup()
@@ -245,7 +262,6 @@ public class AboutPanel extends javax.swing.JPanel {
     private javax.swing.JSeparator legalSeparator;
     private publy.gui.LinkLabel licenseLink;
     private javax.swing.JLabel licensedLabel;
-    private javax.swing.JLabel logoLabel;
     private javax.swing.JLabel newVersionsLabel;
     private javax.swing.JLabel parseCmdLabel;
     private javax.swing.JLabel runningVersionLabel;
