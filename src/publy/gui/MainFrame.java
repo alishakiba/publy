@@ -16,6 +16,9 @@
 package publy.gui;
 
 import java.awt.Cursor;
+import javax.swing.ImageIcon;
+import javax.swing.UIManager;
+import javax.swing.plaf.ColorUIResource;
 import publy.Console;
 import publy.Publy;
 import publy.data.settings.Settings;
@@ -31,18 +34,32 @@ public class MainFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form MainFrame
+     *
      * @param settings
      */
     public MainFrame(Settings settings) {
         this.settings = settings;
+
+        
+
         initComponents();
         setLocationRelativeTo(null); // Center
+        changeTabs();
 
         // Make sure all console output from the generation is redirected to the text area.
         Console.setOutputTarget(consoleTextPane);
-        
+
         // Make sure the console reads from the correct settings object
         Console.setSettings(settings.getConsoleSettings());
+    }
+
+    private void changeTabs() {
+        settingsTabbedPane.setTabComponentAt(0, new TabTitle("Files", new ImageIcon(getClass().getResource("/publy/gui/resources/folder-32.png")))); // Files
+        settingsTabbedPane.setTabComponentAt(1, new TabTitle("Categories", new ImageIcon(getClass().getResource("/publy/gui/resources/puzzle-32.png")))); // Categories
+        settingsTabbedPane.setTabComponentAt(2, new TabTitle("General", new ImageIcon(getClass().getResource("/publy/gui/resources/document-32.png")))); // General
+        settingsTabbedPane.setTabComponentAt(3, new TabTitle("HTML", new ImageIcon(getClass().getResource("/publy/gui/resources/globe-32.png")))); // HTML
+        settingsTabbedPane.setTabComponentAt(4, new TabTitle("Console", new ImageIcon(getClass().getResource("/publy/gui/resources/console-32.png")))); // Console
+        settingsTabbedPane.setTabComponentAt(5, new TabTitle("About", new ImageIcon(getClass().getResource("/publy/gui/resources/about-32.png")))); // About
     }
 
     public Settings getSettings() {
@@ -77,13 +94,14 @@ public class MainFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION);
         setIconImages(UIConstants.PUBLY_ICONS);
-        setPreferredSize(new java.awt.Dimension(450, 720));
+        setPreferredSize(new java.awt.Dimension(670, 720));
 
         mainSplitPane.setDividerLocation(getHeight() - 150);
         mainSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         mainSplitPane.setResizeWeight(1.0);
 
         settingsTabbedPane.setFont(settingsTabbedPane.getFont().deriveFont(settingsTabbedPane.getFont().getSize2D() + 2));
+        settingsTabbedPane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         settingsTabbedPane.addTab("Files", new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/folder-16.png")), fileSettingsPanel); // NOI18N
         settingsTabbedPane.addTab("Categories", new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/puzzle-16.png")), categorySettingsPanel); // NOI18N
         settingsTabbedPane.addTab("General", new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/document-16.png")), generalSettingsPanel); // NOI18N
@@ -160,7 +178,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         // Change cursor to hourglass
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        
+
         // Clear the console before generating
         consoleTextPane.setText("");
 
