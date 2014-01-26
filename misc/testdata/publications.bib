@@ -1,7 +1,14 @@
 -- Authors
--- Format: <author short="abbreviation for use in this file" name="Name" url="author's website">
--- If needed, different html and plain text names can be specified. These will be displayed exactly as given here, i.e. no formatting will be applied.
--- <author short="abbreviation" name="Name", htmlname="Name for HTML file" plaintextname="Name for text file" url="website">
+-- Format: <author short="Abbreviation for use in this file" name="Author's name, using LaTeX syntax for special characters">
+-- There are a few optional arguments:
+--  htmlname: Publy supports most special characters given in LaTeX notation (i.e. \'e for é). However, in some cases it might be useful to specify exactly how the author's name should be rendered in HTML. Note that if this is specified, the name will appear exactly as given and no further formatting will be applied.
+--  plaintextname: As htmlname, but for the plain text version.
+--   Using the special text ~NAME~ in the htmlname or plaintextname will replace that part with the formatted name.
+--   Example: <author short="padawan" name="Wan, Pada" plaintextname="_~NAME~_"> (this surrounds the name with underscores in the plain text file)
+--  url: the author's website
+--  group: a css class that will be applied to this author in the HTML file.
+--   Example: <author short="padawan" name="Wan, Pada" url="http://cg.scs.carleton.ca/~pada/" group="student">
+-- This author can be added to a publication by writing <<padawan>> in the author or editor field of a bibtex entry.
 <author short="me"         name="Verdonschot, Sander">
 <author short="oswin"      name="Aichholzer, Oswin"       url="http://www.ist.tugraz.at/staff/aichholzer/">
 <author short="sangwb"     name="Bae, Sang Won"           url="http://algeo.kyonggi.ac.kr/">
@@ -33,49 +40,52 @@
 
 -- General abbreviations
 -- Format: <abbr short="abbreviation for use in this file" full="expanded text">
--- Note: Abbreviations can contain author links (<abbr short="X" full="<a> and <b>">), but not the other way around.
+-- Abbreviations are invoked in the same way as authors, except they can occur in every field and get expanded first.
+-- This means that abbreviations can contain author links (<abbr short="X" full="<<a>> and <<b>>">), but not the other way around.
 <abbr short="proc" full="Proceedings of the">
 
 -- Conferences
--- Format: <conf short="abbreviation for use in this file" full="Full conference name for use in verbose publication list" abbr="official conference abbreviation for use in terse publication list">
-<conf short="analco" full="Meeting on Analytic Algorithmics and Combinatorics" abbr="ANALCO">
-<conf short="cccg" full="Canadian Conference on Computational Geometry" abbr="CCCG">
-<conf short="esa" full="European Symposium on Algorithms" abbr="ESA">
-<conf short="gd" full="International Symposium on Graph drawing" abbr="GD">
-<conf short="giscience" full="International Conference on Geographic Information Science" abbr="GIScience">
-<conf short="isaac" full="International Symposium on Algorithms and Computation" abbr="ISAAC">
-<conf short="jcdcgg" full="Japan Conference on Discrete and Computational Geometry and Graphs" abbr="JCDCGG">
-<conf short="latin" full="Latin American Symposium on Theoretical Informatics" abbr="LATIN">
-<conf short="pacificvis" full="IEEE Pacific Visualization Symposium" abbr="PacificVis">
-<conf short="socg" full="ACM Symposium on Computational Geometry" abbr="SoCG">
-<conf short="soda" full="ACM-SIAM Symposium on Discrete Algorithms" abbr="SODA">
-<conf short="wads" full="Algorithms and Data Structures Symposium" abbr="WADS">
-<conf short="wg" full="International Workshop on Graph-Theoretic Concepts in Computer Science" abbr="WG">
+<abbr short="analco" full="Meeting on Analytic Algorithmics and Combinatorics">
+<abbr short="cccg" full="Canadian Conference on Computational Geometry">
+<abbr short="esa" full="European Symposium on Algorithms">
+<abbr short="gd" full="International Symposium on Graph drawing">
+<abbr short="giscience" full="International Conference on Geographic Information Science">
+<abbr short="isaac" full="International Symposium on Algorithms and Computation">
+<abbr short="jcdcgg" full="Japan Conference on Discrete and Computational Geometry and Graphs">
+<abbr short="latin" full="Latin American Symposium on Theoretical Informatics">
+<abbr short="pacificvis" full="IEEE Pacific Visualization Symposium">
+<abbr short="socg" full="ACM Symposium on Computational Geometry">
+<abbr short="soda" full="ACM-SIAM Symposium on Discrete Algorithms">
+<abbr short="wads" full="Algorithms and Data Structures Symposium">
+<abbr short="wg" full="International Workshop on Graph-Theoretic Concepts in Computer Science">
 
 -- Journals
--- Format: <journal ... >, see Conferences for the arguments
-<journal short="cgta" full="Computational Geometry: Theory and Applications" abbr="CGTA">
-<journal short="dmtcs" full="Discrete Mathematics & Theoretical Computer Science" abbr="DMTCS">
-<journal short="ijcga" full="International Journal of Computational Geometry and Applications" abbr="IJCGA">
-<journal short="jap" full="Journal of Applied Probability" abbr="JAP">
-<journal short="jocg" full="Journal of Computational Geometry" abbr="JoCG">
-<journal short="lncs" full="Lecture Notes in Computer Science" abbr="LNCS">
+<abbr short="cgta" full="Computational Geometry: Theory and Applications">
+<abbr short="dmtcs" full="Discrete Mathematics & Theoretical Computer Science">
+<abbr short="ijcga" full="International Journal of Computational Geometry and Applications">
+<abbr short="jap" full="Journal of Applied Probability">
+<abbr short="jocg" full="Journal of Computational Geometry">
+<abbr short="lncs" full="Lecture Notes in Computer Science">
 
--- Publications (in reverse chronological order; latest first)
--- Format: standard BibTeX format, with a few exceptions:
--- The above defined author abbreviations can be used in the "author" field: author={<a> and <b> and <c>}
--- The above defined general abbreviations can be used in the value of any field (so not in the type, identifier, or key), like so: field={Stuff <<abbreviation>> more stuff}
--- The above defined conference abbreviations can be used in the "booktitle" field: booktitle={Proc. 42nd <<all>>}
--- The above defined journal abbreviations can be used in the "journal" field: journal={<<jomg>>}
--- There are a few optional additional fields:
---  abstract: The full abstract of the paper
---  status: Either "submitted" for manuscripts under review, "accepted" for accepted but unpublished manuscripts, or "acceptedrev" for accepted with minor revisions
---  arxiv: The arXiv.org identifier of a preprint of the paper:
---    arxiv={1212.0570}
---  doi: The DOI of the paper:
---    
---  presented: If this has the value "yes", this indicates that you gave the talk for this paper
---  paper: A relative path locating a digital copy of the paper.
+-- Publications (in the order you want them to appear in your list of publications; Publy does not sort these)
+-- Format: standard BibTeX format, with a few exceptions and additions:
+--  @String is not supported (use the abbr tag instead)
+--  Concatenation (via '#') is not supported
+--  Crossref is not supported
+--  
+--  The above defined author abbreviations can be used in the "author" and "editor" fields: author={<<a>> and <<b>>}
+--  The above defined abbreviations can be used in the value of any field (i.e. not in the type or identifier): booktitle={<<proc>> <<soda>>}
+--
+-- There are a few additional optional fields. Most of these are only used in the HTML version:
+--  abstract: The full abstract of the paper.
+--  pubstate: The status of the manuscript. Possible values are:
+--   "submitted" for manuscripts under review,
+--   "accepted" for accepted but unpublished manuscripts, and
+--   "acceptedrev" for accepted with minor revisions
+--  arxiv: The arXiv.org identifier of a preprint of the paper: arxiv={1212.0570 [cs.cg]}
+--  doi: The DOI of the paper: doi={10.1007/978-3-642-33024-7_3}
+--  presented: If this has the value "yes", this indicates that you gave the talk for this paper. You can specify text to append after the title of your publication in this case.
+--  file: A relative path locating a digital copy of the paper.
 --  link: An arbitrary link. Consists of an anchor text, followed by either a relative path locating a file on the website, a "#" followed by the bibtex identifier of another publication in this list, or a fully qualified url to an external resource. Examples:
 --    link={Anchor|images/anchor.png}
 --    link2={Slides (pdf)|slides/AwesomeTalk.pdf}
@@ -87,26 +97,6 @@
 -- Items without an '@' at the start of the line will not be considered.
 
 -- Listed
-@inproceedings{bose2014flipping,
- title={Flipping Edge-Labelled Triangulations},
- author={<jit> and <annal> and <vinayakp> and <me>},
- booktitle={<<proc>> 25th <<soda>> (SODA14)},
- year={2014},
- abstract={The problem of computing the minimum number of flips to transform one triangulation of a convex polygon to another is not known to be in P or NP-complete.
-A flip sequence determines a one-to-one correspondence between the edges of the two triangulations.
-As a step towards understanding the source of difficulty, we investigate the problem
-when this edge correspondence is given, i.e., we want the flip distance between two edge labelled triangulations of a convex polygon.
-
-We give tight worst case bounds of $\Theta(n \log n)$ on the flip distance between edge labelled triangulations of a convex polygon, and edge-labelled combinatorial triangulations, in contrast to the $\Theta(n)$ bounds for the unlabelled case.
-Our method is to reduce to sorting with restricted operations similar to the length-weighted reversals relevant in comparative genomics.  Our bounds imply a lower bound on a very general model of sorting that subsumes a previously known lower bound.
-
-We give an $O(\log n)$-factor approximation algorithm for computing the flip distance between edge labelled triangulations of a convex polygon.
-
-We also consider simultaneous flips on edge-labelled triangulations. We prove an $O(\log^2 n)$ upper bound and an $\Omega(\log n)$ lower bound on the worst case number of simultaneous flips, in contrast with the tight bound of $\Theta(\log n)$ for the unlabelled case proved in SODA '06.},
- --file={publications/papers/2014/Bose, Lubiw, Pathak, Verdonschot - Flipping Edge-Labelled Triangulations.pdf},
- status={submitted}
-}
-
 @inproceedings{barba2014new,
  title={New and Improved Spanning Ratios for {Y}ao Graphs},
  author={<luis> and <jit> and <mirelad> and <rolff> and <joeor> and <andre> and <perouz> and <me>},
