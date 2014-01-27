@@ -98,7 +98,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         mainSplitPane.setDividerLocation(getHeight() - 150);
         mainSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        mainSplitPane.setResizeWeight(1.0);
 
         settingsTabbedPane.setFont(settingsTabbedPane.getFont().deriveFont(settingsTabbedPane.getFont().getSize2D() + 2));
         settingsTabbedPane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
@@ -111,6 +110,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         mainSplitPane.setTopComponent(settingsTabbedPane);
 
+        bottomPanel.setPreferredSize(new java.awt.Dimension(117, 143));
         bottomPanel.setLayout(new java.awt.BorderLayout());
 
         generateButton.setText("Generate");
@@ -158,7 +158,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(cancelButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(saveNQuitButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         bottomPanel.add(buttonPanel, java.awt.BorderLayout.LINE_END);
