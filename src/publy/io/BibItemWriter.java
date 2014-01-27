@@ -90,17 +90,9 @@ public abstract class BibItemWriter {
         // Connect these names in the proper way
         String result = formatNames(authors);
 
-        // Add "With" if necessary
-        if (!gs.isListAllAuthors()) {
-            if (authors.size() == authorList.size()) {
-                if (editors) {
-                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the editors of entry \"%s\" match your name.%n(Editors: \"%s\")", item.getId(), item.get("editor"));
-                } else {
-                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors of entry \"%s\" match your name.%n(Authors: \"%s\")", item.getId(), item.get("author"));
-                }
-            } else {
-                result = "With " + result;
-            }
+        // Add "With" if I was omitted
+        if (!gs.isListAllAuthors() && authors.size() != authorList.size()) {
+            result = "With " + result;
         }
 
         // Add the ", editors" postfix

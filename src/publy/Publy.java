@@ -28,6 +28,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
+import publy.data.Author;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.FieldData;
 import publy.data.category.OutputCategory;
@@ -262,8 +263,14 @@ public class Publy {
             if (items != null) {
                 List<OutputCategory> categories = categorizePapers(settings, items);
 
-                if (settings.getConsoleSettings().isShowWarnings() && settings.getConsoleSettings().isWarnMandatoryFieldIgnored()) {
-                    warnForMandatoryIgnoredFields(categories);
+                if (settings.getConsoleSettings().isShowWarnings()) {
+                    if (settings.getConsoleSettings().isWarnMandatoryFieldIgnored()) {
+                        warnForMandatoryIgnoredFields(categories);
+                    }
+
+                    if (settings.getConsoleSettings().isWarnNotAuthor()) {
+                        warnIfIAmNotAuthor(items);
+                    }
                 }
 
                 if (settings.getHtmlSettings().isGenerateTextVersion()) {
@@ -364,6 +371,34 @@ public class Publy {
 
                 if (!itemIDs.isEmpty()) {
                     Console.warn(Console.WarningType.MANDATORY_FIELD_IGNORED, "Category \"%s\" ignores field \"%s\", which is mandatory for the following entries:%n%s.%nThese entries may not display properly.", c.getShortName(), ignored, itemIDs);
+                }
+            }
+        }
+    }
+
+    private static void warnIfIAmNotAuthor(List<BibItem> items) {
+        for (BibItem item : items) {
+            boolean imAuthor = false;
+
+            for (Author author : item.getAuthors()) {
+                if (author.isMe(settings.getGeneralSettings())) {
+                    imAuthor = true;
+                    break;
+                }
+            }
+
+            if (!imAuthor) {
+                boolean imEditor = false;
+
+                for (Author author : item.getEditors()) {
+                    if (author.isMe(settings.getGeneralSettings())) {
+                        imEditor = true;
+                        break;
+                    }
+                }
+
+                if (!imEditor) {
+                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors or editors of entry \"%s\" match your name.", item.getId());
                 }
             }
         }
