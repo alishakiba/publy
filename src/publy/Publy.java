@@ -21,8 +21,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -31,6 +33,7 @@ import org.xml.sax.SAXException;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.FieldData;
+import publy.data.bibitem.Type;
 import publy.data.category.OutputCategory;
 import publy.data.settings.Settings;
 import publy.gui.MainFrame;
@@ -356,21 +359,37 @@ public class Publy {
 
     private static void warnForMandatoryIgnoredFields(List<OutputCategory> categories) {
         for (OutputCategory c : categories) {
-            for (String ignored : c.getIgnoredFields()) {
-                String itemIDs = "";
+            Map<Type, List<String>> itemIDs = new EnumMap<>(Type.class);
 
-                for (BibItem item : c.getItems()) {
-                    if (FieldData.getMandatoryFields(item.getType()).contains(ignored)) {
-                        if (itemIDs.isEmpty()) {
-                            itemIDs += item.getId();
-                        } else {
-                            itemIDs += ", " + item.getId();
-                        }
-                    }
+            for (BibItem item : c.getItems()) {
+                if (!itemIDs.containsKey(item.getType())) {
+                    itemIDs.put(item.getType(), new ArrayList<String>());
                 }
 
-                if (!itemIDs.isEmpty()) {
-                    Console.warn(Console.WarningType.MANDATORY_FIELD_IGNORED, "Category \"%s\" ignores field \"%s\", which is mandatory for the following entries:%n%s.%nThese entries may not display properly.", c.getShortName(), ignored, itemIDs);
+                itemIDs.get(item.getType()).add(item.getId());
+            }
+
+            for (Type type : itemIDs.keySet()) {
+                for (String mandatoryFields : FieldData.getMandatoryFields(type)) {
+                    boolean allIgnored = true;
+
+                    for (String mandatory : mandatoryFields.split(";")) {
+                        if (!c.getIgnoredFields().contains(mandatory)) {
+                            allIgnored = false;
+                        }
+                    }
+
+                    if (allIgnored) {
+                        if (mandatoryFields.contains(";")) {
+                            Console.warn(Console.WarningType.MANDATORY_FIELD_IGNORED, 
+                                    "Category \"%s\" ignores fields \"%s\", which are mandatory for the following entries:%n%s.%nThese entries may not display properly.", 
+                                    c.getShortName(), mandatoryFields, itemIDs.get(type).toString());
+                        } else {
+                            Console.warn(Console.WarningType.MANDATORY_FIELD_IGNORED, 
+                                    "Category \"%s\" ignores field \"%s\", which is mandatory for the following entries:%n%s.%nThese entries may not display properly.", 
+                                    c.getShortName(), mandatoryFields, itemIDs.get(type).toString());
+                        }
+                    }
                 }
             }
         }
