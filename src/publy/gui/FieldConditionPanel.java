@@ -17,7 +17,11 @@ package publy.gui;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.event.ItemEvent;
+import java.awt.font.TextAttribute;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
@@ -51,6 +55,18 @@ public class FieldConditionPanel extends javax.swing.JPanel {
             }
         }
     }
+    
+    private static final Map<TextAttribute, Object> strikeThroughAttribute;
+    private static final Map<TextAttribute, Object> notStrikeThroughAttribute;
+    
+    static {
+        strikeThroughAttribute = new HashMap<>();
+        strikeThroughAttribute.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+        
+        notStrikeThroughAttribute = new HashMap<>();
+        notStrikeThroughAttribute.put(TextAttribute.STRIKETHROUGH, false);
+    }
+    
     private FieldCondition condition;
     private boolean initializing;
 
@@ -72,10 +88,9 @@ public class FieldConditionPanel extends javax.swing.JPanel {
         // Inversion
         if (condition.isInverted()) {
             invertCheckBox.setSelected(true);
-            invertCheckBox.setForeground(UIManager.getDefaults().getColor("CheckBox.foreground"));
         } else {
             invertCheckBox.setSelected(false);
-            invertCheckBox.setForeground(Color.GRAY);
+            invertCheckBox.setFont(invertCheckBox.getFont().deriveFont(strikeThroughAttribute));
         }
 
         // Field
@@ -208,10 +223,10 @@ public class FieldConditionPanel extends javax.swing.JPanel {
     private void invertCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invertCheckBoxActionPerformed
         if (invertCheckBox.isSelected()) {
             condition.setInverted(true);
-            invertCheckBox.setForeground(UIManager.getDefaults().getColor("CheckBox.foreground"));
+            invertCheckBox.setFont(invertCheckBox.getFont().deriveFont(notStrikeThroughAttribute));
         } else {
             condition.setInverted(false);
-            invertCheckBox.setForeground(Color.GRAY);
+            invertCheckBox.setFont(invertCheckBox.getFont().deriveFont(strikeThroughAttribute));
         }
     }//GEN-LAST:event_invertCheckBoxActionPerformed
 
