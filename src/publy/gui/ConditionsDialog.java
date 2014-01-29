@@ -18,10 +18,13 @@ package publy.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Rectangle;
+import java.awt.font.TextAttribute;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
@@ -43,6 +46,17 @@ import publy.io.BibTeXParser;
  */
 public class ConditionsDialog extends javax.swing.JDialog {
 
+    private static final Map<TextAttribute, Object> strikeThroughAttribute;
+    private static final Map<TextAttribute, Object> notStrikeThroughAttribute;
+    
+    static {
+        strikeThroughAttribute = new HashMap<>();
+        strikeThroughAttribute.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+        
+        notStrikeThroughAttribute = new HashMap<>();
+        notStrikeThroughAttribute.put(TextAttribute.STRIKETHROUGH, false);
+    }
+    
     private final OutputCategory category;
     private final TypeCondition typeCondition;
 
@@ -72,11 +86,10 @@ public class ConditionsDialog extends javax.swing.JDialog {
         // Type condition
         if (typeCondition.isInverted()) {
             typeInvertCheckBox.setSelected(true);
-            typeInvertCheckBox.setForeground(UIManager.getDefaults().getColor("CheckBox.foreground"));
             typeLabel.setText(typeLabel.getText().substring(0, 1).toLowerCase() + typeLabel.getText().substring(1));
         } else {
             typeInvertCheckBox.setSelected(false);
-            typeInvertCheckBox.setForeground(Color.GRAY);
+            typeInvertCheckBox.setFont(typeInvertCheckBox.getFont().deriveFont(strikeThroughAttribute));
             typeLabel.setText(typeLabel.getText().substring(0, 1).toUpperCase() + typeLabel.getText().substring(1));
         }
 
@@ -289,12 +302,12 @@ public class ConditionsDialog extends javax.swing.JDialog {
         if (typeInvertCheckBox.isSelected()) {
             typeCondition.setInverted(true);
 
-            typeInvertCheckBox.setForeground(UIManager.getDefaults().getColor("CheckBox.foreground"));
+            typeInvertCheckBox.setFont(typeInvertCheckBox.getFont().deriveFont(notStrikeThroughAttribute));
             typeLabel.setText(typeLabel.getText().substring(0, 1).toLowerCase() + typeLabel.getText().substring(1));
         } else {
             typeCondition.setInverted(false);
 
-            typeInvertCheckBox.setForeground(Color.GRAY);
+            typeInvertCheckBox.setFont(typeInvertCheckBox.getFont().deriveFont(strikeThroughAttribute));
             typeLabel.setText(typeLabel.getText().substring(0, 1).toUpperCase() + typeLabel.getText().substring(1));
         }
     }//GEN-LAST:event_typeInvertCheckBoxActionPerformed
