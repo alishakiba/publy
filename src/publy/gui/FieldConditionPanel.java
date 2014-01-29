@@ -15,15 +15,12 @@
  */
 package publy.gui;
 
-import java.awt.Color;
 import java.awt.Container;
-import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.font.TextAttribute;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import publy.data.category.conditions.FieldCondition;
