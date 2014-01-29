@@ -29,7 +29,7 @@ public class TabTitle extends JLabel {
     public TabTitle(String title, Icon icon) {
         super(title, icon, JLabel.LEADING);
         
-        setPreferredSize(new Dimension(120, 40));
+        setPreferredSize(new Dimension(130, 40));
         
         setFont(getFont().deriveFont(getFont().getSize2D() + 2));
         UIStyles.applyHeaderStyle(this);
