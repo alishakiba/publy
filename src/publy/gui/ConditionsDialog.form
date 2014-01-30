@@ -121,6 +121,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="typeTextField">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Types to include in this category. A * matches all types; multiple types can be separated by semicolons."/>
+      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="typeTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;            public void insertUpdate(DocumentEvent e) {&#xa;                typeTextFieldTextChanged(e);&#xa;            }&#xa;            public void removeUpdate(DocumentEvent e) {&#xa;                typeTextFieldTextChanged(e);&#xa;            }&#xa;            public void changedUpdate(DocumentEvent e) {&#xa;                //Plain text components do not fire these events&#xa;            }&#xa;        });"/>
       </AuxValues>
@@ -145,6 +148,7 @@
             <Component class="javax.swing.JButton" name="addConditionButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Add filter"/>
+                <Property name="toolTipText" type="java.lang.String" value="Add another filter. All filters must match for an entry to be included."/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
               <Events>
@@ -181,6 +185,7 @@
     <Component class="javax.swing.JButton" name="testButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Test"/>
+        <Property name="toolTipText" type="java.lang.String" value="List all matching entries in the current publications list."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="testButtonActionPerformed"/>

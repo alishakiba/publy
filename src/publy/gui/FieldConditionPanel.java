@@ -176,8 +176,10 @@ public class FieldConditionPanel extends javax.swing.JPanel {
             }
         });
         valueTextField.setColumns(12);
+        valueTextField.setToolTipText("Multiple terms can be separated by semicolons.");
 
         deleteButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/cancel-14.png"))); // NOI18N
+        deleteButton.setToolTipText("Delete");
         deleteButton.setPreferredSize(new java.awt.Dimension(49, 22));
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

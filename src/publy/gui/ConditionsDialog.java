@@ -173,12 +173,14 @@ public class ConditionsDialog extends javax.swing.JDialog {
                 //Plain text components do not fire these events
             }
         });
+        typeTextField.setToolTipText("Types to include in this category. A * matches all types; multiple types can be separated by semicolons.");
 
         fieldConditionsScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Fields"));
 
         fieldConditionsPanel.setLayout(new javax.swing.BoxLayout(fieldConditionsPanel, javax.swing.BoxLayout.PAGE_AXIS));
 
         addConditionButton.setText("Add filter");
+        addConditionButton.setToolTipText("Add another filter. All filters must match for an entry to be included.");
         addConditionButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         addConditionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -206,6 +208,7 @@ public class ConditionsDialog extends javax.swing.JDialog {
         testHeader.setText("Test");
 
         testButton.setText("Test");
+        testButton.setToolTipText("List all matching entries in the current publications list.");
         testButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 testButtonActionPerformed(evt);
