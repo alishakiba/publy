@@ -5,5 +5,4 @@ nbproject/genfiles.properties
 nbproject/private/
 build/
 dist/
-misc/test/
-misc/icons/
+testOutput/

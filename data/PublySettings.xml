@@ -2,8 +2,8 @@
 <plgsettings majorversion="0" minorversion="7">
   <!-- File settings -->
   <fileSettings>
-    <publications>misc/testdata/publications.bib</publications>
-    <target>misc/test/test.html</target>
+    <publications>publications.bib</publications>
+    <target>testOutput/test.html</target>
     <header>data/defaultHeader.html</header>
     <footer>data/defaultFooter.html</footer>
   </fileSettings>
