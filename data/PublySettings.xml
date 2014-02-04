@@ -121,7 +121,7 @@
     <myNames><![CDATA[me]]></myNames>
     <nameDisplay>ABBREVIATED</nameDisplay>
     <reverseNames>true</reverseNames>
-    <listAllAuthors>false</listAllAuthors>
+    <listAllAuthors>true</listAllAuthors>
     <titleFirst>false</titleFirst>
     <useNewLines>false</useNewLines>
     <numbering>GLOBAL</numbering>
