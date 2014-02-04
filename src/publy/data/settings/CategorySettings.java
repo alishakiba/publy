@@ -68,7 +68,7 @@ public class CategorySettings {
         result.setAllCategories(Arrays.asList(books, chapters, conference, journal, other, submitted, talks, theses, unpublished));
         
         // Active categories
-        result.setActiveCategories(Arrays.asList(journal, conference, books, chapters, theses, other));
+        result.setActiveCategories(Arrays.asList(submitted, journal, conference, books, chapters, theses, other));
 
         return result;
     }
