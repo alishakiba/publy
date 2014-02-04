@@ -21,6 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import publy.data.settings.FileSettings;
 import publy.io.ResourceLocator;
 
@@ -51,6 +53,15 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         initComponents();
         applyStyles();
         populateValues();
+        
+        // Set the correct file filters
+        FileFilter bibFilter = new FileNameExtensionFilter("BibTeX files (*.bib)", "bib");
+        FileFilter htmlFilter = new FileNameExtensionFilter("HTML files (*.htm;*.html)", "htm", "html");
+        
+        pubFileChooser.setFileFilter(bibFilter);
+        targetFileChooser.setFileFilter(htmlFilter);
+        headerFileChooser.setFileFilter(htmlFilter);
+        footerFileChooser.setFileFilter(htmlFilter);
     }
 
     private void applyStyles() {
@@ -293,6 +304,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             pubTextField.setText(ResourceLocator.getRelativePath(selected));
             settings.setPublications(selected);
 
+            // Auto-fill the target field
             if (settings.getTarget() == null) {
                 // Extract the base name
                 String baseName = pubFileChooser.getSelectedFile().getName();
