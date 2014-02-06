@@ -254,11 +254,10 @@ public class PlainBibItemWriter extends BibItemWriter {
 
             if (isPresent(item, "publisher")) {
                 output(get(item, "organization"), ", ");
+                output(get(item, "publisher"), ".");
             } else {
                 output(get(item, "organization"), ".");
             }
-
-            output(get(item, "publisher"), ".");
         } else {
             output(get(item, "organization"), ", ");
             output(get(item, "publisher"), ", ");
