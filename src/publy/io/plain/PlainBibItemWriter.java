@@ -18,7 +18,6 @@ package publy.io.plain;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import publy.Console;
-import publy.data.Author;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.Type;
 import publy.data.settings.Settings;
@@ -467,7 +466,7 @@ public class PlainBibItemWriter extends BibItemWriter {
                     throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized pubstate: \"" + get(item, "pubstate") + "\"");
             }
             
-            output(venue, true);
+            output(venue, ".", true);
         }
     }
 
