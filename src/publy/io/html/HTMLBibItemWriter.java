@@ -268,14 +268,16 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         if (isPresent(item, "address")) {
             output(", <span class=\"address\">", get(item, "address"), "</span>, ");
-            output("<span class=\"date\">", formatDate(item), "</span>.", true);
+            output("<span class=\"date\">", formatDate(item), "</span>.");
 
             if (isPresent(item, "publisher")) {
-                output("<span class=\"organization\">", get(item, "organization"), "</span>, ");
-                output("<span class=\"publisher\">", get(item, "publisher"), "</span>. ");
+                output(" <span class=\"organization\">", get(item, "organization"), "</span>,");
+                output(" <span class=\"publisher\">", get(item, "publisher"), "</span>.");
             } else {
-                output("<span class=\"organization\">", get(item, "organization"), "</span>. ");
+                output(" <span class=\"organization\">", get(item, "organization"), "</span>.");
             }
+
+            newline();
         } else if (anyPresent(item, "publisher", "organization")) {
             out.write(". ");
             output("<span class=\"organization\">", get(item, "organization"), "</span>, ");
