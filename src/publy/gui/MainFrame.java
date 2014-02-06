@@ -86,7 +86,6 @@ public class MainFrame extends javax.swing.JFrame {
         bottomPanel = new javax.swing.JPanel();
         buttonPanel = new javax.swing.JPanel();
         generateButton = new javax.swing.JButton();
-        cancelButton = new javax.swing.JButton();
         saveNQuitButton = new javax.swing.JButton();
         consoleScrollPane = new javax.swing.JScrollPane();
         consoleTextPane = new javax.swing.JTextPane();
@@ -95,6 +94,11 @@ public class MainFrame extends javax.swing.JFrame {
         setTitle("Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION);
         setIconImages(UIConstants.PUBLY_ICONS);
         setPreferredSize(new java.awt.Dimension(670, 720));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         mainSplitPane.setDividerLocation(getHeight() - 150);
         mainSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
@@ -121,15 +125,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        cancelButton.setText("Don't save");
-        cancelButton.setToolTipText("Closes the application without saving any changes to the settings.");
-        cancelButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelButtonActionPerformed(evt);
-            }
-        });
-
-        saveNQuitButton.setText("Save & Quit");
+        saveNQuitButton.setText("Exit");
         saveNQuitButton.setToolTipText("Closes the application and saves all changes to the settings.");
         saveNQuitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,8 +140,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(buttonPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(generateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cancelButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(generateButton, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
                     .addComponent(saveNQuitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -154,11 +149,9 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(buttonPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(generateButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cancelButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(saveNQuitButton)
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         bottomPanel.add(buttonPanel, java.awt.BorderLayout.LINE_END);
@@ -191,10 +184,6 @@ public class MainFrame extends javax.swing.JFrame {
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_generateButtonActionPerformed
 
-    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        dispose();
-    }//GEN-LAST:event_cancelButtonActionPerformed
-
     private void saveNQuitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveNQuitButtonActionPerformed
         try {
             SettingsWriter.writeSettings(settings);
@@ -203,6 +192,14 @@ public class MainFrame extends javax.swing.JFrame {
             Console.except(ex, "Exception when saving settings:");
         }
     }//GEN-LAST:event_saveNQuitButtonActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            SettingsWriter.writeSettings(settings);
+        } catch (Exception | AssertionError ex) {
+            Console.except(ex, "Exception when saving settings:");
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -220,7 +217,6 @@ public class MainFrame extends javax.swing.JFrame {
     private publy.gui.AboutPanel aboutPanel;
     private javax.swing.JPanel bottomPanel;
     private javax.swing.JPanel buttonPanel;
-    private javax.swing.JButton cancelButton;
     private publy.gui.CategorySettingsPanel categorySettingsPanel;
     private javax.swing.JScrollPane consoleScrollPane;
     private publy.gui.ConsoleSettingsPanel consoleSettingsPanel;
