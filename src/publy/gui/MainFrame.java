@@ -17,8 +17,6 @@ package publy.gui;
 
 import java.awt.Cursor;
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
-import javax.swing.plaf.ColorUIResource;
 import publy.Console;
 import publy.Publy;
 import publy.data.settings.Settings;
