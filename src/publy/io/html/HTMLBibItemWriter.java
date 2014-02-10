@@ -382,6 +382,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.newLine();
         } else {
             out.write('.');
+            out.newLine(); // Still add a newline in the source
         }
     }
 
@@ -909,7 +910,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write("<br>"); // Add a new line in both the web page and source file
             out.newLine();
         } else {
-            out.write(' ');
+            out.newLine();
         }
     }
 }

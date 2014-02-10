@@ -48,7 +48,7 @@ public class PlainBibItemWriterTest {
 
         String output = htmlOutput.getBuffer().toString();
         output = output.replaceAll("<[^>]*>", "").replaceAll("&ndash;", "-");
-        output = output.replaceAll(" +", " ").trim(); // Reduce whitespace
+        output = output.replaceAll("\\s+", " ").trim(); // Reduce whitespace
 
         // Clear the output
         htmlOutput.getBuffer().delete(0, htmlOutput.getBuffer().length());
