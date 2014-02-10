@@ -514,9 +514,9 @@ public class LatexToUnicode {
         characters.put("\\\"{O}", '\u00D6');
         characters.put("\\\"{U}", '\u00DC');
         characters.put("\\\"{Y}", '\u0178');
-        characters.put("\\\"{\\i}", '\u00EF');
         characters.put("\\\"{a}", '\u00E4');
         characters.put("\\\"{e}", '\u00EB');
+        characters.put("\\\"{i}", '\u00EF');
         characters.put("\\\"{o}", '\u00F6');
         characters.put("\\\"{u}", '\u00FC');
         characters.put("\\\"{y}", '\u00FF');
