@@ -4,7 +4,6 @@
  */
 package publy.io;
 
-import publy.io.LatexToUnicode;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import org.junit.After;
@@ -52,6 +51,7 @@ public class LatexToUnicodeTest {
         expected.put("\\`{o}", "ò");
         expected.put("\\'{o}", "ó");
         expected.put("\\\"{o}", "ö");
+        expected.put("\\\"{i}", "ï");
         expected.put("\\.{o}", "ȯ");
         expected.put("\\^{o}", "ô");
         expected.put("\\H{o}", "ő");
@@ -83,6 +83,7 @@ public class LatexToUnicodeTest {
         expected.put("<span class=\"author\">A. L{\\'o}pez-Ortiz</span>, <span class=\"author\">P. Morin</span>, and <span class=\"author\">J. Munro</span>",
                      "<span class=\"author\">A. L{ó}pez-Ortiz</span>, <span class=\"author\">P. Morin</span>, and <span class=\"author\">J. Munro</span>");
         expected.put("Discrete {\\&} Computational Geometry", "Discrete {&} Computational Geometry");
+        expected.put("Georgy Theodosiyovych Vorono\\\"i", "Georgy Theodosiyovych Voronoï");
         
         // From http://www.tex.ac.uk/ctan/biblio/bibtex/utils/bib2xhtml/example.bib
         expected.put("Albert-L\\'{a}szl\\'{o} Barab\\'{a}si", "Albert-László Barabási");
