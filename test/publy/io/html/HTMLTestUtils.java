@@ -214,7 +214,7 @@ public class HTMLTestUtils {
     }
 
     private static String trim(String input) {
-        String reduced = input.replaceAll(" +", " ");
+        String reduced = input.replaceAll("\\s+", " ");
         return reduced.trim();
     }
 }
