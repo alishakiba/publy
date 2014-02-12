@@ -219,6 +219,7 @@ public class LatexToUnicode {
         characters.put("\\'{Y}", '\u00DD');
         characters.put("\\'{Z}", '\u0179');
         characters.put("\\'{\\i}", '\u00ED');
+        characters.put("\\'{i}", '\u00ED');
         characters.put("\\'{a}", '\u00E1');
         characters.put("\\'{c}", '\u0107');
         characters.put("\\'{e}", '\u00E9');
@@ -245,6 +246,8 @@ public class LatexToUnicode {
         characters.put("\\.{g}", '\u0121');
         characters.put("\\.{z}", '\u017C');
         characters.put("\\.{o}", '\u022F');
+        characters.put("\\.{i}", 'i');
+        characters.put("\\.{\\i}", 'i');
         //"\\;":"U+2009-0200A-0200A",
         characters.put("\\=", '\u0304');
         characters.put("\\={A}", '\u0100');
@@ -517,6 +520,7 @@ public class LatexToUnicode {
         characters.put("\\\"{a}", '\u00E4');
         characters.put("\\\"{e}", '\u00EB');
         characters.put("\\\"{i}", '\u00EF');
+        characters.put("\\\"{\\i}", '\u00EF');
         characters.put("\\\"{o}", '\u00F6');
         characters.put("\\\"{u}", '\u00FC');
         characters.put("\\\"{y}", '\u00FF');
@@ -534,6 +538,7 @@ public class LatexToUnicode {
         characters.put("\\^{W}", '\u0174');
         characters.put("\\^{Y}", '\u0176');
         characters.put("\\^{\\i}", '\u00EE');
+        characters.put("\\^{i}", '\u00EE');
         characters.put("\\^{\\j}", '\u0135');
         characters.put("\\^{a}", '\u00E2');
         characters.put("\\^{c}", '\u0109');
@@ -554,6 +559,7 @@ public class LatexToUnicode {
         characters.put("\\`{O}", '\u00D2');
         characters.put("\\`{U}", '\u00D9');
         characters.put("\\`{\\i}", '\u00EC');
+        characters.put("\\`{i}", '\u00EC');
         characters.put("\\`{a}", '\u00E0');
         characters.put("\\`{e}", '\u00E8');
         characters.put("\\`{o}", '\u00F2');
