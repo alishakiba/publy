@@ -65,6 +65,12 @@ public class LatexToUnicodeTest {
                 "Testòtestótestôtestötestõtestōtestȯtest");
         expected.put("Test\\u{o}test\\v{s}test\\H{o}test\\c{c}test",
                 "Testŏtestštestőtestçtest");
+        expected.put("Test\\`itest\\'itest\\^itest\\\"itest\\.itest",
+                "Testìtestítestîtestïtestitest");
+        expected.put("Test\\`{i}test\\'{i}test\\^{i}test\\\"{i}test\\.{i}test",
+                "Testìtestítestîtestïtestitest");
+        expected.put("Test\\`{\\i}test\\'{\\i}test\\^{\\i}test\\\"{\\i}test\\~{\\i}test\\={\\i}test\\.{\\i}test",
+                "Testìtestítestîtestïtest\u0129test\u012Btestitest");
 
         // Don't touch things in math-mode
         expected.put("$\\'{o}$", "$\\'{o}$");
