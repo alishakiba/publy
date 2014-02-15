@@ -51,8 +51,7 @@ public class FileSettings {
 
     /**
      * Returns the path to the location where the bibtex version of the
-     * publication list will be written to, if any. Returns
-     * <code>null</code> if no such version will be written. The target is
+     * publication list is to be written, if any. The target is
      * guaranteed to be in the same directory as the HTML target.
      *
      * @return
@@ -60,16 +59,17 @@ public class FileSettings {
     public Path getBibtexTarget() {
         String baseName = target.getFileName().toString();
         int extension = baseName.lastIndexOf('.');
+        
         if (extension > -1) {
             baseName = baseName.substring(0, extension);
         }
-        return target.resolveSibling(baseName + ".bib");
+        
+        return target.resolveSibling(baseName + "-generated.bib");
     }
 
     /**
      * Returns the path to the location where the plain text version of the
-     * publication list will be written to, if any. Returns
-     * <code>null</code> if no such version will be written. The target is
+     * publication list is to be written, if any. The target is
      * guaranteed to be in the same directory as the HTML target.
      *
      * @return
@@ -77,9 +77,11 @@ public class FileSettings {
     public Path getPlainTextTarget() {
         String baseName = target.getFileName().toString();
         int extension = baseName.lastIndexOf('.');
+        
         if (extension > -1) {
             baseName = baseName.substring(0, extension);
         }
+        
         return target.resolveSibling(baseName + ".utf8.txt");
     }
 
