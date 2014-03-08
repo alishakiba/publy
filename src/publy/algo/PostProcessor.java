@@ -24,33 +24,60 @@ import publy.data.bibitem.BibItem;
  */
 public class PostProcessor {
 
-    private static final HashMap<String, String> aliases; // key can be used instead of value
-    
+    /**
+     * A map containing the supported aliases for entry fields. If aliases
+     * contains the mapping "A" -> "B", it means that "A" can be used instead of
+     * "B". In other words, if a publication does not have field "B" set, the
+     * value of field "A" (if any) will be used instead.
+     */
+    private static final HashMap<String, String> aliases;
+
     static {
         aliases = new HashMap<>();
-        aliases.put("journaltitle", "journal");
+        aliases.put("journaltitle", "journal"); // biblatex uses journaltitle for @article entries
     }
-    
+
+    /**
+     * Runs all defined post-processing tasks for the given publication: Checks
+     * for and replace aliases, and checks for an arXiv version.
+     *
+     * @param item
+     */
     public static void postProcess(BibItem item) {
         processAliases(item);
         detectArxiv(item);
     }
-    
+
+    /**
+     * Checks the item for aliases of standard fields. If the alias is present
+     * while the standard field is not, the standard field is assigned the value
+     * of the alias. Otherwise, no change is made.
+     *
+     * @param item
+     */
     private static void processAliases(BibItem item) {
-        for (String field : aliases.keySet()) {
-            String value = item.get(field); // The possible alias
-            
-            if (value != null && !value.isEmpty()) {
-                String value2 = item.get(aliases.get(field)); // The field it replaces
-                
-                if (value2 == null || value2.isEmpty()) {
-                    item.put(aliases.get(field), value);
+        for (String aliasField : aliases.keySet()) {
+            String aliasValue = item.get(aliasField);
+
+            if (aliasValue != null && !aliasValue.isEmpty()) {
+                String standardField = aliases.get(aliasField);
+                String standardValue = item.get(standardField);
+
+                if (standardValue == null || standardValue.isEmpty()) {
+                    item.put(standardField, aliasValue);
                 }
             }
         }
     }
 
-    protected static void detectArxiv(BibItem item) {
+    /**
+     * Uses information from other fields to infer whether this publication has
+     * an arXiv version that we can link to. If one is found, the arxiv and
+     * primaryClass fields are updated to reflect the new information.
+     *
+     * @param item
+     */
+    private static void detectArxiv(BibItem item) {
         // If this entry has an arxiv and primaryclass field, it's done
         String arxiv = item.get("arxiv");
         String primaryClass = item.get("primaryclass");
