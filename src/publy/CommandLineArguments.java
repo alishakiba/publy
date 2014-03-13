@@ -18,8 +18,9 @@ package publy;
 import com.beust.jcommander.Parameter;
 
 /**
+ * The command-line arguments for Publy.
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ * These are parsed using JCommander.
  */
 public class CommandLineArguments {
 
@@ -42,38 +43,108 @@ public class CommandLineArguments {
     @Parameter(names = {"-w", "--no-warn"}, description = "Hide warnings")
     private boolean hidewarnings = false;
 
+    /**
+     * Gets the name of the configuration file to be used.
+     *
+     * If no configuration file was specified at the command line, this returns
+     * null, and the
+     * {@link publy.io.settings.SettingsReader#DEFAULT_SETTINGS_LOCATION default configuration file location}
+     * is used instead.
+     *
+     * @return the file name of the configuration file
+     */
     public String getConfig() {
         return config;
     }
 
+    /**
+     * Gets whether debug output should be printed.
+     *
+     * This affects whether stack traces are shown for exceptions. This setting
+     * overrides the option in the configuration file.
+     *
+     * @return whether debug output should be printed
+     */
     public boolean isDebug() {
         return debug;
     }
 
+    /**
+     * Gets whether the program should be run in GUI mode.
+     *
+     * @return whether the program should be run in GUI mode
+     */
     public boolean isGui() {
         return gui;
     }
 
+    /**
+     * Gets whether the command-line usage information should be printed.
+     *
+     * If this is true, the program will exit after printing the usage
+     * information.
+     *
+     * @return whether the command-line usage information should be printed
+     */
     public boolean isHelp() {
         return help;
     }
 
+    /**
+     * Gets the name of the input publication list.
+     *
+     * This should be a BibTeX file. This setting overrides the option in the
+     * configuration file.
+     *
+     * @return the name of the input publication list
+     */
     public String getInput() {
         return input;
     }
 
+    /**
+     * Gets the name of the output file.
+     *
+     * This should be an HTML file. This setting overrides the option in the
+     * configuration file.
+     *
+     * @return the name of the output file
+     */
     public String getOutput() {
         return output;
     }
 
+    /**
+     * Gets whether to run the program in silent mode, without printing progress
+     * messages.
+     *
+     * This setting overrides the option in the configuration file.
+     *
+     * @return whether to run the program in silent mode
+     */
     public boolean isSilent() {
         return silent;
     }
 
+    /**
+     * Gets whether to print the current program version.
+     *
+     * If this is true, the program will exit after printing the version
+     * information.
+     *
+     * @return whether to print the current program version
+     */
     public boolean isVersion() {
         return version;
     }
 
+    /**
+     * Gets whether to hide warnings.
+     *
+     * This setting overrides the option in the configuration file.
+     *
+     * @return whether to hide warnings
+     */
     public boolean isHidewarnings() {
         return hidewarnings;
     }
