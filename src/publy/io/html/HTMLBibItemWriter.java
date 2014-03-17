@@ -35,7 +35,7 @@ import publy.io.bibtex.BibtexBibItemWriter;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class HTMLBibItemWriter extends BibItemWriter {
 

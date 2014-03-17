@@ -48,7 +48,7 @@ import publy.io.settings.SettingsReader;
 
 /**
  *
- * @author Sander
+ *
  */
 public class Publy {
 

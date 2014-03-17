@@ -17,7 +17,7 @@ package publy.data.settings;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class ConsoleSettings {
 

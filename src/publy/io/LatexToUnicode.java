@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class LatexToUnicode {
 

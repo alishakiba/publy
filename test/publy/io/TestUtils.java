@@ -28,7 +28,7 @@ import publy.data.bibitem.Type;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class TestUtils {
 

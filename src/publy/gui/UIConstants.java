@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class UIConstants {
 

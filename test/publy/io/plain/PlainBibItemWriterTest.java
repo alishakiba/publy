@@ -32,7 +32,7 @@ import publy.io.html.HTMLTestUtils;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class PlainBibItemWriterTest {
 

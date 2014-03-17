@@ -29,7 +29,7 @@ import java.util.Set;
 
 /**
  *
- * @author Sander
+ *
  */
 public class TempWriter extends BufferedWriter {
 

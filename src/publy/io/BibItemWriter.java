@@ -29,7 +29,7 @@ import publy.data.settings.Settings;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public abstract class BibItemWriter {
 

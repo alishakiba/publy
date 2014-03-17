@@ -21,7 +21,7 @@ import publy.data.settings.Settings;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class SettingsIOTest {
     

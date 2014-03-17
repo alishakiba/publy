@@ -21,7 +21,7 @@ import publy.io.html.HTMLPublicationListWriter;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class FileSettings {
 

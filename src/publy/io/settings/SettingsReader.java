@@ -41,7 +41,7 @@ import publy.io.ResourceLocator;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class SettingsReader extends DefaultHandler {
 

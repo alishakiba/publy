@@ -34,7 +34,7 @@ import publy.Console;
  * This class was inspired by the answers at
  * http://stackoverflow.com/questions/527719/how-to-add-hyperlink-in-jlabel
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class LinkLabel extends JLabel {
 

@@ -22,7 +22,7 @@ import publy.Console;
 
 /**
  *
- * @author Sander
+ *
  */
 public class BibItem {
 

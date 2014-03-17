@@ -38,7 +38,7 @@ import publy.io.TempWriter;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class SettingsWriter {
 

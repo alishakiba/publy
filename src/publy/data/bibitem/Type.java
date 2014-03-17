@@ -17,7 +17,7 @@ package publy.data.bibitem;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public enum Type {
 

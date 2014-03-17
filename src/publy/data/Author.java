@@ -22,7 +22,7 @@ import publy.data.settings.GeneralSettings;
 
 /**
  *
- * @author Sander
+ *
  */
 public class Author {
 

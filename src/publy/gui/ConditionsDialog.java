@@ -40,7 +40,7 @@ import publy.io.BibTeXParser;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class ConditionsDialog extends javax.swing.JDialog {
 

@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class FieldData {
 

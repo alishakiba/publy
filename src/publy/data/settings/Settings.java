@@ -17,7 +17,7 @@ package publy.data.settings;
 
 /**
  *
- * @author Sander
+ *
  */
 public class Settings {
     private FileSettings fileSettings;

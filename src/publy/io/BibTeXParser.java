@@ -31,7 +31,7 @@ import publy.data.bibitem.BibItem;
 
 /**
  *
- * @author Sander
+ *
  */
 public class BibTeXParser {
 
