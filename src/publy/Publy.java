@@ -30,6 +30,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
+import publy.algo.PublicationPostProcessor;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.FieldData;
@@ -243,6 +244,7 @@ public class Publy {
             }
 
             if (items != null) {
+                PublicationPostProcessor.postProcess(items);
                 List<OutputCategory> categories = categorizePapers(settings, items);
 
                 if (settings.getConsoleSettings().isShowWarnings()) {

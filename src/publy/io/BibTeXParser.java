@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import publy.Console;
-import publy.algo.PostProcessor;
+import publy.algo.PublicationPostProcessor;
 import publy.data.Pair;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
@@ -66,8 +66,6 @@ public class BibTeXParser {
     }
 
     private static void parseFile(Path file, List<BibItem> items, Map<String, String> abbreviations, Map<String, Author> authors) throws IOException {
-        HashSet<String> ids = new HashSet<>(); // Bibitem identifiers, used to check for duplicates
-
         try (BufferedReader in = Files.newBufferedReader(file, Charset.forName("UTF-8"))) {
             for (String l = in.readLine(); l != null; l = in.readLine()) {
                 String line = l.trim();
@@ -77,16 +75,7 @@ public class BibTeXParser {
                     BibItem item = parseBibItem(collectItem(in, line, '{', '}'));
 
                     if (item != null) {
-                        if (ids.contains(item.getId())) {
-                            Console.error("Duplicate publication identifier: %s", item.getId());
-                        } else {
-                            PostProcessor.postProcess(item);
-                            
-                            if (item.checkMandatoryFields()) {
-                                ids.add(item.getId());
-                                items.add(item);
-                            }
-                        }
+                        items.add(item);
                     }
                 } else if (line.startsWith("<")) {
                     // A custom tag
