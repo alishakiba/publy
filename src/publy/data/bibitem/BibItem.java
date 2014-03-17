@@ -99,7 +99,7 @@ public class BibItem {
         // Nice error
         if (missingFields != null) {
             if (missingFields.size() == 1) {
-                Console.error("Item \"%s\" is missing mandatory field \"%s\".", id, missingFields.get(0));
+                Console.error("Publication \"%s\" is missing the mandatory field \"%s\".", id, missingFields.get(0));
             } else {
                 StringBuilder sb = new StringBuilder();
 
@@ -119,7 +119,7 @@ public class BibItem {
                     sb.append("\"").append(missingFields.get(i)).append("\"");
                 }
 
-                Console.error("Item \"%s\" is missing mandatory fields %s.", id, sb.toString());
+                Console.error("Publication \"%s\" is missing the mandatory fields %s.", id, sb.toString());
             }
         }
 

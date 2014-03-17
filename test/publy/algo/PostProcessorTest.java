@@ -194,7 +194,7 @@ public class PostProcessorTest {
         BibItem items[] = new BibItem[] {item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item14};
         
         for (BibItem item : items) {
-            PostProcessor.detectArxiv(item);
+            //PublicationPostProcessor.detectArxiv(item);
             assertEquals("arXiv mismatch: " + item, item.get("--testArxiv"), (item.get("arxiv") == null ? "" : item.get("arxiv")));
             assertEquals("class mismatch: " + item, item.get("--testClass"), (item.get("primaryclass") == null ? "" : item.get("primaryclass")));
         }
