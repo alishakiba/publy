@@ -197,28 +197,7 @@ public class Publy {
     }
 
     private static void applyCommandlineOverwites(CommandLineArguments arguments) {
-        // File settings
-        if (arguments.getInput() != null && !arguments.getInput().isEmpty()) {
-            settings.getFileSettings().setPublications(ResourceLocator.getFullPath(arguments.getInput()));
-        }
-
-        if (arguments.getOutput() != null && !arguments.getOutput().isEmpty()) {
-            settings.getFileSettings().setTarget(ResourceLocator.getFullPath(arguments.getOutput()));
-        }
-
-        // Console settings
-        if (arguments.isSilent()) {
-            settings.getConsoleSettings().setShowLogs(false);
-        }
-
-        if (arguments.isHidewarnings()) {
-            settings.getConsoleSettings().setShowWarnings(false);
-        }
-
-        if (arguments.isDebug()) {
-            settings.getConsoleSettings().setShowStackTraces(true);
-        }
-
+        arguments.applyOverrides(settings);
         Console.setSettings(settings.getConsoleSettings());
     }
 
