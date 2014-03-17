@@ -16,6 +16,10 @@
 package publy;
 
 import com.beust.jcommander.Parameter;
+import publy.data.settings.ConsoleSettings;
+import publy.data.settings.FileSettings;
+import publy.data.settings.Settings;
+import publy.io.ResourceLocator;
 
 /**
  * The command-line arguments for Publy.
@@ -45,7 +49,7 @@ public class CommandLineArguments {
 
     /**
      * Gets the name of the configuration file to be used.
-     *
+     * <p>
      * If no configuration file was specified at the command line, this returns
      * null, and the
      * {@link publy.io.settings.SettingsReader#DEFAULT_SETTINGS_LOCATION default configuration file location}
@@ -59,7 +63,7 @@ public class CommandLineArguments {
 
     /**
      * Gets whether debug output should be printed.
-     *
+     * <p>
      * This affects whether stack traces are shown for exceptions. This setting
      * overrides the option in the configuration file.
      *
@@ -80,7 +84,7 @@ public class CommandLineArguments {
 
     /**
      * Gets whether the command-line usage information should be printed.
-     *
+     * <p>
      * If this is true, the program will exit after printing the usage
      * information.
      *
@@ -92,7 +96,7 @@ public class CommandLineArguments {
 
     /**
      * Gets the name of the input publication list.
-     *
+     * <p>
      * This should be a BibTeX file. This setting overrides the option in the
      * configuration file.
      *
@@ -104,7 +108,7 @@ public class CommandLineArguments {
 
     /**
      * Gets the name of the output file.
-     *
+     * <p>
      * This should be an HTML file. This setting overrides the option in the
      * configuration file.
      *
@@ -117,7 +121,7 @@ public class CommandLineArguments {
     /**
      * Gets whether to run the program in silent mode, without printing progress
      * messages.
-     *
+     * <p>
      * This setting overrides the option in the configuration file.
      *
      * @return whether to run the program in silent mode
@@ -128,7 +132,7 @@ public class CommandLineArguments {
 
     /**
      * Gets whether to print the current program version.
-     *
+     * <p>
      * If this is true, the program will exit after printing the version
      * information.
      *
@@ -140,12 +144,53 @@ public class CommandLineArguments {
 
     /**
      * Gets whether to hide warnings.
-     *
+     * <p>
      * This setting overrides the option in the configuration file.
      *
      * @return whether to hide warnings
      */
     public boolean isHidewarnings() {
         return hidewarnings;
+    }
+
+    /**
+     * Overrides the relevant settings with the values given by these
+     * command-line arguments.
+     * <p>
+     * The following fields are potentially affected:
+     * <p><ul>
+     * <li> {@link FileSettings#publications} is set to
+     * {@link #getInput()}, if the latter is not null and non-empty.
+     * <li> {@link FileSettings#target} is set to
+     * {@link #getOutput()}, if the latter is not null and non-empty.
+     * <li> {@link ConsoleSettings#showLogs} is set to the inverse of {@link #isSilent()}.
+     * <li> {@link ConsoleSettings#showWarnings} is set to the inverse of {@link #hidewarnings()}.
+     * <li> {@link ConsoleSettings#showStackTraces} is set to {@link #isDebug()}.
+     * </ul><p>
+     *
+     * @param settings
+     */
+    public void applyOverrides(Settings settings) {
+        // File settings
+        if (input != null && !input.isEmpty()) {
+            settings.getFileSettings().setPublications(ResourceLocator.getFullPath(input));
+        }
+
+        if (output != null && !output.isEmpty()) {
+            settings.getFileSettings().setTarget(ResourceLocator.getFullPath(output));
+        }
+
+        // Console settings
+        if (silent) {
+            settings.getConsoleSettings().setShowLogs(false);
+        }
+
+        if (hidewarnings) {
+            settings.getConsoleSettings().setShowWarnings(false);
+        }
+
+        if (debug) {
+            settings.getConsoleSettings().setShowStackTraces(true);
+        }
     }
 }
