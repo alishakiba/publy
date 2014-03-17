@@ -45,7 +45,7 @@ import publy.io.settings.SettingsWriter;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class BeanTestUtils {
 

@@ -16,7 +16,7 @@ import publy.io.TestUtils;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class HTMLBibItemWriterTest {
 

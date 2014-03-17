@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  *
- * @author Sander
+ *
  */
 public class GeneralSettings {
 

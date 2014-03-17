@@ -19,7 +19,7 @@ package publy.data;
  *
  * @param <T1> The type of the first argument
  * @param <T2> The type of the second argument
- * @author Sander Verdonschot <sander.verdonschot@gmail.com>
+ *
  */
 public class Pair<T1, T2> {
 

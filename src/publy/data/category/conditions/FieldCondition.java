@@ -17,7 +17,7 @@ package publy.data.category.conditions;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public abstract class FieldCondition extends Condition {
     private String field;

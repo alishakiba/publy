@@ -22,7 +22,7 @@ import javax.swing.JLabel;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class TabTitle extends JLabel {
 

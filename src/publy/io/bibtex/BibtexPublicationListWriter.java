@@ -29,7 +29,7 @@ import publy.io.PublicationListWriter;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class BibtexPublicationListWriter extends PublicationListWriter {
 

@@ -24,7 +24,7 @@ import publy.Console;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class AboutPanel extends javax.swing.JPanel {
 

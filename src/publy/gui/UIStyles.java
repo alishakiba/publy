@@ -25,7 +25,7 @@ import javax.swing.border.TitledBorder;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class UIStyles {
     private static final int HEADER_FONT_STYLE = Font.BOLD;

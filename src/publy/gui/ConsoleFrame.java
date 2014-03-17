@@ -27,7 +27,7 @@ import publy.io.settings.SettingsReader;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class ConsoleFrame extends javax.swing.JFrame {
 

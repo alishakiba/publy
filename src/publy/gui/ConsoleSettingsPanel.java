@@ -19,7 +19,7 @@ import publy.data.settings.ConsoleSettings;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class ConsoleSettingsPanel extends javax.swing.JPanel {
 

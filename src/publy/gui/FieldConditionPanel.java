@@ -30,7 +30,7 @@ import publy.data.category.conditions.FieldExistsCondition;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class FieldConditionPanel extends javax.swing.JPanel {
 

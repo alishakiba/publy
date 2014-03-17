@@ -12,7 +12,7 @@ import publy.data.bibitem.BibItem;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class PublicationTypeTest {
     

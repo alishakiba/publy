@@ -28,7 +28,7 @@ import publy.data.settings.CategorySettings;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class CategorySettingsPanel extends javax.swing.JPanel {
 

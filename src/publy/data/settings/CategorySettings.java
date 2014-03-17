@@ -24,7 +24,7 @@ import publy.data.category.conditions.TypeCondition;
 
 /**
  *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
+ *
  */
 public class CategorySettings {
 
