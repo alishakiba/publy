@@ -15,6 +15,8 @@
  */
 package publy.algo;
 
+import java.util.Arrays;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -190,10 +192,11 @@ public class PostProcessorTest {
         item14.put("--testArxiv", "");
         item14.put("--testClass", "");
 
-        BibItem items[] = new BibItem[]{item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item14};
+        BibItem[] items = new BibItem[]{item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item14};
 
         for (BibItem item : items) {
-            PostProcessor.postProcess(item);
+            PublicationPostProcessor.postProcess(Arrays.asList(item));
+            
             assertEquals("arXiv mismatch: " + item, item.get("--testArxiv"), (item.get("arxiv") == null ? "" : item.get("arxiv")));
             assertEquals("class mismatch: " + item, item.get("--testClass"), (item.get("primaryclass") == null ? "" : item.get("primaryclass")));
         }
@@ -243,7 +246,7 @@ public class PostProcessorTest {
         BibItem items[] = new BibItem[]{item1, item2, item3, item4};
 
         for (BibItem item : items) {
-            PostProcessor.postProcess(item);
+            PublicationPostProcessor.postProcess(Arrays.asList(item));
 
             if (item.get("--expectedJournal") != null) {
                 assertEquals("journal mismatch: " + item, item.get("--expectedJournal"), (item.get("journal") == null ? "" : item.get("journal")));
