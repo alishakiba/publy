@@ -29,13 +29,31 @@ import publy.data.bibitem.BibItem;
  */
 public class PublicationPostProcessor {
 
-    private static final HashMap<String, String> aliases; // key can be used instead of value
+    /**
+     * A map containing the supported aliases for entry fields. If aliases
+     * contains the mapping "A" -> "B", it means that "A" can be used instead of
+     * "B". In other words, if a publication does not have field "B" set, the
+     * value of field "A" (if any) will be used instead.
+     */
+    private static final HashMap<String, String> aliases;
 
     static {
         aliases = new HashMap<>();
-        aliases.put("journaltitle", "journal");
+        aliases.put("journaltitle", "journal"); // biblatex uses journaltitle for @article entries
     }
 
+    /**
+     * Runs all defined post-processing tasks for the given publications.
+     * <p>
+     * <ul>
+     * <li> Removes publications with duplicate identifiers.
+     * <li> Checks for, and replaces certain fields with possible aliases.
+     * <li> Removes publications that miss mandatory information.
+     * <li> Checks for an arXiv version.
+     * </ul>
+     *
+     * @param items the publications to process
+     */
     public static void postProcess(List<BibItem> items) {
         removeDuplicateIDs(items);
         processAliases(items);
@@ -50,7 +68,7 @@ public class PublicationPostProcessor {
      * If there are duplicate identifiers, this method also prints a helpful
      * error message.
      *
-     * @param items
+     * @param items the publications to process
      */
     private static void removeDuplicateIDs(List<BibItem> items) {
         HashSet<String> ids = new HashSet<>();
@@ -80,16 +98,25 @@ public class PublicationPostProcessor {
         }
     }
 
+    /**
+     * Checks the publications for aliases of standard fields.
+     * <p>
+     * If the alias is present while the standard field is not, the standard
+     * field is assigned the value of the alias. Otherwise, no change is made.
+     *
+     * @param items the publications to process
+     */
     private static void processAliases(List<BibItem> items) {
         for (BibItem item : items) {
-            for (String field : aliases.keySet()) {
-                String value = item.get(field); // The possible alias
+            for (String aliasField : aliases.keySet()) {
+                String aliasValue = item.get(aliasField);
 
-                if (value != null && !value.isEmpty()) {
-                    String value2 = item.get(aliases.get(field)); // The field it replaces
+                if (aliasValue != null && !aliasValue.isEmpty()) {
+                    String standardField = aliases.get(aliasField);
+                    String standardValue = item.get(standardField);
 
-                    if (value2 == null || value2.isEmpty()) {
-                        item.put(aliases.get(field), value);
+                    if (standardValue == null || standardValue.isEmpty()) {
+                        item.put(standardField, aliasValue);
                     }
                 }
             }
@@ -102,7 +129,7 @@ public class PublicationPostProcessor {
      * If any publications are removed, this method also prints a helpful error
      * message.
      *
-     * @param items
+     * @param items the publications to process
      */
     private static void removeItemsWithMissingMandatoryFields(List<BibItem> items) {
         ListIterator<BibItem> it = items.listIterator();
@@ -126,7 +153,16 @@ public class PublicationPostProcessor {
         }
     }
 
-    protected static void detectArxiv(List<BibItem> items) {
+    /**
+     * Uses information from other fields to infer whether this publication has
+     * an arXiv version that we can link to.
+     * <p>
+     * If one is found, the {@code arxiv} and {@code primaryClass} fields are
+     * updated to reflect the new information.
+     *
+     * @param items the publications to process
+     */
+    private static void detectArxiv(List<BibItem> items) {
         for (BibItem item : items) {
             // If this entry has an arxiv and primaryclass field, it's done
             String arxiv = item.get("arxiv");
