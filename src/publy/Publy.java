@@ -93,7 +93,7 @@ public class Publy {
 
     private static void printVersionInfo() {
         System.out.printf("Publy %d.%d%n"
-                + "Copyright (c) 2013 Sander Verdonschot%n"
+                + "Copyright (c) 2013-2014 Sander Verdonschot%n"
                 + "License Apache v2%n"
                 + "This is free software. You are free to change and redistribute it.",
                 UIConstants.MAJOR_VERSION, UIConstants.MINOR_VERSION);
