@@ -21,64 +21,119 @@ import publy.Console;
 import publy.data.settings.GeneralSettings;
 
 /**
- *
- *
+ * This class stores all information associated with one author. In particular,
+ * this includes the author's name and all other information necessary to
+ * display it correctly in various formats.
+ * <p>
+ * The name of the author should be given in LaTeX syntax. It is then split into
+ * parts (first, last, von, junior) in the same way that BibTeX does. For more
+ * information, see
+ * <p>
+ * <ul>
+ * <li>
+ * http://maverick.inria.fr/~Xavier.Decoret/resources/xdkbibtex/bibtex_summary.html#names
+ * <li> http://nwalsh.com/tex/texhelp/bibtx-23.html
+ * </ul>
  */
 public class Author {
 
-    public enum NameOutputType {
-
-        LATEX, PLAINTEXT, HTML, LINKED_HTML;
-    }
     private String abbreviation; // The abbreviation associated with this author in the bibtex file
     private String firstName = "", lastName = "", vonPart = "", juniorPart = ""; // The four parts of this name
     private String url; // The url associated with this author
     private String group; // The group associated with this author
     private String name; // The name in LaTeX format, as given in the input
 
+    /**
+     * Creates a new Author from the given LaTeX name.
+     *
+     * @param name the author's name, using LaTeX syntax
+     */
     public Author(String name) {
         this(name, name);
     }
 
+    /**
+     * Creates a new Author from the given LaTeX name.
+     *
+     * @param abbreviation the abbreviation associated with this author in the
+     * input file
+     * @param name the author's name, using LaTeX syntax
+     */
     public Author(String abbreviation, String name) {
         this.abbreviation = abbreviation;
         this.name = name;
         splitName(name);
     }
 
+    /**
+     * Gets the abbreviation that is used to refer to this author in the input
+     * file.
+     *
+     * @return the abbreviation
+     */
     public String getAbbreviation() {
         return abbreviation;
     }
 
+    /**
+     * Gets this author's first name.
+     *
+     * @return the first name
+     */
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * Gets this author's last name.
+     *
+     * @return the last name
+     */
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     * Gets this author's von part.
+     *
+     * @return the von part
+     */
     public String getVonPart() {
         return vonPart;
     }
 
+    /**
+     * Gets this author's junior part.
+     *
+     * @return the junior part
+     */
     public String getJuniorPart() {
         return juniorPart;
     }
 
     /**
-     * Returns the name in LaTeX format, exactly as specified in the input file.
+     * Returns this author's name in LaTeX format, exactly as specified in the
+     * input file.
      *
-     * @return
+     * @return the name
      */
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    /**
+     * Formats this author's name for inclusion in an HTML file.
+     * <p>
+     * Specifically, the name is formatted in the same way as
+     * {@link #getFormattedName}. In addition, it is enclosed in an HTML element
+     * with classes {@code author} and this author's group, if any. If this
+     * author has a defined URL, the tag is a hyperlink to this URL, otherwise
+     * it is a {@code span} element.
+     *
+     * @param display how to format the first name
+     * @param reversed where to place the first name
+     * @return the formatted name
+     */
     public String getLinkedHTMLName(GeneralSettings.NameDisplay display, boolean reversed) {
         String result = getFormattedName(display, reversed);
 
@@ -97,8 +152,30 @@ public class Author {
         return result;
     }
 
+    /**
+     * Formats this author's name.
+     * <p>
+     * The first name is formatted according to the specified
+     * {@code NameDisplay}, and the placement of the first name depends on the
+     * value of {@code reversed}.
+     * <p>
+     * For example, the author "von Last, Jr, First" is formatted as follows:
+     * <p>
+     * <ul>
+     * <li> (NameDisplay.FULL, false) - First von Last, Jr
+     * <li> (NameDisplay.FULL, true) - von Last, Jr, First
+     * <li> (NameDisplay.ABBREVIATED, false) - F. von Last, Jr
+     * <li> (NameDisplay.ABBREVIATED, true) - von Last, Jr, F.
+     * <li> (NameDisplay.NONE, false) - von Last, Jr
+     * <li> (NameDisplay.NONE, true) - von Last, Jr
+     * </ul><p>
+     *
+     * @param display how to format the first name
+     * @param reversed where to place the first name
+     * @return the formatted name
+     */
     public String getFormattedName(GeneralSettings.NameDisplay display, boolean reversed) {
-        // First von Last, Jr OR von Last, First, Jr
+        // First von Last, Jr OR von Last, Jr, First
         String result = "";
 
         if (!reversed && display != GeneralSettings.NameDisplay.NONE && !firstName.isEmpty()) {
@@ -123,25 +200,59 @@ public class Author {
         return result;
     }
 
+    /**
+     * Gets this author's URL.
+     *
+     * @return the URL
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Sets this author's URL.
+     *
+     * @param url the new URL
+     */
     public void setUrl(String url) {
         this.url = url;
     }
 
+    /**
+     * Gets this author's group. This is only included as a class with the HTML
+     * version of this author's name.
+     *
+     * @return the group
+     */
     public String getGroup() {
         return group;
     }
 
+    /**
+     * Sets this author's group.
+     *
+     * @param group the new group
+     */
     public void setGroup(String group) {
         this.group = group;
     }
 
-    public boolean isMe(GeneralSettings gs) {
-        for (String myName : gs.getMyNames()) {
-            if (name.equals(myName) || abbreviation.equals(myName) || getFormattedName(gs.getNameDisplay(), gs.isReverseNames()).equals(myName)) {
+    /**
+     * Tests whether this author represents the user.
+     * <p>
+     * This is based on the names given by {@link GeneralSettings#getMyNames}.
+     * Each name there is checked against this author's LaTeX name,
+     * abbreviation, and formatted name.
+     *
+     * @param generalSettings
+     * @return true if one of the user's names matches this author, false
+     * otherwise
+     */
+    public boolean isMe(GeneralSettings generalSettings) {
+        for (String myName : generalSettings.getMyNames()) {
+            if (name.equals(myName)
+                    || abbreviation.equals(myName)
+                    || getFormattedName(generalSettings.getNameDisplay(), generalSettings.isReverseNames()).equals(myName)) {
                 return true;
             }
         }

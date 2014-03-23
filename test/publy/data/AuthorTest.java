@@ -26,6 +26,8 @@ public class AuthorTest {
 
         Map<String, String[]> expected = new LinkedHashMap<>();
 
+        expected.put("von Last, Jr., First", new String[]{"First", "von", "Last", "Jr."});
+        
         expected.put("Sander Verdonschot", new String[]{"Sander", "", "Verdonschot", ""});
         expected.put("Verdonschot, Sander", new String[]{"Sander", "", "Verdonschot", ""});
         expected.put("Andr\\'e van Renssen", new String[]{"Andr\\'e", "van", "Renssen", ""});
@@ -90,6 +92,8 @@ public class AuthorTest {
         System.out.println("Format - Full");
 
         Map<String, String> expected = new LinkedHashMap<>();
+        
+        expected.put("von Last, Jr., First", "First von Last, Jr.");
 
         expected.put("Sander Verdonschot", "Sander Verdonschot");
         expected.put("Verdonschot, Sander", "Sander Verdonschot");
@@ -148,6 +152,8 @@ public class AuthorTest {
         System.out.println("Format - Full Reversed");
 
         Map<String, String> expected = new LinkedHashMap<>();
+        
+        expected.put("von Last, Jr., First", "von Last, Jr., First");
 
         expected.put("Sander Verdonschot", "Verdonschot, Sander");
         expected.put("Verdonschot, Sander", "Verdonschot, Sander");
@@ -206,6 +212,8 @@ public class AuthorTest {
         System.out.println("Format - None");
 
         Map<String, String> expected = new LinkedHashMap<>();
+        
+        expected.put("von Last, Jr., First", "von Last, Jr.");
 
         expected.put("Sander Verdonschot", "Verdonschot");
         expected.put("Verdonschot, Sander", "Verdonschot");
@@ -266,6 +274,8 @@ public class AuthorTest {
         System.out.println("Format - Abbreviated");
 
         Map<String, String> expected = new LinkedHashMap<>();
+        
+        expected.put("von Last, Jr., First", "F. von Last, Jr.");
 
         expected.put("Sander Verdonschot", "S. Verdonschot");
         expected.put("Verdonschot, Sander", "S. Verdonschot");
@@ -327,6 +337,8 @@ public class AuthorTest {
         System.out.println("Format - Abbreviated Reversed");
 
         Map<String, String> expected = new LinkedHashMap<>();
+        
+        expected.put("von Last, Jr., First", "von Last, Jr., F.");
 
         expected.put("Sander Verdonschot", "Verdonschot, S.");
         expected.put("Verdonschot, Sander", "Verdonschot, S.");
