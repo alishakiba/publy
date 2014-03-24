@@ -20,21 +20,36 @@ import java.util.Set;
 import publy.data.bibitem.BibItem;
 
 /**
- *
- *
+ * A classification of publications.
+ * <p>
+ * The classification increases monotonically from most exclusive to most
+ * inclusive:
+ * <p>
+ * <ul>
+ * <li> NONE - No publications match this type.
+ * <li> PUBLISHED - Papers that have been published, i.e. whose {@code pubstate}
+ * field is not set.
+ * <li> ACCEPTED - Papers that have been published or accepted for publications,
+ * i.e. whose {@code pubstate} field is either not set, or one of
+ * {@code accepted}, {@code acceptedrev}, {@code forthcoming}, {@code inpress},
+ * {@code prepublished}.
+ * <li> ARXIV - Papers that have been published, accepted for publication, or
+ * placed on the arXiv, i.e. whose {@code arxiv} field is set.
+ * <li> ALL - All publications match this type.
+ * </ul>
  */
 public enum PublicationType {
 
     NONE, PUBLISHED, ACCEPTED, ARXIV, ALL;
-    
+
     /**
-     * All <code>pubstate</code> values which are classified as ACCEPTED.
+     * All {@code pubstate} values which are classified as ACCEPTED.
      */
     private static final Set<String> ACCEPTED_STATES;
-    
+
     static {
         ACCEPTED_STATES = new HashSet<>();
-        
+
         ACCEPTED_STATES.add("accepted");
         ACCEPTED_STATES.add("acceptedrev");
         ACCEPTED_STATES.add("forthcoming");
@@ -59,11 +74,24 @@ public enum PublicationType {
                 throw new AssertionError("Unrecognized PublicationType: " + this);
         }
     }
-    
+
+    /**
+     * Tests whether the given paper matches this type.
+     *
+     * @param item the paper to test
+     * @return true if {@code item} matches this type, false otherwise
+     */
     public boolean matches(BibItem item) {
         return matches(this, item);
     }
-    
+
+    /**
+     * Tests whether the given paper matches the specified type.
+     *
+     * @param type the publication type to match
+     * @param item the paper to test
+     * @return true if {@code item} matches {@code type}, false otherwise
+     */
     public static boolean matches(PublicationType type, BibItem item) {
         if (type == ALL) {
             return true;
@@ -72,7 +100,7 @@ public enum PublicationType {
         } else {
             // The type is either PUBLISHED, ACCEPTED, or ARXIV
             String pubstate = item.get("pubstate");
-            
+
             if (pubstate == null || pubstate.isEmpty()) {
                 // The paper has been published, matching all remaining types
                 return true;
