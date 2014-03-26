@@ -36,7 +36,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.is;
 import org.xml.sax.SAXException;
 import publy.data.Pair;
-import publy.data.PublicationType;
+import publy.data.PublicationStatus;
 import publy.data.category.OutputCategory;
 import publy.data.category.conditions.TypeCondition;
 import publy.io.ResourceLocator;
@@ -108,8 +108,8 @@ public class BeanTestUtils {
             return new Pair<Object, Object>(HTMLSettings.NavigationPlacement.NO_NAVIGATION, HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM);
         } else if (field.getType().equals(HTMLSettings.TitleLinkTarget.class)) {
             return new Pair<Object, Object>(HTMLSettings.TitleLinkTarget.ABSTRACT, HTMLSettings.TitleLinkTarget.PAPER);
-        } else if (field.getType().equals(PublicationType.class)) {
-            return new Pair<Object, Object>(PublicationType.ACCEPTED, PublicationType.ARXIV);
+        } else if (field.getType().equals(PublicationStatus.class)) {
+            return new Pair<Object, Object>(PublicationStatus.ACCEPTED, PublicationStatus.ARXIV);
         } else if (field.getType().equals(String.class)) {
             return new Pair<Object, Object>("a", "b");
         } else if (field.getType().equals(List.class)) {
@@ -133,8 +133,8 @@ public class BeanTestUtils {
             return new Pair<Object, Object>(GeneralSettings.NameDisplay.ABBREVIATED, GeneralSettings.NameDisplay.FULL);
         } else if (field.getType().equals(GeneralSettings.Numbering.class)) {
             return new Pair<Object, Object>(GeneralSettings.Numbering.GLOBAL, GeneralSettings.Numbering.LOCAL);
-        } else if (field.getType().equals(PublicationType.class)) {
-            return new Pair<Object, Object>(PublicationType.ACCEPTED, PublicationType.ARXIV);
+        } else if (field.getType().equals(PublicationStatus.class)) {
+            return new Pair<Object, Object>(PublicationStatus.ACCEPTED, PublicationStatus.ARXIV);
         } else {
             fail("Unknown field type: " + field.getGenericType());
         }

@@ -20,7 +20,7 @@ import java.util.Set;
 import publy.data.bibitem.BibItem;
 
 /**
- * A classification of publications.
+ * A classification of publications by progress in the publication pipeline.
  * <p>
  * The classification increases monotonically from most exclusive to most
  * inclusive:
@@ -38,7 +38,7 @@ import publy.data.bibitem.BibItem;
  * <li> ALL - All publications match this type.
  * </ul>
  */
-public enum PublicationType {
+public enum PublicationStatus {
 
     NONE, PUBLISHED, ACCEPTED, ARXIV, ALL;
 
@@ -92,7 +92,7 @@ public enum PublicationType {
      * @param item the paper to test
      * @return true if {@code item} matches {@code type}, false otherwise
      */
-    public static boolean matches(PublicationType type, BibItem item) {
+    public static boolean matches(PublicationStatus type, BibItem item) {
         if (type == ALL) {
             return true;
         } else if (type == NONE) {

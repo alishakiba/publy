@@ -15,7 +15,7 @@
  */
 package publy.data.settings;
 
-import publy.data.PublicationType;
+import publy.data.PublicationStatus;
 
 /**
  *
@@ -73,9 +73,9 @@ public class HTMLSettings {
     // Navigation
     private NavigationPlacement navPlacement = NavigationPlacement.TOP;
     // Additional publication info
-    private PublicationType includeAbstract = PublicationType.ALL;
-    private PublicationType includeBibtex = PublicationType.ARXIV; // ALL should not be an option here.
-    private PublicationType includePaper = PublicationType.ARXIV;
+    private PublicationStatus includeAbstract = PublicationStatus.ALL;
+    private PublicationStatus includeBibtex = PublicationStatus.ARXIV; // ALL should not be an option here.
+    private PublicationStatus includePaper = PublicationStatus.ARXIV;
     // Title link
     private TitleLinkTarget titleTarget = TitleLinkTarget.NONE;
     // Presented
@@ -115,15 +115,15 @@ public class HTMLSettings {
         this.navPlacement = navPlacement;
     }
 
-    public PublicationType getIncludeAbstract() {
+    public PublicationStatus getIncludeAbstract() {
         return includeAbstract;
     }
 
-    public PublicationType getIncludeBibtex() {
+    public PublicationStatus getIncludeBibtex() {
         return includeBibtex;
     }
 
-    public PublicationType getIncludePaper() {
+    public PublicationStatus getIncludePaper() {
         return includePaper;
     }
 
@@ -139,15 +139,15 @@ public class HTMLSettings {
         this.titleTarget = titleTarget;
     }
 
-    public void setIncludeAbstract(PublicationType includeAbstract) {
+    public void setIncludeAbstract(PublicationStatus includeAbstract) {
         this.includeAbstract = includeAbstract;
     }
 
-    public void setIncludeBibtex(PublicationType includeBibtex) {
+    public void setIncludeBibtex(PublicationStatus includeBibtex) {
         this.includeBibtex = includeBibtex;
     }
 
-    public void setIncludePaper(PublicationType includePaper) {
+    public void setIncludePaper(PublicationStatus includePaper) {
         this.includePaper = includePaper;
     }
 

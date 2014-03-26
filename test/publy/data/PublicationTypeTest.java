@@ -42,7 +42,7 @@ public class PublicationTypeTest {
     public void testMatches_BibItem() {
         System.out.println("matches");
         
-        PublicationType[] types = new PublicationType[]{PublicationType.NONE, PublicationType.PUBLISHED, PublicationType.ACCEPTED, PublicationType.ARXIV, PublicationType.ALL};
+        PublicationStatus[] types = new PublicationStatus[]{PublicationStatus.NONE, PublicationStatus.PUBLISHED, PublicationStatus.ACCEPTED, PublicationStatus.ARXIV, PublicationStatus.ALL};
         
         // ALL
         BibItem submitted = new BibItem("article", "test");
@@ -135,7 +135,7 @@ public class PublicationTypeTest {
         for (BibItem item : items) {
             for (int i = 0; i < types.length; i++) {
                 boolean expResult = Integer.parseInt(item.get("--test--")) <= i;
-                boolean result = PublicationType.matches(types[i], item);
+                boolean result = PublicationStatus.matches(types[i], item);
                 
                 assertEquals("Type: " + types[i] + ". Item: " + item.toString(), expResult, result);
             }
