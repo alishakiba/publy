@@ -23,7 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import publy.Console;
-import publy.data.PublicationType;
+import publy.data.PublicationStatus;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.Type;
@@ -595,7 +595,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     }
                     break;
                 default:
-                    if (PublicationType.ACCEPTED.matches(item)) {
+                    if (PublicationStatus.ACCEPTED.matches(item)) {
                         writeLinks(item, true, false);
                     } else if (isPresent(item, "arxiv")) {
                         writeLinks(item, false, true);

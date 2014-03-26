@@ -219,7 +219,7 @@
     <Component class="javax.swing.JComboBox" name="abstractComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new DefaultComboBoxModel&lt;&gt;(PublicationType.values())" type="code"/>
+          <Connection code="new DefaultComboBoxModel&lt;&gt;(publy.data.PublicationStatus.values())" type="code"/>
         </Property>
       </Properties>
       <Events>
@@ -227,7 +227,7 @@
       </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox&lt;&gt;()"/>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;PublicationType&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;publy.data.PublicationStatus&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="bibtexLabel">
@@ -243,7 +243,7 @@
     <Component class="javax.swing.JComboBox" name="bibtexComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new DefaultComboBoxModel&lt;&gt;(Arrays.copyOfRange(PublicationType.values(), 0, 4))" type="code"/>
+          <Connection code="new DefaultComboBoxModel&lt;&gt;(Arrays.copyOfRange(publy.data.PublicationStatus.values(), 0, 4))" type="code"/>
         </Property>
       </Properties>
       <Events>
@@ -251,13 +251,13 @@
       </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox&lt;&gt;()"/>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;PublicationType&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;publy.data.PublicationStatus&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JComboBox" name="paperComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new DefaultComboBoxModel&lt;&gt;(PublicationType.values())" type="code"/>
+          <Connection code="new DefaultComboBoxModel&lt;&gt;(publy.data.PublicationStatus.values())" type="code"/>
         </Property>
       </Properties>
       <Events>
@@ -265,7 +265,7 @@
       </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox&lt;&gt;()"/>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;PublicationType&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;publy.data.PublicationStatus&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="analyticsLabel">

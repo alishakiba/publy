@@ -19,7 +19,7 @@ import java.util.Arrays;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import publy.data.PublicationType;
+import publy.data.PublicationStatus;
 import publy.data.settings.HTMLSettings;
 
 /**
@@ -144,7 +144,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
 
         abstractLabel.setText("Include the abstract for:");
 
-        abstractComboBox.setModel(new DefaultComboBoxModel<>(PublicationType.values()));
+        abstractComboBox.setModel(new DefaultComboBoxModel<>(PublicationStatus.values()));
         abstractComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 abstractComboBoxActionPerformed(evt);
@@ -155,14 +155,14 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
 
         paperLabel.setText("Include the paper for:");
 
-        bibtexComboBox.setModel(new DefaultComboBoxModel<>(Arrays.copyOfRange(PublicationType.values(), 0, 4)));
+        bibtexComboBox.setModel(new DefaultComboBoxModel<>(Arrays.copyOfRange(PublicationStatus.values(), 0, 4)));
         bibtexComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bibtexComboBoxActionPerformed(evt);
             }
         });
 
-        paperComboBox.setModel(new DefaultComboBoxModel<>(PublicationType.values()));
+        paperComboBox.setModel(new DefaultComboBoxModel<>(PublicationStatus.values()));
         paperComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 paperComboBoxActionPerformed(evt);
@@ -379,15 +379,15 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_linkToTextCheckBoxActionPerformed
 
     private void abstractComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abstractComboBoxActionPerformed
-        settings.setIncludeAbstract((PublicationType) abstractComboBox.getSelectedItem());
+        settings.setIncludeAbstract((PublicationStatus) abstractComboBox.getSelectedItem());
     }//GEN-LAST:event_abstractComboBoxActionPerformed
 
     private void bibtexComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bibtexComboBoxActionPerformed
-        settings.setIncludeBibtex((PublicationType) bibtexComboBox.getSelectedItem());
+        settings.setIncludeBibtex((PublicationStatus) bibtexComboBox.getSelectedItem());
     }//GEN-LAST:event_bibtexComboBoxActionPerformed
 
     private void paperComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paperComboBoxActionPerformed
-        settings.setIncludePaper((PublicationType) paperComboBox.getSelectedItem());
+        settings.setIncludePaper((PublicationStatus) paperComboBox.getSelectedItem());
     }//GEN-LAST:event_paperComboBoxActionPerformed
 
     private void analyticsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyticsCheckBoxActionPerformed
@@ -434,14 +434,14 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<PublicationType> abstractComboBox;
+    private javax.swing.JComboBox<PublicationStatus> abstractComboBox;
     private javax.swing.JLabel abstractLabel;
     private javax.swing.JCheckBox analyticsCheckBox;
     private javax.swing.JLabel analyticsLabel;
     private javax.swing.JSeparator analyticsSeparator;
     private javax.swing.JLabel analyticsUserLabel;
     private javax.swing.JTextField analyticsUserTextField;
-    private javax.swing.JComboBox<PublicationType> bibtexComboBox;
+    private javax.swing.JComboBox<PublicationStatus> bibtexComboBox;
     private javax.swing.JLabel bibtexLabel;
     private javax.swing.JCheckBox insertLinksCheckBox;
     private javax.swing.JCheckBox linkToBibtexCheckBox;
@@ -454,7 +454,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel navigationComboLabel;
     private javax.swing.JLabel navigationLabel;
     private javax.swing.JSeparator navigationSeparator;
-    private javax.swing.JComboBox<PublicationType> paperComboBox;
+    private javax.swing.JComboBox<PublicationStatus> paperComboBox;
     private javax.swing.JLabel paperLabel;
     private javax.swing.JLabel presentedLabel;
     private javax.swing.JSeparator presentedSeparator;

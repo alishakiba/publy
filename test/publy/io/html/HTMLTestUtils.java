@@ -26,7 +26,7 @@ import java.util.Properties;
 import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import publy.data.PublicationType;
+import publy.data.PublicationStatus;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.Type;
 import publy.data.settings.GeneralSettings;
@@ -58,9 +58,9 @@ public class HTMLTestUtils {
 
         HTMLSettings hs = bibtexSettings.getHtmlSettings();
 
-        hs.setIncludeAbstract(PublicationType.NONE);
-        hs.setIncludeBibtex(PublicationType.NONE);
-        hs.setIncludePaper(PublicationType.NONE);
+        hs.setIncludeAbstract(PublicationStatus.NONE);
+        hs.setIncludeBibtex(PublicationStatus.NONE);
+        hs.setIncludePaper(PublicationStatus.NONE);
         hs.setTitleTarget(HTMLSettings.TitleLinkTarget.NONE);
 
         // Initialize default values for fields

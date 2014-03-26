@@ -26,7 +26,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import publy.Console;
-import publy.data.PublicationType;
+import publy.data.PublicationStatus;
 import publy.data.category.OutputCategory;
 import publy.data.category.conditions.Condition;
 import publy.data.category.conditions.FieldCondition;
@@ -346,13 +346,13 @@ public class SettingsReader extends DefaultHandler {
                 settings.getHtmlSettings().setNavPlacement(HTMLSettings.NavigationPlacement.valueOf(text));
                 break;
             case "includeAbstract":
-                settings.getHtmlSettings().setIncludeAbstract(PublicationType.valueOf(text));
+                settings.getHtmlSettings().setIncludeAbstract(PublicationStatus.valueOf(text));
                 break;
             case "includeBibtex":
-                settings.getHtmlSettings().setIncludeBibtex(PublicationType.valueOf(text));
+                settings.getHtmlSettings().setIncludeBibtex(PublicationStatus.valueOf(text));
                 break;
             case "includePaper":
-                settings.getHtmlSettings().setIncludePaper(PublicationType.valueOf(text));
+                settings.getHtmlSettings().setIncludePaper(PublicationStatus.valueOf(text));
                 break;
             case "titleTarget":
                 settings.getHtmlSettings().setTitleTarget(HTMLSettings.TitleLinkTarget.valueOf(text));
