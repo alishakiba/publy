@@ -21,30 +21,43 @@ import java.util.Map.Entry;
 import publy.Console;
 
 /**
- *
- *
+ * A publication.
  */
 public class BibItem {
 
     private String id;
     private Type type;
-    private String originalType;
+    private String originalType; // The type as specified in the input file (for example 'article', or 'inproceedings')
     private HashMap<String, String> values;
     private List<Author> authors;
     private List<Author> editors;
 
-    public BibItem(String originalType, String id) {
-        this.type = Type.fromString(originalType);
-        this.originalType = originalType;
+    /**
+     * Creates a new publication with the given type and identifier.
+     *
+     * @param type the type as specified in the input file (for example
+     * 'article', or 'inproceedings')
+     * @param id the unique identifier used to refer to this publication
+     */
+    public BibItem(String type, String id) {
+        this.type = Type.fromString(type);
+        this.originalType = type;
         this.id = id;
 
         values = new LinkedHashMap<>();
         authors = new ArrayList<>();
         editors = new ArrayList<>();
 
-        handleSpecialTypes(originalType);
+        handleSpecialTypes(type);
     }
 
+    /**
+     * Certain types are grouped together by {@link Type}. These require extra
+     * information to be set for proper display.
+     *
+     * @param originalType the type as specified in the input file (for example
+     * 'article', or 'inproceedings')
+     */
     private void handleSpecialTypes(String originalType) {
         switch (originalType) {
             case "mastersthesis":
@@ -59,30 +72,79 @@ public class BibItem {
         }
     }
 
+    /**
+     * Gets the type of this publication.
+     *
+     * @return the type
+     */
     public Type getType() {
         return type;
     }
 
+    /**
+     * Gets the type of this publication, as specified in the input file.
+     *
+     * @return the original type
+     */
     public String getOriginalType() {
         return originalType;
     }
 
+    /**
+     * Gets the unique identifier of this publication.
+     *
+     * @return the unique identifier
+     */
     public String getId() {
         return id;
     }
 
-    public String get(String attr) {
-        return values.get(attr);
+    /**
+     * Gets the value associated with the specified field.
+     *
+     * @param field the field to look up
+     * @return the value associated with this field, or null if no such value
+     * exists
+     */
+    public String get(String field) {
+        return values.get(field);
     }
 
-    public void put(String attr, String value) {
-        values.put(attr, value);
+    /**
+     * Associates the given value with the specified field.
+     *
+     * @param field the field to modify
+     * @param value the value to associate with this field
+     */
+    public void put(String field, String value) {
+        values.put(field, value);
     }
 
+    /**
+     * Gets all fields of this publication.
+     * <p>
+     * This includes fields that were set in the input file, and fields that
+     * have been set by Publy afterwards. There is no guarantee that these
+     * fields have non-null or non-empty values.
+     *
+     * @return a set containing all fields
+     */
     public Set<String> getFields() {
         return values.keySet();
     }
 
+    /**
+     * Checks whether this publication includes information for all its
+     * mandatory fields.
+     * <p>
+     * Which fields are mandatory depends on the type of this publication, as
+     * specified by {@link FieldData#getMandatoryFields}. If any mandatory
+     * fields are missing, this method prints a helpful error message to the
+     * console.
+     *
+     * @return true if this publication includes information for all its
+     * mandatory fields, false otherwise
+     */
     public boolean checkMandatoryFields() {
         List<String> missingFields = null;
 
@@ -126,24 +188,52 @@ public class BibItem {
         return missingFields == null;
     }
 
+    /**
+     * Gets all authors of this publication.
+     *
+     * @return a list of all authors
+     */
     public List<Author> getAuthors() {
         return authors;
     }
 
+    /**
+     * Sets the authors of this publication.
+     *
+     * @param authors the new authors
+     */
     public void setAuthors(Author... authors) {
         this.authors.clear();
         this.authors.addAll(Arrays.asList(authors));
     }
-    
+
+    /**
+     * Gets all editors of this publication.
+     *
+     * @return a list of all editors
+     */
     public List<Author> getEditors() {
         return editors;
     }
 
+    /**
+     * Sets the editors of this publication.
+     *
+     * @param editors the new editors
+     */
     public void setEditors(Author... editors) {
         this.editors.clear();
         this.editors.addAll(Arrays.asList(editors));
     }
 
+    /**
+     * Gets the BibTeX representation of this publication.
+     * <p>
+     * This representation uses the original type, as specified in the input
+     * file.
+     *
+     * @return a (multi-line) String with the BibTeX representation
+     */
     public String getBibTeX() {
         StringBuilder sb = new StringBuilder();
 
@@ -154,11 +244,13 @@ public class BibItem {
         sb.append(",\n");
 
         for (Entry<String, String> entry : values.entrySet()) {
-            sb.append("  ");
-            sb.append(entry.getKey());
-            sb.append("={");
-            sb.append(entry.getValue());
-            sb.append("},\n");
+            if (entry.getValue() != null) {
+                sb.append("  ");
+                sb.append(entry.getKey());
+                sb.append("={");
+                sb.append(entry.getValue());
+                sb.append("},\n");
+            }
         }
 
         // remove the last comma
@@ -173,7 +265,7 @@ public class BibItem {
     public String toString() {
         return getBibTeX();
     }
-    
+
     private boolean anyNonEmpty(String... fields) {
         for (String field : fields) {
             String v = values.get(field);
