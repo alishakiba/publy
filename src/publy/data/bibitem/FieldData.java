@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
- *
+ * This is a utility class that stores the mandatory and optional fields for
+ * each publication type.
  */
 public class FieldData {
 
@@ -68,11 +68,32 @@ public class FieldData {
         optionalFields.put(Type.UNPUBLISHED, Arrays.asList("howpublished", "address", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
     }
 
+    /**
+     * Gets the mandatory fields for the given publication type.
+     * <p>
+     * Publications that do not have these fields set are rejected by Publy.
+     *
+     * @param type the publication type
+     * @return a list of mandatory fields
+     */
     public static List<String> getMandatoryFields(Type type) {
         return mandatoryFields.get(type);
     }
 
+    /**
+     * Gets the supported optional fields of the given publication type.
+     * <p>
+     * These are the (semi-)official BibTeX fields that are printed when the
+     * BibTeX for a publication is requested. This does not include fields that
+     * are only used by Publy.
+     *
+     * @param type the publication type
+     * @return a list of optional fields
+     */
     public static List<String> getOptionalFields(Type type) {
         return optionalFields.get(type);
+    }
+
+    private FieldData() {
     }
 }
