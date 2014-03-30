@@ -24,8 +24,16 @@ import publy.data.category.conditions.FieldCondition;
 import publy.data.category.conditions.TypeCondition;
 
 /**
- *
- *
+ * A publication category.
+ * <p>
+ * This is a group of publications, with several properties that make it easier
+ * to manage large numbers of publications. In the output, the publications in
+ * each category are grouped together under a heading. Publications that are not
+ * included in any category will not be listed.
+ * <p>
+ * Publications that match the type and field conditions of a category are
+ * automatically assigned to that category. If a publication matches multiple
+ * categories, it is assigned to the first in the list of categories.
  */
 public class OutputCategory implements Cloneable {
 
@@ -39,75 +47,196 @@ public class OutputCategory implements Cloneable {
     // Fields that should be ignored for this category
     private List<String> ignoredFields;
 
+    /**
+     * Creates a new category with the given names and type condition.
+     *
+     * @param shortName the one-word description of this category - used to
+     * refer to it via links or in the GUI
+     * @param name the full description of this category - used as a heading in
+     * the publication lists
+     * @param typeCondition a condition on the types of publications that will
+     * be accepted into this category
+     */
     public OutputCategory(String shortName, String name, TypeCondition typeCondition) {
         this.shortName = shortName;
         this.name = name;
         htmlNote = "";
-        
+
         this.typeCondition = typeCondition;
         fieldConditions = new ArrayList<>();
-        
+
         items = new ArrayList<>();
         ignoredFields = new ArrayList<>();
     }
-    
+
+    /**
+     * Gets the short name of this category.
+     * <p>
+     * This is a one-word description that is used to refer to this category via
+     * links or in the GUI.
+     *
+     * @return the short name
+     */
     public String getShortName() {
         return shortName;
     }
 
+    /**
+     * Sets the short name of this category.
+     * <p>
+     * This is a one-word description that is used to refer to this category via
+     * links or in the GUI.
+     *
+     * @param shortName the new short name
+     */
     public void setShortName(String shortName) {
         this.shortName = shortName;
     }
 
+    /**
+     * Gets the name of this category.
+     * <p>
+     * This is a longer description of this category that is used as a heading
+     * in the publication lists.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name of this category.
+     * <p>
+     * This is a longer description of this category that is used as a heading
+     * in the publication lists.
+     *
+     * @param name the new name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets the HTML note of this category.
+     * <p>
+     * This is text that is displayed immediately after the category heading in
+     * the HTML version of the publication list. The text can contain arbitrary
+     * HTML code, including figures and structural elements.
+     *
+     * @return the HTML note
+     */
     public String getHtmlNote() {
         return htmlNote;
     }
 
+    /**
+     * Sets the HTML note of this category.
+     * <p>
+     * This is text that is displayed immediately after the category heading in
+     * the HTML version of the publication list. The text can contain arbitrary
+     * HTML code, including figures and structural elements.
+     *
+     * @param htmlNote the new HTML note
+     */
     public void setHtmlNote(String htmlNote) {
         this.htmlNote = htmlNote;
     }
 
+    /**
+     * Gets the type condition of this category.
+     * <p>
+     * The type condition restricts the types of publications that are accepted
+     * into this category. A publication must match both the type and fields
+     * conditions to be accepted.
+     *
+     * @return the type condition
+     */
     public TypeCondition getTypeCondition() {
         return typeCondition;
     }
 
+    /**
+     * Sets the type condition of this category.
+     * <p>
+     * The type condition restricts the types of publications that are accepted
+     * into this category. A publication must match both the type and fields
+     * conditions to be accepted.
+     *
+     * @param typeCondition the new type condition
+     */
     public void setTypeCondition(TypeCondition typeCondition) {
         this.typeCondition = typeCondition;
     }
 
+    /**
+     * Gets the field conditions of this category.
+     * <p>
+     * The field conditions place restrictions on the fields and field values of
+     * publications that are accepted into this category. A publication must
+     * match both the type and fields conditions to be accepted.
+     *
+     * @return the field conditions
+     */
     public List<FieldCondition> getFieldConditions() {
         return fieldConditions;
     }
 
+    /**
+     * Sets the field conditions of this category.
+     * <p>
+     * The field conditions place restrictions on the fields and field values of
+     * publications that are accepted into this category. A publication must
+     * match both the type and fields conditions to be accepted.
+     *
+     * @param fieldConditions the new field conditions
+     */
     public void setFieldConditions(List<FieldCondition> fieldConditions) {
         this.fieldConditions = fieldConditions;
     }
-    
+
+    /**
+     * Gets the items that have been accepted into this category.
+     *
+     * @return the items
+     */
     public List<BibItem> getItems() {
         return items;
     }
 
+    /**
+     * Gets the ignored fields of this category.
+     * <p>
+     * All publications in this category will be formatted as if they have no
+     * information set for these fields. This helps to make the presentation of
+     * publications in the same category more uniform.
+     *
+     * @return the ignored fields
+     */
     public List<String> getIgnoredFields() {
         return ignoredFields;
     }
 
+    /**
+     * Sets the ignored fields of this category.
+     * <p>
+     * All publications in this category will be formatted as if they have no
+     * information set for these fields. This helps to make the presentation of
+     * publications in the same category more uniform.
+     *
+     * @param ignoredFields the new ignored fields
+     */
     public void setIgnoredFields(List<String> ignoredFields) {
         this.ignoredFields = ignoredFields;
     }
 
     /**
-     * Removes all items that match this category's conditions from the given
-     * list and adds them to the category.
+     * Populates this category with publications from the given list.
+     * <p>
+     * This removes all publications that match the type and field conditions
+     * from the list, and adds them to the category.
      *
-     * @param items
+     * @param items the publications
      */
     public void populate(List<BibItem> items) {
         for (ListIterator<BibItem> it = items.listIterator(); it.hasNext();) {
@@ -167,18 +296,15 @@ public class OutputCategory implements Cloneable {
         if (!Objects.equals(this.shortName, other.shortName)) {
             return false;
         }
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.name, other.name);
     }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
         OutputCategory result = (OutputCategory) super.clone();
-        
+
         result.items = new ArrayList<>(items);
-        
+
         return result;
     }
 
