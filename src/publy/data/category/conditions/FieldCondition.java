@@ -16,26 +16,50 @@
 package publy.data.category.conditions;
 
 /**
- *
- *
+ * A boolean condition on the fields and field values of publications.
  */
 public abstract class FieldCondition extends Condition {
+
     private String field;
 
+    /**
+     * Creates a new field condition for the specified field.
+     * <p>
+     * If {@code inverted} is true, any item that would otherwise match this
+     * condition no longer matches it and vice versa.
+     *
+     * @param inverted whether to invert this condition
+     * @param field the field this condition checks
+     */
     public FieldCondition(boolean inverted, String field) {
         super(inverted);
         this.field = field;
     }
 
+    /**
+     * Creates a new field condition with the same attributes as the given one.
+     *
+     * @param condition the condition to copy
+     */
     public FieldCondition(FieldCondition condition) {
         super(condition);
         this.field = condition.field;
     }
 
+    /**
+     * Gets the field that this condition checks.
+     *
+     * @return the field
+     */
     public String getField() {
         return field;
     }
 
+    /**
+     * Sets the field that this condition checks.
+     *
+     * @param field the new field
+     */
     public void setField(String field) {
         this.field = field;
     }
