@@ -18,8 +18,11 @@ package publy.data.category.conditions;
 import publy.data.bibitem.BibItem;
 
 /**
- *
- *
+ * A field condition that tests whether a publication's field has a value
+ * assigned.
+ * <p>
+ * For example, it could match all publications at a specific venue, or all
+ * papers published in 2012.
  */
 public class FieldExistsCondition extends FieldCondition {
 
@@ -30,10 +33,11 @@ public class FieldExistsCondition extends FieldCondition {
     public FieldExistsCondition(FieldExistsCondition condition) {
         super(condition);
     }
-    
+
     @Override
     public boolean internalMatches(BibItem item) {
-        return item.getFields().contains(getField());
+        String value = item.get(getField());
+        return (value != null && !value.isEmpty());
     }
-    
+
 }
