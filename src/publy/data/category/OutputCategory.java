@@ -264,10 +264,10 @@ public class OutputCategory implements Cloneable {
     }
 
     /**
-     * Equals and hashcode rely solely on the names, so categories that contain
-     * different items still appear the same.
-     *
-     * @return
+     * {@inheritDoc}
+     * <p>
+     * <b>Implementation note:</b> The hash of this category depends only on
+     * {@code shortName} and {@code name}.
      */
     @Override
     public int hashCode() {
@@ -278,11 +278,10 @@ public class OutputCategory implements Cloneable {
     }
 
     /**
-     * Equals and hashcode rely solely on the names, so categories that contain
-     * different items still appear the same.
-     *
-     * @param obj
-     * @return
+     * {@inheritDoc}
+     * <p>
+     * <b>Implementation note:</b> Two categories are considered equal if they
+     * have the same {@code shortName} and {@code name}.
      */
     @Override
     public boolean equals(Object obj) {
