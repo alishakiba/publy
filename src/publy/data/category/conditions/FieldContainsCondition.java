@@ -21,36 +21,83 @@ import java.util.List;
 import publy.data.bibitem.BibItem;
 
 /**
- *
- *
+ * A field condition that tests whether a publication's field contains specific
+ * text anywhere in its value.
+ * <p>
+ * For example, it could match all publications co-authored with a specific
+ * researcher, or all papers published in conferences with IEEE in their name.
  */
 public class FieldContainsCondition extends FieldCondition {
 
     private List<String> values;
 
+    /**
+     * Creates a new field condition that tests whether the given field of a
+     * publication contains any of the specified strings.
+     * <p>
+     * If {@code inverted} is true, any item that would otherwise match this
+     * condition no longer matches it and vice versa. In other words, the
+     * condition tests that the field contains none of the specified strings.
+     *
+     * @param inverted whether to invert this condition
+     * @param field the field this condition checks
+     * @param values the strings to test for
+     */
     public FieldContainsCondition(boolean inverted, String field, List<String> values) {
         super(inverted, field);
         this.values = values;
     }
 
+    /**
+     * Creates a new field condition that tests whether the given field of a
+     * publication contains any of the specified strings.
+     * <p>
+     * If {@code inverted} is true, any item that would otherwise match this
+     * condition no longer matches it and vice versa. In other words, the
+     * condition tests that the field contains none of the specified strings.
+     *
+     * @param inverted whether to invert this condition
+     * @param field the field this condition checks
+     * @param values the strings to test for
+     */
     public FieldContainsCondition(boolean inverted, String field, String... values) {
         super(inverted, field);
         this.values = Arrays.asList(values);
     }
 
+    /**
+     * Creates a new field condition with the same attributes as the given one.
+     *
+     * @param condition the condition to copy
+     */
     public FieldContainsCondition(FieldContainsCondition condition) {
         super(condition);
         values = new ArrayList<>(condition.values);
     }
 
+    /**
+     * Gets the strings this condition looks for.
+     *
+     * @return the values
+     */
     public List<String> getValues() {
         return values;
     }
 
+    /**
+     * Sets the strings this condition looks for.
+     *
+     * @param values the new values
+     */
     public void setValues(List<String> values) {
         this.values = values;
     }
 
+    /**
+     * Sets the strings this condition looks for.
+     *
+     * @param values the new values
+     */
     public void setValues(String... values) {
         this.values = Arrays.asList(values);
     }
