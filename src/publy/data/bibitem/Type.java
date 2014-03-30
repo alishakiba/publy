@@ -16,8 +16,7 @@
 package publy.data.bibitem;
 
 /**
- *
- *
+ * A kind of publication. These correspond roughly to BibTeX's types.
  */
 public enum Type {
 
@@ -30,6 +29,13 @@ public enum Type {
         return name().toLowerCase();
     }
 
+    /**
+     * Finds the publication type that most closely corresponds to the given BibTeX (or
+     * BibLaTeX) type.
+     *
+     * @param type the BibTeX publication type, for example 'article'
+     * @return the corresponding Publy publication type
+     */
     public static Type fromString(String type) {
         switch (type) {
             // The types themselves
@@ -51,7 +57,6 @@ public enum Type {
                 return ONLINE;
             case "patent":
                 return PATENT;
-
             case "proceedings":
                 return PROCEEDINGS;
             case "inproceedings":
