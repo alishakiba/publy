@@ -21,15 +21,31 @@ import publy.data.bibitem.BibItem;
  * A field condition that tests whether a publication's field has a value
  * assigned.
  * <p>
- * For example, it could match all publications at a specific venue, or all
- * papers published in 2012.
+ * For example, it could match all publications that have an e-print version or
+ * a DOI.
  */
 public class FieldExistsCondition extends FieldCondition {
 
+    /**
+     * Creates a new field condition that tests whether the given field of a
+     * publication is set.
+     * <p>
+     * If {@code inverted} is true, any item that would otherwise match this
+     * condition no longer matches it and vice versa. In other words, the
+     * condition tests that the field is not set.
+     *
+     * @param inverted whether to invert this condition
+     * @param field the field this condition checks
+     */
     public FieldExistsCondition(boolean inverted, String field) {
         super(inverted, field);
     }
 
+    /**
+     * Creates a new field condition with the same attributes as the given one.
+     *
+     * @param condition the condition to copy
+     */
     public FieldExistsCondition(FieldExistsCondition condition) {
         super(condition);
     }
