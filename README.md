@@ -2,13 +2,13 @@
 
 ## Overview
 
-Publy turns a BibTeX file with a list of your publications into a HTML page, perfect for your academic web presence.
+Publy turns a BibTeX file with a list of your publications into a professional webpage. Quick, effortless, and exactly the way you want it.
 
 ## Features
 
  * Understands most BibTeX files
  * Automatically translates LaTeX-encoded special characters to Unicode
- * Nicely renders mathematics with [MathJax](http://www.mathjax.org/)
+ * Renders mathematics with [MathJax](http://www.mathjax.org/)
  * Abstracts and BibTeX citation information can be displayed for each paper
  * Fully customizable with CSS
  * Google Analytics integration
