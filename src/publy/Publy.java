@@ -20,21 +20,14 @@ import com.beust.jcommander.ParameterException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import publy.algo.PublicationPostProcessor;
-import publy.data.Author;
 import publy.data.bibitem.BibItem;
-import publy.data.bibitem.FieldData;
-import publy.data.bibitem.Type;
 import publy.data.category.OutputCategory;
 import publy.data.settings.Settings;
 import publy.gui.MainFrame;
@@ -105,7 +98,8 @@ public class Publy {
             settings = Settings.defaultSettings();
         }
 
-        applyCommandlineOverwites(arguments);
+        arguments.applyOverrides(settings);
+        Console.setSettings(settings.getConsoleSettings());
 
         launchGUI();
     }
@@ -118,9 +112,11 @@ public class Publy {
             showSettings = true;
             notifyForMissingSettings();
             settings = Settings.defaultSettings();
-            applyCommandlineOverwites(arguments);
+            arguments.applyOverrides(settings);
+            Console.setSettings(settings.getConsoleSettings());
         } else {
-            applyCommandlineOverwites(arguments);
+            arguments.applyOverrides(settings);
+            Console.setSettings(settings.getConsoleSettings());
 
             // Basic checks, give the user a chance to fix issues instead of simply throwing an error
             Path pubList = settings.getFileSettings().getPublications();
@@ -151,7 +147,9 @@ public class Publy {
                 Console.except(settingsParseException, "An exception occurred while parsing the configuration:");
             }
         } else {
-            applyCommandlineOverwites(arguments);
+            arguments.applyOverrides(settings);
+            Console.setSettings(settings.getConsoleSettings());
+            
             generatePublicationList(settings);
         }
     }
@@ -197,11 +195,6 @@ public class Publy {
         }
     }
 
-    private static void applyCommandlineOverwites(CommandLineArguments arguments) {
-        arguments.applyOverrides(settings);
-        Console.setSettings(settings.getConsoleSettings());
-    }
-
     private static void launchGUI() {
         // Variables need to be final in order to be shared
         final Settings guiSettings = (settings == null ? Settings.defaultSettings() : settings);
@@ -244,18 +237,7 @@ public class Publy {
             }
 
             if (items != null) {
-                PublicationPostProcessor.postProcess(items);
-                List<OutputCategory> categories = categorizePapers(settings, items);
-
-                if (settings.getConsoleSettings().isShowWarnings()) {
-                    if (settings.getConsoleSettings().isWarnMandatoryFieldIgnored()) {
-                        warnForMandatoryIgnoredFields(categories);
-                    }
-
-                    if (settings.getConsoleSettings().isWarnNotAuthor()) {
-                        warnIfIAmNotAuthor(items);
-                    }
-                }
+                List<OutputCategory> categories = PublicationPostProcessor.postProcess(settings, items);
 
                 if (settings.getHtmlSettings().isGenerateTextVersion()) {
                     try {
@@ -287,120 +269,6 @@ public class Publy {
             }
 
             Console.log("Done.");
-        }
-    }
-
-    private static List<OutputCategory> categorizePapers(Settings settings, List<BibItem> items) {
-        // Create the list of empty categories
-        List<OutputCategory> categories = new ArrayList<>(settings.getCategorySettings().getActiveCategories().size());
-
-        for (OutputCategory c : settings.getCategorySettings().getActiveCategories()) {
-            try {
-                categories.add((OutputCategory) c.clone());
-            } catch (CloneNotSupportedException ex) {
-                // Should never happen
-                Console.except(ex, "Category \"%s\" could not be copied.", c.getShortName());
-            }
-        }
-
-        // Assign each paper to the correct category
-        // Make a copy so the categories can remove items without removing them from the main list
-        List<BibItem> tempItems = new ArrayList<>(items);
-
-        for (OutputCategory c : categories) {
-            c.populate(tempItems);
-        }
-
-        // Remove empty categories
-        ListIterator<OutputCategory> it = categories.listIterator();
-
-        while (it.hasNext()) {
-            OutputCategory c = it.next();
-
-            if (c.getItems().isEmpty()) {
-                it.remove();
-            }
-        }
-
-        // Warn for remaining items
-        if (!tempItems.isEmpty()) {
-            String ids = "";
-
-            for (BibItem item : tempItems) {
-                ids += "\"" + item.getId() + "\", ";
-            }
-
-            ids = ids.substring(0, ids.length() - 2); // Cut off the last ", "
-
-            Console.warn(Console.WarningType.ITEM_DOES_NOT_FIT_ANY_CATEGORY, "%d entries did not fit any category:%n%s", tempItems.size(), ids);
-        }
-
-        return categories;
-    }
-
-    private static void warnForMandatoryIgnoredFields(List<OutputCategory> categories) {
-        for (OutputCategory c : categories) {
-            Map<Type, List<String>> itemIDs = new EnumMap<>(Type.class);
-
-            for (BibItem item : c.getItems()) {
-                if (!itemIDs.containsKey(item.getType())) {
-                    itemIDs.put(item.getType(), new ArrayList<String>());
-                }
-
-                itemIDs.get(item.getType()).add(item.getId());
-            }
-
-            for (Type type : itemIDs.keySet()) {
-                for (String mandatoryFields : FieldData.getMandatoryFields(type)) {
-                    boolean allIgnored = true;
-
-                    for (String mandatory : mandatoryFields.split(";")) {
-                        if (!c.getIgnoredFields().contains(mandatory)) {
-                            allIgnored = false;
-                        }
-                    }
-
-                    if (allIgnored) {
-                        if (mandatoryFields.contains(";")) {
-                            Console.warn(Console.WarningType.MANDATORY_FIELD_IGNORED, 
-                                    "Category \"%s\" ignores fields \"%s\", which are mandatory for the following entries:%n%s.%nThese entries may not display properly.", 
-                                    c.getShortName(), mandatoryFields, itemIDs.get(type).toString());
-                        } else {
-                            Console.warn(Console.WarningType.MANDATORY_FIELD_IGNORED, 
-                                    "Category \"%s\" ignores field \"%s\", which is mandatory for the following entries:%n%s.%nThese entries may not display properly.", 
-                                    c.getShortName(), mandatoryFields, itemIDs.get(type).toString());
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private static void warnIfIAmNotAuthor(List<BibItem> items) {
-        for (BibItem item : items) {
-            boolean imAuthor = false;
-
-            for (Author author : item.getAuthors()) {
-                if (author.isMe(settings.getGeneralSettings())) {
-                    imAuthor = true;
-                    break;
-                }
-            }
-
-            if (!imAuthor) {
-                boolean imEditor = false;
-
-                for (Author author : item.getEditors()) {
-                    if (author.isMe(settings.getGeneralSettings())) {
-                        imEditor = true;
-                        break;
-                    }
-                }
-
-                if (!imEditor) {
-                    Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors or editors of entry \"%s\" match your name.", item.getId());
-                }
-            }
         }
     }
 }

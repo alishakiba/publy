@@ -15,13 +15,20 @@
  */
 package publy.algo;
 
+import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import publy.Console;
+import publy.data.Author;
 import publy.data.bibitem.BibItem;
+import publy.data.bibitem.FieldData;
+import publy.data.bibitem.Type;
+import publy.data.category.OutputCategory;
+import publy.data.settings.Settings;
 
 /**
  *
@@ -50,15 +57,26 @@ public class PublicationPostProcessor {
      * <li> Checks for, and replaces certain fields with possible aliases.
      * <li> Removes publications that miss mandatory information.
      * <li> Checks for an arXiv version.
+     * <li> Categorizes the papers.
+     * <li> Presents warnings for several common mistakes.
      * </ul>
      *
+     * @param settings the configuration settings to use
      * @param items the publications to process
+     * @return a list of categories that contain the post-processed publications
      */
-    public static void postProcess(List<BibItem> items) {
+    public static List<OutputCategory> postProcess(Settings settings, List<BibItem> items) {
         removeDuplicateIDs(items);
         processAliases(items);
         removeItemsWithMissingMandatoryFields(items);
         detectArxiv(items);
+
+        List<OutputCategory> categories = categorizePapers(settings, items);
+
+        warnForMandatoryIgnoredFields(settings, categories);
+        warnIfIAmNotAuthor(settings, items);
+
+        return categories;
     }
 
     /**
@@ -239,5 +257,148 @@ public class PublicationPostProcessor {
                 item.put("primaryclass", primaryClass);
             }
         }
+    }
+
+    /**
+     * Groups the publications into the categories defined in the settings.
+     * <p>
+     * Each paper is tested against the conditions of each category (in the
+     * order they appear in), and added to the first category that it matches.
+     * If there are papers that do not match any category, a warning message is
+     * shown.
+     *
+     * @param settings the configuration settings to use
+     * @param items the publications to process
+     * @return the categories containing all matched publications
+     */
+    private static List<OutputCategory> categorizePapers(Settings settings, List<BibItem> items) {
+        // Create the list of empty categories
+        List<OutputCategory> categories = new ArrayList<>(settings.getCategorySettings().getActiveCategories().size());
+
+        for (OutputCategory c : settings.getCategorySettings().getActiveCategories()) {
+            try {
+                categories.add((OutputCategory) c.clone());
+            } catch (CloneNotSupportedException ex) {
+                // Should never happen
+                Console.except(ex, "Category \"%s\" could not be copied.", c.getShortName());
+            }
+        }
+
+        // Assign each paper to the correct category
+        // Make a copy so the categories can remove items without removing them from the main list
+        List<BibItem> tempItems = new ArrayList<>(items);
+
+        for (OutputCategory c : categories) {
+            c.populate(tempItems);
+        }
+
+        // Remove empty categories
+        ListIterator<OutputCategory> it = categories.listIterator();
+
+        while (it.hasNext()) {
+            OutputCategory c = it.next();
+
+            if (c.getItems().isEmpty()) {
+                it.remove();
+            }
+        }
+
+        // Warn for remaining items
+        if (!tempItems.isEmpty()) {
+            String ids = "";
+
+            for (BibItem item : tempItems) {
+                ids += "\"" + item.getId() + "\", ";
+            }
+
+            ids = ids.substring(0, ids.length() - 2); // Cut off the last ", "
+
+            Console.warn(Console.WarningType.ITEM_DOES_NOT_FIT_ANY_CATEGORY, "%d %s did not fit any category:%n%s", tempItems.size(), (tempItems.size() == 1 ? "entry" : "entries"), ids);
+        }
+
+        return categories;
+    }
+
+    /**
+     * Prints a warning message if a category ignores a mandatory field of one
+     * of its publications.
+     *
+     * @param settings the configuration settings to use
+     * @param categories the categories that contain the publications to process
+     */
+    private static void warnForMandatoryIgnoredFields(Settings settings, List<OutputCategory> categories) {
+        if (settings.getConsoleSettings().isShowWarnings() && settings.getConsoleSettings().isWarnMandatoryFieldIgnored()) {
+            for (OutputCategory c : categories) {
+                Map<Type, List<String>> idsPerType = new EnumMap<>(Type.class);
+
+                for (BibItem item : c.getItems()) {
+                    if (!idsPerType.containsKey(item.getType())) {
+                        idsPerType.put(item.getType(), new ArrayList<String>());
+                    }
+
+                    idsPerType.get(item.getType()).add(item.getId());
+                }
+
+                for (Type type : idsPerType.keySet()) {
+                    for (String mandatoryFields : FieldData.getMandatoryFields(type)) {
+                        boolean allOptionsIgnored = true;
+
+                        for (String mandatory : mandatoryFields.split(";")) {
+                            if (!c.getIgnoredFields().contains(mandatory)) {
+                                allOptionsIgnored = false;
+                            }
+                        }
+
+                        if (allOptionsIgnored) {
+                            Console.warn(Console.WarningType.MANDATORY_FIELD_IGNORED,
+                                    "Category \"%s\" ignores field%s \"%s\", which %s mandatory for the following entr%s:%n%s.%nTh%s may not display properly.",
+                                    c.getShortName(), (mandatoryFields.contains(";") ? "s" : ""), mandatoryFields,
+                                    (mandatoryFields.contains(";") ? "are" : "is"), (idsPerType.get(type).size() == 1 ? "y" : "ies"),
+                                    idsPerType.get(type).toString(), (idsPerType.get(type).size() == 1 ? "is entry" : "ese entries"));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Prints a warning message for publications that were not authored by the
+     * user.
+     *
+     * @param settings the configuration settings to use
+     * @param items the publications to process
+     */
+    private static void warnIfIAmNotAuthor(Settings settings, List<BibItem> items) {
+        if (settings.getConsoleSettings().isShowWarnings() && settings.getConsoleSettings().isWarnNotAuthor()) {
+            for (BibItem item : items) {
+                boolean imAuthor = false;
+
+                for (Author author : item.getAuthors()) {
+                    if (author.isMe(settings.getGeneralSettings())) {
+                        imAuthor = true;
+                        break;
+                    }
+                }
+
+                if (!imAuthor) {
+                    boolean imEditor = false;
+
+                    for (Author author : item.getEditors()) {
+                        if (author.isMe(settings.getGeneralSettings())) {
+                            imEditor = true;
+                            break;
+                        }
+                    }
+
+                    if (!imEditor) {
+                        Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors or editors of entry \"%s\" match your name.", item.getId());
+                    }
+                }
+            }
+        }
+    }
+
+    private PublicationPostProcessor() {
     }
 }
