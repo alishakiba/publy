@@ -17,37 +17,27 @@ package publy;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 import publy.algo.PublicationPostProcessor;
 import publy.data.bibitem.BibItem;
 import publy.data.category.OutputCategory;
 import publy.data.settings.Settings;
-import publy.gui.MainFrame;
 import publy.gui.UIConstants;
 import publy.io.BibTeXParser;
 import publy.io.PublicationListWriter;
-import publy.io.ResourceLocator;
 import publy.io.bibtex.BibtexPublicationListWriter;
 import publy.io.html.HTMLPublicationListWriter;
 import publy.io.plain.PlainPublicationListWriter;
-import publy.io.settings.SettingsReader;
 
 /**
  *
  *
  */
 public class Publy {
-
-    private static Settings settings = null;
-    private static Throwable settingsParseException = null;
 
     /**
      * @param args the command line arguments
@@ -72,108 +62,16 @@ public class Publy {
         } else if (arguments.isVersion()) {
             printVersionInfo();
         } else {
-            readSettings(arguments.getConfig());
-
             if (arguments.isGui()) {
-                runInGuiMode(arguments);
+                Runner.runWithGUI(arguments);
             } else if (System.console() == null) {
-                runInMixedMode(arguments);
+                Runner.runInMixedMode(arguments);
             } else {
-                runInCommandlineMode(arguments);
+                Runner.runOnCommandLine(arguments);
             }
         }
     }
-
-    private static void printVersionInfo() {
-        System.out.printf("Publy %d.%d%n"
-                + "Copyright (c) 2013-2014 Sander Verdonschot%n"
-                + "License Apache v2%n"
-                + "This is free software. You are free to change and redistribute it.",
-                UIConstants.MAJOR_VERSION, UIConstants.MINOR_VERSION);
-    }
-
-    private static void runInGuiMode(CommandLineArguments arguments) {
-        if (settings == null) {
-            notifyForMissingSettings();
-            settings = Settings.defaultSettings();
-        }
-
-        arguments.applyOverrides(settings);
-        Console.setSettings(settings.getConsoleSettings());
-
-        launchGUI();
-    }
-
-    private static void runInMixedMode(CommandLineArguments arguments) {
-        // Decide whether to show the settings GUI
-        boolean showSettings = false;
-
-        if (settings == null) {
-            showSettings = true;
-            notifyForMissingSettings();
-            settings = Settings.defaultSettings();
-            arguments.applyOverrides(settings);
-            Console.setSettings(settings.getConsoleSettings());
-        } else {
-            arguments.applyOverrides(settings);
-            Console.setSettings(settings.getConsoleSettings());
-
-            // Basic checks, give the user a chance to fix issues instead of simply throwing an error
-            Path pubList = settings.getFileSettings().getPublications();
-            Path target = settings.getFileSettings().getTarget();
-
-            if (pubList == null || target == null) {
-                showSettings = true;
-                JOptionPane.showMessageDialog(null, "Some critical settings have not been specified yet. Please complete your configuration.", "Publy - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
-            } else if (Files.notExists(pubList)) {
-                showSettings = true;
-                JOptionPane.showMessageDialog(null, "The publication list \"" + pubList.getFileName().toString() + "\" could not be found at the indicated location.", "Publy - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
-            }
-        }
-
-        if (showSettings) {
-            launchGUI();
-        } else {
-            generatePublicationList(settings);
-        }
-    }
-
-    private static void runInCommandlineMode(CommandLineArguments arguments) {
-        if (settings == null) {
-            // Notify the user
-            if (settingsParseException == null) {
-                Console.error("No configuration information was found. Please set up your preferences by running Publy with the \"--gui\" option.");
-            } else {
-                Console.except(settingsParseException, "An exception occurred while parsing the configuration:");
-            }
-        } else {
-            arguments.applyOverrides(settings);
-            Console.setSettings(settings.getConsoleSettings());
-            
-            generatePublicationList(settings);
-        }
-    }
-
-    private static void readSettings(String settingsLocation) {
-        // Change the default settings location, if another location was specified
-        if (settingsLocation != null && !settingsLocation.isEmpty()) {
-            Path settingsFile = ResourceLocator.getFullPath(settingsLocation);
-
-            if (Files.exists(settingsFile)) {
-                SettingsReader.setSettingsFile(settingsFile);
-            } else {
-                Console.error("The configuration file \"%s\" could not be found at \"%s\".", settingsLocation, settingsFile);
-                return;
-            }
-        }
-
-        try {
-            settings = SettingsReader.parseSettings();
-        } catch (ParserConfigurationException | SAXException | IOException ex) {
-            settingsParseException = ex;
-        }
-    }
-
+    
     private static void setLookAndFeel() {
         try {
             if (UIManager.getSystemLookAndFeelClassName().contains("GTK") || UIManager.getSystemLookAndFeelClassName().contains("Motif")) {
@@ -187,32 +85,12 @@ public class Publy {
         }
     }
 
-    private static void notifyForMissingSettings() {
-        if (settingsParseException == null) {
-            JOptionPane.showMessageDialog(null, "No configuration information was found. Please set up your preferences.", "Publy - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "An exception occurred while parsing the configuration. Loading the default configuration.", "Publy - Launching Settings Window", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private static void launchGUI() {
-        // Variables need to be final in order to be shared
-        final Settings guiSettings = (settings == null ? Settings.defaultSettings() : settings);
-        final Throwable guiException = settingsParseException;
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                MainFrame mf = new MainFrame(guiSettings);
-
-                // Report an Exception, if one occurred
-                if (guiException != null) {
-                    Console.except(guiException, "Exception occurred while parsing the configuration:");
-                }
-
-                mf.setVisible(true);
-            }
-        });
+    private static void printVersionInfo() {
+        System.out.printf("Publy %d.%d%n"
+                + "Copyright (c) 2013-2014 Sander Verdonschot%n"
+                + "License Apache v2%n"
+                + "This is free software. You are free to change and redistribute it.",
+                UIConstants.MAJOR_VERSION, UIConstants.MINOR_VERSION);
     }
 
     public static void generatePublicationList(Settings settings) {
