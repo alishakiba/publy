@@ -2,7 +2,7 @@
 
 ## Overview
 
-Publy turns a BibTeX file with a list of your publications into a professional webpage. Quick, effortless, and exactly the way you want it.
+Publy turns a BibTeX file with a list of your publications into a professional webpage. Fast, effortless, and exactly the way you want it.
 
 ## Features
 
