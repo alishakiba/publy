@@ -16,14 +16,15 @@
 package publy.algo;
 
 import java.util.Arrays;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import publy.Console;
 import publy.data.bibitem.BibItem;
+import publy.data.settings.Settings;
 
 /**
  *
@@ -193,9 +194,12 @@ public class PostProcessorTest {
         item14.put("--testClass", "");
 
         BibItem[] items = new BibItem[]{item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item14};
+        Settings settings = new Settings();
+        settings.getConsoleSettings().setShowWarnings(false);
+        Console.setSettings(settings.getConsoleSettings());
 
         for (BibItem item : items) {
-            PublicationPostProcessor.postProcess(Arrays.asList(item));
+            PublicationPostProcessor.postProcess(settings, Arrays.asList(item));
             
             assertEquals("arXiv mismatch: " + item, item.get("--testArxiv"), (item.get("arxiv") == null ? "" : item.get("arxiv")));
             assertEquals("class mismatch: " + item, item.get("--testClass"), (item.get("primaryclass") == null ? "" : item.get("primaryclass")));
@@ -206,7 +210,7 @@ public class PostProcessorTest {
      * Test of processAliases method, of class PostProcessor.
      */
     @Test
-    public void testProcessAliases() {
+    public void testProcessAliases() throws InterruptedException {
         System.out.println("processAliases");
 
         // Just journal
@@ -244,9 +248,12 @@ public class PostProcessorTest {
         item4.put("--expectedJournal", "Journal of Misfires");
 
         BibItem items[] = new BibItem[]{item1, item2, item3, item4};
+        Settings settings = new Settings();
+        settings.getConsoleSettings().setShowWarnings(false);
+        Console.setSettings(settings.getConsoleSettings());
 
         for (BibItem item : items) {
-            PublicationPostProcessor.postProcess(Arrays.asList(item));
+            PublicationPostProcessor.postProcess(settings, Arrays.asList(item));
 
             if (item.get("--expectedJournal") != null) {
                 assertEquals("journal mismatch: " + item, item.get("--expectedJournal"), (item.get("journal") == null ? "" : item.get("journal")));
