@@ -17,29 +17,21 @@ package publy;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import publy.algo.PublicationPostProcessor;
-import publy.data.bibitem.BibItem;
-import publy.data.category.OutputCategory;
-import publy.data.settings.Settings;
 import publy.gui.UIConstants;
-import publy.io.BibTeXParser;
-import publy.io.PublicationListWriter;
-import publy.io.bibtex.BibtexPublicationListWriter;
-import publy.io.html.HTMLPublicationListWriter;
-import publy.io.plain.PlainPublicationListWriter;
 
 /**
- *
+ * The entrypoint to Publy. This class interprets the command-line arguments and
+ * starts the correct initialization procedure of {@link Runner}.
  *
  */
 public class Publy {
 
     /**
+     * Interprets the command-line arguments and starts the correct
+     * initialization procedure of {@link Runner}.
+     *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
@@ -71,7 +63,13 @@ public class Publy {
             }
         }
     }
-    
+
+    /**
+     * Changes the look and feel to the system default look and feel.
+     * <p>
+     * The only exception is Linux, where we use the nicer Metal look and feel
+     * instead.
+     */
     private static void setLookAndFeel() {
         try {
             if (UIManager.getSystemLookAndFeelClassName().contains("GTK") || UIManager.getSystemLookAndFeelClassName().contains("Motif")) {
@@ -85,68 +83,15 @@ public class Publy {
         }
     }
 
+    /**
+     * Prints Publy's version information when the corresponding command-line
+     * argument is used.
+     */
     private static void printVersionInfo() {
         System.out.printf("Publy %d.%d%n"
                 + "Copyright (c) 2013-2014 Sander Verdonschot%n"
                 + "License Apache v2%n"
                 + "This is free software. You are free to change and redistribute it.",
                 UIConstants.MAJOR_VERSION, UIConstants.MINOR_VERSION);
-    }
-
-    public static void generatePublicationList(Settings settings) {
-        // Check if the publication list is set and exists
-        Path pubList = settings.getFileSettings().getPublications();
-
-        if (pubList == null) {
-            Console.error("No publication list was set.");
-        } else if (Files.notExists(pubList)) {
-            Console.error("No publication list was found at: %s", pubList);
-        } else if (settings.getFileSettings().getTarget() == null) {
-            Console.error("No output file was set.");
-        } else {
-            // Parse all publications
-            List<BibItem> items = null;
-
-            try {
-                items = BibTeXParser.parseFile(settings.getFileSettings().getPublications());
-                Console.log("Publications list \"%s\" parsed.", settings.getFileSettings().getPublications().getFileName());
-            } catch (Exception | AssertionError ex) {
-                Console.except(ex, "Exception while parsing publications list:");
-            }
-
-            if (items != null) {
-                List<OutputCategory> categories = PublicationPostProcessor.postProcess(settings, items);
-
-                if (settings.getHtmlSettings().isGenerateTextVersion()) {
-                    try {
-                        PublicationListWriter writer = new PlainPublicationListWriter(settings);
-                        writer.writePublicationList(categories, settings.getFileSettings().getPlainTextTarget());
-                        Console.log("Plain text publication list written.");
-                    } catch (Exception | AssertionError ex) {
-                        Console.except(ex, "Exception while writing plain text publication list:");
-                    }
-                }
-
-                if (settings.getHtmlSettings().isGenerateBibtexVersion()) {
-                    try {
-                        PublicationListWriter writer = new BibtexPublicationListWriter(settings);
-                        writer.writePublicationList(categories, settings.getFileSettings().getBibtexTarget());
-                        Console.log("BibTeX publication list written.");
-                    } catch (Exception | AssertionError ex) {
-                        Console.except(ex, "Exception while writing BibTeX publication list:");
-                    }
-                }
-
-                try {
-                    PublicationListWriter writer = new HTMLPublicationListWriter(settings);
-                    writer.writePublicationList(categories, settings.getFileSettings().getTarget());
-                    Console.log("HTML publication list written.");
-                } catch (Exception | AssertionError ex) {
-                    Console.except(ex, "Exception while writing HTML publication list:");
-                }
-            }
-
-            Console.log("Done.");
-        }
     }
 }

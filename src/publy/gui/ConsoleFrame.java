@@ -22,6 +22,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import publy.Console;
 import publy.Publy;
+import publy.algo.PublicationListGenerator;
 import publy.data.settings.Settings;
 import publy.io.settings.SettingsReader;
 
@@ -136,7 +137,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
         }
 
         if (settings != null) {
-            Publy.generatePublicationList(settings);
+            PublicationListGenerator.generatePublicationList(settings);
         }
         
         // Change cursor back
