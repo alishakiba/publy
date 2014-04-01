@@ -21,7 +21,7 @@ import java.nio.file.Path;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-import static publy.Publy.generatePublicationList;
+import publy.algo.PublicationListGenerator;
 import publy.data.settings.Settings;
 import publy.gui.MainFrame;
 import publy.io.ResourceLocator;
@@ -53,7 +53,7 @@ public class Runner {
             arguments.applyOverrides(settings);
             Console.setSettings(settings.getConsoleSettings());
 
-            generatePublicationList(settings);
+            PublicationListGenerator.generatePublicationList(settings);
         }
     }
 
@@ -117,7 +117,7 @@ public class Runner {
         if (showSettings) {
             launchGUI(settings);
         } else {
-            generatePublicationList(settings);
+            PublicationListGenerator.generatePublicationList(settings);
         }
     }
 

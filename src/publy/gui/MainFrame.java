@@ -19,6 +19,7 @@ import java.awt.Cursor;
 import javax.swing.ImageIcon;
 import publy.Console;
 import publy.Publy;
+import publy.algo.PublicationListGenerator;
 import publy.data.settings.Settings;
 import publy.io.settings.SettingsWriter;
 
@@ -173,7 +174,7 @@ public class MainFrame extends javax.swing.JFrame {
         // Clear the console before generating
         consoleTextPane.setText("");
 
-        Publy.generatePublicationList(settings);
+        PublicationListGenerator.generatePublicationList(settings);
 
         // Move to the top of the console output
         consoleTextPane.setCaretPosition(0);
