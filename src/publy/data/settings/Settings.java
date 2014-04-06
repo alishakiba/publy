@@ -16,20 +16,25 @@
 package publy.data.settings;
 
 /**
- *
- *
+ * All configuration information, divided into five categories:
+ * <p><ul>
+ * <li>{@link FileSettings}
+ * <li>{@link CategorySettings}
+ * <li>{@link GeneralSettings}
+ * <li>{@link HTMLSettings}
+ * <li>{@link ConsoleSettings}
+ * </ul>
  */
 public class Settings {
-    private FileSettings fileSettings;
-    private CategorySettings categorySettings;
-    private GeneralSettings generalSettings;
-    private HTMLSettings htmlSettings;
-    private ConsoleSettings consoleSettings;
+
+    private final FileSettings fileSettings;
+    private final CategorySettings categorySettings;
+    private final GeneralSettings generalSettings;
+    private final HTMLSettings htmlSettings;
+    private final ConsoleSettings consoleSettings;
 
     /**
-     * Creates a new empty Settings object.
-     *
-     * @param publications
+     * Creates a new, empty, Settings object.
      */
     public Settings() {
         fileSettings = new FileSettings();
@@ -38,16 +43,15 @@ public class Settings {
         generalSettings = new GeneralSettings();
         consoleSettings = new ConsoleSettings();
     }
-    
+
     /**
      * Returns a new Settings object with default settings.
-     * @return 
+     *
+     * @return the default settings
      */
     public static Settings defaultSettings() {
         Settings result = new Settings();
-        
-        result.categorySettings = CategorySettings.defaultSettings();
-        
+        result.categorySettings.setToDefault();
         return result;
     }
 

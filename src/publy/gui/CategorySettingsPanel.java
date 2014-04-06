@@ -41,7 +41,8 @@ public class CategorySettingsPanel extends javax.swing.JPanel {
      * Empty constructor, for use in the NetBeans GUI editor.
      */
     public CategorySettingsPanel() {
-        settings = CategorySettings.defaultSettings();
+        settings = new CategorySettings();
+        settings.setToDefault();
         initComponents();
         applyStyles();
         populateValues();

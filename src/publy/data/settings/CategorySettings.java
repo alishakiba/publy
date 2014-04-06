@@ -31,48 +31,6 @@ public class CategorySettings {
     private List<OutputCategory> allCategories = new ArrayList<>();
     private List<OutputCategory> activeCategories = new ArrayList<>();
 
-    public static CategorySettings defaultSettings() {
-        CategorySettings result = new CategorySettings();
-
-        // Default categories
-        // BOOK
-        OutputCategory books = new OutputCategory("Books", "Books", new TypeCondition(false, "book"));
-        books.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
-        books.getIgnoredFields().addAll(Arrays.asList("address"));
-        // CHAPTER
-        OutputCategory chapters = new OutputCategory("Chapters", "Chapters in Books", new TypeCondition(false, "incollection"));
-        chapters.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
-        chapters.getIgnoredFields().addAll(Arrays.asList("address"));
-        // CONFERENCE
-        OutputCategory conference = new OutputCategory("Conference", "Conference papers", new TypeCondition(false, "inproceedings", "conference"));
-        conference.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
-        conference.getIgnoredFields().addAll(Arrays.asList("address", "publisher", "editor", "volume", "number", "series"));
-        // JOURNAL
-        OutputCategory journal = new OutputCategory("Journal", "Journal papers", new TypeCondition(false, "article"));
-        journal.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
-        // OTHER
-        OutputCategory other = new OutputCategory("Other", "Other", new TypeCondition(false, "*"));
-        other.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
-        // SUBMITTED
-        OutputCategory submitted = new OutputCategory("Submitted", "Currently under review", new TypeCondition(false, "*"));
-        submitted.getFieldConditions().add(new FieldEqualsCondition(false, "pubstate", "submitted"));
-        // TALK
-        OutputCategory talks = new OutputCategory("Talks", "Invited Talks", new TypeCondition(false, "talk"));
-        talks.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
-        // THESIS
-        OutputCategory theses = new OutputCategory("Theses", "Theses", new TypeCondition(false, "mastersthesis", "phdthesis"));
-        theses.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
-        // UNPUBLISHED
-        OutputCategory unpublished = new OutputCategory("Unpublished", "Unpublished manuscripts", new TypeCondition(false, "unpublished"));
-
-        result.setAllCategories(Arrays.asList(books, chapters, conference, journal, other, submitted, talks, theses, unpublished));
-        
-        // Active categories
-        result.setActiveCategories(Arrays.asList(submitted, journal, conference, books, chapters, theses, other));
-
-        return result;
-    }
-
     public List<OutputCategory> getAllCategories() {
         return allCategories;
     }
@@ -128,5 +86,43 @@ public class CategorySettings {
      */
     public void deactivate(OutputCategory category) {
         activeCategories.remove(category);
+    }
+    
+    public void setToDefault() {
+        // Default categories
+        // BOOK
+        OutputCategory books = new OutputCategory("Books", "Books", new TypeCondition(false, "book"));
+        books.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
+        books.getIgnoredFields().addAll(Arrays.asList("address"));
+        // CHAPTER
+        OutputCategory chapters = new OutputCategory("Chapters", "Chapters in Books", new TypeCondition(false, "incollection"));
+        chapters.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
+        chapters.getIgnoredFields().addAll(Arrays.asList("address"));
+        // CONFERENCE
+        OutputCategory conference = new OutputCategory("Conference", "Conference papers", new TypeCondition(false, "inproceedings", "conference"));
+        conference.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
+        conference.getIgnoredFields().addAll(Arrays.asList("address", "publisher", "editor", "volume", "number", "series"));
+        // JOURNAL
+        OutputCategory journal = new OutputCategory("Journal", "Journal papers", new TypeCondition(false, "article"));
+        journal.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
+        // OTHER
+        OutputCategory other = new OutputCategory("Other", "Other", new TypeCondition(false, "*"));
+        other.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
+        // SUBMITTED
+        OutputCategory submitted = new OutputCategory("Submitted", "Currently under review", new TypeCondition(false, "*"));
+        submitted.getFieldConditions().add(new FieldEqualsCondition(false, "pubstate", "submitted"));
+        // TALK
+        OutputCategory talks = new OutputCategory("Talks", "Invited Talks", new TypeCondition(false, "talk"));
+        talks.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
+        // THESIS
+        OutputCategory theses = new OutputCategory("Theses", "Theses", new TypeCondition(false, "mastersthesis", "phdthesis"));
+        theses.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
+        // UNPUBLISHED
+        OutputCategory unpublished = new OutputCategory("Unpublished", "Unpublished manuscripts", new TypeCondition(false, "unpublished"));
+
+        setAllCategories(Arrays.asList(books, chapters, conference, journal, other, submitted, talks, theses, unpublished));
+        
+        // Active categories
+        setActiveCategories(Arrays.asList(submitted, journal, conference, books, chapters, theses, other));
     }
 }
