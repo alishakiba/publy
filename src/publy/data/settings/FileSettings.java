@@ -20,8 +20,7 @@ import publy.io.ResourceLocator;
 import publy.io.html.HTMLPublicationListWriter;
 
 /**
- *
- *
+ * The location of all relevant user-configurable files.
  */
 public class FileSettings {
 
@@ -33,70 +32,126 @@ public class FileSettings {
     private Path header = ResourceLocator.getFullPath(HTMLPublicationListWriter.DEFAULT_HEADER_LOCATION);
     private Path footer = ResourceLocator.getFullPath(HTMLPublicationListWriter.DEFAULT_FOOTER_LOCATION);
 
+    /**
+     * Gets the location of the user's publication list.
+     *
+     * @return the path to the publication list
+     */
     public Path getPublications() {
         return publications;
     }
 
+    /**
+     * Sets the location of the user's publication list.
+     *
+     * @param publications the path to the new publication list
+     */
     public void setPublications(Path publications) {
         this.publications = publications;
     }
 
+    /**
+     * Gets the location of the output (HTML) file.
+     *
+     * @return the path to the output file
+     */
     public Path getTarget() {
         return target;
     }
 
+    /**
+     * Sets the location of the output (HTML) file.
+     *
+     * @param target the path to the new output file
+     */
     public void setTarget(Path target) {
         this.target = target;
     }
 
     /**
-     * Returns the path to the location where the bibtex version of the
-     * publication list is to be written, if any. The target is
-     * guaranteed to be in the same directory as the HTML target.
+     * Gets the location where the BibTeX version of the publication list is to
+     * be written, if any.
+     * <p>
+     * This path is generated from the HTML target, and guaranteed to be in the
+     * same directory.
      *
-     * @return
+     * @return the path to the BibTeX output file
      */
     public Path getBibtexTarget() {
         String baseName = target.getFileName().toString();
         int extension = baseName.lastIndexOf('.');
-        
+
         if (extension > -1) {
             baseName = baseName.substring(0, extension);
         }
-        
+
         return target.resolveSibling(baseName + "-generated.bib");
     }
 
     /**
-     * Returns the path to the location where the plain text version of the
-     * publication list is to be written, if any. The target is
-     * guaranteed to be in the same directory as the HTML target.
+     * Gets the location where the plain text version of the publication list is
+     * to be written, if any.
+     * <p>
+     * This path is generated from the HTML target, and guaranteed to be in the
+     * same directory.
      *
-     * @return
+     * @return the path to the plain text output file
      */
     public Path getPlainTextTarget() {
         String baseName = target.getFileName().toString();
         int extension = baseName.lastIndexOf('.');
-        
+
         if (extension > -1) {
             baseName = baseName.substring(0, extension);
         }
-        
+
         return target.resolveSibling(baseName + ".utf8.txt");
     }
 
+    /**
+     * Gets the location of the HTML header file.
+     * <p>
+     * The contents of this file will be written to the HTML output file before
+     * the publication list.
+     *
+     * @return the path to the HTML header file
+     */
     public Path getHeader() {
         return header;
     }
 
+    /**
+     * Sets the location of the HTML header file.
+     * <p>
+     * The contents of this file will be written to the HTML output file before
+     * the publication list.
+     *
+     * @param header the path to the new HTML header file
+     */
     public void setHeader(Path header) {
         this.header = header;
     }
 
+    /**
+     * Gets the location of the HTML footer file.
+     * <p>
+     * The contents of this file will be written to the HTML output file after
+     * the publication list.
+     *
+     * @return the path to the HTML footer file
+     */
     public Path getFooter() {
         return footer;
     }
 
+    /**
+     * Sets the location of the HTML footer file.
+     * <p>
+     * The contents of this file will be written to the HTML output file after
+     * the publication list.
+     *
+     * @param footer the path to the new HTML footer file
+     */
     public void setFooter(Path footer) {
         this.footer = footer;
     }
