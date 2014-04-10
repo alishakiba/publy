@@ -17,7 +17,8 @@ package publy.data.settings;
 
 /**
  * All configuration information, divided into five categories:
- * <p><ul>
+ * <p>
+ * <ul>
  * <li>{@link FileSettings}
  * <li>{@link CategorySettings}
  * <li>{@link GeneralSettings}
@@ -45,9 +46,9 @@ public class Settings {
     }
 
     /**
-     * Returns a new Settings object with default settings.
+     * Returns a new Settings object with the default configuration.
      *
-     * @return the default settings
+     * @return the default configuration
      */
     public static Settings defaultSettings() {
         Settings result = new Settings();
@@ -55,22 +56,47 @@ public class Settings {
         return result;
     }
 
+    /**
+     * Gets the file settings.
+     *
+     * @return the file settings
+     */
     public FileSettings getFileSettings() {
         return fileSettings;
     }
 
+    /**
+     * Gets the category settings.
+     *
+     * @return the category settings
+     */
     public CategorySettings getCategorySettings() {
         return categorySettings;
     }
 
+    /**
+     * Gets the formatting settings.
+     *
+     * @return the formatting settings
+     */
     public GeneralSettings getGeneralSettings() {
         return generalSettings;
     }
 
+    /**
+     * Gets the HTML settings.
+     *
+     * @return the HTML settings
+     */
     public HTMLSettings getHtmlSettings() {
         return htmlSettings;
     }
 
+    /**
+     * Gets the console settings.
+     *
+     * @return the console settings
+     */
     public ConsoleSettings getConsoleSettings() {
         return consoleSettings;
     }
