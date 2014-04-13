@@ -16,7 +16,6 @@
 package publy.data.settings;
 
 import java.io.IOException;
-import java.lang.String;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -24,13 +23,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.is;
@@ -43,10 +38,6 @@ import publy.io.ResourceLocator;
 import publy.io.settings.SettingsReader;
 import publy.io.settings.SettingsWriter;
 
-/**
- *
- *
- */
 public class BeanTestUtils {
 
     public static String makeSetter(Field field) {
@@ -122,10 +113,11 @@ public class BeanTestUtils {
             Type parameter = parameters[0];
 
             if (parameter.equals(String.class)) {
-                return new Pair<Object, Object>(Arrays.asList("b"), Arrays.asList("a")); // Needs to be Arrays.asList(...) for the types to match, as SettingsReader returns an Ärrays.asList(...).
+                return new Pair<Object, Object>(Arrays.asList("b"), Arrays.asList("a")); // Needs to be Arrays.asList(...) for the types to match, as SettingsReader returns an Arrays.asList(...).
             } else if (parameter.equals(OutputCategory.class)) {
                 // The second list should be a superset of the first, that way allCategories will be set to the second, when activeCategories is test with the first
-                return new Pair<Object, Object>(Arrays.asList(new OutputCategory("a", "A", new TypeCondition(true, "ta"))), Arrays.asList(new OutputCategory("a", "A", new TypeCondition(true, "ta")), new OutputCategory("b", "B", new TypeCondition(false, "tb"))));
+                // CategorySettings expects its lists to be modifiable, so we need to wrap them in new ArrayLists
+                return new Pair<Object, Object>(new ArrayList<>(Arrays.asList(new OutputCategory("a", "A", new TypeCondition(true, "ta")))), new ArrayList<>(Arrays.asList(new OutputCategory("a", "A", new TypeCondition(true, "ta")), new OutputCategory("b", "B", new TypeCondition(false, "tb")))));
             } else {
                 fail("Unknown parameter type: " + field.getGenericType());
             }
@@ -224,8 +216,7 @@ public class BeanTestUtils {
             return settings.getConsoleSettings();
         } else {
             fail("Unknown settings type.");
+            return null; // Unreachable, but necessary to prevent a compile error
         }
-
-        return null; // Unreachable, but necessary to prevent a compile error
     }
 }

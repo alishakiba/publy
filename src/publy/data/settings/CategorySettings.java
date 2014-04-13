@@ -17,63 +17,96 @@ package publy.data.settings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import publy.data.category.OutputCategory;
 import publy.data.category.conditions.FieldEqualsCondition;
 import publy.data.category.conditions.TypeCondition;
 
 /**
- *
- *
+ * All settings that relate to the publication categories.
+ * <p>
+ * This contains both default and user-defined categories (these are treated in
+ * the exact same way. Not all categories need to be in active use. This class
+ * provides methods to activate and deactivate categories.
  */
 public class CategorySettings {
 
-    private List<OutputCategory> allCategories = new ArrayList<>();
-    private List<OutputCategory> activeCategories = new ArrayList<>();
+    private final List<OutputCategory> allCategories = new ArrayList<>();
+    private final List<OutputCategory> activeCategories = new ArrayList<>();
 
+    /**
+     * Gets all available categories.
+     *
+     * @return an unmodifiable view of the list of all categories
+     */
     public List<OutputCategory> getAllCategories() {
-        return allCategories;
-    }
-
-    public void setAllCategories(List<OutputCategory> allCategories) {
-        this.allCategories = new ArrayList<>(allCategories);
+        return Collections.unmodifiableList(allCategories);
     }
 
     /**
-     * Adds a category to the collection of all possible categories. Does not
-     * automatically activate this category.
+     * Sets all available categories.
      *
-     * @param category
+     * @param allCategories a list of the new categories
+     */
+    public void setAllCategories(List<OutputCategory> allCategories) {
+        this.allCategories.clear();
+        this.allCategories.addAll(allCategories);
+    }
+
+    /**
+     * Adds a category to the list of all possible categories.
+     * <p>
+     * The new category is not yet active.
+     *
+     * @param category the new category
      */
     public void addCategory(OutputCategory category) {
         allCategories.add(category);
     }
 
     /**
-     * Deactivates this category and removes it from the list of all possible
-     * categories.
+     * Removes the category from the list of all possible categories.
+     * <p>
+     * If the category is active, it is first deactivated.
      *
-     * @param category
+     * @param category the category to remove
      */
     public void removeCategory(OutputCategory category) {
         allCategories.remove(category);
         activeCategories.remove(category);
     }
 
+    /**
+     * Gets all active categories.
+     *
+     * @return an unmodifiable view of the list of active categories
+     */
     public List<OutputCategory> getActiveCategories() {
-        return activeCategories;
-    }
-
-    public void setActiveCategories(List<OutputCategory> activeCategories) {
-        this.activeCategories = new ArrayList<>(activeCategories);
+        return Collections.unmodifiableList(activeCategories);
     }
 
     /**
-     * Adds this category to the list of active categories. The category should
-     * already exist in the list of all possible categories.
+     * Sets all active categories.
+     * <p>
+     * These should already be in the list of all categories. If they are not,
+     * the behaviour is undefined.
+     *
+     * @param activeCategories the new active categories
+     */
+    public void setActiveCategories(List<OutputCategory> activeCategories) {
+        this.activeCategories.clear();
+        this.activeCategories.addAll(activeCategories);
+    }
+
+    /**
+     * Adds this category to the list of active categories.
+     * <p>
+     * The category should already exist in the list of all possible categories.
+     * If it does not, the behaviour is undefined.
      *
      * @see #addCategory(publy.data.category.OutputCategory)
-     * @param category
+     * @param category the category to activate
      */
     public void activate(OutputCategory category) {
         activeCategories.add(category);
@@ -82,12 +115,15 @@ public class CategorySettings {
     /**
      * Removes this category from the list of active categories.
      *
-     * @param category
+     * @param category the category to deactivate
      */
     public void deactivate(OutputCategory category) {
         activeCategories.remove(category);
     }
-    
+
+    /**
+     * Sets the list of all categories and active categories to their default values.
+     */
     public void setToDefault() {
         // Default categories
         // BOOK
@@ -121,7 +157,7 @@ public class CategorySettings {
         OutputCategory unpublished = new OutputCategory("Unpublished", "Unpublished manuscripts", new TypeCondition(false, "unpublished"));
 
         setAllCategories(Arrays.asList(books, chapters, conference, journal, other, submitted, talks, theses, unpublished));
-        
+
         // Active categories
         setActiveCategories(Arrays.asList(submitted, journal, conference, books, chapters, theses, other));
     }
