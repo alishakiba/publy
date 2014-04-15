@@ -73,7 +73,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             case FULL:
                 fullFirstNameRadioButton.setSelected(true);
                 break;
-            case ABBREVIATED:
+            case INITIAL:
                 abbrFirstNameRadioButton.setSelected(true);
                 break;
             case NONE:
@@ -84,7 +84,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         }
 
         reverseNamesCheckBox.setSelected(settings.isReverseNames());
-        reverseNamesCheckBox.setEnabled(settings.getNameDisplay() != GeneralSettings.NameDisplay.NONE);
+        reverseNamesCheckBox.setEnabled(settings.getNameDisplay() != GeneralSettings.FirstNameDisplay.NONE);
         
         listOnlyCoauthorsCheckBox.setSelected(!settings.isListAllAuthors()); // Negation, since the meaning is opposite
 
@@ -94,10 +94,10 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         // Numbering
         switch (settings.getNumbering()) {
-            case NONE:
+            case NO_NUMBERS:
                 numNoneRadioButton.setSelected(true);
                 break;
-            case LOCAL:
+            case WITHIN_CATEGORIES:
                 numLocalRadioButton.setSelected(true);
                 break;
             case GLOBAL:
@@ -108,7 +108,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         }
 
         reverseNumberingCheckBox.setSelected(settings.isReverseNumbering());
-        reverseNumberingCheckBox.setEnabled(settings.getNumbering() != GeneralSettings.Numbering.NONE);
+        reverseNumberingCheckBox.setEnabled(settings.getNumbering() != GeneralSettings.Numbering.NO_NUMBERS);
     }
 
     /**
@@ -370,12 +370,12 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     }
     
     private void numNoneRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numNoneRadioButtonActionPerformed
-        settings.setNumbering(GeneralSettings.Numbering.NONE);
+        settings.setNumbering(GeneralSettings.Numbering.NO_NUMBERS);
         reverseNumberingCheckBox.setEnabled(false);
     }//GEN-LAST:event_numNoneRadioButtonActionPerformed
 
     private void numLocalRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numLocalRadioButtonActionPerformed
-        settings.setNumbering(GeneralSettings.Numbering.LOCAL);
+        settings.setNumbering(GeneralSettings.Numbering.WITHIN_CATEGORIES);
         reverseNumberingCheckBox.setEnabled(true);
     }//GEN-LAST:event_numLocalRadioButtonActionPerformed
 
@@ -410,17 +410,17 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_listOnlyCoauthorsCheckBoxItemStateChanged
 
     private void fullFirstNameRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fullFirstNameRadioButtonActionPerformed
-        settings.setNameDisplay(GeneralSettings.NameDisplay.FULL);
+        settings.setNameDisplay(GeneralSettings.FirstNameDisplay.FULL);
         reverseNamesCheckBox.setEnabled(true);
     }//GEN-LAST:event_fullFirstNameRadioButtonActionPerformed
 
     private void abbrFirstNameRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abbrFirstNameRadioButtonActionPerformed
-        settings.setNameDisplay(GeneralSettings.NameDisplay.ABBREVIATED);
+        settings.setNameDisplay(GeneralSettings.FirstNameDisplay.INITIAL);
         reverseNamesCheckBox.setEnabled(true);
     }//GEN-LAST:event_abbrFirstNameRadioButtonActionPerformed
 
     private void noFirstNameRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noFirstNameRadioButtonActionPerformed
-        settings.setNameDisplay(GeneralSettings.NameDisplay.NONE);
+        settings.setNameDisplay(GeneralSettings.FirstNameDisplay.NONE);
         reverseNamesCheckBox.setEnabled(false);
     }//GEN-LAST:event_noFirstNameRadioButtonActionPerformed
 

@@ -247,9 +247,9 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
 
         // Section list start
-        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.NONE) {
+        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.NO_NUMBERS) {
             out.write("      <ul class=\"section-list\">"); // Unordered list
-        } else if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.LOCAL) {
+        } else if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES) {
             out.write("      <ol class=\"section-list\">");
             // Reset the count
             if (settings.getGeneralSettings().isReverseNumbering()) {
@@ -289,10 +289,10 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
 
         // Section list end
-        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.NONE) {
+        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.NO_NUMBERS) {
             out.write("      </ul>");
         } else { // LOCAL or GLOBAL
-            assert (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.LOCAL || settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL);
+            assert (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES || settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL);
             out.write("      </ol>");
         }
         out.newLine();

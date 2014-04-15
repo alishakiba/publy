@@ -49,12 +49,12 @@ public class HTMLTestUtils {
     static {
         GeneralSettings gs = bibtexSettings.getGeneralSettings();
 
-        gs.setNameDisplay(GeneralSettings.NameDisplay.FULL);
+        gs.setNameDisplay(GeneralSettings.FirstNameDisplay.FULL);
         gs.setReverseNames(false);
         gs.setListAllAuthors(true);
         gs.setTitleFirst(false);
         gs.setUseNewLines(false);
-        gs.setNumbering(GeneralSettings.Numbering.NONE);
+        gs.setNumbering(GeneralSettings.Numbering.NO_NUMBERS);
 
         HTMLSettings hs = bibtexSettings.getHtmlSettings();
 

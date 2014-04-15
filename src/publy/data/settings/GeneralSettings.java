@@ -15,43 +15,51 @@
  */
 package publy.data.settings;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
- *
- *
+ * Settings that control the formatting of the publication list.
  */
 public class GeneralSettings {
 
+    /**
+     * Possible options for the numbering of publications.
+     */
     public enum Numbering {
 
-        NONE, LOCAL, GLOBAL;
+        NO_NUMBERS, WITHIN_CATEGORIES, GLOBAL;
     }
 
-    public enum NameDisplay {
+    /**
+     * Options for the display of the first name.
+     */
+    public enum FirstNameDisplay {
 
-        FULL, ABBREVIATED, NONE;
+        FULL, INITIAL, NONE;
     }
     // Identification
-    private List<String> myNames = Arrays.asList("me");
+    private final List<String> myNames = new ArrayList<>(Arrays.asList("me"));
     // Author info
-    private NameDisplay nameDisplay = NameDisplay.FULL;
+    private FirstNameDisplay nameDisplay = FirstNameDisplay.FULL;
     private boolean reverseNames = false;
     private boolean listAllAuthors = true;
     // Publication Structure
     private boolean titleFirst = true;
     private boolean useNewLines = true;
     // Numbering
-    private Numbering numbering = Numbering.NONE;
+    private Numbering numbering = Numbering.NO_NUMBERS;
     private boolean reverseNumbering = false;
 
     public List<String> getMyNames() {
-        return myNames;
+        return Collections.unmodifiableList(myNames);
     }
 
     public void setMyNames(List<String> myNames) {
-        this.myNames = myNames;
+        this.myNames.clear();
+        this.myNames.addAll(myNames);
     }
 
     public boolean isListAllAuthors() {
@@ -62,11 +70,11 @@ public class GeneralSettings {
         this.listAllAuthors = listAllAuthors;
     }
 
-    public NameDisplay getNameDisplay() {
+    public FirstNameDisplay getNameDisplay() {
         return nameDisplay;
     }
 
-    public void setNameDisplay(NameDisplay nameDisplay) {
+    public void setNameDisplay(FirstNameDisplay nameDisplay) {
         this.nameDisplay = nameDisplay;
     }
 
@@ -108,10 +116,5 @@ public class GeneralSettings {
 
     public void setReverseNumbering(boolean reverseNumbering) {
         this.reverseNumbering = reverseNumbering;
-    }
-
-    @Override
-    public String toString() {
-        return "GeneralSettings{" + "myNames=" + myNames + ", nameDisplay=" + nameDisplay + ", reverseNames=" + reverseNames + ", listAllAuthors=" + listAllAuthors + ", titleFirst=" + titleFirst + ", numbering=" + numbering + ", reverseNumbering=" + reverseNumbering + '}';
     }
 }

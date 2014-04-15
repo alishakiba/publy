@@ -134,7 +134,7 @@ public class Author {
      * @param reversed where to place the first name
      * @return the formatted name
      */
-    public String getLinkedHTMLName(GeneralSettings.NameDisplay display, boolean reversed) {
+    public String getLinkedHTMLName(GeneralSettings.FirstNameDisplay display, boolean reversed) {
         String result = getFormattedName(display, reversed);
 
         String classes = "author";
@@ -174,11 +174,11 @@ public class Author {
      * @param reversed where to place the first name
      * @return the formatted name
      */
-    public String getFormattedName(GeneralSettings.NameDisplay display, boolean reversed) {
+    public String getFormattedName(GeneralSettings.FirstNameDisplay display, boolean reversed) {
         // First von Last, Jr OR von Last, Jr, First
         String result = "";
 
-        if (!reversed && display != GeneralSettings.NameDisplay.NONE && !firstName.isEmpty()) {
+        if (!reversed && display != GeneralSettings.FirstNameDisplay.NONE && !firstName.isEmpty()) {
             result = formatFirstName(display) + " ";
         }
 
@@ -193,7 +193,7 @@ public class Author {
             result += ", " + juniorPart;
         }
 
-        if (reversed && display != GeneralSettings.NameDisplay.NONE && !firstName.isEmpty()) {
+        if (reversed && display != GeneralSettings.FirstNameDisplay.NONE && !firstName.isEmpty()) {
             result += ", " + formatFirstName(display);
         }
 
@@ -260,13 +260,13 @@ public class Author {
         return false;
     }
 
-    private String formatFirstName(GeneralSettings.NameDisplay display) {
+    private String formatFirstName(GeneralSettings.FirstNameDisplay display) {
         switch (display) {
             case NONE:
                 return "";
             case FULL:
                 return firstName;
-            case ABBREVIATED:
+            case INITIAL:
                 return abbreviate(firstName);
             default:
                 throw new AssertionError("Unexpected NameDisplay value: " + display);

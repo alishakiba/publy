@@ -70,7 +70,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
 
     private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
         // Reset the count if necessary
-        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.LOCAL) {
+        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES) {
             if (settings.getGeneralSettings().isReverseNumbering()) {
                 count = c.getItems().size();
             } else {
@@ -86,7 +86,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
 
         for (BibItem item : c.getItems()) {
             // Write the appropriate number
-            if (settings.getGeneralSettings().getNumbering() != GeneralSettings.Numbering.NONE) {
+            if (settings.getGeneralSettings().getNumbering() != GeneralSettings.Numbering.NO_NUMBERS) {
                 out.write(count + ".");
                 
                 if (settings.getGeneralSettings().isUseNewLines()) {

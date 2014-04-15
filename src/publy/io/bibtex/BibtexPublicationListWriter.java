@@ -69,7 +69,7 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
 
     private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
         // Reset the count if necessary
-        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.LOCAL) {
+        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES) {
             if (settings.getGeneralSettings().isReverseNumbering()) {
                 count = c.getItems().size();
             } else {
@@ -83,7 +83,7 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
 
         for (BibItem item : c.getItems()) {
             // Write the appropriate number
-            if (settings.getGeneralSettings().getNumbering() != GeneralSettings.Numbering.NONE) {
+            if (settings.getGeneralSettings().getNumbering() != GeneralSettings.Numbering.NO_NUMBERS) {
                 out.write("-- " + count + ".");
                 out.newLine();
 
@@ -102,7 +102,7 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
         out.newLine();
 
         // Reset the count if necessary
-        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.LOCAL) {
+        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES) {
             count = 0;
         }
     }
