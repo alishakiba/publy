@@ -117,14 +117,14 @@ public class BeanTestUtils {
             } else if (parameter.equals(OutputCategory.class)) {
                 // The second list should be a superset of the first, that way allCategories will be set to the second, when activeCategories is test with the first
                 // CategorySettings expects its lists to be modifiable, so we need to wrap them in new ArrayLists
-                return new Pair<Object, Object>(new ArrayList<>(Arrays.asList(new OutputCategory("a", "A", new TypeCondition(true, "ta")))), new ArrayList<>(Arrays.asList(new OutputCategory("a", "A", new TypeCondition(true, "ta")), new OutputCategory("b", "B", new TypeCondition(false, "tb")))));
+                return new Pair<Object, Object>(Arrays.asList(new OutputCategory("a", "A", new TypeCondition(true, "ta"))), Arrays.asList(new OutputCategory("a", "A", new TypeCondition(true, "ta")), new OutputCategory("b", "B", new TypeCondition(false, "tb"))));
             } else {
                 fail("Unknown parameter type: " + field.getGenericType());
             }
-        } else if (field.getType().equals(GeneralSettings.NameDisplay.class)) {
-            return new Pair<Object, Object>(GeneralSettings.NameDisplay.ABBREVIATED, GeneralSettings.NameDisplay.FULL);
+        } else if (field.getType().equals(GeneralSettings.FirstNameDisplay.class)) {
+            return new Pair<Object, Object>(GeneralSettings.FirstNameDisplay.INITIAL, GeneralSettings.FirstNameDisplay.FULL);
         } else if (field.getType().equals(GeneralSettings.Numbering.class)) {
-            return new Pair<Object, Object>(GeneralSettings.Numbering.GLOBAL, GeneralSettings.Numbering.LOCAL);
+            return new Pair<Object, Object>(GeneralSettings.Numbering.GLOBAL, GeneralSettings.Numbering.WITHIN_CATEGORIES);
         } else if (field.getType().equals(PublicationStatus.class)) {
             return new Pair<Object, Object>(PublicationStatus.ACCEPTED, PublicationStatus.ARXIV);
         } else {
@@ -135,33 +135,24 @@ public class BeanTestUtils {
     }
 
     private static void testField(Field field, Object declaringClass, Object val1, Object val2) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        // Set the field to val1
-        field.setAccessible(true);
-        field.set(declaringClass, val1);
-
-        // Check that get returns val1
+        // Check getter and setter signatures
         Method get = declaringClass.getClass().getMethod(makeGetter(field));
         assertTrue("Getter does not have the correct return type.", get.getReturnType().equals(field.getType()));
+        
+        Method set = declaringClass.getClass().getMethod(makeSetter(field), field.getType());
+        assertTrue("Setter does not have the correct return type.", set.getReturnType().equals(void.class));
 
+        // Set the field to val1 and check that get returns val1
+        set.invoke(declaringClass, val1);
         Object result = get.invoke(declaringClass);
         assertTrue(get + " returned null.", result != null);
         assertEquals("Getter returned an incorrect value.", val1, result);
 
         // Set the field to val2 and check that get returns val2
-        field.set(declaringClass, val2);
+        set.invoke(declaringClass, val2);
         result = get.invoke(declaringClass);
         assertTrue(get + " returned null.", result != null);
         assertEquals("Getter returned an incorrect value.", val2, result);
-
-        // Test set (field is val2)
-        Method set = declaringClass.getClass().getMethod(makeSetter(field), field.getType());
-        assertTrue("Setter does not have the correct return type.", set.getReturnType().equals(void.class));
-
-        set.invoke(declaringClass, val1);
-        assertEquals("Field \"" + field.getName() + "\" does not have the right value after invoking setter \"" + set.getName() + "\".", val1, field.get(declaringClass));
-
-        set.invoke(declaringClass, val2);
-        assertEquals("Field \"" + field.getName() + "\" does not have the right value after invoking setter \"" + set.getName() + "\".", val2, field.get(declaringClass));
     }
 
     public static void testSettingsIO(Settings settings, Object partialSettings) throws IOException, SAXException, ParserConfigurationException {
