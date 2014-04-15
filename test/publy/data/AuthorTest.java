@@ -140,7 +140,7 @@ public class AuthorTest {
         for (String name : expected.keySet()) {
             Author a = new Author(name);
 
-            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.NameDisplay.FULL, false));
+            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.FirstNameDisplay.FULL, false));
         }
     }
     
@@ -200,7 +200,7 @@ public class AuthorTest {
         for (String name : expected.keySet()) {
             Author a = new Author(name);
 
-            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.NameDisplay.FULL, true));
+            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.FirstNameDisplay.FULL, true));
         }
     }
     
@@ -261,8 +261,8 @@ public class AuthorTest {
             Author a = new Author(name);
 
             // Reversed doesn't matter
-            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.NameDisplay.NONE, false));
-            assertEquals(name + " reversed - ", expected.get(name), a.getFormattedName(GeneralSettings.NameDisplay.NONE, true));
+            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.FirstNameDisplay.NONE, false));
+            assertEquals(name + " reversed - ", expected.get(name), a.getFormattedName(GeneralSettings.FirstNameDisplay.NONE, true));
         }
     }
     
@@ -325,7 +325,7 @@ public class AuthorTest {
         for (String name : expected.keySet()) {
             Author a = new Author(name);
 
-            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.NameDisplay.ABBREVIATED, false));
+            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.FirstNameDisplay.INITIAL, false));
         }
     }
     
@@ -388,7 +388,7 @@ public class AuthorTest {
         for (String name : expected.keySet()) {
             Author a = new Author(name);
 
-            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.NameDisplay.ABBREVIATED, true));
+            assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.FirstNameDisplay.INITIAL, true));
         }
     }
 }

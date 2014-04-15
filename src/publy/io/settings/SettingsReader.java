@@ -301,7 +301,7 @@ public class SettingsReader extends DefaultHandler {
                 settings.getGeneralSettings().setMyNames(Arrays.asList(text.split(";")));
                 break;
             case "nameDisplay":
-                settings.getGeneralSettings().setNameDisplay(GeneralSettings.NameDisplay.valueOf(text));
+                settings.getGeneralSettings().setNameDisplay(GeneralSettings.FirstNameDisplay.valueOf(text));
                 break;
             case "reverseNames":
                 settings.getGeneralSettings().setReverseNames(Boolean.parseBoolean(text));
