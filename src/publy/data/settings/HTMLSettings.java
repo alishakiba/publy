@@ -18,11 +18,13 @@ package publy.data.settings;
 import publy.data.PublicationStatus;
 
 /**
- *
- *
+ * All settings specific to the HTML version of the publication list.
  */
 public class HTMLSettings {
 
+    /**
+     * Where the paper title should link to.
+     */
     public enum TitleLinkTarget {
 
         NONE, ABSTRACT, PAPER;
@@ -42,6 +44,9 @@ public class HTMLSettings {
         }
     }
 
+    /**
+     * Where the between-section navigation should be placed.
+     */
     public enum NavigationPlacement {
 
         NO_NAVIGATION, TOP, TOP_AND_BOTTOM, AFTER_SECTION_TITLE, BEFORE_SECTION_TITLE, BEFORE_SECTION_AND_BOTTOM;
@@ -83,34 +88,80 @@ public class HTMLSettings {
     // Google analytics
     private String googleAnalyticsUser = null;
 
+    /**
+     * Gets whether a separate BibTeX version of the publication list should be
+     * generated.
+     *
+     * @return whether to generate a BibTeX version
+     */
     public boolean isGenerateBibtexVersion() {
         return generateBibtexVersion;
     }
 
+    /**
+     * Sets whether a separate BibTeX version of the publication list should be
+     * generated.
+     *
+     * @param generateBibtexVersion whether to generate a BibTeX version
+     */
     public void setGenerateBibtexVersion(boolean generateBibtexVersion) {
         this.generateBibtexVersion = generateBibtexVersion;
     }
 
+    /**
+     * Gets whether a separate plain-text version of the publication list should
+     * be generated.
+     *
+     * @return whether to generate a plain-text version
+     */
     public boolean isGenerateTextVersion() {
         return generateTextVersion;
     }
 
+    /**
+     * Sets whether a separate plain-text version of the publication list should
+     * be generated.
+     *
+     * @param generateTextVersion whether to generate a plain-text version
+     */
     public void setGenerateTextVersion(boolean generateTextVersion) {
         this.generateTextVersion = generateTextVersion;
     }
 
+    /**
+     * Gets whether links to alternate versions should be added to the HTML
+     * version.
+     *
+     * @return whether to link to alternate versions
+     */
     public boolean isLinkToAlternateVersions() {
         return linkToAlternateVersions;
     }
 
+    /**
+     * Sets whether links to alternate versions should be added to the HTML
+     * version.
+     *
+     * @param linkToAlternateVersions whether to link to alternate versions
+     */
     public void setLinkToAlternateVersions(boolean linkToAlternateVersions) {
         this.linkToAlternateVersions = linkToAlternateVersions;
     }
 
+    /**
+     * Gets where on the page to place the section navigation.
+     *
+     * @return where to place the section navigation
+     */
     public NavigationPlacement getNavPlacement() {
         return navPlacement;
     }
 
+    /**
+     * Sets where on the page to place the section navigation.
+     *
+     * @param navPlacement where to place the section navigation
+     */
     public void setNavPlacement(NavigationPlacement navPlacement) {
         this.navPlacement = navPlacement;
     }
