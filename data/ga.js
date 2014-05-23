@@ -17,7 +17,7 @@ $(document).ready(function() {
         
         if (!href.match(/^javascript:/i)) {
             var track = true;
-            var elEv = []; elEv.value = 0, elEv.non_i = false;
+            var elEv = [];
             var isThisDomain = href.match(document.domain.split('.').reverse()[1] + '.' + document.domain.split('.').reverse()[0]);
             
             if (href.match(filetypes)) {
@@ -33,7 +33,6 @@ $(document).ready(function() {
                 elEv.category = "external";
                 elEv.action = "click";
                 elEv.label = href.replace(/^https?\:\/\//i, '');
-                elEv.non_i = true;
                 elEv.loc = href;
             } else {
                 track = false;
@@ -41,7 +40,7 @@ $(document).ready(function() {
 
             if (track) {
                 // Report the event to Google Analytics
-                _gaq.push(['_trackEvent', elEv.category.toLowerCase(), elEv.action.toLowerCase(), elEv.label.toLowerCase(), elEv.value, elEv.non_i]);
+                ga('send', 'event', elEv.category.toLowerCase(), elEv.action.toLowerCase(), elEv.label.toLowerCase());
                 
                 // If this is a link that opens in the same window, we need to wait a little while for the event to register
                 if (event.which == 1 && (el.attr('target') == undefined || el.attr('target').toLowerCase() != '_blank')) {
@@ -53,23 +52,19 @@ $(document).ready(function() {
     });
     
     // Add event tracking behaviour to all toggle buttons
-    $('.abstract-toggle').on('click', function(event) {
-        _gaq.push(['_trackEvent', 'toggle', 'click-abstract', $(this).parent().attr('id').toLowerCase(), 0, false]);
+    $('.abstract-toggle').on('click', function() {
+        ga('send', 'event', 'toggle', 'click-abstract', $(this).parent().attr('id').toLowerCase());
     });
-    $('.bibtex-toggle').on('click', function(event) {
-        _gaq.push(['_trackEvent', 'toggle', 'click-bibtex', $(this).parent().attr('id').toLowerCase(), 0, false]);
+    $('.bibtex-toggle').on('click', function() {
+        ga('send', 'event', 'toggle', 'click-bibtex', $(this).parent().attr('id').toLowerCase());
     });
 });
 
 // Google analytics code
-var _gaq = _gaq || [];
-var pluginUrl = 'http://www.google-analytics.com/plugins/ga/inpage_linkid.js';
-_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
-_gaq.push(['_setAccount', '~GAUSERACCOUNT~']);
-_gaq.push(['_trackPageview']);
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-(function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
+ga('create', '~GAUSERACCOUNT~', 'auto');
+ga('send', 'pageview');
