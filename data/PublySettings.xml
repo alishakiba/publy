@@ -119,7 +119,7 @@
   <!-- General settings -->
   <generalSettings>
     <myNames><![CDATA[me]]></myNames>
-    <nameDisplay>ABBREVIATED</nameDisplay>
+    <nameDisplay>INITIAL</nameDisplay>
     <reverseNames>true</reverseNames>
     <listAllAuthors>true</listAllAuthors>
     <titleFirst>false</titleFirst>
