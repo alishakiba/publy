@@ -18,6 +18,22 @@ function showPaper(paperID) {
     }
 }
 
+// Toggles button text
+function toggleText(button, text1, text2) {
+    // Store the original width, so it doesn't change
+    var width = button.width();
+
+    // Swap the labels
+    if (button.text() == text1) {
+        button.text(text2);
+    } else {
+        button.text(text1);
+    }
+
+    // Reset the width to the original
+    button.width(width);
+}
+
 // Functions that run the first time the document loads
 $(document).ready(function() {
     // Abstracts start hidden for JS-enabled users
@@ -40,33 +56,13 @@ $(document).ready(function() {
         $(this).parent().children('.abstract-container').slideToggle(500);
     });
     $('button.abstract-toggle').click(function () {
-        // Store the original width, so it doesn't jump
-        var width = $(this).width();
-
-        if ($(this).text() == "Abstract") {
-            $(this).text("Hide");
-        } else {
-            $(this).text("Abstract");
-        }
-
-        // Reset the width to the original
-        $(this).width(width);
+        toggleText($(this), "Abstract", "Hide");
     });
 
     $('.bibtex-toggle').click(function () {
         $(this).parent().children('.bibtex-container').slideToggle(500);
     });
     $('button.bibtex-toggle').click(function () {
-        // Store the original width, so it doesn't jump
-        var width = $(this).width();
-
-        if ($(this).text() == "BibTeX") {
-            $(this).text("Hide");
-        } else {
-            $(this).text("BibTeX");
-        }
-
-        // Reset the width to the original
-        $(this).width(width);
+        toggleText($(this), "BibTeX", "Hide");
     });
 });
