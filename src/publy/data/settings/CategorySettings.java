@@ -27,7 +27,7 @@ import publy.data.category.conditions.TypeCondition;
  * All settings that relate to the publication categories.
  * <p>
  * This contains both default and user-defined categories (these are treated in
- * the exact same way. Not all categories need to be in active use. This class
+ * the exact same way). Not all categories need to be in active use. This class
  * provides methods to activate and deactivate categories.
  */
 public class CategorySettings {
