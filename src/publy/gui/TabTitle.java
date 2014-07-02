@@ -21,21 +21,24 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 
 /**
- *
- *
+ * A custom label that is used as the title of a tab.
  */
 public class TabTitle extends JLabel {
 
+    /**
+     * Creates a new TabTitle with the specified text and icon.
+     *
+     * @param title The text to be displayed by the label.
+     * @param icon The image to be displayed by the label.
+     */
     public TabTitle(String title, Icon icon) {
         super(title, icon, JLabel.LEADING);
-        
+
         setPreferredSize(new Dimension(130, 40));
-        
+
         setFont(getFont().deriveFont(getFont().getSize2D() + 2));
         UIStyles.applyHeaderStyle(this);
-        
+
         setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 0));
     }
-    
-    
 }
