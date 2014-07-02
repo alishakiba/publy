@@ -29,12 +29,10 @@ import javax.swing.SwingWorker;
 import publy.Console;
 
 /**
- * A JLabel that functions as a HTML hyperlink.
+ * A JLabel that appears and functions as a HTML hyperlink.
  *
  * This class was inspired by the answers at
  * http://stackoverflow.com/questions/527719/how-to-add-hyperlink-in-jlabel
- *
- *
  */
 public class LinkLabel extends JLabel {
 
@@ -42,12 +40,21 @@ public class LinkLabel extends JLabel {
     private URI uri;
 
     /**
-     * For usage in the GUI editor
+     * DO NOT USE THIS CONSTRUCTOR.
+     *
+     * This constructor is just here for the NetBeans GUI editor, which requires
+     * a no-argument constructor.
      */
     public LinkLabel() {
         super("link", new javax.swing.ImageIcon(LinkLabel.class.getResource("/publy/gui/resources/BlueGlobe-12.png")), SwingConstants.LEADING);
     }
 
+    /**
+     * Creates a new LinkLabel with the specified text, linking to the specified URI.
+     * 
+     * @param text the text of the link
+     * @param uri the URI to link to
+     */
     public LinkLabel(String text, String uri) {
         super();
 
