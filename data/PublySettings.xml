@@ -119,25 +119,25 @@
   <!-- General settings -->
   <generalSettings>
     <myNames><![CDATA[me]]></myNames>
-    <nameDisplay>INITIAL</nameDisplay>
-    <reverseNames>true</reverseNames>
-    <listAllAuthors>true</listAllAuthors>
-    <titleFirst>false</titleFirst>
-    <useNewLines>false</useNewLines>
-    <numbering>GLOBAL</numbering>
-    <reverseNumbering>true</reverseNumbering>
+    <nameDisplay>FULL</nameDisplay>
+    <reverseNames>false</reverseNames>
+    <listAllAuthors>false</listAllAuthors>
+    <titleFirst>true</titleFirst>
+    <useNewLines>true</useNewLines>
+    <numbering>NO_NUMBERS</numbering>
+    <reverseNumbering>false</reverseNumbering>
   </generalSettings>
 
   <!-- HTML-specific settings -->
   <htmlSettings>
-    <generateTextVersion>true</generateTextVersion>
-    <generateBibtexVersion>true</generateBibtexVersion>
+    <generateTextVersion>false</generateTextVersion>
+    <generateBibtexVersion>false</generateBibtexVersion>
     <linkToAlternateVersions>true</linkToAlternateVersions>
-    <navPlacement>TOP_AND_BOTTOM</navPlacement>
+    <navPlacement>BEFORE_SECTION_AND_BOTTOM</navPlacement>
     <includeAbstract>ALL</includeAbstract>
     <includeBibtex>ARXIV</includeBibtex>
     <includePaper>ARXIV</includePaper>
-    <titleTarget>NONE</titleTarget>
+    <titleTarget>ABSTRACT</titleTarget>
     <presentedText><![CDATA[]]></presentedText>
     <googleAnalyticsUser><![CDATA[]]></googleAnalyticsUser>
   </htmlSettings>
