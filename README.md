@@ -21,16 +21,11 @@ Publy turns a BibTeX file with a list of your publications into a professional w
  4. Run Publy
  5. Locate your publications list and specify the output file
  6. Generate!
- 
-## Getting the most out of Publy
 
-Publy can make it a lot easier to update your publications list
-by using abbreviations for co-authors you frequently collaborate with,
-or for venues you frequently publish in.
-
-TODO - Explain links, file, etc.
+![screenshot](http://i.imgur.com/1iZ6c2s.png)
 
 ## Researchers using Publy
 
  * [Sander Verdonschot](http://cg.scs.carleton.ca/~sander/publications.html)
  * [André van Renssen](http://cg.scs.carleton.ca/~andre/publications.html)
+ 
