@@ -23,15 +23,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- *
+ * Constants that are used throughout the UI.
  */
 public class UIConstants {
 
+    /**
+     * Publy's major version number.
+     */
     public static final int MAJOR_VERSION = 0;
+    /**
+     * Publy's minor version number.
+     */
     public static final int MINOR_VERSION = 8;
+    /**
+     * Publy's application icons.
+     */
     public static final List<Image> PUBLY_ICONS; // Initialized in the static block
+    /**
+     * Publy's logo in all its glory.
+     */
     public static final Image PUBLY_LOGO; // Initialized in the static block
+    /**
+     * The background color for textfields that contain an incorrect version.
+     */
     public static final Color TEXTFIELD_ERROR_COLOR = new Color(255, 210, 210);
 
     static {

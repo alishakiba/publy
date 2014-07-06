@@ -166,50 +166,120 @@ public class HTMLSettings {
         this.navPlacement = navPlacement;
     }
 
+    /**
+     * Gets for which publication types the publication list should include
+     * abstracts for publications that specify them.
+     *
+     * @return whether to include abstracts
+     */
     public PublicationStatus getIncludeAbstract() {
         return includeAbstract;
     }
 
+    /**
+     * Gets for which publication types the publication list should include
+     * BibTeX information for publications.
+     *
+     * @return whether to include BibTeX
+     */
     public PublicationStatus getIncludeBibtex() {
         return includeBibtex;
     }
 
+    /**
+     * Gets for which publication types the publication list should include a
+     * link to a local copy of the paper for publications that specify them.
+     *
+     * @return whether to link to a local copy of the paper
+     */
     public PublicationStatus getIncludePaper() {
         return includePaper;
     }
 
+    /**
+     * Gets the Google Analytics User ID that should be used for the page
+     * analytics.
+     *
+     * @return the Google Analytics User ID
+     */
     public String getGoogleAnalyticsUser() {
         return googleAnalyticsUser;
     }
 
+    /**
+     * Gets where the title of the publication should link to.
+     *
+     * @return the link target
+     */
     public TitleLinkTarget getTitleTarget() {
         return titleTarget;
     }
 
+    /**
+     * Sets where the title of the publication should link to.
+     *
+     * @param titleTarget the link target
+     */
     public void setTitleTarget(TitleLinkTarget titleTarget) {
         this.titleTarget = titleTarget;
     }
 
+    /**
+     * Sets for which publication types the publication list should include
+     * abstracts for publications that specify them.
+     *
+     * @param includeAbstract whether to include abstracts
+     */
     public void setIncludeAbstract(PublicationStatus includeAbstract) {
         this.includeAbstract = includeAbstract;
     }
 
+    /**
+     * Sets for which publication types the publication list should include
+     * BibTeX information for publications.
+     *
+     * @param includeBibtex whether to include BibTeX
+     */
     public void setIncludeBibtex(PublicationStatus includeBibtex) {
         this.includeBibtex = includeBibtex;
     }
 
+    /**
+     * Sets for which publication types the publication list should include a
+     * link to a local copy of the paper for publications that specify them.
+     *
+     * @param includePaper whether to link to a local copy of the paper
+     */
     public void setIncludePaper(PublicationStatus includePaper) {
         this.includePaper = includePaper;
     }
 
+    /**
+     * Sets the Google Analytics User ID that should be used for the page
+     * analytics.
+     *
+     * @param googleAnalyticsUser the Google Analytics User ID
+     */
     public void setGoogleAnalyticsUser(String googleAnalyticsUser) {
         this.googleAnalyticsUser = googleAnalyticsUser;
     }
 
+    /**
+     * Gets the text that is added after a publication that was presented by the
+     * user.
+     *
+     * @return the presented text
+     */
     public String getPresentedText() {
         return presentedText;
     }
 
+    /**
+     * Sets the text that is added after a publication that was presented by the
+     * user.
+     *
+     * @param presentedText the presented text
+     */
     public void setPresentedText(String presentedText) {
         this.presentedText = presentedText;
     }
