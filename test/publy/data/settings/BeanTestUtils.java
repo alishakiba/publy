@@ -23,7 +23,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
@@ -72,7 +71,7 @@ public class BeanTestUtils {
         try {
             Pair<Object, Object> exampleValues = getExampleValues(field);
             testField(field, declaringClass, exampleValues.getFirst(), exampleValues.getSecond());
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException | InvocationTargetException ex) {
             ex.printStackTrace();
             fail(ex.toString());
         } catch (NoSuchMethodException ex) {
@@ -84,9 +83,6 @@ public class BeanTestUtils {
                 ex.printStackTrace();
                 fail(ex.toString());
             }
-        } catch (InvocationTargetException ex) {
-            ex.printStackTrace();
-            fail(ex.toString());
         }
     }
 
@@ -166,13 +162,7 @@ public class BeanTestUtils {
                 Pair<Object, Object> exampleValues = getExampleValues(field);
                 testFieldIO(settings, field, partialSettings, exampleValues.getFirst());
                 testFieldIO(settings, field, partialSettings, exampleValues.getSecond());
-            } catch (IllegalAccessException ex) {
-                ex.printStackTrace();
-                fail(ex.toString());
-            } catch (ParserConfigurationException ex) {
-                ex.printStackTrace();
-                fail(ex.toString());
-            } catch (SAXException ex) {
+            } catch (IllegalAccessException | ParserConfigurationException | SAXException ex) {
                 ex.printStackTrace();
                 fail(ex.toString());
             }
