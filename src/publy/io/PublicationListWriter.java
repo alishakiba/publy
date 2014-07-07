@@ -36,8 +36,10 @@ public abstract class PublicationListWriter {
     }
 
     public void writePublicationList(List<OutputCategory> categories, Path target) throws IOException {
-        Files.createDirectories(target.getParent());
-        
+        if (target.getParent() != null) {
+            Files.createDirectories(target.getParent());
+        }
+
         try (TempWriter out = TempWriter.newTempWriter(target)) {
             writePublicationList(categories, out);
             out.copyWrittenFileOnClose();
