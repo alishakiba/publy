@@ -46,7 +46,7 @@ public class Runner {
         if (settings == null) {
             // Notify the user
             if (settingsParseException == null) {
-                Console.error("No configuration information was found. Please set up your preferences by running Publy with the \"--gui\" option.");
+                Console.error("Hey, it looks like this is the first time you're using Publy! Before we can do anything, you should set up your configuration by running Publy with the \"--gui\" option. ");
             } else {
                 Console.except(settingsParseException, "An exception occurred while parsing the configuration:");
             }
