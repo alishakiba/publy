@@ -24,6 +24,7 @@ import org.xml.sax.SAXException;
 import publy.algo.PublicationListGenerator;
 import publy.data.settings.Settings;
 import publy.gui.MainFrame;
+import publy.gui.WelcomeDialog;
 import publy.io.ResourceLocator;
 import publy.io.settings.SettingsReader;
 
@@ -159,7 +160,9 @@ public class Runner {
      */
     private static void showMissingSettingsDialog() {
         if (settingsParseException == null) {
-            JOptionPane.showMessageDialog(null, "No configuration information was found. Please set up your preferences.", "Publy - Launching Settings Window", JOptionPane.INFORMATION_MESSAGE);
+            WelcomeDialog wd = new WelcomeDialog(null, true);
+            wd.setLocationRelativeTo(null); // Center
+            wd.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "An exception occurred while parsing the configuration. Loading the default configuration.", "Publy - Launching Settings Window", JOptionPane.ERROR_MESSAGE);
         }
