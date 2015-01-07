@@ -41,13 +41,13 @@ fi
 
 
 # Make the .jar file executable
-if [ -e "$JAR_FILE" ]
+if [ ! -e "$JAR_FILE" ]
 then
   echo "ERROR: Jar file $JAR_FILE is missing. Run a clean and build operation in NetBeans to generate this file."
   exit 1
 fi
 
-chmod +x dist/Publy.jar
+chmod +x "$JAR_FILE"
 
 
 # Remove the old zip file
