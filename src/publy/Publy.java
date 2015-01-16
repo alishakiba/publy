@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2015 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,7 +89,7 @@ public class Publy {
      */
     private static void printVersionInfo() {
         System.out.printf("Publy %d.%d%n"
-                + "Copyright (c) 2013-2014 Sander Verdonschot%n"
+                + "Copyright (c) 2013-2015 Sander Verdonschot%n"
                 + "License Apache v2%n"
                 + "This is free software. You are free to change and redistribute it.%n",
                 UIConstants.MAJOR_VERSION, UIConstants.MINOR_VERSION);
