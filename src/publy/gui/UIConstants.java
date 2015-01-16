@@ -34,7 +34,7 @@ public class UIConstants {
     /**
      * Publy's minor version number.
      */
-    public static final int MINOR_VERSION = 8;
+    public static final int MINOR_VERSION = 9;
     /**
      * Publy's application icons.
      */
