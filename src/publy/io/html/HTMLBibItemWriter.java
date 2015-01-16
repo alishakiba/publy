@@ -387,7 +387,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeAbstract(BibItem item) throws IOException {
-        out.write(indent + "<div class=\"abstract-container\">");
+        out.write(indent + "<div class=\"abstract-container tex2jax_ignore\">");
         out.write("<div class=\"abstract\">");
         out.newLine();
         out.write(indent + "  <span class=\"abstractword\">Abstract: </span>");

@@ -5,17 +5,26 @@ function showPaper(paperID) {
     var abs = bibitem.children('.abstract-container');
 
     if (abs.length && abs.is(":hidden")) {
-        abs.slideToggle(500);
+        toggleAbstract(abs);
 
         // Update the button text to reflect that the abstract expanded
         var button = bibitem.children('button.abstract-toggle');
 
         if (button.length && button.text() == "Abstract") {
-            var width = button.width();
-            button.text("Hide");
-            button.width(width);
+            toggleText(button, "Abstract", "Hide");
         }
     }
+}
+
+// Toggles abstract. Input: .abstract-container
+function toggleAbstract(abstract) {
+    // Render the math in here, if necessary
+    if (abstract.hasClass("tex2jax_ignore")) {
+        abstract.removeClass("tex2jax_ignore");
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, abstract.get(0)]);
+    }
+    
+    abstract.slideToggle(500);
 }
 
 // Toggles button text
@@ -53,7 +62,7 @@ $(document).ready(function() {
 
     // Add click-behaviour to toggle elements
     $('.abstract-toggle').click(function () {
-        $(this).parent().children('.abstract-container').slideToggle(500);
+        toggleAbstract($(this).parent().children('.abstract-container'));
     });
     $('button.abstract-toggle').click(function () {
         toggleText($(this), "Abstract", "Hide");
