@@ -146,8 +146,8 @@ public class Runner {
         }
 
         try {
-            return SettingsReaderCurrent.parseSettings();
-        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            return (new SettingsReaderCurrent()).parseSettings();
+        } catch (IOException ex) {
             settingsParseException = ex;
             return null;
         }

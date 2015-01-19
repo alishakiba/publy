@@ -141,7 +141,7 @@ public class WelcomeDialog extends javax.swing.JDialog {
 
             try {
                 // Import settings
-                settings = SettingsReaderCurrent.parseSettings(settingsFile, false);
+                settings = (new SettingsReaderCurrent()).parseSettings(settingsFile);
             } catch (Exception ex) {
                 importError("An error occurred while parsing the settings file.", ex);
                 return;
