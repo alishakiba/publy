@@ -20,7 +20,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import publy.data.settings.Settings;
 import publy.io.settings.SettingsFinder;
-import publy.io.settings.SettingsReader;
+import publy.io.settings.SettingsReaderCurrent;
 
 /**
  *
@@ -141,7 +141,7 @@ public class WelcomeDialog extends javax.swing.JDialog {
 
             try {
                 // Import settings
-                settings = SettingsReader.parseSettings(settingsFile, false);
+                settings = SettingsReaderCurrent.parseSettings(settingsFile, false);
             } catch (Exception ex) {
                 importError("An error occurred while parsing the settings file.", ex);
                 return;

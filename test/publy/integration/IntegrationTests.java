@@ -25,7 +25,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 import publy.algo.PublicationListGenerator;
-import publy.io.settings.SettingsReader;
+import publy.io.settings.SettingsReaderCurrent;
 import static org.junit.Assert.*;
 
 /**
@@ -73,11 +73,11 @@ public class IntegrationTests {
         Files.copy(inputDir.resolve("publications.bib"), publications);
 
         // Set the correct fields
-        SettingsReader.setSettingsFile(inputDir.resolve("TestSettings.xml"));
+        SettingsReaderCurrent.setSettingsFile(inputDir.resolve("TestSettings.xml"));
 
         try {
             // Run the show
-            PublicationListGenerator.generatePublicationList(SettingsReader.parseSettings());
+            PublicationListGenerator.generatePublicationList(SettingsReaderCurrent.parseSettings());
         } catch (ParserConfigurationException | SAXException ex) {
             fail("Exception while parsing: " + ex);
             ex.printStackTrace();

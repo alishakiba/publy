@@ -34,7 +34,7 @@ import publy.data.PublicationStatus;
 import publy.data.category.OutputCategory;
 import publy.data.category.conditions.TypeCondition;
 import publy.io.ResourceLocator;
-import publy.io.settings.SettingsReader;
+import publy.io.settings.SettingsReaderCurrent;
 import publy.io.settings.SettingsWriter;
 
 public class BeanTestUtils {
@@ -155,7 +155,7 @@ public class BeanTestUtils {
         // Change the location the settings are read from
         Path tempSettingsFile = Files.createTempFile("PublyIOTestSettings", ".xml");
         tempSettingsFile.toFile().deleteOnExit();
-        SettingsReader.setSettingsFile(tempSettingsFile);
+        SettingsReaderCurrent.setSettingsFile(tempSettingsFile);
 
         for (Field field : partialSettings.getClass().getDeclaredFields()) {
             try {
@@ -176,7 +176,7 @@ public class BeanTestUtils {
 
         // Store and read the settings
         SettingsWriter.writeSettings(settings);
-        Settings readSettings = SettingsReader.parseSettings();
+        Settings readSettings = SettingsReaderCurrent.parseSettings();
 
         // Check that the field has value val
         Object declaringClassInstance = getSettingsPart(readSettings, declaringClass);

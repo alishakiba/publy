@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plgsettings majorversion="0" minorversion="8">
+<publysettings majorversion="0" minorversion="9">
   <!-- File settings -->
   <fileSettings>
-    <publications>publications.bib</publications>
-    <target>testOutput/test.html</target>
+    <publications></publications>
+    <target></target>
     <header>data/defaultHeader.html</header>
     <footer>data/defaultFooter.html</footer>
   </fileSettings>
@@ -19,7 +19,7 @@
         <fieldConditions>
           <FieldEqualsCondition inverted="true" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
-        <ignoredFields><![CDATA[]]></ignoredFields>
+        <ignoredFields><![CDATA[address]]></ignoredFields>
       </category>
       <category>
         <shortName><![CDATA[Chapters]]></shortName>
@@ -29,7 +29,7 @@
         <fieldConditions>
           <FieldEqualsCondition inverted="true" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
         </fieldConditions>
-        <ignoredFields><![CDATA[]]></ignoredFields>
+        <ignoredFields><![CDATA[address]]></ignoredFields>
       </category>
       <category>
         <shortName><![CDATA[Conference]]></shortName>
@@ -38,9 +38,8 @@
         <TypeCondition inverted="false"><![CDATA[inproceedings;conference]]></TypeCondition>
         <fieldConditions>
           <FieldEqualsCondition inverted="true" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
-          <FieldContainsCondition inverted="true" field="booktitle"><![CDATA[CCCG;EuroCG]]></FieldContainsCondition>
         </fieldConditions>
-        <ignoredFields><![CDATA[volume;series]]></ignoredFields>
+        <ignoredFields><![CDATA[address;publisher;editor;volume;number;series]]></ignoredFields>
       </category>
       <category>
         <shortName><![CDATA[Journal]]></shortName>
@@ -76,10 +75,9 @@
         <shortName><![CDATA[Talks]]></shortName>
         <name><![CDATA[Invited Talks]]></name>
         <htmlNote><![CDATA[]]></htmlNote>
-        <TypeCondition inverted="false"><![CDATA[misc]]></TypeCondition>
+        <TypeCondition inverted="false"><![CDATA[talk]]></TypeCondition>
         <fieldConditions>
           <FieldEqualsCondition inverted="true" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
-          <FieldEqualsCondition inverted="false" field="presented"><![CDATA[yes]]></FieldEqualsCondition>
         </fieldConditions>
         <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
@@ -102,18 +100,8 @@
         </fieldConditions>
         <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
-      <category>
-        <shortName><![CDATA[Abstracts]]></shortName>
-        <name><![CDATA[Papers in conferences without refereed proceedings]]></name>
-        <htmlNote><![CDATA[]]></htmlNote>
-        <TypeCondition inverted="false"><![CDATA[inproceedings;conference]]></TypeCondition>
-        <fieldConditions>
-          <FieldContainsCondition inverted="false" field="booktitle"><![CDATA[CCCG;EuroCG]]></FieldContainsCondition>
-        </fieldConditions>
-        <ignoredFields><![CDATA[]]></ignoredFields>
-      </category>
     </allCategories>
-    <activeCategories>5;0;3;2;9;1;7;6</activeCategories>
+    <activeCategories>5;3;2;0;1;7;4</activeCategories>
   </categorySettings>
 
   <!-- General settings -->
@@ -121,7 +109,7 @@
     <myNames><![CDATA[me]]></myNames>
     <nameDisplay>FULL</nameDisplay>
     <reverseNames>false</reverseNames>
-    <listAllAuthors>false</listAllAuthors>
+    <listAllAuthors>true</listAllAuthors>
     <titleFirst>true</titleFirst>
     <useNewLines>true</useNewLines>
     <numbering>NO_NUMBERS</numbering>
@@ -133,11 +121,11 @@
     <generateTextVersion>false</generateTextVersion>
     <generateBibtexVersion>false</generateBibtexVersion>
     <linkToAlternateVersions>true</linkToAlternateVersions>
-    <navPlacement>BEFORE_SECTION_AND_BOTTOM</navPlacement>
+    <navPlacement>TOP</navPlacement>
     <includeAbstract>ALL</includeAbstract>
     <includeBibtex>ARXIV</includeBibtex>
     <includePaper>ARXIV</includePaper>
-    <titleTarget>ABSTRACT</titleTarget>
+    <titleTarget>NONE</titleTarget>
     <presentedText><![CDATA[]]></presentedText>
     <googleAnalyticsUser><![CDATA[]]></googleAnalyticsUser>
   </htmlSettings>
@@ -145,7 +133,7 @@
   <!-- Console settings -->
   <consoleSettings>
     <showWarnings>true</showWarnings>
-    <warnMissingReferences>false</warnMissingReferences>
+    <warnMissingReferences>true</warnMissingReferences>
     <warnNotAuthor>true</warnNotAuthor>
     <warnNoCategoryForItem>true</warnNoCategoryForItem>
     <warnMandatoryFieldIgnored>true</warnMandatoryFieldIgnored>
@@ -153,4 +141,4 @@
     <showStackTraces>false</showStackTraces>
   </consoleSettings>
 
-</plgsettings>
+</publysettings>

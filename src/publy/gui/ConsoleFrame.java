@@ -24,7 +24,7 @@ import publy.Console;
 import publy.Publy;
 import publy.algo.PublicationListGenerator;
 import publy.data.settings.Settings;
-import publy.io.settings.SettingsReader;
+import publy.io.settings.SettingsReaderCurrent;
 
 /**
  *
@@ -131,7 +131,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
         Settings settings = null;
 
         try {
-            settings = SettingsReader.parseSettings();
+            settings = SettingsReaderCurrent.parseSettings();
         } catch (ParserConfigurationException | SAXException | IOException ex) {
             Console.except(ex, "Exception occurred while parsing the configuration:");
         }
@@ -149,7 +149,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
         Settings settings = null;
 
         try {
-            settings = SettingsReader.parseSettings();
+            settings = SettingsReaderCurrent.parseSettings();
         } catch (ParserConfigurationException | SAXException | IOException ex) {
             Console.except(ex, "Exception occurred while parsing the configuration:");
         }
