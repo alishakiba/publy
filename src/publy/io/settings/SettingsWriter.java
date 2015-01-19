@@ -43,7 +43,7 @@ import publy.io.TempWriter;
 public class SettingsWriter {
 
     public static void writeSettings(Settings settings) throws IOException {
-        Path settingsFile = SettingsReaderCurrent.getSettingsFile();
+        Path settingsFile = Settings.getSettingsPath();
         Path settingsDirectory = settingsFile.getParent();
 
         if (Files.notExists(settingsDirectory)) {

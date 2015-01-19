@@ -155,7 +155,7 @@ public class BeanTestUtils {
         // Change the location the settings are read from
         Path tempSettingsFile = Files.createTempFile("PublyIOTestSettings", ".xml");
         tempSettingsFile.toFile().deleteOnExit();
-        SettingsReaderCurrent.setSettingsFile(tempSettingsFile);
+        Settings.setSettingsPath(tempSettingsFile);
 
         for (Field field : partialSettings.getClass().getDeclaredFields()) {
             try {

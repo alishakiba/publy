@@ -138,7 +138,7 @@ public class Runner {
             Path settingsFile = ResourceLocator.getFullPath(settingsLocation);
 
             if (Files.exists(settingsFile)) {
-                SettingsReaderCurrent.setSettingsFile(settingsFile);
+                Settings.setSettingsPath(settingsFile);
             } else {
                 Console.error("The configuration file \"%s\" could not be found at \"%s\".", settingsLocation, settingsFile);
                 return null;
