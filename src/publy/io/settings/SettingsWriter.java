@@ -58,7 +58,7 @@ public class SettingsWriter {
             // Write header
             out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             out.newLine();
-            out.write("<plgsettings majorversion=\"" + UIConstants.MAJOR_VERSION + "\" minorversion=\"" + UIConstants.MINOR_VERSION + "\">");
+            out.write("<publysettings majorversion=\"" + UIConstants.MAJOR_VERSION + "\" minorversion=\"" + UIConstants.MINOR_VERSION + "\">");
             out.newLine();
 
             writeFileSettings(settings.getFileSettings(), out);
@@ -68,7 +68,7 @@ public class SettingsWriter {
             writeConsoleSettings(settings.getConsoleSettings(), out);
 
             // Write footer
-            out.write("</plgsettings>");
+            out.write("</publysettings>");
             out.newLine();
             
             out.copyWrittenFileOnClose();
