@@ -15,12 +15,13 @@
  */
 package publy.gui;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import publy.data.settings.Settings;
 import publy.io.settings.SettingsFinder;
-import publy.io.settings.SettingsReaderCurrent;
+import publy.io.settings.SettingsImporter;
 
 /**
  *
@@ -28,7 +29,7 @@ import publy.io.settings.SettingsReaderCurrent;
  */
 public class WelcomeDialog extends javax.swing.JDialog {
 
-    private Settings settings;
+    private Settings settings = Settings.defaultSettings();
 
     /**
      * Creates new form WelcomeDialog
@@ -45,7 +46,7 @@ public class WelcomeDialog extends javax.swing.JDialog {
     /**
      * The settings selected by the user. Either the default settings, or
      * settings imported from an older version of Publy. This method returns
-     * null until this dialog has been made visible.
+     * the default settings until this dialog has been made visible.
      *
      * @return
      */
@@ -115,7 +116,6 @@ public class WelcomeDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        settings = Settings.defaultSettings();
         dispose();
     }//GEN-LAST:event_okButtonActionPerformed
 
@@ -134,14 +134,14 @@ public class WelcomeDialog extends javax.swing.JDialog {
                 return;
             }
 
-            if (settingsFile == null) {
+            if (settingsFile == null || !Files.exists(settingsFile) || !Files.isRegularFile(settingsFile)) {
                 importError("No settings file was found in this folder.");
                 return;
             }
 
             try {
                 // Import settings
-                settings = (new SettingsReaderCurrent()).parseSettings(settingsFile);
+                settings = SettingsImporter.importSettings(settingsFile);
             } catch (Exception ex) {
                 importError("An error occurred while parsing the settings file.", ex);
                 return;

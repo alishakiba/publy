@@ -15,12 +15,11 @@
  */
 package publy;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.swing.JOptionPane;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 import publy.algo.PublicationListGenerator;
 import publy.data.settings.Settings;
 import publy.gui.MainFrame;
@@ -143,6 +142,11 @@ public class Runner {
                 Console.error("The configuration file \"%s\" could not be found at \"%s\".", settingsLocation, settingsFile);
                 return null;
             }
+        } else {
+            // Check if the settings file exists
+            if (!Files.exists(Settings.getSettingsPath())) {
+                return null;
+            }
         }
 
         try {
@@ -157,7 +161,7 @@ public class Runner {
      * Shows a message dialog informing the user of the missing settings. If
      * there was no parse exception, the dialog gives the user the option to
      * import settings from an existing installation of Publy.
-     * 
+     *
      * @return the Settings to use - either default or imported
      */
     private static Settings showMissingSettingsDialog() {
