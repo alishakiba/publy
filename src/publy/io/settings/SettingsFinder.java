@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import publy.data.settings.Settings;
 
 public class SettingsFinder extends SimpleFileVisitor<Path> {
 
@@ -34,7 +35,7 @@ public class SettingsFinder extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(Path t, BasicFileAttributes bfa) throws IOException {
-        if (Files.isRegularFile(t) && SettingsReaderCurrent.DEFAULT_SETTINGS_FILE.equals(t.getFileName().toString())) {
+        if (Files.isRegularFile(t) && Settings.DEFAULT_SETTINGS_FILE.equals(t.getFileName().toString())) {
             settingsFile = t;
             return FileVisitResult.TERMINATE;
         } else {

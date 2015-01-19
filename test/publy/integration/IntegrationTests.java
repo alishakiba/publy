@@ -27,11 +27,8 @@ import org.xml.sax.SAXException;
 import publy.algo.PublicationListGenerator;
 import publy.io.settings.SettingsReaderCurrent;
 import static org.junit.Assert.*;
+import publy.data.settings.Settings;
 
-/**
- *
- * @author Sander Verdonschot <sander.verdonschot at gmail.com>
- */
 public class IntegrationTests {
 
     private static final Path TEST_DIR = Paths.get("test/publy/integration");
@@ -73,7 +70,7 @@ public class IntegrationTests {
         Files.copy(inputDir.resolve("publications.bib"), publications);
 
         // Set the correct fields
-        SettingsReaderCurrent.setSettingsFile(inputDir.resolve("TestSettings.xml"));
+        Settings.setSettingsPath(inputDir.resolve("TestSettings.xml"));
 
         try {
             // Run the show

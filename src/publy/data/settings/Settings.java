@@ -15,6 +15,9 @@
  */
 package publy.data.settings;
 
+import java.nio.file.Path;
+import publy.io.ResourceLocator;
+
 /**
  * All configuration information, divided into five categories:
  * <p>
@@ -27,6 +30,11 @@ package publy.data.settings;
  * </ul>
  */
 public class Settings {
+
+    // Static properties that concern Settings
+    public static final String DEFAULT_SETTINGS_FILE = "PublySettings.xml";
+    public static final String DEFAULT_SETTINGS_PATH = "data/" + DEFAULT_SETTINGS_FILE;
+    private static Path settingsPath = ResourceLocator.getFullPath(DEFAULT_SETTINGS_PATH);
 
     private final FileSettings fileSettings;
     private final CategorySettings categorySettings;
@@ -54,6 +62,25 @@ public class Settings {
         Settings result = new Settings();
         result.categorySettings.setToDefault();
         return result;
+    }
+
+    /**
+     * Returns the path to the current settings file. This may not yet exist -
+     * it is where the settings will be saved when Publy closes.
+     *
+     * @return the path to the current settings file
+     */
+    public static Path getSettingsPath() {
+        return settingsPath;
+    }
+
+    /**
+     * Sets the path to which the settings will be saved when Publy closes.
+     *
+     * @param settingsFile the new path
+     */
+    public static void setSettingsPath(Path settingsFile) {
+        Settings.settingsPath = settingsFile;
     }
 
     /**

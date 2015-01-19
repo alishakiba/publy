@@ -39,10 +39,6 @@ import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
 import publy.io.ResourceLocator;
 
-/**
- *
- *
- */
 public class SettingsReaderCurrent extends DefaultHandler {
 
     private enum State {
@@ -51,9 +47,7 @@ public class SettingsReaderCurrent extends DefaultHandler {
         // Main settings
         FILE_SETTINGS, CATEGORY_SETTINGS, GENERAL_SETTINGS, HTML_SETTINGS, CONSOLE_SETTINGS;
     }
-    static final String DEFAULT_SETTINGS_FILE = "PublySettings.xml";
-    static final String DEFAULT_SETTINGS_PATH = "data/" + DEFAULT_SETTINGS_FILE;
-    private static Path settingsFile = ResourceLocator.getFullPath(DEFAULT_SETTINGS_PATH);
+    
     private StringBuilder textBuffer; // Contains the characters that are read between start and end elements (e.g. <item>Text</item>)
     private Settings settings; // Contains the read settings after parsing.
     private State state = State.DEFAULT;
@@ -66,14 +60,14 @@ public class SettingsReaderCurrent extends DefaultHandler {
     }
 
     public static Settings parseSettings() throws ParserConfigurationException, SAXException, IOException {
-        return parseSettings(settingsFile, false);
+        return parseSettings(Settings.getSettingsPath(), false);
     }
 
-    public static Settings parseSettings(Path inputFile, boolean updateSettingsFileLocation) throws ParserConfigurationException, SAXException, IOException {
+    public static Settings parseSettings(Path inputFile, boolean updateSettingsPath) throws ParserConfigurationException, SAXException, IOException {
         Settings settings = null;
 
-        if (updateSettingsFileLocation) {
-            settingsFile = inputFile;
+        if (updateSettingsPath) {
+            Settings.setSettingsPath(inputFile);
         }
 
         if (Files.exists(inputFile)) {
@@ -82,14 +76,6 @@ public class SettingsReaderCurrent extends DefaultHandler {
         }
 
         return settings;
-    }
-
-    public static void setSettingsFile(Path settingsFile) {
-        SettingsReaderCurrent.settingsFile = settingsFile;
-    }
-
-    public static Path getSettingsFile() {
-        return settingsFile;
     }
 
     private static void parseSettings(Settings settings, Path inputFile) throws ParserConfigurationException, SAXException, IOException {
