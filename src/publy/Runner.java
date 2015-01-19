@@ -67,8 +67,7 @@ public class Runner {
         Settings settings = readSettings(arguments.getConfig());
 
         if (settings == null) {
-            showMissingSettingsDialog();
-            settings = Settings.defaultSettings();
+            settings = showMissingSettingsDialog();
         }
 
         arguments.applyOverrides(settings);
@@ -94,8 +93,7 @@ public class Runner {
 
         if (settings == null) {
             showSettings = true;
-            showMissingSettingsDialog();
-            settings = Settings.defaultSettings();
+            settings = showMissingSettingsDialog();
             arguments.applyOverrides(settings);
             Console.setSettings(settings.getConsoleSettings());
         } else {
@@ -156,15 +154,21 @@ public class Runner {
     }
 
     /**
-     * Shows a message dialog informing the user of the missing settings.
+     * Shows a message dialog informing the user of the missing settings. If
+     * there was no parse exception, the dialog gives the user the option to
+     * import settings from an existing installation of Publy.
+     * 
+     * @return the Settings to use - either default or imported
      */
-    private static void showMissingSettingsDialog() {
+    private static Settings showMissingSettingsDialog() {
         if (settingsParseException == null) {
-            WelcomeDialog wd = new WelcomeDialog(null, true);
+            WelcomeDialog wd = new WelcomeDialog(null);
             wd.setLocationRelativeTo(null); // Center
             wd.setVisible(true);
+            return wd.getSettings();
         } else {
             JOptionPane.showMessageDialog(null, "An exception occurred while parsing the configuration. Loading the default configuration.", "Publy - Launching Settings Window", JOptionPane.ERROR_MESSAGE);
+            return Settings.defaultSettings();
         }
     }
 

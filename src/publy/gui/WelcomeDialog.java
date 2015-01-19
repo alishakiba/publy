@@ -13,8 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package publy.gui;
+
+import java.nio.file.Path;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import publy.data.settings.Settings;
+import publy.io.settings.SettingsFinder;
+import publy.io.settings.SettingsReader;
 
 /**
  *
@@ -22,12 +28,29 @@ package publy.gui;
  */
 public class WelcomeDialog extends javax.swing.JDialog {
 
+    private Settings settings;
+
     /**
      * Creates new form WelcomeDialog
+     *
+     * @param parent
      */
-    public WelcomeDialog(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public WelcomeDialog(java.awt.Frame parent) {
+        super(parent, true);
         initComponents();
+
+        importDirectoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    }
+
+    /**
+     * The settings selected by the user. Either the default settings, or
+     * settings imported from an older version of Publy. This method returns
+     * null until this dialog has been made visible.
+     *
+     * @return
+     */
+    public Settings getSettings() {
+        return settings;
     }
 
     /**
@@ -39,24 +62,34 @@ public class WelcomeDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        importDirectoryChooser = new javax.swing.JFileChooser();
         welcomeLabel = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        buttonPanel = new javax.swing.JPanel();
         okButton = new javax.swing.JButton();
+        importButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Publy - Hello!");
 
         welcomeLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/publy/gui/resources/logo-100.png"))); // NOI18N
-        welcomeLabel.setText("<html>Hey, it looks like this is the first time you're running Publy!<br><b>Please set up your configuration to get started.</b><br><br>(If you've run Publy before, something might have happened to your configuration file.)</html>");
+        welcomeLabel.setText("<html>Hey, it looks like this is the first time you're running Publy!<br><b>Please set up your configuration to get started.</b><br>You can also import the configuration of an existing installation of Publy.<br><br>(If you've run Publy before, something might have happened to your configuration file.)</html>");
         welcomeLabel.setIconTextGap(10);
 
-        okButton.setText("Get started");
+        okButton.setText("Start fresh");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(okButton);
+        buttonPanel.add(okButton);
+
+        importButton.setText("Import...");
+        importButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                importButtonActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(importButton);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -66,7 +99,7 @@ public class WelcomeDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(welcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -74,7 +107,7 @@ public class WelcomeDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(welcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -82,11 +115,68 @@ public class WelcomeDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        settings = Settings.defaultSettings();
         dispose();
     }//GEN-LAST:event_okButtonActionPerformed
 
+    private void importButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importButtonActionPerformed
+        int opened = importDirectoryChooser.showOpenDialog(this);
+
+        if (opened == JFileChooser.APPROVE_OPTION) {
+            Path selected = importDirectoryChooser.getSelectedFile().toPath();
+            Path settingsFile;
+
+            try {
+                // Find Publy
+                settingsFile = SettingsFinder.findSettingsFileInFileTree(selected);
+            } catch (Exception ex) {
+                importError("An error occurred while looking for the settings.", ex);
+                return;
+            }
+
+            if (settingsFile == null) {
+                importError("No settings file was found in this folder.");
+                return;
+            }
+
+            try {
+                // Import settings
+                settings = SettingsReader.parseSettings(settingsFile, false);
+            } catch (Exception ex) {
+                importError("An error occurred while parsing the settings file.", ex);
+                return;
+            }
+
+            if (settings == null) {
+                importError("Import failed.");
+                return;
+            }
+
+            dispose();
+        }
+    }//GEN-LAST:event_importButtonActionPerformed
+
+    private void importError(String message) {
+        JOptionPane.showMessageDialog(this,
+                message,
+                "Publy - Import error",
+                JOptionPane.ERROR_MESSAGE);
+        System.err.println(message);
+    }
+
+    private void importError(String message, Exception ex) {
+        JOptionPane.showMessageDialog(this,
+                message,
+                "Publy - Import error",
+                JOptionPane.ERROR_MESSAGE);
+        System.err.println(message);
+        ex.printStackTrace();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel buttonPanel;
+    private javax.swing.JButton importButton;
+    private javax.swing.JFileChooser importDirectoryChooser;
     private javax.swing.JButton okButton;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
