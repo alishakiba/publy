@@ -176,7 +176,7 @@ public class BeanTestUtils {
 
         // Store and read the settings
         SettingsWriter.writeSettings(settings);
-        Settings readSettings = SettingsReaderCurrent.parseSettings();
+        Settings readSettings = (new SettingsReaderCurrent()).parseSettings();
 
         // Check that the field has value val
         Object declaringClassInstance = getSettingsPart(readSettings, declaringClass);

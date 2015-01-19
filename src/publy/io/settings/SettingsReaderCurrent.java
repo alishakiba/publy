@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -39,7 +41,7 @@ import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
 import publy.io.ResourceLocator;
 
-public class SettingsReaderCurrent extends DefaultHandler {
+public class SettingsReaderCurrent extends DefaultHandler implements SettingsReader {
 
     private enum State {
 
@@ -49,44 +51,35 @@ public class SettingsReaderCurrent extends DefaultHandler {
     }
     
     private StringBuilder textBuffer; // Contains the characters that are read between start and end elements (e.g. <item>Text</item>)
-    private Settings settings; // Contains the read settings after parsing.
+    private final Settings settings; // Contains the read settings after parsing.
     private State state = State.DEFAULT;
     private OutputCategory currentCategory = null;
     private Condition currentCondition;
     private String activeCategories;
 
-    private SettingsReaderCurrent(Settings settings) {
-        this.settings = settings;
+    public SettingsReaderCurrent() {
+        this.settings = new Settings();
     }
 
-    public static Settings parseSettings() throws ParserConfigurationException, SAXException, IOException {
-        return parseSettings(Settings.getSettingsPath(), false);
+    public Settings parseSettings() throws IOException {
+        return parseSettings(Settings.getSettingsPath());
     }
 
-    public static Settings parseSettings(Path inputFile, boolean updateSettingsPath) throws ParserConfigurationException, SAXException, IOException {
-        Settings settings = null;
-
-        if (updateSettingsPath) {
-            Settings.setSettingsPath(inputFile);
-        }
-
-        if (Files.exists(inputFile)) {
-            settings = new Settings();
-            parseSettings(settings, inputFile);
-        }
-
-        return settings;
-    }
-
-    private static void parseSettings(Settings settings, Path inputFile) throws ParserConfigurationException, SAXException, IOException {
+    public Settings parseSettings(Path inputFile) throws IOException {
         // Use the default (non-validating) parser
         SAXParserFactory factory = SAXParserFactory.newInstance();
         // Create a new instance of this class as handler
-        SettingsReaderCurrent handler = new SettingsReaderCurrent(settings);
+        SettingsReaderCurrent handler = new SettingsReaderCurrent();
 
         // Parse the input
-        SAXParser saxParser = factory.newSAXParser();
-        saxParser.parse(inputFile.toFile(), handler);
+        try {
+            SAXParser saxParser = factory.newSAXParser();
+            saxParser.parse(inputFile.toFile(), handler);
+        } catch (ParserConfigurationException | SAXException ex) {
+            throw new IOException(ex);
+        }
+
+        return handler.settings;
     }
 
     @Override

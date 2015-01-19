@@ -74,8 +74,8 @@ public class IntegrationTests {
 
         try {
             // Run the show
-            PublicationListGenerator.generatePublicationList(SettingsReaderCurrent.parseSettings());
-        } catch (ParserConfigurationException | SAXException ex) {
+            PublicationListGenerator.generatePublicationList((new SettingsReaderCurrent()).parseSettings());
+        } catch (IOException ex) {
             fail("Exception while parsing: " + ex);
             ex.printStackTrace();
         }
