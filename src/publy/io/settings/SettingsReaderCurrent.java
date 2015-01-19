@@ -43,7 +43,7 @@ import publy.io.ResourceLocator;
  *
  *
  */
-public class SettingsReader extends DefaultHandler {
+public class SettingsReaderCurrent extends DefaultHandler {
 
     private enum State {
 
@@ -61,7 +61,7 @@ public class SettingsReader extends DefaultHandler {
     private Condition currentCondition;
     private String activeCategories;
 
-    private SettingsReader(Settings settings) {
+    private SettingsReaderCurrent(Settings settings) {
         this.settings = settings;
     }
 
@@ -85,7 +85,7 @@ public class SettingsReader extends DefaultHandler {
     }
 
     public static void setSettingsFile(Path settingsFile) {
-        SettingsReader.settingsFile = settingsFile;
+        SettingsReaderCurrent.settingsFile = settingsFile;
     }
 
     public static Path getSettingsFile() {
@@ -96,7 +96,7 @@ public class SettingsReader extends DefaultHandler {
         // Use the default (non-validating) parser
         SAXParserFactory factory = SAXParserFactory.newInstance();
         // Create a new instance of this class as handler
-        SettingsReader handler = new SettingsReader(settings);
+        SettingsReaderCurrent handler = new SettingsReaderCurrent(settings);
 
         // Parse the input
         SAXParser saxParser = factory.newSAXParser();

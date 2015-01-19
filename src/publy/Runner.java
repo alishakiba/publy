@@ -26,7 +26,7 @@ import publy.data.settings.Settings;
 import publy.gui.MainFrame;
 import publy.gui.WelcomeDialog;
 import publy.io.ResourceLocator;
-import publy.io.settings.SettingsReader;
+import publy.io.settings.SettingsReaderCurrent;
 
 /**
  * A utility class that implements different ways to run Publy.
@@ -138,7 +138,7 @@ public class Runner {
             Path settingsFile = ResourceLocator.getFullPath(settingsLocation);
 
             if (Files.exists(settingsFile)) {
-                SettingsReader.setSettingsFile(settingsFile);
+                SettingsReaderCurrent.setSettingsFile(settingsFile);
             } else {
                 Console.error("The configuration file \"%s\" could not be found at \"%s\".", settingsLocation, settingsFile);
                 return null;
@@ -146,7 +146,7 @@ public class Runner {
         }
 
         try {
-            return SettingsReader.parseSettings();
+            return SettingsReaderCurrent.parseSettings();
         } catch (ParserConfigurationException | SAXException | IOException ex) {
             settingsParseException = ex;
             return null;
