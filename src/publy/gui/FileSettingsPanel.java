@@ -17,12 +17,14 @@ package publy.gui;
 
 import java.awt.Desktop;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
@@ -61,6 +63,8 @@ public class FileSettingsPanel extends javax.swing.JPanel {
     public FileSettingsPanel(FileSettings settings) {
         this.settings = settings;
         initComponents();
+        applyStyles();
+        populateValues();
 
         if (Desktop.isDesktopSupported()) {
             desktop = Desktop.getDesktop();
@@ -68,9 +72,6 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         } else {
             desktop = null;
         }
-
-        applyStyles();
-        populateValues();
 
         // Set the correct file filters
         FileFilter bibFilter = new FileNameExtensionFilter("BibTeX files (*.bib)", "bib");
@@ -99,25 +100,24 @@ public class FileSettingsPanel extends javax.swing.JPanel {
     }
 
     private void enableDesktopButtons() {
-        if (desktop.isSupported(Desktop.Action.BROWSE)) {
-            viewTargetButton.setEnabled(true);
+        if (desktop.isSupported(Desktop.Action.BROWSE) || desktop.isSupported(Desktop.Action.OPEN)) {
+            viewTargetButton.setEnabled(!targetTextField.getText().isEmpty());
+        } else {
+            viewTargetButton.setToolTipText("This action is not supported by your operating system");
+        }
+
+        if (desktop.isSupported(Desktop.Action.EDIT) || desktop.isSupported(Desktop.Action.OPEN)) {
+            editPubButton.setEnabled(!pubTextField.getText().isEmpty());
+        } else {
+            editPubButton.setToolTipText("This action is not supported by your operating system");
         }
 
         if (desktop.isSupported(Desktop.Action.EDIT)) {
-            editPubButton.setEnabled(true);
-            editHeaderButton.setEnabled(true);
-            editFooterButton.setEnabled(true);
-        }
-
-        if (desktop.isSupported(Desktop.Action.OPEN)) {
-            viewTargetButton.setEnabled(true);
-            editPubButton.setEnabled(true);
-        }
-
-        for (JButton button : Arrays.asList(viewTargetButton, editPubButton, editHeaderButton, editFooterButton)) {
-            if (!button.isEnabled()) {
-                button.setToolTipText("This action is not supported by your operating system");
-            }
+            editHeaderButton.setEnabled(!headerTextField.getText().isEmpty());
+            editFooterButton.setEnabled(!footerTextField.getText().isEmpty());
+        } else {
+            editHeaderButton.setToolTipText("This action is not supported by your operating system");
+            editFooterButton.setToolTipText("This action is not supported by your operating system");
         }
     }
 
@@ -426,6 +426,11 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         } else {
             pubTextField.setBackground(UIManager.getColor("TextField.background"));
         }
+
+        // Update edit button enabled state?
+        if (desktop != null && (desktop.isSupported(Desktop.Action.EDIT) || desktop.isSupported(Desktop.Action.OPEN))) {
+            editPubButton.setEnabled(!pubTextField.getText().isEmpty());
+        }
     }
 
     private void targetTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
@@ -438,16 +443,31 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         } else {
             targetTextField.setBackground(UIManager.getColor("TextField.background"));
         }
+
+        // Update view button enabled state?
+        if (desktop != null && (desktop.isSupported(Desktop.Action.BROWSE) || desktop.isSupported(Desktop.Action.OPEN))) {
+            viewTargetButton.setEnabled(!targetTextField.getText().isEmpty());
+        }
     }
 
     private void headerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
         settings.setHeader(ResourceLocator.getFullPath(headerTextField.getText()));
+
+        // Update edit button enabled state?
+        if (desktop != null && desktop.isSupported(Desktop.Action.EDIT)) {
+            editHeaderButton.setEnabled(!headerTextField.getText().isEmpty());
+        }
     }
 
     private void footerTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
         settings.setFooter(ResourceLocator.getFullPath(footerTextField.getText()));
+
+        // Update edit button enabled state?
+        if (desktop != null && desktop.isSupported(Desktop.Action.EDIT)) {
+            editFooterButton.setEnabled(!footerTextField.getText().isEmpty());
+        }
     }
 
     private void targetBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_targetBrowseButtonActionPerformed
@@ -479,6 +499,11 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             return;
         }
 
+        if (!Files.exists(settings.getTarget())) {
+            JOptionPane.showMessageDialog(this, "This file does not exist yet.", "Publy - Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         try {
             if (desktop.isSupported(Desktop.Action.BROWSE)) {
                 desktop.browse(settings.getTarget().toUri());
@@ -504,6 +529,11 @@ public class FileSettingsPanel extends javax.swing.JPanel {
 
     private void edit(Path file, String name) {
         if (desktop == null) {
+            return;
+        }
+
+        if (!Files.exists(file)) {
+            JOptionPane.showMessageDialog(this, "This file could not be found.", "Publy - Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
