@@ -15,7 +15,13 @@
  */
 package publy.gui;
 
+import java.awt.Desktop;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -23,6 +29,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import publy.Console;
 import publy.data.settings.FileSettings;
 import publy.io.ResourceLocator;
 
@@ -33,6 +40,7 @@ import publy.io.ResourceLocator;
 public class FileSettingsPanel extends javax.swing.JPanel {
 
     private final FileSettings settings;
+    private final Desktop desktop;
 
     /**
      * Empty constructor, for use in the NetBeans GUI editor.
@@ -40,24 +48,34 @@ public class FileSettingsPanel extends javax.swing.JPanel {
     public FileSettingsPanel() {
         // Don't initialize settings, as NetBeans will error on ResourceLocator
         settings = null;
+        desktop = null;
         initComponents();
         applyStyles();
     }
 
     /**
      * Creates new form FileSettingsPanel
+     *
      * @param settings
      */
     public FileSettingsPanel(FileSettings settings) {
         this.settings = settings;
         initComponents();
+
+        if (Desktop.isDesktopSupported()) {
+            desktop = Desktop.getDesktop();
+            enableDesktopButtons();
+        } else {
+            desktop = null;
+        }
+
         applyStyles();
         populateValues();
-        
+
         // Set the correct file filters
         FileFilter bibFilter = new FileNameExtensionFilter("BibTeX files (*.bib)", "bib");
         FileFilter htmlFilter = new FileNameExtensionFilter("HTML files (*.htm;*.html)", "htm", "html");
-        
+
         pubFileChooser.setFileFilter(bibFilter);
         targetFileChooser.setFileFilter(htmlFilter);
         headerFileChooser.setFileFilter(htmlFilter);
@@ -78,6 +96,29 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         // Header and Footer
         updateField(headerTextField, headerFileChooser, settings.getHeader(), false);
         updateField(footerTextField, footerFileChooser, settings.getFooter(), false);
+    }
+
+    private void enableDesktopButtons() {
+        if (desktop.isSupported(Desktop.Action.BROWSE)) {
+            viewTargetButton.setEnabled(true);
+        }
+
+        if (desktop.isSupported(Desktop.Action.EDIT)) {
+            editPubButton.setEnabled(true);
+            editHeaderButton.setEnabled(true);
+            editFooterButton.setEnabled(true);
+        }
+
+        if (desktop.isSupported(Desktop.Action.OPEN)) {
+            viewTargetButton.setEnabled(true);
+            editPubButton.setEnabled(true);
+        }
+
+        for (JButton button : Arrays.asList(viewTargetButton, editPubButton, editHeaderButton, editFooterButton)) {
+            if (!button.isEnabled()) {
+                button.setToolTipText("This action is not supported by your operating system");
+            }
+        }
     }
 
     /**
@@ -114,7 +155,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         pubLabel = new javax.swing.JLabel();
         pubTextField = new javax.swing.JTextField();
         pubBrowseButton = new javax.swing.JButton();
-        jSeparator2 = new javax.swing.JSeparator();
+        pubSeparator = new javax.swing.JSeparator();
         targetSeparator = new javax.swing.JSeparator();
         targetLabel = new javax.swing.JLabel();
         targetTextField = new javax.swing.JTextField();
@@ -125,6 +166,10 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         footerTextField = new javax.swing.JTextField();
         footerBrowseButton = new javax.swing.JButton();
         headerBrowseButton = new javax.swing.JButton();
+        viewTargetButton = new javax.swing.JButton();
+        editPubButton = new javax.swing.JButton();
+        editHeaderButton = new javax.swing.JButton();
+        editFooterButton = new javax.swing.JButton();
 
         pubLabel.setText("List of publications");
 
@@ -148,7 +193,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             }
         });
 
-        jSeparator2.setPreferredSize(new java.awt.Dimension(0, 5));
+        pubSeparator.setPreferredSize(new java.awt.Dimension(0, 5));
 
         targetSeparator.setPreferredSize(new java.awt.Dimension(0, 5));
 
@@ -221,6 +266,38 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        viewTargetButton.setText("View");
+        viewTargetButton.setEnabled(false);
+        viewTargetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewTargetButtonActionPerformed(evt);
+            }
+        });
+
+        editPubButton.setText("Edit");
+        editPubButton.setEnabled(false);
+        editPubButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editPubButtonActionPerformed(evt);
+            }
+        });
+
+        editHeaderButton.setText("Edit");
+        editHeaderButton.setEnabled(false);
+        editHeaderButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editHeaderButtonActionPerformed(evt);
+            }
+        });
+
+        editFooterButton.setText("Edit");
+        editFooterButton.setEnabled(false);
+        editFooterButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editFooterButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -229,22 +306,10 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(pubLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(targetLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(targetSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(headerLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(headerSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(pubTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                                .addComponent(pubTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(pubBrowseButton))
                             .addGroup(layout.createSequentialGroup()
@@ -258,20 +323,45 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(headerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(headerBrowseButton)))))
+                                .addComponent(headerBrowseButton)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(viewTargetButton)
+                            .addComponent(editPubButton)
+                            .addComponent(editHeaderButton)
+                            .addComponent(editFooterButton)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(pubLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pubSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(targetLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(targetSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(headerLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(headerSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {editFooterButton, editHeaderButton, editPubButton, viewTargetButton});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pubLabel)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(pubLabel))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(pubSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pubTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pubBrowseButton))
+                    .addComponent(pubBrowseButton)
+                    .addComponent(editPubButton))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(targetLabel)
@@ -279,7 +369,8 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(targetTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(targetBrowseButton))
+                    .addComponent(targetBrowseButton)
+                    .addComponent(viewTargetButton))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(headerSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -287,11 +378,13 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(headerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(headerBrowseButton))
+                    .addComponent(headerBrowseButton)
+                    .addComponent(editHeaderButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(footerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(footerBrowseButton))
+                    .addComponent(footerBrowseButton)
+                    .addComponent(editFooterButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -338,7 +431,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
     private void targetTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
         settings.setTarget(ResourceLocator.getFullPath(targetTextField.getText()));
-        
+
         // Remove the error background?
         if (targetTextField.getText().isEmpty()) {
             targetTextField.setBackground(UIConstants.TEXTFIELD_ERROR_COLOR);
@@ -380,7 +473,55 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             headerTextField.setText(ResourceLocator.getRelativePath(headerFileChooser.getSelectedFile().toPath()));
         }
     }//GEN-LAST:event_headerBrowseButtonActionPerformed
+
+    private void viewTargetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewTargetButtonActionPerformed
+        if (desktop == null) {
+            return;
+        }
+
+        try {
+            if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                desktop.browse(settings.getTarget().toUri());
+            } else if (desktop.isSupported(Desktop.Action.OPEN)) {
+                desktop.open(settings.getTarget().toFile());
+            }
+        } catch (IOException ex) {
+            Console.except(ex, "The website could not be opened.");
+        }
+    }//GEN-LAST:event_viewTargetButtonActionPerformed
+
+    private void editPubButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editPubButtonActionPerformed
+        edit(settings.getPublications(), "publications list");
+    }//GEN-LAST:event_editPubButtonActionPerformed
+
+    private void editHeaderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editHeaderButtonActionPerformed
+        edit(settings.getHeader(), "header");
+    }//GEN-LAST:event_editHeaderButtonActionPerformed
+
+    private void editFooterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editFooterButtonActionPerformed
+        edit(settings.getFooter(), "footer");
+    }//GEN-LAST:event_editFooterButtonActionPerformed
+
+    private void edit(Path file, String name) {
+        if (desktop == null) {
+            return;
+        }
+
+        try {
+            if (desktop.isSupported(Desktop.Action.EDIT)) {
+                desktop.edit(file.toFile());
+            } else if (desktop.isSupported(Desktop.Action.OPEN)) {
+                desktop.open(file.toFile());
+            }
+        } catch (IOException ex) {
+            Console.except(ex, "The %s could not be opened.", name);
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton editFooterButton;
+    private javax.swing.JButton editHeaderButton;
+    private javax.swing.JButton editPubButton;
     private javax.swing.JButton footerBrowseButton;
     private javax.swing.JFileChooser footerFileChooser;
     private javax.swing.JTextField footerTextField;
@@ -389,15 +530,16 @@ public class FileSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel headerLabel;
     private javax.swing.JSeparator headerSeparator;
     private javax.swing.JTextField headerTextField;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JButton pubBrowseButton;
     private javax.swing.JFileChooser pubFileChooser;
     private javax.swing.JLabel pubLabel;
+    private javax.swing.JSeparator pubSeparator;
     private javax.swing.JTextField pubTextField;
     private javax.swing.JButton targetBrowseButton;
     private javax.swing.JFileChooser targetFileChooser;
     private javax.swing.JLabel targetLabel;
     private javax.swing.JSeparator targetSeparator;
     private javax.swing.JTextField targetTextField;
+    private javax.swing.JButton viewTargetButton;
     // End of variables declaration//GEN-END:variables
 }
