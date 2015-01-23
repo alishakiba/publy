@@ -18,7 +18,7 @@ package publy.gui;
 import java.awt.Cursor;
 import javax.swing.ImageIcon;
 import publy.Console;
-import publy.Publy;
+import publy.Runner;
 import publy.algo.PublicationListGenerator;
 import publy.data.settings.Settings;
 import publy.io.settings.SettingsWriter;
@@ -38,8 +38,6 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame(Settings settings) {
         this.settings = settings;
-
-        
 
         initComponents();
         setLocationRelativeTo(null); // Center
@@ -181,6 +179,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         // Change cursor back
         setCursor(Cursor.getDefaultCursor());
+        
+        // Open the output file in the browser
+        Runner.openFileInBrowser(settings.getFileSettings().getTarget());
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void saveNQuitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveNQuitButtonActionPerformed

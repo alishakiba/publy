@@ -15,7 +15,7 @@
  */
 package publy;
 
-import java.io.FileNotFoundException;
+import java.awt.Desktop;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -116,6 +116,7 @@ public class Runner {
             launchGUI(settings);
         } else {
             PublicationListGenerator.generatePublicationList(settings);
+            openFileInBrowser(settings.getFileSettings().getTarget());
         }
     }
 
@@ -198,6 +199,32 @@ public class Runner {
                 mf.setVisible(true);
             }
         });
+    }
+
+    /**
+     * Opens the specified file in the platform's default browser. If this is
+     * not supported, or something else goes wrong, the method fails quietly.
+     *
+     * @param target
+     */
+    public static void openFileInBrowser(Path target) {
+        if (Files.notExists(target)) {
+            return;
+        }
+
+        if (Desktop.isDesktopSupported()) {
+            Desktop desktop = Desktop.getDesktop();
+
+            try {
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    desktop.browse(target.toUri());
+                } else if (desktop.isSupported(Desktop.Action.OPEN)) {
+                    desktop.open(target.toFile());
+                }
+            } catch (IOException ex) {
+                // Silently ignore
+            }
+        }
     }
 
     private Runner() {
