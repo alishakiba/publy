@@ -30,10 +30,25 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <Component id="headerLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="headerSeparator" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="targetLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="targetSeparator" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="pubLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="pubSeparator" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="pubTextField" pref="159" max="32767" attributes="0"/>
+                              <Component id="pubTextField" pref="208" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="pubBrowseButton" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -53,31 +68,9 @@
                               <Component id="headerBrowseButton" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="viewTargetButton" linkSize="1" min="-2" max="-2" attributes="0"/>
-                          <Component id="editPubButton" linkSize="1" min="-2" max="-2" attributes="0"/>
-                          <Component id="editHeaderButton" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="editFooterButton" linkSize="1" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="pubLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pubSeparator" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="targetLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="targetSeparator" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="headerLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="headerSeparator" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -98,7 +91,6 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="pubTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="pubBrowseButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="editPubButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
@@ -109,7 +101,6 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="targetTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="targetBrowseButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="viewTargetButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
@@ -120,13 +111,11 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="headerTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="headerBrowseButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="editHeaderButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="footerTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="footerBrowseButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="editFooterButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -235,42 +224,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="headerBrowseButtonActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="viewTargetButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="View"/>
-        <Property name="enabled" type="boolean" value="false"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewTargetButtonActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="editPubButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Edit"/>
-        <Property name="enabled" type="boolean" value="false"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editPubButtonActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="editHeaderButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Edit"/>
-        <Property name="enabled" type="boolean" value="false"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editHeaderButtonActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="editFooterButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Edit"/>
-        <Property name="enabled" type="boolean" value="false"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editFooterButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
