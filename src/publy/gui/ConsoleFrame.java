@@ -18,9 +18,8 @@ package publy.gui;
 import java.awt.Cursor;
 import java.io.IOException;
 import javax.swing.JOptionPane;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 import publy.Console;
+import publy.Runner;
 import publy.algo.PublicationListGenerator;
 import publy.data.settings.Settings;
 import publy.io.settings.SettingsReaderCurrent;
@@ -137,6 +136,9 @@ public class ConsoleFrame extends javax.swing.JFrame {
         
         // Change cursor back
         setCursor(Cursor.getDefaultCursor());
+        
+        // Open the output file in the browser
+        Runner.openFileInBrowser(settings.getFileSettings().getTarget());
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void settingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsButtonActionPerformed
