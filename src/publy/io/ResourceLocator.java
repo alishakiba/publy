@@ -91,8 +91,7 @@ public class ResourceLocator {
 
     /**
      * Resolves the given path against the base directory. When the path is
-     * <code>null</code> or empty,
-     * <code>null</code> is returned instead.
+     * <code>null</code> or empty, <code>null</code> is returned instead.
      *
      * @param relativePath
      * @return
