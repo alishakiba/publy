@@ -24,6 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import publy.data.Pair;
+import publy.data.settings.FileSettings;
 import publy.data.settings.Settings;
 import publy.gui.UIConstants;
 import publy.io.settings.legacy.SettingsReaderV0_8;
@@ -36,7 +37,10 @@ public class SettingsImporter {
     public static Settings importSettings(Path settingsFile) throws IOException {
         Pair<Integer, Integer> version = detectVersion(settingsFile);
         SettingsReader reader = selectSettingsReader(version);
-        return reader.parseSettings(settingsFile);
+        Settings settings = reader.parseSettings(settingsFile);
+        correctFilePaths(settingsFile, settings.getFileSettings());
+        
+        return settings;
     }
 
     private static Pair<Integer, Integer> detectVersion(Path settingsFile) throws IOException {
@@ -82,5 +86,15 @@ public class SettingsImporter {
         } else {
             return new SettingsReaderCurrent();
         }
+    }
+
+    private static void correctFilePaths(Path settingsFile, FileSettings fileSettings) {
+        fileSettings.setPublications(settingsFile.getParent().resolveSibling(fileSettings.getPublications()).normalize());
+        fileSettings.setTarget(settingsFile.getParent().resolveSibling(fileSettings.getTarget()).normalize());
+        fileSettings.setHeader(settingsFile.getParent().resolveSibling(fileSettings.getHeader()).normalize());
+        fileSettings.setFooter(settingsFile.getParent().resolveSibling(fileSettings.getFooter()).normalize());
+    }
+
+    private SettingsImporter() {
     }
 }

@@ -17,6 +17,7 @@ package publy.io.settings.legacy;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -188,16 +189,16 @@ public class SettingsReaderV0_8 extends DefaultHandler implements SettingsReader
                 break;
             // File settings
             case "publications":
-                settings.getFileSettings().setPublications(ResourceLocator.getFullPath(text));
+                settings.getFileSettings().setPublications(Paths.get(text));
                 break;
             case "target":
-                settings.getFileSettings().setTarget(ResourceLocator.getFullPath(text));
+                settings.getFileSettings().setTarget(Paths.get(text));
                 break;
             case "header":
-                settings.getFileSettings().setHeader(ResourceLocator.getFullPath(text));
+                settings.getFileSettings().setHeader(Paths.get(text));
                 break;
             case "footer":
-                settings.getFileSettings().setFooter(ResourceLocator.getFullPath(text));
+                settings.getFileSettings().setFooter(Paths.get(text));
                 break;
             default:
                 Console.warn(Console.WarningType.OTHER, "Unrecognized tag in File settings: \"%s\".", qName);
