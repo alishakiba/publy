@@ -217,9 +217,9 @@ public class Runner {
 
             try {
                 if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                    desktop.browse(target.toUri());
+                    desktop.browse(target.normalize().toUri());
                 } else if (desktop.isSupported(Desktop.Action.OPEN)) {
-                    desktop.open(target.toFile());
+                    desktop.open(target.normalize().toFile());
                 }
             } catch (IOException ex) {
                 // Silently ignore
