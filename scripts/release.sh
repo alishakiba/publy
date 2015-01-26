@@ -67,7 +67,7 @@ echo "done."
 
 # Commit these changes
 echo -n "Committing changes... "
-hg commit -m "Updated release zip."
+hg commit -A -m "Updated release zip."
 
 
 # Tag the current revision with the release number
