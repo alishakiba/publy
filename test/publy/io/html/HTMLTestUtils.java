@@ -24,8 +24,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import javax.swing.JTextPane;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import publy.Console;
 import publy.data.PublicationStatus;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.Type;
@@ -92,6 +94,9 @@ public class HTMLTestUtils {
         output = new StringWriter();
         buffer = new BufferedWriter(output);
         testInstance = new HTMLBibItemWriter(buffer, null, bibtexSettings);
+        
+        // Prevent errors from popping up the Console
+        Console.setOutputTarget(new JTextPane());
     }
 
     public static Settings getBibtexSettings() {
