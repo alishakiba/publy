@@ -38,10 +38,10 @@ public class CategorySettings {
     /**
      * Gets all available categories.
      *
-     * @return an unmodifiable view of the list of all categories
+     * @return the list of all categories
      */
     public List<OutputCategory> getAllCategories() {
-        return Collections.unmodifiableList(allCategories);
+        return allCategories;
     }
 
     /**
@@ -73,17 +73,17 @@ public class CategorySettings {
      * @param category the category to remove
      */
     public void removeCategory(OutputCategory category) {
-        allCategories.remove(category);
         activeCategories.remove(category);
+        allCategories.remove(category);
     }
 
     /**
      * Gets all active categories.
      *
-     * @return an unmodifiable view of the list of active categories
+     * @return the list of active categories
      */
     public List<OutputCategory> getActiveCategories() {
-        return Collections.unmodifiableList(activeCategories);
+        return activeCategories;
     }
 
     /**
