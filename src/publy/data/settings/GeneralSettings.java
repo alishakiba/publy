@@ -54,7 +54,7 @@ public class GeneralSettings {
     private boolean reverseNumbering = false;
 
     public List<String> getMyNames() {
-        return Collections.unmodifiableList(myNames);
+        return myNames;
     }
 
     public void setMyNames(List<String> myNames) {
