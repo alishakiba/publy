@@ -24,7 +24,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import publy.Console;
-import publy.algo.PublicationPostProcessor;
 import publy.data.Pair;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
@@ -219,7 +218,7 @@ public class BibTeXParser {
     }
 
     private static void parseTag(String tag, Map<String, String> abbreviations, Map<String, Author> authors) {
-        String type = tag.substring(1, tag.indexOf(' ', 2)).trim().toLowerCase();
+        String type = tag.substring(1, Math.min(tag.indexOf(' ', 2), tag.indexOf('>'))).trim().toLowerCase();
 
         switch (type) {
             case "author":
@@ -228,8 +227,88 @@ public class BibTeXParser {
             case "abbr":
                 parseAbbreviation(tag, abbreviations);
                 break;
+            // Ignore valid HTML tags
+            case "a":
+            case "acronym":
+            case "address":
+            case "area":
+            case "b":
+            case "base":
+            case "bdo":
+            case "big":
+            case "blockquote":
+            case "body":
+            case "br":
+            case "button":
+            case "caption":
+            case "cite":
+            case "code":
+            case "col":
+            case "colgroup":
+            case "dd":
+            case "del":
+            case "dfn":
+            case "div":
+            case "dl":
+            case "DOCTYPE":
+            case "dt":
+            case "em":
+            case "fieldset":
+            case "form":
+            case "h1":
+            case "h2":
+            case "h3":
+            case "h4":
+            case "h5":
+            case "h6":
+            case "head":
+            case "html":
+            case "hr":
+            case "i":
+            case "img":
+            case "input":
+            case "ins":
+            case "kbd":
+            case "label":
+            case "legend":
+            case "li":
+            case "link":
+            case "map":
+            case "meta":
+            case "noscript":
+            case "object":
+            case "ol":
+            case "optgroup":
+            case "option":
+            case "p":
+            case "param":
+            case "pre":
+            case "q":
+            case "samp":
+            case "script":
+            case "select":
+            case "small":
+            case "span":
+            case "strong":
+            case "style":
+            case "sub":
+            case "sup":
+            case "table":
+            case "tbody":
+            case "td":
+            case "textarea":
+            case "tfoot":
+            case "th":
+            case "thead":
+            case "title":
+            case "tr":
+            case "tt":
+            case "ul":
+            case "var":
+                Console.warn(Console.WarningType.OTHER, "Ignored HTML tag \"%s\" out of publication context.", type);
+                break;
             default:
-                Console.error("Unrecognized tag type \"%s\" at line \"%s\".", type, tag);
+                Console.error("Unrecognized tag \"%s\" at line \"%s\".", type, tag);
                 break;
         }
     }
