@@ -55,8 +55,8 @@ public enum Type {
                 return MISC;
             case "online":
                 return ONLINE;
-            case "patent":
-                return PATENT;
+            //case "patent": // TODO! But for now, let's just return MISC so we at least print something.
+            //    return PATENT;
             case "proceedings":
                 return PROCEEDINGS;
             case "inproceedings":
