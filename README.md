@@ -24,8 +24,16 @@ Publy turns a BibTeX file with a list of your publications into a professional w
 
 ![screenshot](http://i.imgur.com/1iZ6c2s.png)
 
+## Getting the most out of Publy
+
+* Set up custom categories and filters.
+* Play with the different options to find a format that you like.
+* Add [author tags](https://bitbucket.org/Mangara/publy/wiki/Publication%20list%20format#markdown-header-author-tags) for frequent co-authors.
+* Add [abbreviation tags](https://bitbucket.org/Mangara/publy/wiki/Publication%20list%20format#markdown-header-abbreviation-tags) for frequent phrases and publication venues.
+* Add [additional information](https://bitbucket.org/Mangara/publy/wiki/Publication%20list%20format#markdown-header-new-fields) to each publication, such as an abstract, DOI, arXiv identifier, or other relevant links.
+* Edit the default CSS style to match the look of your homepage.
+
 ## Researchers using Publy
 
  * [Sander Verdonschot](http://cg.scs.carleton.ca/~sander/publications.html)
  * [André van Renssen](http://cg.scs.carleton.ca/~andre/publications.html)
- 
