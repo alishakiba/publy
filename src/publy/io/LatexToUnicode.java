@@ -28,18 +28,19 @@ import java.util.regex.Pattern;
 public class LatexToUnicode {
 
     /**
-     * A generic LaTeX command: 
-     * A backslash - \\\\ 
-     * One or more non-terminating characters - [^ \\\\{}]+ 
+     * A generic LaTeX command:
+     * A backslash - \\\\
+     * One or more non-terminating characters - [^ \\\\{}]+
      * A closing character or argument - ($| |\\}|\\\\|\\{[^}]*\\})
      */
     private static final Pattern LATEX_COMMAND_1 = Pattern.compile("(\\\\[^ \\\\{}]+)($| |\\}|\\\\|\\{[^}]*\\})");
     /**
-     * Special syntax for LaTeX commands that operate on a single character: * A
-     * backslash - \\\\ * One symbol among the following: ', `, ^, ", ~, ., = -
-     * (['`\\^\"~=.]) * A one-character argument - (.)
+     * Special syntax for LaTeX commands that operate on a single character:
+     * A backslash - \\\\
+     * One symbol among the following: ', `, ^, ", ~, ., = - (['`\\^\"~=.])
+     * A one-character argument - (\\\\i ?|\\\\j ?|.)
      */
-    private static final Pattern LATEX_COMMAND_2 = Pattern.compile("\\\\(['`\\^\"~=.])(.)");
+    private static final Pattern LATEX_COMMAND_2 = Pattern.compile("\\\\(['`\\^\"~=.])(\\\\i ?|\\\\j ?|.)");
     private static final Map<String, Character> LATEX_TO_UNICODE = populateSpecialCharacters();
 
     private LatexToUnicode() {
@@ -123,8 +124,10 @@ public class LatexToUnicode {
     }
 
     private static String convertNonMathToUnicode(String s) {
-        String result = replaceCommands(s, LATEX_COMMAND_1);
-        return replaceCommands(result, LATEX_COMMAND_2);
+        // Processing 2 first, because otherwise \\'\\i will be processed as
+        // separate commands, instead of a single one.
+        String result = replaceCommands(s, LATEX_COMMAND_2);
+        return replaceCommands(result, LATEX_COMMAND_1);
     }
 
     private static String replaceCommands(String input, Pattern commandPattern) {
@@ -155,7 +158,11 @@ public class LatexToUnicode {
                     }
                 }
             } else if (commandPattern == LATEX_COMMAND_2) {
-                command = '\\' + m.group(1) + '{' + m.group(2) + '}';
+                if (m.group(2).length() > 1) {
+                    command = '\\' + m.group(1) + '{' + m.group(2).trim() + '}';
+                } else {
+                    command = '\\' + m.group(1) + '{' + m.group(2) + '}';
+                }
             } else {
                 throw new AssertionError("Unexpected command pattern: " + commandPattern);
             }
@@ -247,7 +254,9 @@ public class LatexToUnicode {
         characters.put("\\.{z}", '\u017C');
         characters.put("\\.{o}", '\u022F');
         characters.put("\\.{i}", 'i');
+        characters.put("\\.{j}", 'j');
         characters.put("\\.{\\i}", 'i');
+        characters.put("\\.{\\j}", 'j');
         //"\\;":"U+2009-0200A-0200A",
         characters.put("\\=", '\u0304');
         characters.put("\\={A}", '\u0100');
@@ -540,6 +549,7 @@ public class LatexToUnicode {
         characters.put("\\^{\\i}", '\u00EE');
         characters.put("\\^{i}", '\u00EE');
         characters.put("\\^{\\j}", '\u0135');
+        characters.put("\\^{j}", '\u0135');
         characters.put("\\^{a}", '\u00E2');
         characters.put("\\^{c}", '\u0109');
         characters.put("\\^{e}", '\u00EA');

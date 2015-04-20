@@ -71,6 +71,20 @@ public class LatexToUnicodeTest {
                 "Testìtestítestîtestïtestitest");
         expected.put("Test\\`{\\i}test\\'{\\i}test\\^{\\i}test\\\"{\\i}test\\~{\\i}test\\={\\i}test\\.{\\i}test",
                 "Testìtestítestîtestïtest\u0129test\u012Btestitest");
+        expected.put("Test{\\`\\i}test{\\'\\i}test{\\^\\i}test{\\\"\\i}test{\\~\\i}test{\\=\\i}test{\\.\\i}test",
+                "Test{ì}test{í}test{î}test{ï}test{\u0129}test{\u012B}test{i}test");
+        expected.put("Test\\`\\i test\\'\\i test\\^\\i test\\\"\\i test\\~\\i test\\=\\i test\\.\\i test",
+                "Testìtestítestîtestïtest\u0129test\u012Btestitest");
+        expected.put("Test\\^jtest\\.jtest",
+                "Testĵtestjtest");
+        expected.put("Test\\^{j}test\\.{j}test",
+                "Testĵtestjtest");
+        expected.put("Test\\^{\\j}test\\.{\\j}test",
+                "Testĵtestjtest");
+        expected.put("Test{\\^\\j}test{\\.\\j}test",
+                "Test{ĵ}test{j}test");
+        expected.put("Test\\^\\j test\\.\\j test",
+                "Testĵtestjtest");
 
         // Don't touch things in math-mode
         expected.put("$\\'{o}$", "$\\'{o}$");
@@ -90,6 +104,7 @@ public class LatexToUnicodeTest {
                      "<span class=\"author\">A. L{ó}pez-Ortiz</span>, <span class=\"author\">P. Morin</span>, and <span class=\"author\">J. Munro</span>");
         expected.put("Discrete {\\&} Computational Geometry", "Discrete {&} Computational Geometry");
         expected.put("Georgy Theodosiyovych Vorono\\\"i", "Georgy Theodosiyovych Voronoï");
+        expected.put("K. Dou\\\"\\i eb", "K. Douïeb");
         
         // From http://www.tex.ac.uk/ctan/biblio/bibtex/utils/bib2xhtml/example.bib
         expected.put("Albert-L\\'{a}szl\\'{o} Barab\\'{a}si", "Albert-László Barabási");
@@ -106,7 +121,7 @@ public class LatexToUnicodeTest {
             String expectedResult = expected.get(input);
             String result = LatexToUnicode.convertToUnicode(input);
 
-            assertEquals(expectedResult, result);
+            assertEquals(input, expectedResult, result);
         }
     }
 }
