@@ -20,9 +20,12 @@ package publy.data.bibitem;
  */
 public enum Type {
 
+    // Actual entry types
     ARTICLE, BOOK, INBOOK, BOOKLET, INCOLLECTION, MANUAL, MISC,
     ONLINE, PATENT, PROCEEDINGS, INPROCEEDINGS, REPORT, THESIS,
-    UNPUBLISHED;
+    UNPUBLISHED,
+    // Types that appear in the bibtex file, but do not correspond to entries
+    COMMENT, PREAMBLE, STRING;
 
     @Override
     public String toString() {
@@ -30,8 +33,8 @@ public enum Type {
     }
 
     /**
-     * Finds the publication type that most closely corresponds to the given BibTeX (or
-     * BibLaTeX) type.
+     * Finds the publication type that most closely corresponds to the given
+     * BibTeX (or BibLaTeX) type.
      *
      * @param type the BibTeX publication type, for example 'article'
      * @return the corresponding Publy publication type
@@ -67,6 +70,13 @@ public enum Type {
                 return THESIS;
             case "unpublished":
                 return UNPUBLISHED;
+
+            case "comment":
+                return COMMENT;
+            case "preamble":
+                return PREAMBLE;
+            case "string":
+                return STRING;
 
             // Aliases
             case "mvbook":
