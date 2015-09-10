@@ -30,6 +30,7 @@ import publy.data.bibitem.BibItem;
 import publy.data.bibitem.FieldData;
 import publy.data.bibitem.Type;
 import publy.data.category.OutputCategory;
+import publy.data.settings.GeneralSettings;
 import publy.data.settings.Settings;
 
 /**
@@ -262,19 +263,54 @@ public class PublicationPostProcessor {
     }
 
     /**
-     * Groups the publications into the categories defined in the settings.
+     * Groups the publications into the sections defined in the settings.
      * <p>
      * Each paper is tested against the conditions of each category (in the
      * order they appear in), and added to the section corresponding to the
      * first category that it matches. If there are papers that do not match any
      * category, a warning message is shown.
+     * <p>
+     * If grouping by year is desired, the categories are split further by year
+     * or the years are split by category, depending on preferences.
      *
      * @param settings the configuration settings to use
      * @param items the publications to process
      * @return the sections containing all matched publications
      */
     private static List<Section> categorizePapers(Settings settings, List<BibItem> items) {
-        // Create the list of empty categories
+        // Create a virtual section with all papers.
+        Section master = new Section("Master", null);
+        master.getItems().addAll(items);
+
+        if (settings.getGeneralSettings().getGrouping() == GeneralSettings.Grouping.NO_GROUPING) {
+            groupByCategory(settings, master);
+        } else if (settings.getGeneralSettings().getGrouping() == GeneralSettings.Grouping.GROUP_BY_YEAR) {
+            if (settings.getGeneralSettings().isGroupWithinCategories()) {
+                groupByCategory(settings, master);
+
+                for (Section category : master.getSubsections()) {
+                    groupByYear(category);
+                }
+            } else {
+                groupByYear(master);
+
+                for (Section year : master.getSubsections()) {
+                    groupByCategory(settings, year);
+                }
+            }
+        }
+
+        return master.getSubsections();
+    }
+
+    /**
+     * Splits the given section into sub-sections by category.
+     *
+     * @param settings the configuration settings to use
+     * @param section the section to split
+     */
+    private static void groupByCategory(Settings settings, Section section) {
+        // Create an empty section for each category
         Map<OutputCategory, Section> sections = new LinkedHashMap<>();
 
         for (OutputCategory c : settings.getCategorySettings().getActiveCategories()) {
@@ -282,10 +318,7 @@ public class PublicationPostProcessor {
         }
 
         // Assign each paper to the correct category
-        // Make a copy so the categories can remove items without removing them from the main list
-        List<BibItem> tempItems = new ArrayList<>(items);
-
-        for (ListIterator<BibItem> it = items.listIterator(); it.hasNext();) {
+        for (ListIterator<BibItem> it = section.getItems().listIterator(); it.hasNext();) {
             BibItem item = it.next();
 
             for (OutputCategory c : settings.getCategorySettings().getActiveCategories()) {
@@ -298,28 +331,82 @@ public class PublicationPostProcessor {
         }
 
         // Warn for remaining items
-        if (!tempItems.isEmpty()) {
+        if (!section.getItems().isEmpty()) {
             String ids = "";
 
-            for (BibItem item : tempItems) {
+            for (BibItem item : section.getItems()) {
                 ids += "\"" + item.getId() + "\", ";
             }
 
             ids = ids.substring(0, ids.length() - 2); // Cut off the last ", "
 
-            Console.warn(Console.WarningType.ITEM_DOES_NOT_FIT_ANY_CATEGORY, "%d %s did not fit any category:%n%s", tempItems.size(), (tempItems.size() == 1 ? "entry" : "entries"), ids);
+            Console.warn(Console.WarningType.ITEM_DOES_NOT_FIT_ANY_CATEGORY, "%d %s did not fit any category:%n%s", section.getItems().size(), (section.getItems().size() == 1 ? "entry" : "entries"), ids);
         }
 
-        // Add all non-empty sections to the output list
+        // Add all non-empty sections as subsections
         List<Section> result = new ArrayList<>(sections.size());
 
-        for (Section section : sections.values()) {
-            if (!section.getItems().isEmpty()) {
-                result.add(section);
+        for (Section s : sections.values()) {
+            if (!s.getItems().isEmpty()) {
+                result.add(s);
             }
         }
 
-        return result;
+        section.setSubsections(result);
+    }
+
+    /**
+     * Splits the given section into sub-sections by year of publication.
+     *
+     * @param settings the configuration settings to use
+     * @param section the section to split
+     */
+    private static void groupByYear(Section section) {
+        Map<Integer, Section> sections = new HashMap<>();
+
+        // Assign each paper to the correct section, creating one if it does not yet exist
+        for (ListIterator<BibItem> it = section.getItems().listIterator(); it.hasNext();) {
+            BibItem item = it.next();
+
+            try {
+                Integer year = Integer.parseInt(item.get("year"));
+                Section yearSection = sections.get(year);
+
+                if (yearSection == null) {
+                    yearSection = new Section(year.toString(), year.toString());
+                }
+
+                yearSection.addItem(item);
+                it.remove();
+            } catch (NumberFormatException nfe) {
+                // Either the publication has no year set, or it is not a valid integer
+                // Either way, we just leave it in the super-section
+            }
+        }
+
+        // Warn for remaining items
+        if (!section.getItems().isEmpty()) {
+            String ids = "";
+
+            for (BibItem item : section.getItems()) {
+                ids += "\"" + item.getId() + "\", ";
+            }
+
+            ids = ids.substring(0, ids.length() - 2); // Cut off the last ", "
+
+            Console.warn(Console.WarningType.ITEM_DOES_NOT_FIT_ANY_CATEGORY, "%d %s does not have a valid publication year:%n%s", section.getItems().size(), (section.getItems().size() == 1 ? "entry" : "entries"), ids);
+        }
+
+        // Add all non-empty sections as subsections
+        List<Section> result = new ArrayList<>(sections.size());
+
+        for (Section s : sections.values()) {
+            if (!s.getItems().isEmpty()) {
+                result.add(s);
+            }
+        }
+
+        section.setSubsections(result);
     }
 
     /**
