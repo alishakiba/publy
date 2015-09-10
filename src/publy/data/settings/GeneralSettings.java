@@ -17,7 +17,6 @@ package publy.data.settings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,6 +39,13 @@ public class GeneralSettings {
 
         FULL, INITIAL, NONE;
     }
+
+    /**
+     * Options for grouping of publications.
+     */
+    public enum Grouping {
+        NO_GROUPING, GROUP_BY_YEAR;
+    }
     // Identification
     private final List<String> myNames = new ArrayList<>(Arrays.asList("me"));
     // Author info
@@ -52,6 +58,9 @@ public class GeneralSettings {
     // Numbering
     private Numbering numbering = Numbering.NO_NUMBERS;
     private boolean reverseNumbering = false;
+    // Grouping
+    private Grouping grouping = Grouping.NO_GROUPING;
+    private boolean groupWithinCategories = true;
 
     public List<String> getMyNames() {
         return myNames;
@@ -116,5 +125,21 @@ public class GeneralSettings {
 
     public void setReverseNumbering(boolean reverseNumbering) {
         this.reverseNumbering = reverseNumbering;
+    }
+
+    public Grouping getGrouping() {
+        return grouping;
+    }
+
+    public void setGrouping(Grouping grouping) {
+        this.grouping = grouping;
+    }
+
+    public boolean isGroupWithinCategories() {
+        return groupWithinCategories;
+    }
+
+    public void setGroupWithinCategories(boolean groupWithinCategories) {
+        this.groupWithinCategories = groupWithinCategories;
     }
 }
