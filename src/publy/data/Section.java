@@ -34,7 +34,7 @@ public class Section {
     // Bibitems in this section
     private final List<BibItem> items;
     // Sub-sections in this section
-    private final List<Section> subsections;
+    private List<Section> subsections;
     // Fields that should be ignored for publications in this section
     private List<String> ignoredFields;
 
@@ -171,6 +171,15 @@ public class Section {
      */
     public List<Section> getSubsections() {
         return subsections;
+    }
+
+    /**
+     * Sets the sub-sections of this section.
+     *
+     * @param subsections the new sub-sections
+     */
+    public void setSubsections(List<Section> subsections) {
+        this.subsections = subsections;
     }
 
     /**
