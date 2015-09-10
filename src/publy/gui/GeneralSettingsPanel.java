@@ -52,7 +52,7 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
     }
     
     private void applyStyles() {
-        UIStyles.applyHeaderStyle(yourNameLabel, authorLabel, numLabel, titleFirstLabel);
+        UIStyles.applyHeaderStyle(yourNameLabel, authorLabel, numLabel, titleFirstLabel, groupingLabel);
     }
 
     private void populateValues() {
@@ -109,6 +109,27 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         reverseNumberingCheckBox.setSelected(settings.isReverseNumbering());
         reverseNumberingCheckBox.setEnabled(settings.getNumbering() != GeneralSettings.Numbering.NO_NUMBERS);
+
+        // Grouping
+        switch (settings.getGrouping()) {
+            case NO_GROUPING:
+                noGroupingRadioButton.setSelected(true);
+                break;
+            case GROUP_BY_YEAR:
+                byYearRadioButton.setSelected(true);
+                break;
+            default:
+                throw new AssertionError("Unknown grouping: " + settings.getGrouping());
+        }
+
+        if (settings.isGroupWithinCategories()) {
+            groupWithinCategoriesRadioButton.setSelected(true);
+        } else {
+            categorizeWithinGroupsRadioButton.setSelected(true);
+        }
+
+        groupWithinCategoriesRadioButton.setEnabled(settings.getGrouping() != GeneralSettings.Grouping.NO_GROUPING);
+        categorizeWithinGroupsRadioButton.setEnabled(settings.getGrouping() != GeneralSettings.Grouping.NO_GROUPING);
     }
 
     /**
@@ -122,6 +143,8 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
 
         numGroup = new javax.swing.ButtonGroup();
         firstNameGroup = new javax.swing.ButtonGroup();
+        groupingGroup = new javax.swing.ButtonGroup();
+        groupCategoriesGroup = new javax.swing.ButtonGroup();
         numNoneRadioButton = new javax.swing.JRadioButton();
         numGlobalRadioButton = new javax.swing.JRadioButton();
         numLocalRadioButton = new javax.swing.JRadioButton();
@@ -143,6 +166,12 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         yourNameSeparator = new javax.swing.JSeparator();
         yourNameTextField = new javax.swing.JTextField();
         newlinesCheckbox = new javax.swing.JCheckBox();
+        groupingLabel = new javax.swing.JLabel();
+        groupingSeparator = new javax.swing.JSeparator();
+        noGroupingRadioButton = new javax.swing.JRadioButton();
+        byYearRadioButton = new javax.swing.JRadioButton();
+        groupWithinCategoriesRadioButton = new javax.swing.JRadioButton();
+        categorizeWithinGroupsRadioButton = new javax.swing.JRadioButton();
 
         numGroup.add(numNoneRadioButton);
         numNoneRadioButton.setText("None");
@@ -254,6 +283,40 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        groupingLabel.setText("Grouping");
+
+        groupingGroup.add(noGroupingRadioButton);
+        noGroupingRadioButton.setText("No grouping");
+        noGroupingRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                noGroupingRadioButtonActionPerformed(evt);
+            }
+        });
+
+        groupingGroup.add(byYearRadioButton);
+        byYearRadioButton.setText("By year of publication");
+        byYearRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                byYearRadioButtonActionPerformed(evt);
+            }
+        });
+
+        groupCategoriesGroup.add(groupWithinCategoriesRadioButton);
+        groupWithinCategoriesRadioButton.setText("Group within categories");
+        groupWithinCategoriesRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                groupWithinCategoriesRadioButtonActionPerformed(evt);
+            }
+        });
+
+        groupCategoriesGroup.add(categorizeWithinGroupsRadioButton);
+        categorizeWithinGroupsRadioButton.setText("Categorize within groups");
+        categorizeWithinGroupsRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                categorizeWithinGroupsRadioButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -294,29 +357,50 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                                 .addComponent(yourNameTextField)))
                         .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(titleFirstCheckBox)
-                    .addComponent(newlinesCheckbox))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(numLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(numSeparator))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(numNoneRadioButton)
-                                .addGap(18, 18, 18)
-                                .addComponent(numLocalRadioButton)
-                                .addGap(18, 18, 18)
-                                .addComponent(numGlobalRadioButton))
-                            .addComponent(reverseNumberingCheckBox))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(numLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(numSeparator))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(numNoneRadioButton)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(numLocalRadioButton)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(numGlobalRadioButton))
+                                    .addComponent(reverseNumberingCheckBox))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(titleFirstCheckBox)
+                            .addComponent(newlinesCheckbox))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(groupingLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(groupingSeparator))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(noGroupingRadioButton)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(byYearRadioButton))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(groupWithinCategoriesRadioButton)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(categorizeWithinGroupsRadioButton)))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -361,6 +445,18 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
                     .addComponent(numGlobalRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(reverseNumberingCheckBox)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(groupingLabel)
+                    .addComponent(groupingSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(noGroupingRadioButton)
+                    .addComponent(byYearRadioButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(groupWithinCategoriesRadioButton)
+                    .addComponent(categorizeWithinGroupsRadioButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -440,16 +536,44 @@ public class GeneralSettingsPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_newlinesCheckboxItemStateChanged
 
+    private void noGroupingRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noGroupingRadioButtonActionPerformed
+        settings.setGrouping(GeneralSettings.Grouping.NO_GROUPING);
+        groupWithinCategoriesRadioButton.setEnabled(false);
+        categorizeWithinGroupsRadioButton.setEnabled(false);
+    }//GEN-LAST:event_noGroupingRadioButtonActionPerformed
+
+    private void byYearRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_byYearRadioButtonActionPerformed
+        settings.setGrouping(GeneralSettings.Grouping.GROUP_BY_YEAR);
+        groupWithinCategoriesRadioButton.setEnabled(true);
+        categorizeWithinGroupsRadioButton.setEnabled(true);
+    }//GEN-LAST:event_byYearRadioButtonActionPerformed
+
+    private void groupWithinCategoriesRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_groupWithinCategoriesRadioButtonActionPerformed
+        settings.setGroupWithinCategories(true);
+    }//GEN-LAST:event_groupWithinCategoriesRadioButtonActionPerformed
+
+    private void categorizeWithinGroupsRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categorizeWithinGroupsRadioButtonActionPerformed
+        settings.setGroupWithinCategories(false);
+    }//GEN-LAST:event_categorizeWithinGroupsRadioButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton abbrFirstNameRadioButton;
     private javax.swing.JLabel authorLabel;
     private javax.swing.JSeparator authorSeparator;
+    private javax.swing.JRadioButton byYearRadioButton;
+    private javax.swing.JRadioButton categorizeWithinGroupsRadioButton;
     private javax.swing.ButtonGroup firstNameGroup;
     private javax.swing.JLabel firstNameLabel;
     private javax.swing.JRadioButton fullFirstNameRadioButton;
+    private javax.swing.ButtonGroup groupCategoriesGroup;
+    private javax.swing.JRadioButton groupWithinCategoriesRadioButton;
+    private javax.swing.ButtonGroup groupingGroup;
+    private javax.swing.JLabel groupingLabel;
+    private javax.swing.JSeparator groupingSeparator;
     private javax.swing.JCheckBox listOnlyCoauthorsCheckBox;
     private javax.swing.JCheckBox newlinesCheckbox;
     private javax.swing.JRadioButton noFirstNameRadioButton;
+    private javax.swing.JRadioButton noGroupingRadioButton;
     private javax.swing.JRadioButton numGlobalRadioButton;
     private javax.swing.ButtonGroup numGroup;
     private javax.swing.JLabel numLabel;
