@@ -174,6 +174,8 @@ public class SettingsWriter {
         output(out, 4, "useNewLines", makeString(settings.isUseNewLines()));
         output(out, 4, "numbering", makeString(settings.getNumbering()));
         output(out, 4, "reverseNumbering", makeString(settings.isReverseNumbering()));
+        output(out, 4, "grouping", makeString(settings.getGrouping()));
+        output(out, 4, "groupWithinCategories", makeString(settings.isGroupWithinCategories()));
 
         out.write("  </generalSettings>");
         out.newLine();

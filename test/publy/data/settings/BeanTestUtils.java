@@ -121,6 +121,8 @@ public class BeanTestUtils {
             return new Pair<Object, Object>(GeneralSettings.FirstNameDisplay.INITIAL, GeneralSettings.FirstNameDisplay.FULL);
         } else if (field.getType().equals(GeneralSettings.Numbering.class)) {
             return new Pair<Object, Object>(GeneralSettings.Numbering.GLOBAL, GeneralSettings.Numbering.WITHIN_CATEGORIES);
+        } else if (field.getType().equals(GeneralSettings.Grouping.class)) {
+            return new Pair<Object, Object>(GeneralSettings.Grouping.NO_GROUPING, GeneralSettings.Grouping.GROUP_BY_YEAR);
         } else if (field.getType().equals(PublicationStatus.class)) {
             return new Pair<Object, Object>(PublicationStatus.ACCEPTED, PublicationStatus.ARXIV);
         } else {
