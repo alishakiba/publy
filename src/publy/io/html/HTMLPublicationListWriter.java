@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import publy.Console;
+import publy.data.Section;
 import publy.data.bibitem.BibItem;
-import publy.data.category.OutputCategory;
 import publy.data.settings.GeneralSettings;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
@@ -59,16 +59,16 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     @Override
-    protected void writePublicationList(List<OutputCategory> categories, BufferedWriter out) throws IOException {
-        itemWriter = new HTMLBibItemWriter(out, categories, settings);
+    protected void writePublicationList(List<Section> sections, BufferedWriter out) throws IOException {
+        itemWriter = new HTMLBibItemWriter(out, sections, settings);
 
         // Initialize the count
         if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL) {
             if (settings.getGeneralSettings().isReverseNumbering()) {
                 count = 0;
 
-                for (OutputCategory c : categories) {
-                    count += c.getItems().size();
+                for (Section s : sections) {
+                    count += s.getItems().size();
                 }
             } else {
                 count = 1;
@@ -112,18 +112,18 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         // Navigation?
         if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP
                 || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM) {
-            writeNavigation(categories, out);
+            writeNavigation(sections, out);
         }
 
         out.newLine();
-        for (OutputCategory c : categories) {
-            writeCategory(c, categories, out);
+        for (Section s : sections) {
+            writeCategory(s, sections, out);
         }
 
         // Navigation?
         if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM
                 || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
-            writeNavigation(categories, out);
+            writeNavigation(sections, out);
         }
 
         // Credit line and last modified
@@ -215,28 +215,28 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
     }
 
-    private void writeCategory(OutputCategory c, List<OutputCategory> categories, BufferedWriter out) throws IOException {
+    private void writeCategory(Section section, List<Section> sections, BufferedWriter out) throws IOException {
         // Section start
-        out.write("    <div id=\"" + c.getShortName().toLowerCase() + "\" class=\"section\">");
+        out.write("    <div id=\"" + section.getShortName().toLowerCase() + "\" class=\"section\">");
         out.newLine();
 
         // Navigation?
         if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_TITLE
                 || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
-            writeNavigation(categories, c, out);
+            writeNavigation(sections, section, out);
         }
 
         // Section title
-        out.write("      <h2 class=\"section-title\">" + c.getName() + "</h2>");
+        out.write("      <h2 class=\"section-title\">" + section.getName() + "</h2>");
         out.newLine();
 
         // Navigation?
         if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.AFTER_SECTION_TITLE) {
-            writeNavigation(categories, c, out);
+            writeNavigation(sections, section, out);
         }
 
         // Note
-        String note = c.getHtmlNote();
+        String note = section.getHtmlNote();
 
         if (note != null && !note.isEmpty()) {
             out.write("      <p class=\"section-note\">");
@@ -253,7 +253,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             out.write("      <ol class=\"section-list\">");
             // Reset the count
             if (settings.getGeneralSettings().isReverseNumbering()) {
-                count = c.getItems().size();
+                count = section.getItems().size();
                 // There is limited browser support for the reversed attribute, so we'll add values manually if needed
             } else {
                 count = 0;
@@ -267,10 +267,10 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
         out.newLine();
 
-        itemWriter.setIgnoredFields(new HashSet<>(c.getIgnoredFields()));
+        itemWriter.setIgnoredFields(new HashSet<>(section.getIgnoredFields()));
 
         // The actual entries
-        for (BibItem item : c.getItems()) {
+        for (BibItem item : section.getItems()) {
             if (settings.getGeneralSettings().isReverseNumbering()) {
                 out.write("        <li id=\"" + item.getId() + "\" value=\"" + count + "\" class=\"bibentry " + item.getOriginalType() + "\">");
                 count--;
@@ -303,22 +303,22 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.newLine();
     }
 
-    private void writeNavigation(List<OutputCategory> categories, BufferedWriter out) throws IOException {
-        writeNavigation(categories, null, out);
+    private void writeNavigation(List<Section> sections, BufferedWriter out) throws IOException {
+        writeNavigation(sections, null, out);
     }
 
-    private void writeNavigation(List<OutputCategory> categories, OutputCategory current, BufferedWriter out) throws IOException {
+    private void writeNavigation(List<Section> sections, Section current, BufferedWriter out) throws IOException {
         out.newLine();
         out.write("      <p class=\"navigation\">");
         out.newLine();
 
-        for (int i = 0; i < categories.size(); i++) {
-            OutputCategory c = categories.get(i);
+        for (int i = 0; i < sections.size(); i++) {
+            Section s = sections.get(i);
 
-            if (c == current) {
-                out.write("        <span class=\"current\">" + c.getShortName() + "</span>");
+            if (s == current) {
+                out.write("        <span class=\"current\">" + s.getShortName() + "</span>");
             } else {
-                out.write("        <a href=\"#" + c.getShortName().toLowerCase() + "\">" + c.getShortName() + "</a>");
+                out.write("        <a href=\"#" + s.getShortName().toLowerCase() + "\">" + s.getShortName() + "</a>");
             }
 
             out.newLine();

@@ -25,9 +25,9 @@ import java.util.List;
 import publy.Console;
 import publy.data.PublicationStatus;
 import publy.data.Author;
+import publy.data.Section;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.Type;
-import publy.data.category.OutputCategory;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
 import publy.io.BibItemWriter;
@@ -41,12 +41,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private static final String indent = "          ";
     private final BibtexBibItemWriter bibtexWriter;
-    private final List<OutputCategory> categories;
+    private final List<Section> sections;
 
-    public HTMLBibItemWriter(BufferedWriter out, List<OutputCategory> categories, Settings settings) {
+    public HTMLBibItemWriter(BufferedWriter out, List<Section> sections, Settings settings) {
         super(out, settings);
         bibtexWriter = new BibtexBibItemWriter(out, settings);
-        this.categories = categories;
+        this.sections = sections;
     }
 
     @Override
@@ -563,7 +563,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 default:
                     throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized pubstate: \"" + get(item, "pubstate") + "\"");
             }
-            
+
             output("<span class=\"booktitle\">", venue, "</span>.", true);
         }
     }
@@ -903,15 +903,29 @@ public class HTMLBibItemWriter extends BibItemWriter {
      * @param id
      */
     private void checkIdExistance(String id, String attr, BibItem item) {
-        for (OutputCategory cat : categories) {
-            for (BibItem i : cat.getItems()) {
-                if (i.getId().equals(id)) {
-                    return;
-                }
+        for (Section section : sections) {
+            if (checkIdExists(id, section)) {
+                return;
             }
         }
 
         Console.warn(Console.WarningType.MISSING_REFERENCE, "Publication \"%s\" (linked in attribute \"%s\" of publication \"%s\") is not in the final list.", id, attr, item.getId());
+    }
+
+    private boolean checkIdExists(String id, Section section) {
+        for (BibItem i : section.getItems()) {
+            if (i.getId().equals(id)) {
+                return true;
+            }
+        }
+
+        for (Section subsection : section.getSubsections()) {
+            if (checkIdExists(id, subsection)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

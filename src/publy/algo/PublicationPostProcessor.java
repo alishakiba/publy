@@ -19,11 +19,13 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import publy.Console;
 import publy.data.Author;
+import publy.data.Section;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.FieldData;
 import publy.data.bibitem.Type;
@@ -65,18 +67,18 @@ public class PublicationPostProcessor {
      * @param items the publications to process
      * @return a list of categories that contain the post-processed publications
      */
-    public static List<OutputCategory> postProcess(Settings settings, List<BibItem> items) {
+    public static List<Section> postProcess(Settings settings, List<BibItem> items) {
         removeDuplicateIDs(items);
         processAliases(items);
         removeItemsWithMissingMandatoryFields(items);
         detectArxiv(items);
 
-        List<OutputCategory> categories = categorizePapers(settings, items);
+        List<Section> sections = categorizePapers(settings, items);
 
-        warnForMandatoryIgnoredFields(settings, categories);
+        warnForMandatoryIgnoredFields(settings, sections);
         warnIfIAmNotAuthor(settings, items);
 
-        return categories;
+        return sections;
     }
 
     /**
@@ -263,43 +265,35 @@ public class PublicationPostProcessor {
      * Groups the publications into the categories defined in the settings.
      * <p>
      * Each paper is tested against the conditions of each category (in the
-     * order they appear in), and added to the first category that it matches.
-     * If there are papers that do not match any category, a warning message is
-     * shown.
+     * order they appear in), and added to the section corresponding to the
+     * first category that it matches. If there are papers that do not match any
+     * category, a warning message is shown.
      *
      * @param settings the configuration settings to use
      * @param items the publications to process
-     * @return the categories containing all matched publications
+     * @return the sections containing all matched publications
      */
-    private static List<OutputCategory> categorizePapers(Settings settings, List<BibItem> items) {
+    private static List<Section> categorizePapers(Settings settings, List<BibItem> items) {
         // Create the list of empty categories
-        List<OutputCategory> categories = new ArrayList<>(settings.getCategorySettings().getActiveCategories().size());
+        Map<OutputCategory, Section> sections = new LinkedHashMap<>();
 
         for (OutputCategory c : settings.getCategorySettings().getActiveCategories()) {
-            try {
-                categories.add((OutputCategory) c.clone());
-            } catch (CloneNotSupportedException ex) {
-                // Should never happen
-                Console.except(ex, "Category \"%s\" could not be copied.", c.getShortName());
-            }
+            sections.put(c, new Section(c));
         }
 
         // Assign each paper to the correct category
         // Make a copy so the categories can remove items without removing them from the main list
         List<BibItem> tempItems = new ArrayList<>(items);
 
-        for (OutputCategory c : categories) {
-            c.populate(tempItems);
-        }
+        for (ListIterator<BibItem> it = items.listIterator(); it.hasNext();) {
+            BibItem item = it.next();
 
-        // Remove empty categories
-        ListIterator<OutputCategory> it = categories.listIterator();
-
-        while (it.hasNext()) {
-            OutputCategory c = it.next();
-
-            if (c.getItems().isEmpty()) {
-                it.remove();
+            for (OutputCategory c : settings.getCategorySettings().getActiveCategories()) {
+                if (c.fitsCategory(item)) {
+                    sections.get(c).addItem(item);
+                    it.remove();
+                    break;
+                }
             }
         }
 
@@ -316,22 +310,31 @@ public class PublicationPostProcessor {
             Console.warn(Console.WarningType.ITEM_DOES_NOT_FIT_ANY_CATEGORY, "%d %s did not fit any category:%n%s", tempItems.size(), (tempItems.size() == 1 ? "entry" : "entries"), ids);
         }
 
-        return categories;
+        // Add all non-empty sections to the output list
+        List<Section> result = new ArrayList<>(sections.size());
+
+        for (Section section : sections.values()) {
+            if (!section.getItems().isEmpty()) {
+                result.add(section);
+            }
+        }
+
+        return result;
     }
 
     /**
-     * Prints a warning message if a category ignores a mandatory field of one
-     * of its publications.
+     * Prints a warning message if a section ignores a mandatory field of one of
+     * its publications.
      *
      * @param settings the configuration settings to use
-     * @param categories the categories that contain the publications to process
+     * @param sections the sections that contain the publications to process
      */
-    private static void warnForMandatoryIgnoredFields(Settings settings, List<OutputCategory> categories) {
+    private static void warnForMandatoryIgnoredFields(Settings settings, List<Section> sections) {
         if (settings.getConsoleSettings().isShowWarnings() && settings.getConsoleSettings().isWarnMandatoryFieldIgnored()) {
-            for (OutputCategory c : categories) {
+            for (Section s : sections) {
                 Map<Type, List<String>> idsPerType = new EnumMap<>(Type.class);
 
-                for (BibItem item : c.getItems()) {
+                for (BibItem item : s.getItems()) {
                     if (!idsPerType.containsKey(item.getType())) {
                         idsPerType.put(item.getType(), new ArrayList<String>());
                     }
@@ -344,7 +347,7 @@ public class PublicationPostProcessor {
                         boolean allOptionsIgnored = true;
 
                         for (String mandatory : mandatoryFields.split(";")) {
-                            if (!c.getIgnoredFields().contains(mandatory)) {
+                            if (!s.getIgnoredFields().contains(mandatory)) {
                                 allOptionsIgnored = false;
                             }
                         }
@@ -352,7 +355,7 @@ public class PublicationPostProcessor {
                         if (allOptionsIgnored) {
                             Console.warn(Console.WarningType.MANDATORY_FIELD_IGNORED,
                                     "Category \"%s\" ignores field%s \"%s\", which %s mandatory for the following entr%s:%n%s.%nTh%s may not display properly.",
-                                    c.getShortName(), (mandatoryFields.contains(";") ? "s" : ""), mandatoryFields,
+                                    s.getShortName(), (mandatoryFields.contains(";") ? "s" : ""), mandatoryFields,
                                     (mandatoryFields.contains(";") ? "are" : "is"), (idsPerType.get(type).size() == 1 ? "y" : "ies"),
                                     idsPerType.get(type).toString(), (idsPerType.get(type).size() == 1 ? "is entry" : "ese entries"));
                         }
