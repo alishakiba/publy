@@ -19,8 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import publy.Console;
+import publy.data.Section;
 import publy.data.bibitem.BibItem;
-import publy.data.category.OutputCategory;
 import publy.data.settings.Settings;
 import publy.io.BibTeXParser;
 import publy.io.PublicationListWriter;
@@ -46,11 +46,11 @@ public class PublicationListGenerator {
             List<BibItem> items = parsePublications(settings);
 
             if (items != null) {
-                List<OutputCategory> categories = PublicationPostProcessor.postProcess(settings, items);
+                List<Section> sections = PublicationPostProcessor.postProcess(settings, items);
 
-                writeTextVersion(settings, categories);
-                writeBibtexVersion(settings, categories);
-                writeHtmlVersion(settings, categories);
+                writeTextVersion(settings, sections);
+                writeBibtexVersion(settings, sections);
+                writeHtmlVersion(settings, sections);
             }
 
             Console.log("Done.");
@@ -111,13 +111,13 @@ public class PublicationListGenerator {
      * Writes a text version of the publication list, if required.
      *
      * @param settings the configuration
-     * @param categories the publication categories
+     * @param sections the publication list sections
      */
-    private static void writeTextVersion(Settings settings, List<OutputCategory> categories) {
+    private static void writeTextVersion(Settings settings, List<Section> sections) {
         if (settings.getHtmlSettings().isGenerateTextVersion()) {
             try {
                 PublicationListWriter writer = new PlainPublicationListWriter(settings);
-                writer.writePublicationList(categories, settings.getFileSettings().getPlainTextTarget());
+                writer.writePublicationList(sections, settings.getFileSettings().getPlainTextTarget());
                 Console.log("Plain text publication list written.");
             } catch (Exception | AssertionError ex) {
                 Console.except(ex, "Exception while writing plain text publication list:");
@@ -129,13 +129,13 @@ public class PublicationListGenerator {
      * Writes a BibTeX version of the publication list, if required.
      *
      * @param settings the configuration
-     * @param categories the publication categories
+     * @param sections the publication list sections
      */
-    private static void writeBibtexVersion(Settings settings, List<OutputCategory> categories) {
+    private static void writeBibtexVersion(Settings settings, List<Section> sections) {
         if (settings.getHtmlSettings().isGenerateBibtexVersion()) {
             try {
                 PublicationListWriter writer = new BibtexPublicationListWriter(settings);
-                writer.writePublicationList(categories, settings.getFileSettings().getBibtexTarget());
+                writer.writePublicationList(sections, settings.getFileSettings().getBibtexTarget());
                 Console.log("BibTeX publication list written.");
             } catch (Exception | AssertionError ex) {
                 Console.except(ex, "Exception while writing BibTeX publication list:");
@@ -147,12 +147,12 @@ public class PublicationListGenerator {
      * Writes an HTML version of the publication list.
      *
      * @param settings the configuration
-     * @param categories the publication categories
+     * @param sections the publication list sections
      */
-    private static void writeHtmlVersion(Settings settings, List<OutputCategory> categories) {
+    private static void writeHtmlVersion(Settings settings, List<Section> sections) {
         try {
             PublicationListWriter writer = new HTMLPublicationListWriter(settings);
-            writer.writePublicationList(categories, settings.getFileSettings().getTarget());
+            writer.writePublicationList(sections, settings.getFileSettings().getTarget());
             Console.log("HTML publication list written.");
         } catch (Exception | AssertionError ex) {
             Console.except(ex, "Exception while writing HTML publication list:");

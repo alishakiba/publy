@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import publy.data.Section;
 import publy.data.bibitem.BibItem;
-import publy.data.category.OutputCategory;
 import publy.data.settings.GeneralSettings;
 import publy.data.settings.Settings;
 import publy.gui.UIConstants;
@@ -41,7 +41,7 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
     }
 
     @Override
-    protected void writePublicationList(List<OutputCategory> categories, BufferedWriter out) throws IOException {
+    protected void writePublicationList(List<Section> sections, BufferedWriter out) throws IOException {
         itemWriter = new BibtexBibItemWriter(out, settings);
 
         // Initialize the count
@@ -49,8 +49,8 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
             if (settings.getGeneralSettings().isReverseNumbering()) {
                 count = 0;
 
-                for (OutputCategory c : categories) {
-                    count += c.getItems().size();
+                for (Section s : sections) {
+                    count += s.getItems().size();
                 }
             } else {
                 count = 1;
@@ -58,8 +58,8 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
         }
 
         // Write the body
-        for (OutputCategory c : categories) {
-            writeCategory(c, out);
+        for (Section s : sections) {
+            writeCategory(s, out);
         }
 
         // Credit line and last modified
@@ -67,21 +67,21 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
         out.newLine();
     }
 
-    private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
+    private void writeCategory(Section section, BufferedWriter out) throws IOException {
         // Reset the count if necessary
         if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES) {
             if (settings.getGeneralSettings().isReverseNumbering()) {
-                count = c.getItems().size();
+                count = section.getItems().size();
             } else {
                 count = 1;
             }
         }
 
-        out.write("-- " + c.getName() + ".");
+        out.write("-- " + section.getName() + ".");
         out.newLine();
         out.newLine();
 
-        for (BibItem item : c.getItems()) {
+        for (BibItem item : section.getItems()) {
             // Write the appropriate number
             if (settings.getGeneralSettings().getNumbering() != GeneralSettings.Numbering.NO_NUMBERS) {
                 out.write("-- " + count + ".");

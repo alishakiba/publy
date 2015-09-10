@@ -17,7 +17,6 @@ package publy.data.category;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Objects;
 import publy.data.bibitem.BibItem;
 import publy.data.category.conditions.FieldCondition;
@@ -35,15 +34,13 @@ import publy.data.category.conditions.TypeCondition;
  * automatically assigned to that category. If a publication matches multiple
  * categories, it is assigned to the first in the list of categories.
  */
-public class OutputCategory implements Cloneable {
+public class OutputCategory {
 
     // Category properties
     private String shortName, name, htmlNote;
     // Conditions to categorize bibitems
     private TypeCondition typeCondition;
     private List<FieldCondition> fieldConditions;
-    // Bibitems in this category
-    private List<BibItem> items;
     // Fields that should be ignored for this category
     private List<String> ignoredFields;
 
@@ -65,7 +62,6 @@ public class OutputCategory implements Cloneable {
         this.typeCondition = typeCondition;
         fieldConditions = new ArrayList<>();
 
-        items = new ArrayList<>();
         ignoredFields = new ArrayList<>();
     }
 
@@ -196,15 +192,6 @@ public class OutputCategory implements Cloneable {
     }
 
     /**
-     * Gets the items that have been accepted into this category.
-     *
-     * @return the items
-     */
-    public List<BibItem> getItems() {
-        return items;
-    }
-
-    /**
      * Gets the ignored fields of this category.
      * <p>
      * All publications in this category will be formatted as if they have no
@@ -231,25 +218,13 @@ public class OutputCategory implements Cloneable {
     }
 
     /**
-     * Populates this category with publications from the given list.
-     * <p>
-     * This removes all publications that match the type and field conditions
-     * from the list, and adds them to the category.
+     * Checks whether the given publication matches the conditions for inclusion
+     * in this category.
      *
-     * @param items the publications
+     * @param item the publication to check
+     * @return whether the publication belongs in this category
      */
-    public void populate(List<BibItem> items) {
-        for (ListIterator<BibItem> it = items.listIterator(); it.hasNext();) {
-            BibItem item = it.next();
-
-            if (fitsCategory(item)) {
-                this.items.add(item);
-                it.remove();
-            }
-        }
-    }
-
-    private boolean fitsCategory(BibItem item) {
+    public boolean fitsCategory(BibItem item) {
         if (typeCondition.matches(item)) {
             for (FieldCondition condition : fieldConditions) {
                 if (!condition.matches(item)) {
@@ -296,15 +271,6 @@ public class OutputCategory implements Cloneable {
             return false;
         }
         return Objects.equals(this.name, other.name);
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        OutputCategory result = (OutputCategory) super.clone();
-
-        result.items = new ArrayList<>(items);
-
-        return result;
     }
 
     @Override
