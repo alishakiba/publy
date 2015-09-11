@@ -165,6 +165,21 @@ public class Section {
     }
 
     /**
+     * Counts all publications in this section and its sub-sections.
+     *
+     * @return the total number of publications in this section
+     */
+    public int countAllItems() {
+        int count = items.size();
+
+        for (Section subsection : subsections) {
+            count += subsection.countAllItems();
+        }
+
+        return count;
+    }
+
+    /**
      * Gets the sub-sections of this section.
      *
      * @return the sub-sections
