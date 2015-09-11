@@ -16,6 +16,7 @@
 package publy.algo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -374,6 +375,7 @@ public class PublicationPostProcessor {
 
                 if (yearSection == null) {
                     yearSection = new Section(year.toString(), year.toString());
+                    sections.put(year, yearSection);
                 }
 
                 yearSection.addItem(item);
@@ -397,13 +399,14 @@ public class PublicationPostProcessor {
             Console.warn(Console.WarningType.ITEM_DOES_NOT_FIT_ANY_CATEGORY, "%d %s does not have a valid publication year:%n%s", section.getItems().size(), (section.getItems().size() == 1 ? "entry" : "entries"), ids);
         }
 
-        // Add all non-empty sections as subsections
+        // Add all non-empty sections as subsections, in sorted order
+        List<Integer> years = new ArrayList<>(sections.keySet());
+        Collections.sort(years, Collections.reverseOrder());
+
         List<Section> result = new ArrayList<>(sections.size());
 
-        for (Section s : sections.values()) {
-            if (!s.getItems().isEmpty()) {
-                result.add(s);
-            }
+        for (Integer year : years) {
+            result.add(sections.get(year));
         }
 
         section.setSubsections(result);
