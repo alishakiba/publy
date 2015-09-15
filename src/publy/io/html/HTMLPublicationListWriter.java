@@ -218,6 +218,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
     private void writeSection(Section section, List<Section> sections, List<Section> parents, BufferedWriter out) throws IOException {
         // Section start
+        indent(out, 2 * parents.size());
         out.write("    <div id=\"" + getSectionId(section, parents) + "\" class=\"section\">");
         out.newLine();
 
@@ -231,6 +232,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         if (parents.isEmpty()) {
             out.write("      <h2 class=\"section-title\">" + section.getName() + "</h2>");
         } else {
+            indent(out, 2 * parents.size());
             out.write("      <h3 class=\"section-title\">" + section.getName() + "</h3>");
         }
         out.newLine();
@@ -244,6 +246,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         String note = section.getHtmlNote();
 
         if (note != null && !note.isEmpty()) {
+            indent(out, 2 * parents.size());
             out.write("      <p class=\"section-note\">");
             out.write(note);
             out.write("</p>");
@@ -253,6 +256,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
         if (!section.getItems().isEmpty()) {
             // Section list start
+            indent(out, 2 * parents.size());
             if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.NO_NUMBERS) {
                 out.write("      <ul class=\"section-list\">"); // Unordered list
             } else if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES) {
@@ -273,10 +277,13 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             }
             out.newLine();
 
+            itemWriter.setIndentationLevel(10 + 2 * parents.size());
             itemWriter.setIgnoredFields(new HashSet<>(section.getIgnoredFields()));
 
             // The actual entries
             for (BibItem item : section.getItems()) {
+                indent(out, 2 * parents.size());
+                
                 if (settings.getGeneralSettings().isReverseNumbering()) {
                     out.write("        <li id=\"" + item.getId() + "\" value=\"" + count + "\" class=\"bibentry " + item.getOriginalType() + "\">");
                     count--;
@@ -289,18 +296,22 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
                 itemWriter.write(item);
 
+                indent(out, 2 * parents.size());
                 out.write("        </li>");
                 out.newLine();
                 out.newLine();
             }
 
             // Section list end
+            indent(out, 2 * parents.size());
             if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.NO_NUMBERS) {
                 out.write("      </ul>");
             } else { // LOCAL or GLOBAL
                 assert (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES || settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL);
                 out.write("      </ol>");
             }
+            out.newLine();
+        } else {
             out.newLine();
         }
 
@@ -312,6 +323,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         parents.remove(section);
 
         // Section end
+        indent(out, 2 * parents.size());
         out.write("    </div>");
         out.newLine();
         out.newLine();
@@ -387,6 +399,12 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             } else {
                 publy.Console.error("Cannot find Google Analytics JavaScript file \"%s\".", gaJs);
             }
+        }
+    }
+
+    private void indent(BufferedWriter out, int indentationDepth) throws IOException {
+        for (int i = 0; i < indentationDepth; i++) {
+            out.write(" ");
         }
     }
 }
