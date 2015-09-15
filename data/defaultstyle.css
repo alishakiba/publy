@@ -14,6 +14,11 @@ h2 {
     font-size: 1.2em;
 }
 
+/* Sub-section headings and paper titles */
+h3 {
+    font-size: 1em;
+}
+
 /* Separate sections and papers with white space */
 .section {
     margin-bottom: 3em;
@@ -24,9 +29,7 @@ h2 {
 }
 
 /* Paper titles */
-h3 {
-    font-size: 1em; /* Regular text height */
-    font-weight: bold;
+h3.title {
     display: inline;
 }
 
@@ -43,8 +46,8 @@ h3 {
 /* Make author links unobtrusive */
 a.author:link          { color: black; text-decoration: none; } /* unvisited link */
 a.author:visited    { color: black; text-decoration: none; } /* visited link */
-a.author:hover        { color: blue;  text-decoration: underline; } /* mouse over link */
-a.author:active      { color: red;   text-decoration: underline; } /* selected link */
+a.author:hover        { color: blue; text-decoration: underline; } /* mouse over link */
+a.author:active      { color: red; text-decoration: underline; } /* selected link */
 
 /* Place buttons on the same line as links */
 .links {
@@ -111,8 +114,8 @@ button {
     background: #eee;
     
     -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	box-shadow:inset 0px 1px 0px 0px #ffffff;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    box-shadow:inset 0px 1px 0px 0px #ffffff;
     
     border: 1px solid #999;
     border-radius: 4px;
