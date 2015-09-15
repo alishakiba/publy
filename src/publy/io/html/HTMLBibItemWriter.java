@@ -39,7 +39,6 @@ import publy.io.bibtex.BibtexBibItemWriter;
  */
 public class HTMLBibItemWriter extends BibItemWriter {
 
-    private static final String indent = "          ";
     private final BibtexBibItemWriter bibtexWriter;
     private final List<Section> sections;
 
@@ -56,7 +55,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         if (isPresent(item, "pubstate")) {
             writeStatus(item);
         } else {
-            out.write(indent);
+            out.write(indentString);
 
             switch (item.getType()) {
                 case ARTICLE:
@@ -112,7 +111,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Write note (unpublished uses note as the publication info)
         if (item.getType() != Type.UNPUBLISHED) {
-            output(indent + "<span class=\"note\">", get(item, "note"), ".</span>", true);
+            output(indentString + "<span class=\"note\">", get(item, "note"), ".</span>", true);
         }
 
         writeLinks(item);
@@ -319,7 +318,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeTitle(BibItem item) throws IOException {
-        out.write(indent);
+        out.write(indentString);
 
         String title = formatTitle(item);
 
@@ -387,13 +386,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeAbstract(BibItem item) throws IOException {
-        out.write(indent + "<div class=\"abstract-container tex2jax_ignore\">");
+        out.write(indentString + "<div class=\"abstract-container tex2jax_ignore\">");
         out.write("<div class=\"abstract\">");
         out.newLine();
-        out.write(indent + "  <span class=\"abstractword\">Abstract: </span>");
+        out.write(indentString + "  <span class=\"abstractword\">Abstract: </span>");
         output(get(item, "abstract"));
         out.newLine();
-        out.write(indent + "</div></div>");
+        out.write(indentString + "</div></div>");
         out.newLine();
     }
 
@@ -405,7 +404,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             if (isPresent(item, "editor")) {
                 useEditor = true;
             } else if (isPresent(item, "organization")) {
-                output(indent + "<span class=\"organization\">", get(item, "organization"), "</span>.", true);
+                output(indentString + "<span class=\"organization\">", get(item, "organization"), "</span>.", true);
                 return;
             } else {
                 Console.error("No editor or organization found for entry \"%s\".", item.getId());
@@ -430,9 +429,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
             if (authors.endsWith(".</span>") || authors.endsWith(".</a>")) {
                 // Don't double up on periods (occurs when author names are abbreviated and reversed)
-                output(indent, authors, "", true);
+                output(indentString, authors, "", true);
             } else {
-                output(indent, authors, ".", true);
+                output(indentString, authors, ".", true);
             }
         }
     }
@@ -509,7 +508,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 break;
         }
 
-        out.write(indent);
+        out.write(indentString);
 
         if (venue == null) {
             switch (get(item, "pubstate")) {
@@ -704,7 +703,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Close links div
         if (divOpened) {
-            out.write(indent + "</div>");
+            out.write(indentString + "</div>");
             out.newLine();
         }
 
@@ -738,11 +737,11 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private void writeLink(boolean divOpened, String link, String text) throws IOException {
         if (!divOpened) {
-            out.write(indent + "<div class=\"links\">");
+            out.write(indentString + "<div class=\"links\">");
             out.newLine();
         }
 
-        out.write(indent + "  <a href=\"" + link + "\">" + text + "</a>");
+        out.write(indentString + "  <a href=\"" + link + "\">" + text + "</a>");
         out.newLine();
     }
 
@@ -785,9 +784,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private void writeBibtexHTML(BibItem item) throws IOException {
-        out.write(indent + "<div class=\"bibtex-container\">");
+        out.write(indentString + "<div class=\"bibtex-container\">");
         out.newLine();
-        out.write(indent + "  <pre class=\"bibtex\">");
+        out.write(indentString + "  <pre class=\"bibtex\">");
         out.newLine();
 
         bibtexWriter.write(item);
@@ -795,14 +794,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("</pre>");
         out.newLine();
 
-        out.write(indent + "</div>");
+        out.write(indentString + "</div>");
         out.newLine();
     }
 
     private void writeArxivBibtexHTML(BibItem item) throws IOException {
-        out.write(indent + "<div class=\"bibtex-container\">");
+        out.write(indentString + "<div class=\"bibtex-container\">");
         out.newLine();
-        out.write(indent + "  <pre class=\"bibtex\">");
+        out.write(indentString + "  <pre class=\"bibtex\">");
         out.newLine();
 
         // Item type
@@ -865,12 +864,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("}</pre>");
         out.newLine();
 
-        out.write(indent + "</div>");
+        out.write(indentString + "</div>");
         out.newLine();
     }
 
     private void writeToggleLink(String type, String text) throws IOException {
-        out.write(indent);
+        out.write(indentString);
         out.write("<button class=\"" + type + "-toggle\">");
         out.write(text);
         out.write("</button>");
@@ -931,10 +930,11 @@ public class HTMLBibItemWriter extends BibItemWriter {
     @Override
     protected void newline() throws IOException {
         if (settings.getGeneralSettings().isUseNewLines()) {
-            out.write("<br>"); // Add a new line in both the web page and source file
-            out.newLine();
-        } else {
-            out.newLine();
+            out.write("<br>"); // Also add the new line to the web page
         }
+
+        out.newLine();
+        out.write(indentString);
+        System.out.println("Indentation depth: " + indentString.length());
     }
 }
