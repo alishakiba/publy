@@ -101,6 +101,9 @@ public class PlainPublicationListWriter extends PublicationListWriter {
                 } else {
                     count++;
                 }
+            } else {
+                // Indent the first line
+                out.write("   ");
             }
 
             itemWriter.write(item);

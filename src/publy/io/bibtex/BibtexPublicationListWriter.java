@@ -50,7 +50,7 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
                 count = 0;
 
                 for (Section s : sections) {
-                    count += s.getItems().size();
+                    count += s.countAllItems();
                 }
             } else {
                 count = 1;
@@ -59,7 +59,7 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
 
         // Write the body
         for (Section s : sections) {
-            writeCategory(s, out);
+            writeSection(s, out, 0);
         }
 
         // Credit line and last modified
@@ -67,16 +67,17 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
         out.newLine();
     }
 
-    private void writeCategory(Section section, BufferedWriter out) throws IOException {
+    private void writeSection(Section section, BufferedWriter out, int nestingLevel) throws IOException {
         // Reset the count if necessary
         if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES) {
             if (settings.getGeneralSettings().isReverseNumbering()) {
-                count = section.getItems().size();
+                count = section.getItems().size(); // This is correct; sub-sections hsould have their own count
             } else {
                 count = 1;
             }
         }
 
+        indent(out, 2 * nestingLevel);
         out.write("-- " + section.getName() + ".");
         out.newLine();
         out.newLine();
@@ -99,11 +100,22 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
             out.newLine();
         }
 
+        // Write the sub-sections
+        for (Section subsection : section.getSubsections()) {
+            writeSection(subsection, out, nestingLevel + 1);
+        }
+
         out.newLine();
 
         // Reset the count if necessary
         if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES) {
             count = 0;
+        }
+    }
+
+    private void indent(BufferedWriter out, int nestingLevel) throws IOException {
+        for (int i = 0; i < nestingLevel; i++) {
+            out.write("-");
         }
     }
 }
