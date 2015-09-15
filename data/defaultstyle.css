@@ -14,7 +14,7 @@ h2 {
     font-size: 1.2em;
 }
 
-/* Sub-section headings and paper titles */
+/* Sub-section headings */
 h3 {
     font-size: 1em;
 }
@@ -29,8 +29,9 @@ h3 {
 }
 
 /* Paper titles */
-h3.title {
+h4.title {
     display: inline;
+    font-size: 1em;
 }
 
 /* Italicize journal and conference names */

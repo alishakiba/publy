@@ -342,21 +342,21 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Title
         if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
-            output("<h3 class=\"title abstract-toggle\">", title, "</h3>");
+            output("<h4 class=\"title abstract-toggle\">", title, "</h4>");
         } else if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && includePaper(item)) {
             try {
                 String href = (new URI(null, null, get(item, "file"), null)).toString();
 
                 out.write("<a href=\"" + href + "\">");
-                output("<h3 class=\"title\">", title, "</h3>");
+                output("<h4 class=\"title\">", title, "</h4>");
                 out.write("</a>");
                 checkExistance(get(item, "file"), "file", item);
             } catch (URISyntaxException ex) {
                 Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
-                output("<h3 class=\"title\">", title, "</h3>");
+                output("<h4 class=\"title\">", title, "</h4>");
             }
         } else {
-            output("<h3 class=\"title\">", title, "</h3>");
+            output("<h4 class=\"title\">", title, "</h4>");
         }
 
         // Add text if I presented this paper
