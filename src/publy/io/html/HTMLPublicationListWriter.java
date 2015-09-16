@@ -354,15 +354,12 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         out.write("      <p class=\"navigation\">");
         out.newLine();
 
-        for (int i = 0; i < sections.size(); i++) {
-            Section s = sections.get(i);
-
+        for (Section s : sections) {
             if (s == current) {
                 out.write("        <span class=\"current\">" + s.getShortName() + "</span>");
             } else {
                 out.write("        <a href=\"#" + getSectionId(s, null) + "\">" + s.getShortName() + "</a>");
             }
-
             out.newLine();
         }
 
