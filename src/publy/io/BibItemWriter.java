@@ -18,6 +18,7 @@ package publy.io;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +37,8 @@ public abstract class BibItemWriter {
     protected BufferedWriter out;
     protected Settings settings;
     protected Set<String> ignoredFields;
+    protected int indentationLevel = 0;
+    protected String indentString = "";
 
     public BibItemWriter(BufferedWriter out, Settings settings) {
         this.out = out;
@@ -51,6 +54,20 @@ public abstract class BibItemWriter {
 
     public void setIgnoredFields(Set<String> ignoredFields) {
         this.ignoredFields = ignoredFields;
+    }
+
+    public int getIndentationLevel() {
+        return indentationLevel;
+    }
+
+    public void setIndentationLevel(int indentationLevel) {
+        if (this.indentationLevel != indentationLevel) {
+            this.indentationLevel = indentationLevel;
+
+            char[] indent = new char[indentationLevel];
+            Arrays.fill(indent, ' ');
+            indentString = new String(indent);
+        }
     }
 
     protected String formatTitle(BibItem item) {
@@ -248,6 +265,7 @@ public abstract class BibItemWriter {
     protected void newline() throws IOException {
         if (settings.getGeneralSettings().isUseNewLines()) {
             out.newLine();
+            out.write(indentString);
         } else {
             out.write(' ');
         }

@@ -24,14 +24,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import publy.Console;
+import publy.data.Section;
 import publy.data.bibitem.BibItem;
-import publy.data.category.OutputCategory;
 import publy.data.settings.GeneralSettings;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
@@ -59,16 +60,16 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     @Override
-    protected void writePublicationList(List<OutputCategory> categories, BufferedWriter out) throws IOException {
-        itemWriter = new HTMLBibItemWriter(out, categories, settings);
+    protected void writePublicationList(List<Section> sections, BufferedWriter out) throws IOException {
+        itemWriter = new HTMLBibItemWriter(out, sections, settings);
 
         // Initialize the count
         if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL) {
             if (settings.getGeneralSettings().isReverseNumbering()) {
                 count = 0;
 
-                for (OutputCategory c : categories) {
-                    count += c.getItems().size();
+                for (Section s : sections) {
+                    count += s.countAllItems();
                 }
             } else {
                 count = 1;
@@ -112,18 +113,18 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         // Navigation?
         if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP
                 || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM) {
-            writeNavigation(categories, out);
+            writeNavigation(sections, out);
         }
 
         out.newLine();
-        for (OutputCategory c : categories) {
-            writeCategory(c, categories, out);
+        for (Section s : sections) {
+            writeSection(s, sections, new ArrayList<Section>(), out);
         }
 
         // Navigation?
         if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM
                 || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
-            writeNavigation(categories, out);
+            writeNavigation(sections, out);
         }
 
         // Credit line and last modified
@@ -215,30 +216,37 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
     }
 
-    private void writeCategory(OutputCategory c, List<OutputCategory> categories, BufferedWriter out) throws IOException {
+    private void writeSection(Section section, List<Section> sections, List<Section> parents, BufferedWriter out) throws IOException {
         // Section start
-        out.write("    <div id=\"" + c.getShortName().toLowerCase() + "\" class=\"section\">");
+        indent(out, 2 * parents.size());
+        out.write("    <div id=\"" + getSectionId(section, parents) + "\" class=\"section\">");
         out.newLine();
 
         // Navigation?
-        if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_TITLE
-                || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
-            writeNavigation(categories, c, out);
+        if (parents.isEmpty() && (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_TITLE
+                || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM)) {
+            writeNavigation(sections, section, out);
         }
 
         // Section title
-        out.write("      <h2 class=\"section-title\">" + c.getName() + "</h2>");
+        if (parents.isEmpty()) {
+            out.write("      <h2 class=\"section-title\">" + section.getName() + "</h2>");
+        } else {
+            indent(out, 2 * parents.size());
+            out.write("      <h3 class=\"section-title\">" + section.getName() + "</h3>");
+        }
         out.newLine();
 
         // Navigation?
-        if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.AFTER_SECTION_TITLE) {
-            writeNavigation(categories, c, out);
+        if (parents.isEmpty() && settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.AFTER_SECTION_TITLE) {
+            writeNavigation(sections, section, out);
         }
 
         // Note
-        String note = c.getHtmlNote();
+        String note = section.getHtmlNote();
 
         if (note != null && !note.isEmpty()) {
+            indent(out, 2 * parents.size());
             out.write("      <p class=\"section-note\">");
             out.write(note);
             out.write("</p>");
@@ -246,79 +254,113 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             out.newLine();
         }
 
-        // Section list start
-        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.NO_NUMBERS) {
-            out.write("      <ul class=\"section-list\">"); // Unordered list
-        } else if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES) {
-            out.write("      <ol class=\"section-list\">");
-            // Reset the count
-            if (settings.getGeneralSettings().isReverseNumbering()) {
-                count = c.getItems().size();
-                // There is limited browser support for the reversed attribute, so we'll add values manually if needed
-            } else {
-                count = 0;
+        if (!section.getItems().isEmpty()) {
+            // Section list start
+            indent(out, 2 * parents.size());
+            if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.NO_NUMBERS) {
+                out.write("      <ul class=\"section-list\">"); // Unordered list
+            } else if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES) {
+                out.write("      <ol class=\"section-list\">");
+                // Reset the count
+                if (settings.getGeneralSettings().isReverseNumbering()) {
+                    count = section.getItems().size();
+                    // There is limited browser support for the reversed attribute, so we'll add values manually if needed
+                } else {
+                    count = 0;
+                }
+            } else if (settings.getGeneralSettings().isReverseNumbering()) { // GLOBAL reversed
+                assert settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL && settings.getGeneralSettings().isReverseNumbering();
+                out.write("      <ol class=\"section-list\">");
+            } else { // GLOBAL, not reversed
+                assert settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL && !settings.getGeneralSettings().isReverseNumbering();
+                out.write("      <ol class=\"section-list\" start=\"" + count + "\">");
             }
-        } else if (settings.getGeneralSettings().isReverseNumbering()) { // GLOBAL reversed
-            assert settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL && settings.getGeneralSettings().isReverseNumbering();
-            out.write("      <ol class=\"section-list\">");
-        } else { // GLOBAL, not reversed
-            assert settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL && !settings.getGeneralSettings().isReverseNumbering();
-            out.write("      <ol class=\"section-list\" start=\"" + count + "\">");
-        }
-        out.newLine();
+            out.newLine();
 
-        itemWriter.setIgnoredFields(new HashSet<>(c.getIgnoredFields()));
+            itemWriter.setIndentationLevel(10 + 2 * parents.size());
+            itemWriter.setIgnoredFields(new HashSet<>(section.getIgnoredFields()));
 
-        // The actual entries
-        for (BibItem item : c.getItems()) {
-            if (settings.getGeneralSettings().isReverseNumbering()) {
-                out.write("        <li id=\"" + item.getId() + "\" value=\"" + count + "\" class=\"bibentry " + item.getOriginalType() + "\">");
-                count--;
-            } else {
-                out.write("        <li id=\"" + item.getId() + "\" class=\"bibentry " + item.getOriginalType() + "\">");
-                count++;
+            // The actual entries
+            for (BibItem item : section.getItems()) {
+                indent(out, 2 * parents.size());
+                
+                if (settings.getGeneralSettings().isReverseNumbering()) {
+                    out.write("        <li id=\"" + item.getId() + "\" value=\"" + count + "\" class=\"bibentry " + item.getOriginalType() + "\">");
+                    count--;
+                } else {
+                    out.write("        <li id=\"" + item.getId() + "\" class=\"bibentry " + item.getOriginalType() + "\">");
+                    count++;
+                }
+
+                out.newLine();
+
+                itemWriter.write(item);
+
+                indent(out, 2 * parents.size());
+                out.write("        </li>");
+                out.newLine();
+                out.newLine();
             }
 
+            // Section list end
+            indent(out, 2 * parents.size());
+            if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.NO_NUMBERS) {
+                out.write("      </ul>");
+            } else { // LOCAL or GLOBAL
+                assert (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES || settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL);
+                out.write("      </ol>");
+            }
             out.newLine();
-
-            itemWriter.write(item);
-
-            out.write("        </li>");
-            out.newLine();
+        } else {
             out.newLine();
         }
 
-        // Section list end
-        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.NO_NUMBERS) {
-            out.write("      </ul>");
-        } else { // LOCAL or GLOBAL
-            assert (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES || settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL);
-            out.write("      </ol>");
+        // Write the sub-sections
+        parents.add(section);
+        for (Section subsection : section.getSubsections()) {
+            writeSection(subsection, sections, parents, out);
         }
-        out.newLine();
+        parents.remove(section);
 
         // Section end
+        indent(out, 2 * parents.size());
         out.write("    </div>");
         out.newLine();
         out.newLine();
     }
 
-    private void writeNavigation(List<OutputCategory> categories, BufferedWriter out) throws IOException {
-        writeNavigation(categories, null, out);
+    private static String getSectionId(Section section, List<Section> parents) {
+        if (parents == null || parents.isEmpty()) {
+            return section.getShortName().toLowerCase();
+        } else {
+            StringBuilder sb = new StringBuilder();
+
+            for (Section parent : parents) {
+                sb.append(parent.getShortName().toLowerCase());
+                sb.append('-');
+            }
+
+            sb.append(section.getShortName().toLowerCase());
+            return sb.toString();
+        }
     }
 
-    private void writeNavigation(List<OutputCategory> categories, OutputCategory current, BufferedWriter out) throws IOException {
+    private void writeNavigation(List<Section> sections, BufferedWriter out) throws IOException {
+        writeNavigation(sections, null, out);
+    }
+
+    private void writeNavigation(List<Section> sections, Section current, BufferedWriter out) throws IOException {
         out.newLine();
         out.write("      <p class=\"navigation\">");
         out.newLine();
 
-        for (int i = 0; i < categories.size(); i++) {
-            OutputCategory c = categories.get(i);
+        for (int i = 0; i < sections.size(); i++) {
+            Section s = sections.get(i);
 
-            if (c == current) {
-                out.write("        <span class=\"current\">" + c.getShortName() + "</span>");
+            if (s == current) {
+                out.write("        <span class=\"current\">" + s.getShortName() + "</span>");
             } else {
-                out.write("        <a href=\"#" + c.getShortName().toLowerCase() + "\">" + c.getShortName() + "</a>");
+                out.write("        <a href=\"#" + getSectionId(s, null) + "\">" + s.getShortName() + "</a>");
             }
 
             out.newLine();
@@ -357,6 +399,12 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             } else {
                 publy.Console.error("Cannot find Google Analytics JavaScript file \"%s\".", gaJs);
             }
+        }
+    }
+
+    private void indent(BufferedWriter out, int indentationDepth) throws IOException {
+        for (int i = 0; i < indentationDepth; i++) {
+            out.write(" ");
         }
     }
 }

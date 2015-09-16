@@ -16,18 +16,22 @@
 package publy.algo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import publy.Console;
 import publy.data.Author;
+import publy.data.Section;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.FieldData;
 import publy.data.bibitem.Type;
 import publy.data.category.OutputCategory;
+import publy.data.settings.GeneralSettings;
 import publy.data.settings.Settings;
 
 /**
@@ -65,18 +69,18 @@ public class PublicationPostProcessor {
      * @param items the publications to process
      * @return a list of categories that contain the post-processed publications
      */
-    public static List<OutputCategory> postProcess(Settings settings, List<BibItem> items) {
+    public static List<Section> postProcess(Settings settings, List<BibItem> items) {
         removeDuplicateIDs(items);
         processAliases(items);
         removeItemsWithMissingMandatoryFields(items);
         detectArxiv(items);
 
-        List<OutputCategory> categories = categorizePapers(settings, items);
+        List<Section> sections = categorizePapers(settings, items);
 
-        warnForMandatoryIgnoredFields(settings, categories);
+        warnForMandatoryIgnoredFields(settings, sections);
         warnIfIAmNotAuthor(settings, items);
 
-        return categories;
+        return sections;
     }
 
     /**
@@ -260,78 +264,167 @@ public class PublicationPostProcessor {
     }
 
     /**
-     * Groups the publications into the categories defined in the settings.
+     * Groups the publications into the sections defined in the settings.
      * <p>
      * Each paper is tested against the conditions of each category (in the
-     * order they appear in), and added to the first category that it matches.
-     * If there are papers that do not match any category, a warning message is
-     * shown.
+     * order they appear in), and added to the section corresponding to the
+     * first category that it matches. If there are papers that do not match any
+     * category, a warning message is shown.
+     * <p>
+     * If grouping by year is desired, the categories are split further by year
+     * or the years are split by category, depending on preferences.
      *
      * @param settings the configuration settings to use
      * @param items the publications to process
-     * @return the categories containing all matched publications
+     * @return the sections containing all matched publications
      */
-    private static List<OutputCategory> categorizePapers(Settings settings, List<BibItem> items) {
-        // Create the list of empty categories
-        List<OutputCategory> categories = new ArrayList<>(settings.getCategorySettings().getActiveCategories().size());
+    private static List<Section> categorizePapers(Settings settings, List<BibItem> items) {
+        // Create a virtual section with all papers.
+        Section master = new Section("Master", null);
+        master.getItems().addAll(items);
 
-        for (OutputCategory c : settings.getCategorySettings().getActiveCategories()) {
-            try {
-                categories.add((OutputCategory) c.clone());
-            } catch (CloneNotSupportedException ex) {
-                // Should never happen
-                Console.except(ex, "Category \"%s\" could not be copied.", c.getShortName());
+        if (settings.getGeneralSettings().getGrouping() == GeneralSettings.Grouping.NO_GROUPING) {
+            groupByCategory(settings, master);
+        } else if (settings.getGeneralSettings().getGrouping() == GeneralSettings.Grouping.GROUP_BY_YEAR) {
+            if (settings.getGeneralSettings().isGroupWithinCategories()) {
+                groupByCategory(settings, master);
+
+                for (Section category : master.getSubsections()) {
+                    groupByYear(category);
+                }
+            } else {
+                groupByYear(master);
+
+                for (Section year : master.getSubsections()) {
+                    groupByCategory(settings, year);
+                }
             }
         }
 
-        // Assign each paper to the correct category
-        // Make a copy so the categories can remove items without removing them from the main list
-        List<BibItem> tempItems = new ArrayList<>(items);
+        return master.getSubsections();
+    }
 
-        for (OutputCategory c : categories) {
-            c.populate(tempItems);
+    /**
+     * Splits the given section into sub-sections by category.
+     *
+     * @param settings the configuration settings to use
+     * @param section the section to split
+     */
+    private static void groupByCategory(Settings settings, Section section) {
+        // Create an empty section for each category
+        Map<OutputCategory, Section> sections = new LinkedHashMap<>();
+
+        for (OutputCategory c : settings.getCategorySettings().getActiveCategories()) {
+            sections.put(c, new Section(c));
         }
 
-        // Remove empty categories
-        ListIterator<OutputCategory> it = categories.listIterator();
+        // Assign each paper to the correct category
+        for (ListIterator<BibItem> it = section.getItems().listIterator(); it.hasNext();) {
+            BibItem item = it.next();
 
-        while (it.hasNext()) {
-            OutputCategory c = it.next();
-
-            if (c.getItems().isEmpty()) {
-                it.remove();
+            for (OutputCategory c : settings.getCategorySettings().getActiveCategories()) {
+                if (c.fitsCategory(item)) {
+                    sections.get(c).addItem(item);
+                    it.remove();
+                    break;
+                }
             }
         }
 
         // Warn for remaining items
-        if (!tempItems.isEmpty()) {
+        if (!section.getItems().isEmpty()) {
             String ids = "";
 
-            for (BibItem item : tempItems) {
+            for (BibItem item : section.getItems()) {
                 ids += "\"" + item.getId() + "\", ";
             }
 
             ids = ids.substring(0, ids.length() - 2); // Cut off the last ", "
 
-            Console.warn(Console.WarningType.ITEM_DOES_NOT_FIT_ANY_CATEGORY, "%d %s did not fit any category:%n%s", tempItems.size(), (tempItems.size() == 1 ? "entry" : "entries"), ids);
+            Console.warn(Console.WarningType.ITEM_DOES_NOT_FIT_ANY_CATEGORY, "%d %s did not fit any category:%n%s", section.getItems().size(), (section.getItems().size() == 1 ? "entry" : "entries"), ids);
         }
 
-        return categories;
+        // Add all non-empty sections as subsections
+        List<Section> result = new ArrayList<>(sections.size());
+
+        for (Section s : sections.values()) {
+            if (!s.getItems().isEmpty()) {
+                result.add(s);
+            }
+        }
+
+        section.setSubsections(result);
     }
 
     /**
-     * Prints a warning message if a category ignores a mandatory field of one
-     * of its publications.
+     * Splits the given section into sub-sections by year of publication.
      *
      * @param settings the configuration settings to use
-     * @param categories the categories that contain the publications to process
+     * @param section the section to split
      */
-    private static void warnForMandatoryIgnoredFields(Settings settings, List<OutputCategory> categories) {
+    private static void groupByYear(Section section) {
+        Map<Integer, Section> sections = new HashMap<>();
+
+        // Assign each paper to the correct section, creating one if it does not yet exist
+        for (ListIterator<BibItem> it = section.getItems().listIterator(); it.hasNext();) {
+            BibItem item = it.next();
+
+            try {
+                Integer year = Integer.parseInt(item.get("year"));
+                Section yearSection = sections.get(year);
+
+                if (yearSection == null) {
+                    yearSection = new Section(year.toString(), year.toString());
+                    sections.put(year, yearSection);
+                }
+
+                yearSection.addItem(item);
+                it.remove();
+            } catch (NumberFormatException nfe) {
+                // Either the publication has no year set, or it is not a valid integer
+                // Either way, we just leave it in the super-section
+            }
+        }
+
+        // Warn for remaining items
+        if (!section.getItems().isEmpty()) {
+            String ids = "";
+
+            for (BibItem item : section.getItems()) {
+                ids += "\"" + item.getId() + "\", ";
+            }
+
+            ids = ids.substring(0, ids.length() - 2); // Cut off the last ", "
+
+            Console.warn(Console.WarningType.ITEM_DOES_NOT_FIT_ANY_CATEGORY, "%d %s does not have a valid publication year:%n%s", section.getItems().size(), (section.getItems().size() == 1 ? "entry" : "entries"), ids);
+        }
+
+        // Add all non-empty sections as subsections, in sorted order
+        List<Integer> years = new ArrayList<>(sections.keySet());
+        Collections.sort(years, Collections.reverseOrder());
+
+        List<Section> result = new ArrayList<>(sections.size());
+
+        for (Integer year : years) {
+            result.add(sections.get(year));
+        }
+
+        section.setSubsections(result);
+    }
+
+    /**
+     * Prints a warning message if a section ignores a mandatory field of one of
+     * its publications.
+     *
+     * @param settings the configuration settings to use
+     * @param sections the sections that contain the publications to process
+     */
+    private static void warnForMandatoryIgnoredFields(Settings settings, List<Section> sections) {
         if (settings.getConsoleSettings().isShowWarnings() && settings.getConsoleSettings().isWarnMandatoryFieldIgnored()) {
-            for (OutputCategory c : categories) {
+            for (Section s : sections) {
                 Map<Type, List<String>> idsPerType = new EnumMap<>(Type.class);
 
-                for (BibItem item : c.getItems()) {
+                for (BibItem item : s.getItems()) {
                     if (!idsPerType.containsKey(item.getType())) {
                         idsPerType.put(item.getType(), new ArrayList<String>());
                     }
@@ -344,7 +437,7 @@ public class PublicationPostProcessor {
                         boolean allOptionsIgnored = true;
 
                         for (String mandatory : mandatoryFields.split(";")) {
-                            if (!c.getIgnoredFields().contains(mandatory)) {
+                            if (!s.getIgnoredFields().contains(mandatory)) {
                                 allOptionsIgnored = false;
                             }
                         }
@@ -352,7 +445,7 @@ public class PublicationPostProcessor {
                         if (allOptionsIgnored) {
                             Console.warn(Console.WarningType.MANDATORY_FIELD_IGNORED,
                                     "Category \"%s\" ignores field%s \"%s\", which %s mandatory for the following entr%s:%n%s.%nTh%s may not display properly.",
-                                    c.getShortName(), (mandatoryFields.contains(";") ? "s" : ""), mandatoryFields,
+                                    s.getShortName(), (mandatoryFields.contains(";") ? "s" : ""), mandatoryFields,
                                     (mandatoryFields.contains(";") ? "are" : "is"), (idsPerType.get(type).size() == 1 ? "y" : "ies"),
                                     idsPerType.get(type).toString(), (idsPerType.get(type).size() == 1 ? "is entry" : "ese entries"));
                         }

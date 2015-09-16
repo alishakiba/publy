@@ -25,9 +25,9 @@ import java.util.List;
 import publy.Console;
 import publy.data.PublicationStatus;
 import publy.data.Author;
+import publy.data.Section;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.Type;
-import publy.data.category.OutputCategory;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
 import publy.io.BibItemWriter;
@@ -39,14 +39,13 @@ import publy.io.bibtex.BibtexBibItemWriter;
  */
 public class HTMLBibItemWriter extends BibItemWriter {
 
-    private static final String indent = "          ";
     private final BibtexBibItemWriter bibtexWriter;
-    private final List<OutputCategory> categories;
+    private final List<Section> sections;
 
-    public HTMLBibItemWriter(BufferedWriter out, List<OutputCategory> categories, Settings settings) {
+    public HTMLBibItemWriter(BufferedWriter out, List<Section> sections, Settings settings) {
         super(out, settings);
         bibtexWriter = new BibtexBibItemWriter(out, settings);
-        this.categories = categories;
+        this.sections = sections;
     }
 
     @Override
@@ -56,7 +55,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         if (isPresent(item, "pubstate")) {
             writeStatus(item);
         } else {
-            out.write(indent);
+            out.write(indentString);
 
             switch (item.getType()) {
                 case ARTICLE:
@@ -112,7 +111,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Write note (unpublished uses note as the publication info)
         if (item.getType() != Type.UNPUBLISHED) {
-            output(indent + "<span class=\"note\">", get(item, "note"), ".</span>", true);
+            output(indentString + "<span class=\"note\">", get(item, "note"), ".</span>", true);
         }
 
         writeLinks(item);
@@ -319,7 +318,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeTitle(BibItem item) throws IOException {
-        out.write(indent);
+        out.write(indentString);
 
         String title = formatTitle(item);
 
@@ -343,21 +342,21 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Title
         if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
-            output("<h3 class=\"title abstract-toggle\">", title, "</h3>");
+            output("<h4 class=\"title abstract-toggle\">", title, "</h4>");
         } else if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && includePaper(item)) {
             try {
                 String href = (new URI(null, null, get(item, "file"), null)).toString();
 
                 out.write("<a href=\"" + href + "\">");
-                output("<h3 class=\"title\">", title, "</h3>");
+                output("<h4 class=\"title\">", title, "</h4>");
                 out.write("</a>");
                 checkExistance(get(item, "file"), "file", item);
             } catch (URISyntaxException ex) {
                 Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
-                output("<h3 class=\"title\">", title, "</h3>");
+                output("<h4 class=\"title\">", title, "</h4>");
             }
         } else {
-            output("<h3 class=\"title\">", title, "</h3>");
+            output("<h4 class=\"title\">", title, "</h4>");
         }
 
         // Add text if I presented this paper
@@ -387,13 +386,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeAbstract(BibItem item) throws IOException {
-        out.write(indent + "<div class=\"abstract-container tex2jax_ignore\">");
+        out.write(indentString + "<div class=\"abstract-container tex2jax_ignore\">");
         out.write("<div class=\"abstract\">");
         out.newLine();
-        out.write(indent + "  <span class=\"abstractword\">Abstract: </span>");
+        out.write(indentString + "  <span class=\"abstractword\">Abstract: </span>");
         output(get(item, "abstract"));
         out.newLine();
-        out.write(indent + "</div></div>");
+        out.write(indentString + "</div></div>");
         out.newLine();
     }
 
@@ -405,7 +404,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             if (isPresent(item, "editor")) {
                 useEditor = true;
             } else if (isPresent(item, "organization")) {
-                output(indent + "<span class=\"organization\">", get(item, "organization"), "</span>.", true);
+                output(indentString + "<span class=\"organization\">", get(item, "organization"), "</span>.", true);
                 return;
             } else {
                 Console.error("No editor or organization found for entry \"%s\".", item.getId());
@@ -430,9 +429,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
             if (authors.endsWith(".</span>") || authors.endsWith(".</a>")) {
                 // Don't double up on periods (occurs when author names are abbreviated and reversed)
-                output(indent, authors, "", true);
+                output(indentString, authors, "", true);
             } else {
-                output(indent, authors, ".", true);
+                output(indentString, authors, ".", true);
             }
         }
     }
@@ -509,7 +508,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 break;
         }
 
-        out.write(indent);
+        out.write(indentString);
 
         if (venue == null) {
             switch (get(item, "pubstate")) {
@@ -563,7 +562,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 default:
                     throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized pubstate: \"" + get(item, "pubstate") + "\"");
             }
-            
+
             output("<span class=\"booktitle\">", venue, "</span>.", true);
         }
     }
@@ -704,7 +703,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Close links div
         if (divOpened) {
-            out.write(indent + "</div>");
+            out.write(indentString + "</div>");
             out.newLine();
         }
 
@@ -738,11 +737,11 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private void writeLink(boolean divOpened, String link, String text) throws IOException {
         if (!divOpened) {
-            out.write(indent + "<div class=\"links\">");
+            out.write(indentString + "<div class=\"links\">");
             out.newLine();
         }
 
-        out.write(indent + "  <a href=\"" + link + "\">" + text + "</a>");
+        out.write(indentString + "  <a href=\"" + link + "\">" + text + "</a>");
         out.newLine();
     }
 
@@ -785,9 +784,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private void writeBibtexHTML(BibItem item) throws IOException {
-        out.write(indent + "<div class=\"bibtex-container\">");
+        out.write(indentString + "<div class=\"bibtex-container\">");
         out.newLine();
-        out.write(indent + "  <pre class=\"bibtex\">");
+        out.write(indentString + "  <pre class=\"bibtex\">");
         out.newLine();
 
         bibtexWriter.write(item);
@@ -795,14 +794,14 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("</pre>");
         out.newLine();
 
-        out.write(indent + "</div>");
+        out.write(indentString + "</div>");
         out.newLine();
     }
 
     private void writeArxivBibtexHTML(BibItem item) throws IOException {
-        out.write(indent + "<div class=\"bibtex-container\">");
+        out.write(indentString + "<div class=\"bibtex-container\">");
         out.newLine();
-        out.write(indent + "  <pre class=\"bibtex\">");
+        out.write(indentString + "  <pre class=\"bibtex\">");
         out.newLine();
 
         // Item type
@@ -865,12 +864,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write("}</pre>");
         out.newLine();
 
-        out.write(indent + "</div>");
+        out.write(indentString + "</div>");
         out.newLine();
     }
 
     private void writeToggleLink(String type, String text) throws IOException {
-        out.write(indent);
+        out.write(indentString);
         out.write("<button class=\"" + type + "-toggle\">");
         out.write(text);
         out.write("</button>");
@@ -903,24 +902,39 @@ public class HTMLBibItemWriter extends BibItemWriter {
      * @param id
      */
     private void checkIdExistance(String id, String attr, BibItem item) {
-        for (OutputCategory cat : categories) {
-            for (BibItem i : cat.getItems()) {
-                if (i.getId().equals(id)) {
-                    return;
-                }
+        for (Section section : sections) {
+            if (checkIdExists(id, section)) {
+                return;
             }
         }
 
         Console.warn(Console.WarningType.MISSING_REFERENCE, "Publication \"%s\" (linked in attribute \"%s\" of publication \"%s\") is not in the final list.", id, attr, item.getId());
     }
 
+    private boolean checkIdExists(String id, Section section) {
+        for (BibItem i : section.getItems()) {
+            if (i.getId().equals(id)) {
+                return true;
+            }
+        }
+
+        for (Section subsection : section.getSubsections()) {
+            if (checkIdExists(id, subsection)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     protected void newline() throws IOException {
         if (settings.getGeneralSettings().isUseNewLines()) {
-            out.write("<br>"); // Add a new line in both the web page and source file
-            out.newLine();
-        } else {
-            out.newLine();
+            out.write("<br>"); // Also add the new line to the web page
         }
+
+        out.newLine();
+        out.write(indentString);
+        System.out.println("Indentation depth: " + indentString.length());
     }
 }

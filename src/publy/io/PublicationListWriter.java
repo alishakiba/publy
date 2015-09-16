@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import publy.data.category.OutputCategory;
+import publy.data.Section;
 import publy.data.settings.Settings;
 
 /**
@@ -35,16 +35,16 @@ public abstract class PublicationListWriter {
         this.settings = settings;
     }
 
-    public void writePublicationList(List<OutputCategory> categories, Path target) throws IOException {
+    public void writePublicationList(List<Section> sections, Path target) throws IOException {
         if (target.getParent() != null) {
             Files.createDirectories(target.getParent());
         }
 
         try (TempWriter out = TempWriter.newTempWriter(target)) {
-            writePublicationList(categories, out);
+            writePublicationList(sections, out);
             out.copyWrittenFileOnClose();
         }
     }
 
-    protected abstract void writePublicationList(List<OutputCategory> categories, BufferedWriter out) throws IOException;
+    protected abstract void writePublicationList(List<Section> sections, BufferedWriter out) throws IOException;
 }

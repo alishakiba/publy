@@ -306,6 +306,12 @@ public class SettingsReaderCurrent extends DefaultHandler implements SettingsRea
             case "reverseNumbering":
                 settings.getGeneralSettings().setReverseNumbering(Boolean.parseBoolean(text));
                 break;
+            case "grouping":
+                settings.getGeneralSettings().setGrouping(GeneralSettings.Grouping.valueOf(text));
+                break;
+            case "groupWithinCategories":
+                settings.getGeneralSettings().setGroupWithinCategories(Boolean.parseBoolean(text));
+                break;
             default:
                 Console.warn(Console.WarningType.OTHER, "Unrecognized tag in General settings: \"%s\".", qName);
                 break;

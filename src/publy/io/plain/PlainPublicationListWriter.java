@@ -21,8 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import publy.data.Section;
 import publy.data.bibitem.BibItem;
-import publy.data.category.OutputCategory;
 import publy.data.settings.GeneralSettings;
 import publy.data.settings.Settings;
 import publy.gui.UIConstants;
@@ -42,7 +42,7 @@ public class PlainPublicationListWriter extends PublicationListWriter {
     }
 
     @Override
-    protected void writePublicationList(List<OutputCategory> categories, BufferedWriter out) throws IOException {
+    protected void writePublicationList(List<Section> sections, BufferedWriter out) throws IOException {
         itemWriter = new PlainBibItemWriter(out, settings);
 
         // Initialize the count
@@ -50,8 +50,8 @@ public class PlainPublicationListWriter extends PublicationListWriter {
             if (settings.getGeneralSettings().isReverseNumbering()) {
                 count = 0;
 
-                for (OutputCategory c : categories) {
-                    count += c.getItems().size();
+                for (Section s : sections) {
+                    count += s.countAllItems();
                 }
             } else {
                 count = 1;
@@ -59,8 +59,8 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         }
 
         // Write the body
-        for (OutputCategory c : categories) {
-            writeCategory(c, out);
+        for (Section s : sections) {
+            writeSection(s, out, 0);
         }
         
         // Credit line and last modified
@@ -68,44 +68,59 @@ public class PlainPublicationListWriter extends PublicationListWriter {
         out.newLine();
     }
 
-    private void writeCategory(OutputCategory c, BufferedWriter out) throws IOException {
+    private void writeSection(Section section, BufferedWriter out, int nestingLevel) throws IOException {
         // Reset the count if necessary
         if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.WITHIN_CATEGORIES) {
             if (settings.getGeneralSettings().isReverseNumbering()) {
-                count = c.getItems().size();
+                count = section.getItems().size(); // This is correct; sub-sections hsould have their own count
             } else {
                 count = 1;
             }
         }
 
-        out.write(c.getName() + ".");
+        // Write the title
+        indent(out, 2 * nestingLevel);
+        out.write(section.getName() + ".");
         out.newLine();
         out.newLine();
-        
-        itemWriter.setIgnoredFields(new HashSet<>(c.getIgnoredFields()));
 
-        for (BibItem item : c.getItems()) {
+        // Write the publications
+        itemWriter.setIgnoredFields(new HashSet<>(section.getIgnoredFields()));
+        itemWriter.setIndentationLevel(2 * nestingLevel + 3);
+
+        for (BibItem item : section.getItems()) {
+            indent(out, 2 * nestingLevel);
+
             // Write the appropriate number
             if (settings.getGeneralSettings().getNumbering() != GeneralSettings.Numbering.NO_NUMBERS) {
-                out.write(count + ".");
-                
-                if (settings.getGeneralSettings().isUseNewLines()) {
-                    out.newLine();
-                } else {
-                    out.write(' ');
-                }
+                out.write(count + ". ");
+                itemWriter.setIndentationLevel(2 * nestingLevel + (count + ". ").length());
 
                 if (settings.getGeneralSettings().isReverseNumbering()) {
                     count--;
                 } else {
                     count++;
                 }
+            } else {
+                // Indent the first line
+                out.write("   ");
             }
 
             itemWriter.write(item);
             out.newLine();
         }
 
+        // Write the sub-sections
+        for (Section subsection : section.getSubsections()) {
+            writeSection(subsection, out, nestingLevel + 1);
+        }
+
         out.newLine();
+    }
+
+    private void indent(BufferedWriter out, int nestingLevel) throws IOException {
+        for (int i = 0; i < nestingLevel; i++) {
+            out.write(" ");
+        }
     }
 }
