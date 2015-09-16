@@ -935,6 +935,5 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         out.newLine();
         out.write(indentString);
-        System.out.println("Indentation depth: " + indentString.length());
     }
 }
