@@ -331,7 +331,9 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
     private static String getSectionId(Section section, List<Section> parents) {
         if (parents == null || parents.isEmpty()) {
-            return section.getShortName().toLowerCase();
+            String id = section.getShortName().toLowerCase();
+             // In HTML4, ids are not allowed to start with a number. This might cause CSS selector rules to fail.
+            return (Character.isDigit(id.charAt(0)) ? 's' + id : id);
         } else {
             StringBuilder sb = new StringBuilder();
 
@@ -341,6 +343,11 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             }
 
             sb.append(section.getShortName().toLowerCase());
+
+            if (Character.isDigit(sb.charAt(0))) {
+                sb.insert(0, 's');
+            }
+
             return sb.toString();
         }
     }
