@@ -17,6 +17,7 @@ package publy.io.bibtexparser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -51,48 +52,231 @@ public class TokenizerTest {
     }
 
     /**
-     * Test of extractDelimitedToken method, of class Tokenizer.
+     * Test of collectBibItem method, of class Tokenizer.
      */
     @Test
-    public void testExtractDelimitedToken_3args() {
-        System.out.println("extractDelimitedToken_String");
+    public void testCollectBibItem() {
+        System.out.println("collectBibItem");
 
         String[][] tests = new String[][]{
-            new String[]{"\"abc def\" ghi", "\"", "\"", "\"abc def\"", " ghi"},
-            new String[]{"\"\"", "\"", "\"", "\"\"", ""},
-            new String[]{"  \"abc def\" ghi", "\"", "\"", "\"abc def\"", " ghi"},
-            new String[]{" \n \t\n\r \"abc def\" ghi", "\"", "\"", "\"abc def\"", " ghi"},
-            new String[]{"abc def\" ghi", "\"", "\"", "EX", ""},
-            new String[]{"\" ghi", "\"", "\"", "EX", ""},
-            new String[]{" ghi", "\"", "\"", "EX", ""},
-            new String[]{" ", "\"", "\"", "EX", ""},
-            new String[]{"", "\"", "\"", "EX", ""},
-            new String[]{"\"ab\\\"c def\" ghi", "\"", "\"", "\"ab\\\"c def\"", " ghi"},
-            new String[]{"\"ab\\\"c\\\" def\" ghi", "\"", "\"", "\"ab\\\"c\\\" def\"", " ghi"},
-            new String[]{"\"ab\\\\\"c def\" ghi", "\"", "\"", "\"ab\\\\\"", "c def\" ghi"},
-        };
+            new String[]{"comment{Comment}", "EX"}, // First char should be '@'
+            new String[]{"@commentComment}", "EX"}, // There should be an open brace
+            new String[]{"@comme\n\t\nComme\nt}", "EX"}, // There should be an open brace
+            new String[]{"@comme{Comme\nt", "EX"}, // There should be a close brace
+            new String[]{"@comme{Co{m}me\nt", "EX"}, // There should be a close brace
+            new String[]{"@comme{{Co{}m}me\nt", "EX"}, // There should be a close brace
+            new String[]{"@comment{Comment}", "@comment{Comment}"},
+            new String[]{"@comment{Comment} @string{this = \"test\"}", "@comment{Comment}"},
+            new String[]{"@article{bose,\n title = \"Title\", author = {Bose, {P}rosenjit}}", "@article{bose,\n title = \"Title\", author = {Bose, {P}rosenjit}}"},
+            new String[]{"@comment{Comment\n\t  \t}", "@comment{Comment\n\t  \t}"},
+            new String[]{"@comment{C{{o}m{m}}}ent}", "@comment{C{{o}m{m}}}"},};
 
         for (String[] test : tests) {
             try {
-                Pair<String, String> expResult = new Pair<>(test[3], test[4]);
-                Pair<String, String> result = Tokenizer.extractDelimitedToken(test[0], test[1].charAt(0), test[2].charAt(0));
-                assertEquals("Input: <" + test[0] + "> Open: '" + test[1] + "' Close: '" + test[2] + "'", expResult, result);
+                String expResult = test[1];
+                String result = Tokenizer.collectBibItem(new BufferedReader(new StringReader(test[0])), "");
+                assertEquals("Input: <" + test[0] + ">", expResult, result);
             } catch (IOException ex) {
-                if (!"EX".equals(test[3])) {
-                    fail("extractDelimitedToken threw IOException \"" + ex + "\" with input \"" + test[0] + "\"");
+                if (!"EX".equals(test[1])) {
+                    fail("collectBibItem threw IOException \"" + ex + "\" with input \"" + test[0] + "\"");
                 }
+            } catch (Exception ex) {
+                System.err.println("Input: <" + test[0] + ">");
+                throw ex;
             }
         }
     }
 
-    /**
-     * Test of extractDelimitedToken method, of class Tokenizer.
-     */
     @Test
-    public void testExtractDelimitedToken_4args() {
-        System.out.println("extractDelimitedToken_Reader");
-        
-        fail("The test case is a prototype.");
-    }
+    public void testCollectValue() {
+        System.out.println("collectValue");
 
+        String[][] tests = new String[][]{
+            // Input, value, remainder
+            new String[]{"\"Yes\",\n"
+                + "}",
+                "\"Yes\"",
+                ",\n"
+                + "}"},
+            new String[]{"{No}}",
+                "{No}",
+                "}"},
+            new String[]{"11,\n"
+                + "}",
+                "11",
+                ",\n"
+                + "}"},
+            new String[]{"12}",
+                "12",
+                "}"},
+            new String[]{"\"Goossens, Michel and Mittelbach, Franck and Samarin, Alexander\",\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\",\n"
+                + "booktitle = \"The {{\\LaTeX}} {C}ompanion\",\n"
+                + "publisher = AW,\n"
+                + "year = 1993,\n"
+                + "month = \"December\",\n"
+                + "ISBN = {0-201-54199-8},\n"
+                + "library = \"Yes\",\n"
+                + "}",
+                "\"Goossens, Michel and Mittelbach, Franck and Samarin, Alexander\"",
+                ",\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\",\n"
+                + "booktitle = \"The {{\\LaTeX}} {C}ompanion\",\n"
+                + "publisher = AW,\n"
+                + "year = 1993,\n"
+                + "month = \"December\",\n"
+                + "ISBN = {0-201-54199-8},\n"
+                + "library = \"Yes\",\n"
+                + "}"},
+            new String[]{"\"The {{\\LaTeX}} {C}ompanion\",\n"
+                + "booktitle = \"The {{\\LaTeX}} {C}ompanion\",\n"
+                + "publisher = AW,\n"
+                + "year = 1993,\n"
+                + "month = \"December\",\n"
+                + "ISBN = {0-201-54199-8},\n"
+                + "library = \"Yes\",\n"
+                + "}",
+                "\"The {{\\LaTeX}} {C}ompanion\"",
+                ",\n"
+                + "booktitle = \"The {{\\LaTeX}} {C}ompanion\",\n"
+                + "publisher = AW,\n"
+                + "year = 1993,\n"
+                + "month = \"December\",\n"
+                + "ISBN = {0-201-54199-8},\n"
+                + "library = \"Yes\",\n"
+                + "}"},
+            new String[]{"\"The {{\\LaTeX}} {C}ompanion\",\n"
+                + "publisher = AW,\n"
+                + "year = 1993,\n"
+                + "month = \"December\",\n"
+                + "ISBN = {0-201-54199-8},\n"
+                + "library = \"Yes\",\n"
+                + "}",
+                "\"The {{\\LaTeX}} {C}ompanion\"",
+                ",\n"
+                + "publisher = AW,\n"
+                + "year = 1993,\n"
+                + "month = \"December\",\n"
+                + "ISBN = {0-201-54199-8},\n"
+                + "library = \"Yes\",\n"
+                + "}"},
+            new String[]{"AW,\n"
+                + "year = 1993,\n"
+                + "month = \"December\",\n"
+                + "ISBN = {0-201-54199-8},\n"
+                + "library = \"Yes\",\n"
+                + "}",
+                "AW",
+                ",\n"
+                + "year = 1993,\n"
+                + "month = \"December\",\n"
+                + "ISBN = {0-201-54199-8},\n"
+                + "library = \"Yes\",\n"
+                + "}"},
+            new String[]{"1993,\n"
+                + "month = \"December\",\n"
+                + "ISBN = {0-201-54199-8},\n"
+                + "library = \"Yes\",\n"
+                + "}",
+                "1993",
+                ",\n"
+                + "month = \"December\",\n"
+                + "ISBN = {0-201-54199-8},\n"
+                + "library = \"Yes\",\n"
+                + "}"},
+            new String[]{"\"December\",\n"
+                + "ISBN = {0-201-54199-8},\n"
+                + "library = \"Yes\",\n"
+                + "}",
+                "\"December\"",
+                ",\n"
+                + "ISBN = {0-201-54199-8},\n"
+                + "library = \"Yes\",\n"
+                + "}"},
+            new String[]{"{0-201-54199-8},\n"
+                + "library = \"Yes\",\n"
+                + "}",
+                "{0-201-54199-8}",
+                ",\n"
+                + "library = \"Yes\",\n"
+                + "}"},
+            new String[]{"\"Yes\",\n"
+                + "}",
+                "\"Yes\"",
+                ",\n"
+                + "}"},
+            new String[]{"\"Comments on {\"}Filenames and Fonts{\"}\",\n"
+                + "title = {Comments on \"Filenames and Fonts\"},",
+                "\"Comments on {\"}Filenames and Fonts{\"}\"",
+                ",\n"
+                + "title = {Comments on \"Filenames and Fonts\"},"},
+            new String[]{"{Comments on \"Filenames and Fonts\"},\n"
+                + "title = \"Comments on {\"}Filenames and Fonts{\"}\",",
+                "{Comments on \"Filenames and Fonts\"}",
+                ",\n"
+                + "title = \"Comments on {\"}Filenames and Fonts{\"}\","},
+            new String[]{"goossens # and # mittelbach # and # samarin,\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\",",
+                "goossens # and # mittelbach # and # samarin",
+                ",\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\","},
+            new String[]{"goossens # \" and \" # mittelbach # and # samarin,\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\",",
+                "goossens # \" and \" # mittelbach # and # samarin",
+                ",\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\","},
+            new String[]{"\"goossens\" # \" and \" # mittelbach # and # samarin,\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\",",
+                "\"goossens\" # \" and \" # mittelbach # and # samarin",
+                ",\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\","},
+            new String[]{"\"goossens #  and \" # mittelbach # and # samarin,\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\",",
+                "\"goossens #  and \" # mittelbach # and # samarin",
+                ",\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\","},
+            new String[]{"\"goos,sens #  and \" # mittelbach # and # samarin,\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\",",
+                "\"goos,sens #  and \" # mittelbach # and # samarin",
+                ",\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\","},
+            new String[]{"goossens # and # {mit,telbach} # and # samarin,\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\",",
+                "goossens # and # {mit,telbach} # and # samarin",
+                ",\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\","},
+            new String[]{"goossens # and # {mit, \"tel\" # bach} # and # samarin,\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\",",
+                "goossens # and # {mit, \"tel\" # bach} # and # samarin",
+                ",\n"
+                + "title = \"The {{\\LaTeX}} {C}ompanion\","},
+            new String[]{"\"The {{\\LaTeX}} {C}ompanion\"}",
+                "\"The {{\\LaTeX}} {C}ompanion\"",
+                "}"},
+            new String[]{"\"The {{\\LaTeX,}} {C}ompanion\"}",
+                "\"The {{\\LaTeX,}} {C}ompanion\"",
+                "}"},
+            new String[]{"{The ,ompanion}}",
+                "{The ,ompanion}",
+                "}"},
+            new String[]{"{The ,ompanion},}",
+                "{The ,ompanion}",
+                ",}"},
+        };
+
+        for (String[] test : tests) {
+            try {
+                Pair<String, String> expResult = new Pair<>(test[1], test[2]);
+                Pair<String, String> result = Tokenizer.collectValue(test[0]);
+                assertEquals("Input: <" + test[0] + ">", expResult, result);
+            } catch (IOException ioe) {
+               if (!"EX".equals(test[1])) {
+                    fail("collectBibItem threw IOException \"" + ioe + "\" with input \"" + test[0] + "\"");
+                }
+            } catch (Exception ex) {
+                System.err.println("Input: <" + test[0] + ">");
+                throw ex;
+            }
+        }
+    }
 }
