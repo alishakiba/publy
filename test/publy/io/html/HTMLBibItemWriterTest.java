@@ -30,7 +30,7 @@ public class HTMLBibItemWriterTest {
     public void testWrite() {
         System.out.println("write");
 
-        for (Type type : Type.values()) {
+        for (Type type : Type.getEntryTypes()) {
             if (type == Type.ONLINE || type == Type.PATENT) {
                 continue;
             }
@@ -50,7 +50,7 @@ public class HTMLBibItemWriterTest {
     public void testWriteIgnore() {
         System.out.println("writeIgnore");
 
-        for (Type type : Type.values()) {
+        for (Type type : Type.getEntryTypes()) {
             BibItem item = TestUtils.getFullBibItem(type);
             Set<String> mandatoryFields = TestUtils.getMandatoryFields(type);
 
