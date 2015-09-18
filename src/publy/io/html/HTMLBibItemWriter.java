@@ -19,13 +19,10 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import publy.Console;
 import publy.data.PublicationStatus;
 import publy.data.Author;
-import publy.data.Section;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.Type;
 import publy.data.settings.HTMLSettings;
@@ -40,12 +37,10 @@ import publy.io.bibtex.BibtexBibItemWriter;
 public class HTMLBibItemWriter extends BibItemWriter {
 
     private final BibtexBibItemWriter bibtexWriter;
-    private final List<Section> sections;
 
-    public HTMLBibItemWriter(BufferedWriter out, List<Section> sections, Settings settings) {
+    public HTMLBibItemWriter(BufferedWriter out, Settings settings) {
         super(out, settings);
         bibtexWriter = new BibtexBibItemWriter(out, settings);
-        this.sections = sections;
     }
 
     @Override
@@ -350,7 +345,6 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 out.write("<a href=\"" + href + "\">");
                 output("<h4 class=\"title\">", title, "</h4>");
                 out.write("</a>");
-                checkExistance(get(item, "file"), "file", item);
             } catch (URISyntaxException ex) {
                 Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
                 output("<h4 class=\"title\">", title, "</h4>");
@@ -632,8 +626,6 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
                 writeLink(divOpened, link, text);
                 divOpened = true;
-
-                checkExistance(get(item, "file"), "file", item);
             } catch (URISyntaxException ex) {
                 Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
             }
@@ -752,14 +744,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
             int divider = link.indexOf('|');
 
             if (divider == -1) {
-                Console.error("No divider \"|\" found in %s of item \"%s\". Links should be formatted as%n  %s={<Link text>|<Link target>}", attribute, item.getId(), attribute);
+                Console.error("No divider \"|\" found in %s of item \"%s\". Links should be formatted as%n  %s={Link text|Link target}", attribute, item.getId(), attribute);
             } else {
                 String text = link.substring(0, divider);
                 String target = link.substring(divider + 1);
 
                 if (target.startsWith("#")) {
                     // Link to another paper, good as-is
-                    checkIdExistance(target.substring(1), attribute, item);
                 } else if (target.contains(":")) {
                     // Most file systems prohibit colons in file names, so
                     // it seems safe to assume that this indicates an
@@ -767,7 +758,6 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 } else {
                     // Most likely link to a file on disk. Encode correctly.
                     try {
-                        checkExistance(target, attribute, item);
                         target = (new URI(null, null, target, null)).toString();
                     } catch (URISyntaxException ex) {
                         Console.except(ex, "Could not parse the target of %s of item \"%s\":", attribute, item.getId());
@@ -883,46 +873,6 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     private boolean includePaper(BibItem item) {
         return isPresent(item, "file") && settings.getHtmlSettings().getIncludePaper().matches(item);
-    }
-
-    private void checkExistance(String path, String attr, BibItem item) {
-        Path file = settings.getFileSettings().getTarget().resolveSibling(path);
-
-        if (Files.notExists(file)) {
-            Console.warn(Console.WarningType.MISSING_REFERENCE, "File \"%s\" (linked in attribute \"%s\" of publication \"%s\") cannot be found at \"%s\".", path, attr, item.getId(), file);
-        }
-    }
-
-    /**
-     * Checks whether a BibItem with the given id exists, gives a warning when
-     * it doesn't.
-     *
-     * @param id
-     */
-    private void checkIdExistance(String id, String attr, BibItem item) {
-        for (Section section : sections) {
-            if (checkIdExists(id, section)) {
-                return;
-            }
-        }
-
-        Console.warn(Console.WarningType.MISSING_REFERENCE, "Publication \"%s\" (linked in attribute \"%s\" of publication \"%s\") is not in the final list.", id, attr, item.getId());
-    }
-
-    private boolean checkIdExists(String id, Section section) {
-        for (BibItem i : section.getItems()) {
-            if (i.getId().equals(id)) {
-                return true;
-            }
-        }
-
-        for (Section subsection : section.getSubsections()) {
-            if (checkIdExists(id, subsection)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     @Override
