@@ -113,12 +113,12 @@
         <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
     </allCategories>
-    <activeCategories>5;0;3;2;9;1;7;6</activeCategories>
+    <activeCategories>5;0;3;2;9;1;7;6;4</activeCategories>
   </categorySettings>
 
   <!-- General settings -->
   <generalSettings>
-    <myNames><![CDATA[me]]></myNames>
+    <myNames><![CDATA[Sander Verdonschot]]></myNames>
     <nameDisplay>FULL</nameDisplay>
     <reverseNames>false</reverseNames>
     <listAllAuthors>false</listAllAuthors>
@@ -126,6 +126,8 @@
     <useNewLines>true</useNewLines>
     <numbering>NO_NUMBERS</numbering>
     <reverseNumbering>false</reverseNumbering>
+    <grouping>GROUP_BY_YEAR</grouping>
+    <groupWithinCategories>true</groupWithinCategories>
   </generalSettings>
 
   <!-- HTML-specific settings -->
