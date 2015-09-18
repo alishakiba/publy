@@ -111,7 +111,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Write note (unpublished uses note as the publication info)
         if (item.getType() != Type.UNPUBLISHED) {
-            output("<span class=\"note\">", get(item, "note"), ".</span>", true);
+            output(indentString + "<span class=\"note\">", get(item, "note"), ".</span>", true);
         }
 
         writeLinks(item);
