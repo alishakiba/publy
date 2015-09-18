@@ -307,7 +307,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         }
 
         output(".", true);
-        out.write(indentString);
+        indent();
     }
 
     private void writeAuthors(BibItem item) throws IOException {
@@ -319,7 +319,7 @@ public class PlainBibItemWriter extends BibItemWriter {
                 useEditor = true;
             } else if (isPresent(item, "organization")) {
                 output(get(item, "organization"), ".", true);
-                out.write(indentString);
+                indent();
                 return;
             } else {
                 Console.error("No editor or organization found for entry \"%s\".", item.getId());
@@ -349,7 +349,7 @@ public class PlainBibItemWriter extends BibItemWriter {
                 output(authors, ".", true);
             }
 
-            out.write(indentString);
+            indent();
         }
     }
 
@@ -469,7 +469,7 @@ public class PlainBibItemWriter extends BibItemWriter {
                 default:
                     throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized pubstate: \"" + get(item, "pubstate") + "\"");
             }
-            
+
             output(venue, ".", true);
         }
     }
@@ -482,5 +482,11 @@ public class PlainBibItemWriter extends BibItemWriter {
         }
 
         return pages.replaceAll("-+", "-");
+    }
+    
+    private void indent() throws IOException {
+        if (settings.getGeneralSettings().isUseNewLines()) {
+            out.write(indentString);
+        }
     }
 }
