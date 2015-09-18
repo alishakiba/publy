@@ -97,7 +97,7 @@ public class PlainBibItemWriter extends BibItemWriter {
 
         // Write note (unpublished uses note as the publication info)
         if (item.getType() != Type.UNPUBLISHED) {
-            output(get(item, "note"), ".", true);
+            output(indentString, get(item, "note"), ".", true);
         }
     }
 
@@ -307,6 +307,7 @@ public class PlainBibItemWriter extends BibItemWriter {
         }
 
         output(".", true);
+        out.write(indentString);
     }
 
     private void writeAuthors(BibItem item) throws IOException {
@@ -318,6 +319,7 @@ public class PlainBibItemWriter extends BibItemWriter {
                 useEditor = true;
             } else if (isPresent(item, "organization")) {
                 output(get(item, "organization"), ".", true);
+                out.write(indentString);
                 return;
             } else {
                 Console.error("No editor or organization found for entry \"%s\".", item.getId());
@@ -346,6 +348,8 @@ public class PlainBibItemWriter extends BibItemWriter {
             } else {
                 output(authors, ".", true);
             }
+
+            out.write(indentString);
         }
     }
 

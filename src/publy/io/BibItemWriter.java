@@ -265,7 +265,6 @@ public abstract class BibItemWriter {
     protected void newline() throws IOException {
         if (settings.getGeneralSettings().isUseNewLines()) {
             out.newLine();
-            out.write(indentString);
         } else {
             out.write(' ');
         }
