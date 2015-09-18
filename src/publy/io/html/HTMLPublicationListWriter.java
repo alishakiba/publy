@@ -283,12 +283,25 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             // The actual entries
             for (BibItem item : section.getItems()) {
                 indent(out, 2 * parents.size());
-                
+
                 if (settings.getGeneralSettings().isReverseNumbering()) {
-                    out.write("        <li id=\"" + item.getId() + "\" value=\"" + count + "\" class=\"bibentry " + item.getOriginalType() + "\">");
+                    out.write("        <li id=\"" + 
+                            (Character.isDigit(item.getId().charAt(0)) ? 'p' : "") +
+                            item.getId() +
+                            "\" value=\"" +
+                            count +
+                            "\" " +
+                            "class=\"bibentry " +
+                            item.getOriginalType() +
+                            "\">");
                     count--;
                 } else {
-                    out.write("        <li id=\"" + item.getId() + "\" class=\"bibentry " + item.getOriginalType() + "\">");
+                    out.write("        <li id=\"" +
+                            (Character.isDigit(item.getId().charAt(0)) ? 'p' : "") +
+                            item.getId() +
+                            "\" class=\"bibentry " +
+                            item.getOriginalType() +
+                            "\">");
                     count++;
                 }
 
@@ -330,10 +343,10 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private static String getSectionId(Section section, List<Section> parents) {
+        String id;
+
         if (parents == null || parents.isEmpty()) {
-            String id = section.getShortName().toLowerCase();
-             // In HTML4, ids are not allowed to start with a number. This might cause CSS selector rules to fail.
-            return (Character.isDigit(id.charAt(0)) ? 's' + id : id);
+            id = section.getShortName().toLowerCase();
         } else {
             StringBuilder sb = new StringBuilder();
 
@@ -344,12 +357,11 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
             sb.append(section.getShortName().toLowerCase());
 
-            if (Character.isDigit(sb.charAt(0))) {
-                sb.insert(0, 's');
-            }
-
-            return sb.toString();
+            id = sb.toString();
         }
+
+        // In HTML4, ids are not allowed to start with a number. This might cause CSS selector rules to fail.
+        return (Character.isDigit(id.charAt(0)) ? 's' + id : id);
     }
 
     private void writeNavigation(List<Section> sections, BufferedWriter out) throws IOException {
