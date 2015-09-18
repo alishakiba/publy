@@ -16,6 +16,7 @@
 package publy.io;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -61,6 +62,10 @@ public class TestUtils {
     }
 
     public static Set<BibItem> generateExampleBibitems(Type type) {
+        if (!Type.getEntryTypes().contains(type)) {
+            return Collections.<BibItem>emptySet();
+        }
+        
         // Figure out which fields to include, exclude, and vary
         Set<String> included = new LinkedHashSet<>();
 
@@ -208,6 +213,10 @@ public class TestUtils {
     }
 
     public static BibItem getFullBibItem(Type type) {
+        if (!Type.getEntryTypes().contains(type)) {
+            return null;
+        }
+        
         // Find all fields to use
         Set<String> included = new LinkedHashSet<>();
 

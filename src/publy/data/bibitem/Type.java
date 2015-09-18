@@ -15,6 +15,9 @@
  */
 package publy.data.bibitem;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 /**
  * A kind of publication. These correspond roughly to BibTeX's types.
  */
@@ -30,6 +33,12 @@ public enum Type {
     @Override
     public String toString() {
         return name().toLowerCase();
+    }
+
+    public static Set<Type> getEntryTypes() {
+        return EnumSet.of(ARTICLE, BOOK, INBOOK, BOOKLET, INCOLLECTION, MANUAL,
+                MISC, ONLINE, PATENT, PROCEEDINGS, INPROCEEDINGS, REPORT, THESIS,
+                UNPUBLISHED);
     }
 
     /**

@@ -119,7 +119,7 @@ public class PlainBibItemWriterTest {
 
     @Test
     public void testWrites() {
-        for (Type type : Type.values()) {
+        for (Type type : Type.getEntryTypes()) {
             Set<BibItem> items = TestUtils.generateExampleBibitems(type);
 
             for (BibItem item : items) {
@@ -142,7 +142,7 @@ public class PlainBibItemWriterTest {
     public void testWriteIgnore() {
         System.out.println("writeIgnore");
 
-        for (Type type : Type.values()) {
+        for (Type type : Type.getEntryTypes()) {
             BibItem item = TestUtils.getFullBibItem(type);
             Set<String> mandatoryFields = TestUtils.getMandatoryFields(type);
 
