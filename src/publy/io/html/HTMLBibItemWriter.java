@@ -111,7 +111,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         // Write note (unpublished uses note as the publication info)
         if (item.getType() != Type.UNPUBLISHED) {
-            output(indentString + "<span class=\"note\">", get(item, "note"), ".</span>", true);
+            output("<span class=\"note\">", get(item, "note"), ".</span>", true);
         }
 
         writeLinks(item);
@@ -318,8 +318,6 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     protected void writeTitle(BibItem item) throws IOException {
-        out.write(indentString);
-
         String title = formatTitle(item);
 
         if (item.getType() == Type.INBOOK && !isPresent(item, "volume")) {
@@ -340,6 +338,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
             }
         }
 
+        out.write(indentString);
+        
         // Title
         if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
             output("<h4 class=\"title abstract-toggle\">", title, "</h4>");
@@ -377,11 +377,10 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
             writeAbstract(item);
         } else if (settings.getGeneralSettings().isUseNewLines()) {
-            out.write("<br>");
-            out.newLine();
+            newline();
         } else {
             out.write('.');
-            out.newLine(); // Still add a newline in the source
+            newline(); // Still add a newline in the source
         }
     }
 
@@ -791,7 +790,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         bibtexWriter.write(item);
 
-        out.write("</pre>");
+        out.write("</pre>"); // No indent, as this would end up as part of the BibTeX
         out.newLine();
 
         out.write(indentString + "</div>");
@@ -869,8 +868,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
     }
 
     private void writeToggleLink(String type, String text) throws IOException {
-        out.write(indentString);
-        out.write("<button class=\"" + type + "-toggle\">");
+        out.write(indentString + "<button class=\"" + type + "-toggle\">");
         out.write(text);
         out.write("</button>");
     }
@@ -934,7 +932,5 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         out.newLine();
-        out.write(indentString);
-        System.out.println("Indentation depth: " + indentString.length());
     }
 }
