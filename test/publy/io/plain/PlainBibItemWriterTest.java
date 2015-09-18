@@ -40,7 +40,7 @@ public class PlainBibItemWriterTest {
     }
     private StringWriter htmlOutput = new StringWriter();
     private BufferedWriter htmlBuffer = new BufferedWriter(htmlOutput);
-    private HTMLBibItemWriter htmlWriter = new HTMLBibItemWriter(htmlBuffer, null, HTMLTestUtils.getBibtexSettings());
+    private HTMLBibItemWriter htmlWriter = new HTMLBibItemWriter(htmlBuffer, HTMLTestUtils.getBibtexSettings());
 
     private String runHtmlWriterMethod(BibItem item) throws Exception {
         htmlWriter.write(item);

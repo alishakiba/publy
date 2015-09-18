@@ -93,7 +93,7 @@ public class HTMLTestUtils {
         // Initialize writers
         output = new StringWriter();
         buffer = new BufferedWriter(output);
-        testInstance = new HTMLBibItemWriter(buffer, null, bibtexSettings);
+        testInstance = new HTMLBibItemWriter(buffer, bibtexSettings);
         
         // Prevent errors from popping up the Console
         Console.setOutputTarget(new JTextPane());
