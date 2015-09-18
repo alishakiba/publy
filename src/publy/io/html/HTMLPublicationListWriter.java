@@ -61,7 +61,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
     @Override
     protected void writePublicationList(List<Section> sections, BufferedWriter out) throws IOException {
-        itemWriter = new HTMLBibItemWriter(out, sections, settings);
+        itemWriter = new HTMLBibItemWriter(out, settings);
 
         // Initialize the count
         if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL) {

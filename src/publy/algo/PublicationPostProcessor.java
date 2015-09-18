@@ -15,6 +15,8 @@
  */
 package publy.algo;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -79,6 +81,7 @@ public class PublicationPostProcessor {
 
         warnForMandatoryIgnoredFields(settings, sections);
         warnIfIAmNotAuthor(settings, items);
+        warnForMissingReferences(settings, items, sections);
 
         return sections;
     }
@@ -490,6 +493,100 @@ public class PublicationPostProcessor {
                 }
             }
         }
+    }
+
+    /**
+     * Prints warning messages for publications that reference other
+     * publications or files that do not exist.
+     *
+     * @param settings
+     * @param items
+     * @param sections
+     */
+    private static void warnForMissingReferences(Settings settings, List<BibItem> items, List<Section> sections) {
+        for (BibItem item : items) {
+            // Check 'file' links
+            String path = item.get("file");
+            
+            if (path != null && !path.isEmpty()) {
+                checkFileExistance(settings, item.get("file"), "file", item);
+            }
+
+            // Check all 'link' links
+            for (int i = -1; i < 20; i++) {
+                String attribute = (i == -1 ? "link" : "link" + i);
+                String link = item.get(attribute);
+
+                if (link != null && !link.isEmpty()) {
+                    int divider = link.indexOf('|');
+
+                    if (divider > -1) {
+                        String target = link.substring(divider + 1);
+
+                        if (target.startsWith("#")) {
+                            // Link to another paper
+                            checkIdExistance(target.substring(1), attribute, item, sections);
+                        } else if (target.contains(":")) {
+                        // Most file systems prohibit colons in file names, so
+                            // it seems safe to assume that this indicates an
+                            // absolute URI and as such, should be fine.
+                        } else {
+                            // Most likely link to a file on disk
+                            checkFileExistance(settings, target, attribute, item);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks whether the given path corresponds to an existing file, when
+     * resolved from the HTML target location, prints a warning if it doesn't
+     *
+     * @param settings
+     * @param path
+     * @param attr
+     * @param item
+     */
+    private static void checkFileExistance(Settings settings, String path, String attr, BibItem item) {
+        Path file = settings.getFileSettings().getTarget().resolveSibling(path);
+
+        if (Files.notExists(file)) {
+            Console.warn(Console.WarningType.MISSING_REFERENCE, "File \"%s\" (linked in attribute \"%s\" of publication \"%s\") cannot be found at \"%s\".", path, attr, item.getId(), file);
+        }
+    }
+
+    /**
+     * Checks whether a BibItem with the given id is in any of the given
+     * sections or sub-sections, prints a warning if it doesn't.
+     *
+     * @param id
+     */
+    private static void checkIdExistance(String id, String attr, BibItem item, List<Section> sections) {
+        for (Section s : sections) {
+            if (checkIdExists(id, s)) {
+                return;
+            }
+        }
+
+        Console.warn(Console.WarningType.MISSING_REFERENCE, "Publication \"%s\" (linked in attribute \"%s\" of publication \"%s\") is not in the final list.", id, attr, item.getId());
+    }
+
+    private static boolean checkIdExists(String id, Section section) {
+        for (BibItem i : section.getItems()) {
+            if (i.getId().equals(id)) {
+                return true;
+            }
+        }
+
+        for (Section subsection : section.getSubsections()) {
+            if (checkIdExists(id, subsection)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private PublicationPostProcessor() {
