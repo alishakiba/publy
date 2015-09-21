@@ -15,6 +15,7 @@
  */
 package publy.algo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -49,6 +50,52 @@ public class PostProcessorTest {
 
     @After
     public void tearDown() {
+    }
+
+    /**
+     * Test of applyCrossref method, of class PostProcessor.
+     */
+    @Test
+    public void testApplyCrossref() {
+        System.out.println("applyCrossref");
+
+        Settings settings = new Settings();
+        settings.getConsoleSettings().setShowWarnings(false);
+        Console.setSettings(settings.getConsoleSettings());
+
+        BibItem item1 = new BibItem("inproceedings", "Kang2011");
+        item1.put("author", "Kang, Hongwen and Hebert, Martial and Kanade, Takeo");
+        item1.put("title", "Discovering object instances from scenes of Daily Living");
+        item1.put("crossref", "iccv-2011");
+        item1.put("pages", "762--769");
+
+        BibItem item2 = new BibItem("proceedings", "iccv-2011");
+        item2.put("booktitle", "International Conference on Computer Vision (ICCV)");
+        item2.put("year", "2011");
+
+        PublicationPostProcessor.postProcess(settings, new ArrayList<>(Arrays.asList(item1, item2)));
+
+        assertEquals("International Conference on Computer Vision (ICCV)", item1.get("booktitle"));
+        assertEquals("2011", item1.get("year"));
+
+        BibItem item3 = new BibItem("inproceedings", "no-gnats");
+        item3.put("author", "Rocky Gneisser");
+        item3.put("title", "No Gnats Are Taken for Granite");
+        item3.put("crossref", "gg-proceedings");
+        item3.put("pages", "133-139");
+
+        BibItem item4 = new BibItem("proceedings", "gg-proceedings");
+        item4.put("title", "The Gnats and Gnus 1988 Proceedings");
+        item4.put("editor", "Gerald Ford and Jimmy Carter");
+        item4.put("booktitle", "The Gnats and Gnus 1988 Proceedings");
+        item4.put("year", "2011");
+
+        PublicationPostProcessor.postProcess(settings, new ArrayList<>(Arrays.asList(item3, item4)));
+
+        assertEquals("No Gnats Are Taken for Granite", item3.get("title"));
+        assertEquals("Gerald Ford and Jimmy Carter", item3.get("editor"));
+        assertEquals("The Gnats and Gnus 1988 Proceedings", item3.get("booktitle"));
+        assertEquals("2011", item3.get("year"));
     }
 
     /**
@@ -200,7 +247,7 @@ public class PostProcessorTest {
 
         for (BibItem item : items) {
             PublicationPostProcessor.postProcess(settings, Arrays.asList(item));
-            
+
             assertEquals("arXiv mismatch: " + item, item.get("--testArxiv"), (item.get("arxiv") == null ? "" : item.get("arxiv")));
             assertEquals("class mismatch: " + item, item.get("--testClass"), (item.get("primaryclass") == null ? "" : item.get("primaryclass")));
         }

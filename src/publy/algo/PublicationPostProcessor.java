@@ -72,8 +72,9 @@ public class PublicationPostProcessor {
      * @return a list of categories that contain the post-processed publications
      */
     public static List<Section> postProcess(Settings settings, List<BibItem> items) {
-        removeDuplicateIDs(items);
+        Map<String, BibItem> itemsById = removeDuplicateIDs(items);
         processAliases(items);
+        applyCrossref(items, itemsById);
         removeItemsWithMissingMandatoryFields(items);
         detectArxiv(items);
 
@@ -95,8 +96,8 @@ public class PublicationPostProcessor {
      *
      * @param items the publications to process
      */
-    private static void removeDuplicateIDs(List<BibItem> items) {
-        HashSet<String> ids = new HashSet<>();
+    private static Map<String, BibItem> removeDuplicateIDs(List<BibItem> items) {
+        Map<String, BibItem> itemsById = new HashMap<>();
         Map<String, Integer> duplicateCount = new HashMap<>();
 
         ListIterator<BibItem> it = items.listIterator();
@@ -104,11 +105,13 @@ public class PublicationPostProcessor {
         while (it.hasNext()) {
             BibItem item = it.next();
 
-            if (!ids.add(item.getId())) { // add returns false if the id was already in the set
+            if (itemsById.containsKey(item.getId())) {
                 it.remove();
 
                 int currentCount = (duplicateCount.containsKey(item.getId()) ? duplicateCount.get(item.getId()) : 1);
                 duplicateCount.put(item.getId(), currentCount + 1);
+            } else {
+                itemsById.put(item.getId(), item);
             }
         }
 
@@ -121,6 +124,8 @@ public class PublicationPostProcessor {
 
             Console.error("There were multiple publications with the following identifiers:%n%s Please make sure all identifiers are unique.", sb.toString());
         }
+
+        return itemsById;
     }
 
     /**
@@ -142,6 +147,33 @@ public class PublicationPostProcessor {
 
                     if (standardValue == null || standardValue.isEmpty()) {
                         item.put(standardField, aliasValue);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Fills missing fields with information from cross-referenced publications.
+     *
+     * @param items the publications to process
+     */
+    private static void applyCrossref(List<BibItem> items, Map<String, BibItem> itemsById) {
+        for (BibItem item : items) {
+            String id = item.get("crossref");
+
+            if (id != null && !id.isEmpty()) {
+                BibItem source = itemsById.get(id);
+
+                if (source == null) {
+                    Console.warn(Console.WarningType.MISSING_REFERENCE, "Publication \"%s\" (cross-referenced from \"%s\") does not exist.", id, item.getId());
+                } else {
+                    // Copy all missing fields from source to item
+                    for (String field : source.getFields()) {
+                        if (source.get(field) != null && !source.get(field).isEmpty() &&
+                                (item.get(field) == null || item.get(field).isEmpty())) {
+                            item.put(field, source.get(field));
+                        }
                     }
                 }
             }
@@ -507,7 +539,7 @@ public class PublicationPostProcessor {
         for (BibItem item : items) {
             // Check 'file' links
             String path = item.get("file");
-            
+
             if (path != null && !path.isEmpty()) {
                 checkFileExistance(settings, item.get("file"), "file", item);
             }
@@ -527,7 +559,7 @@ public class PublicationPostProcessor {
                             // Link to another paper
                             checkIdExistance(target.substring(1), attribute, item, sections);
                         } else if (target.contains(":")) {
-                        // Most file systems prohibit colons in file names, so
+                            // Most file systems prohibit colons in file names, so
                             // it seems safe to assume that this indicates an
                             // absolute URI and as such, should be fine.
                         } else {
