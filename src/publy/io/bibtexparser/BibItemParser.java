@@ -22,10 +22,10 @@ import publy.data.bibitem.BibItem;
 
 public class BibItemParser {
 
-    public static BibItem parseBibItem(String text) throws IOException {
+    public static BibItem parseBibItem(String text) throws IOException, ParseException {
         int bodyStart = text.indexOf('{');
         String type = text.substring(1, bodyStart).trim().toLowerCase();
-        String body = text.substring(bodyStart + 1, text.length() - 1).trim();
+        String body = text.substring(bodyStart + 1).trim();
 
         switch (type) {
             case "comment":
@@ -42,7 +42,7 @@ public class BibItemParser {
         // Syntax: Short = "Full" or Short = {Full}
         int split = body.indexOf('=');
         String shortName = body.substring(0, split).trim();
-        String fullText = body.substring(split + 1).trim();
+        String fullText = body.substring(split + 1, body.length() - 1).trim(); // Remove outer '}'
         fullText = fullText.substring(1, fullText.length() - 1); // Remove outer pair of braces or quotation marks
 
         BibItem result = new BibItem("string", null);
@@ -52,13 +52,13 @@ public class BibItemParser {
         return result;
     }
 
-    private static BibItem parsePublication(String type, String body) throws IOException {
+    private static BibItem parsePublication(String type, String body) throws ParseException {
         // Syntax: id, (field-value-pair)*
         int idEnd = body.indexOf(',');
 
         if (idEnd == -1) {
             // No fields
-            return new BibItem(type, body);
+            return new BibItem(type, body.substring(0, body.length() - 1));
         }
 
         String id = body.substring(0, idEnd).trim().toLowerCase();
@@ -66,7 +66,7 @@ public class BibItemParser {
 
         BibItem result = new BibItem(type, id);
 
-        while (!body.isEmpty() && !body.equals(",")) {
+        while (!body.isEmpty() && !body.equals("}")) {
             // Parse the next field-value pair
             int valueStart = body.indexOf('=');
 

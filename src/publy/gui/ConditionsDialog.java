@@ -36,7 +36,7 @@ import publy.data.category.conditions.FieldEqualsCondition;
 import publy.data.category.conditions.FieldExistsCondition;
 import publy.data.category.conditions.TypeCondition;
 import publy.data.settings.Settings;
-import publy.io.BibTeXParser;
+import publy.io.bibtexparser.PublicationListParser;
 
 /**
  *
@@ -330,7 +330,7 @@ public class ConditionsDialog extends javax.swing.JDialog {
             List<BibItem> items = null;
 
             try {
-                items = BibTeXParser.parseFile(settings.getFileSettings().getPublications());
+                items = PublicationListParser.parseFile(settings.getFileSettings().getPublications());
             } catch (Exception | AssertionError ex) {
                 testOutputTextArea.setText(String.format("Exception while parsing publications list:%n%s", ex.toString()));
             }

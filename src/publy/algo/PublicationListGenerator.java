@@ -15,6 +15,7 @@
  */
 package publy.algo;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -22,9 +23,10 @@ import publy.Console;
 import publy.data.Section;
 import publy.data.bibitem.BibItem;
 import publy.data.settings.Settings;
-import publy.io.BibTeXParser;
 import publy.io.PublicationListWriter;
 import publy.io.bibtex.BibtexPublicationListWriter;
+import publy.io.bibtexparser.ParseException;
+import publy.io.bibtexparser.PublicationListParser;
 import publy.io.html.HTMLPublicationListWriter;
 import publy.io.plain.PlainPublicationListWriter;
 
@@ -98,9 +100,10 @@ public class PublicationListGenerator {
         List<BibItem> items = null;
 
         try {
-            items = BibTeXParser.parseFile(settings.getFileSettings().getPublications());
+            items = PublicationListParser.parseFile(settings.getFileSettings().getPublications());
+            //items = BibTeXParser.parseFile(settings.getFileSettings().getPublications());
             Console.log("Publications list \"%s\" parsed.", settings.getFileSettings().getPublications().getFileName());
-        } catch (Exception | AssertionError ex) {
+        } catch (IOException | ParseException ex) {
             Console.except(ex, "Exception while parsing publications list:");
         }
 

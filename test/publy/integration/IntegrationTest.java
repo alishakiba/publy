@@ -27,7 +27,7 @@ import publy.io.settings.SettingsReaderCurrent;
 import static org.junit.Assert.*;
 import publy.data.settings.Settings;
 
-public class IntegrationTests {
+public class IntegrationTest {
 
     private static final Path TEST_DIR = Paths.get("test/publy/integration");
     private static final Path WORKING_DIR = Paths.get("testOutput");

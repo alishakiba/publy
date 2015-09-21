@@ -96,6 +96,27 @@ public class BibItemParserTest {
                         return this;
                     }
                 }).init()},
+            new Object[]{"@inproceedings{morin2013average,\n"
+                + " title={On the Average Number of Edges in Theta Graphs},\n"
+                + " author={<<pat>> and <<me>>},\n"
+                + " booktitle={<<proc>> 11th <<analco>> (ANALCO14)},\n"
+                + " year={2014},\n"
+                + " abstract={Theta graphs are important geometric graphs that have many applications, including wireless networking, motion planning, real-time animation, and minimum-spanning tree construction. We give closed form expressions for the average degree of theta graphs of a homogeneous Poisson point process over the plane. We then show that essentially the same bounds—with vanishing error terms—hold for theta graphs of finite sets of points that are uniformly distributed in a square. Finally, we show that the number of edges in a theta graph of points uniformly distributed in a square is concentrated around its expected value.},\n"
+                + " arxiv={1304.3402},\n"
+                + " pubstate={submitted}\n"
+                + "}",
+                (new BibItem("inproceedings", "morin2013average") {
+                    BibItem init() {
+                        put("title", "On the Average Number of Edges in Theta Graphs");
+                        put("author", "<<pat>> and <<me>>");
+                        put("booktitle", "<<proc>> 11th <<analco>> (ANALCO14)");
+                        put("year", "2014");
+                        put("abstract", "Theta graphs are important geometric graphs that have many applications, including wireless networking, motion planning, real-time animation, and minimum-spanning tree construction. We give closed form expressions for the average degree of theta graphs of a homogeneous Poisson point process over the plane. We then show that essentially the same bounds—with vanishing error terms—hold for theta graphs of finite sets of points that are uniformly distributed in a square. Finally, we show that the number of edges in a theta graph of points uniformly distributed in a square is concentrated around its expected value.");
+                        put("arxiv", "1304.3402");
+                        put("pubstate", "submitted");
+                        return this;
+                    }
+                }).init()},
             new Object[]{"@book{companion}", new BibItem("book", "companion")},};
 
         for (Object[] test : tests) {
@@ -103,7 +124,7 @@ public class BibItemParserTest {
                 BibItem expResult = (BibItem) test[1];
                 BibItem result = BibItemParser.parseBibItem((String) test[0]);
                 assertEqualItems("Input: <" + test[0] + ">", expResult, result);
-            } catch (IOException ioe) {
+            } catch (IOException | ParseException ioe) {
                 if (!"EX".equals(test[1])) {
                     fail("parseBibItem threw IOException \"" + ioe + "\" with input \"" + test[0] + "\"");
                 }
