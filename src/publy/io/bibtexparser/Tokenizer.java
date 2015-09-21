@@ -17,13 +17,12 @@ package publy.io.bibtexparser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringReader;
 import publy.data.Pair;
 
 public class Tokenizer {
 
-    public static String collectBibItem(BufferedReader input, String firstLine) throws IOException {
+    public static String collectBibItem(BufferedReader input, String firstLine) throws IOException, ParseException {
         CombinedReader in = new CombinedReader(input, firstLine);
         StringBuilder bibitem = new StringBuilder();
 
@@ -31,7 +30,7 @@ public class Tokenizer {
         int c = in.read();
 
         if ((char) c != '@') {
-            throw new IOException("First character of bibitem should be '@'.");
+            throw new ParseException("First character of bibitem should be '@'.");
         }
 
         // Scan for first open brace ('{')
@@ -44,7 +43,7 @@ public class Tokenizer {
         }
 
         if (c == -1) {
-            throw new IOException("No opening brace found when trying to parse bibitem.");
+            throw new ParseException("No opening brace found when trying to parse bibitem.");
         } else {
             bibitem.appendCodePoint(c);
         }
@@ -55,7 +54,7 @@ public class Tokenizer {
         return bibitem.toString();
     }
 
-    public static String collectTag(BufferedReader input, String firstLine) throws IOException {
+    public static String collectTag(BufferedReader input, String firstLine) throws IOException, ParseException {
         CombinedReader in = new CombinedReader(input, firstLine);
         StringBuilder tag = new StringBuilder();
 
@@ -74,11 +73,11 @@ public class Tokenizer {
         return tag.toString();
     }
 
-    public static Pair<String, String> collectValue(String body) throws IOException {
+    public static Pair<String, String> collectValue(String body) throws ParseException {
         // Collect until first "level-0" comma or close brace (end of bibitem)
         // When encountering an open brace, collect until we've matched it
         // When encountering a quote ("), collect until next quote
-        
+
         int braceLevel = 0;
         boolean inQuotes = false;
 
@@ -102,8 +101,8 @@ public class Tokenizer {
                 }
             }
         }
-        
-        throw new IOException("End of input reached while collecting value.");
+
+        throw new ParseException(String.format("End of input reached while collecting value.%nText: %s", body));
     }
 
     /**
@@ -115,7 +114,7 @@ public class Tokenizer {
      * @param close
      * @return
      */
-    private static void collectMatchedToken(SingleByteReader in, char open, char close, StringBuilder result) throws IOException {
+    private static void collectMatchedToken(CombinedReader in, char open, char close, StringBuilder result) throws ParseException, IOException {
         int openCount = 1;
 
         while (openCount > 0) {
@@ -123,11 +122,11 @@ public class Tokenizer {
 
             if (c == -1) {
                 if (open == '{') {
-                    throw new IOException("End of input reached while trying to match braces in bibitem body.");
+                    throw new ParseException("End of input reached while trying to match braces in bibitem body.");
                 } else if (open == '<') {
-                    throw new IOException("End of input reached while trying to match angle brackets in tag body.");
+                    throw new ParseException("End of input reached while trying to match angle brackets in tag body.");
                 } else {
-                    throw new IOException("End of input reached while trying to match.");
+                    throw new ParseException("End of input reached while trying to match.");
                 }
             }
 
@@ -141,20 +140,7 @@ public class Tokenizer {
         }
     }
 
-    private static void collectUntil(SingleByteReader in, char stop, StringBuilder result) throws IOException {
-        int c;
-        do {
-            c = in.read();
-
-            if (c == -1) {
-                throw new IOException("End of input reached while trying to find \"" + stop + "\".");
-            }
-
-            result.appendCodePoint(c);
-        } while ((char) c != stop);
-    }
-
-    private static class CombinedReader implements SingleByteReader {
+    private static class CombinedReader {
 
         boolean endOfString = false;
         StringReader sr;
@@ -178,25 +164,6 @@ public class Tokenizer {
                     return c;
                 }
             }
-        }
-    }
-
-    private static interface SingleByteReader {
-
-        public int read() throws IOException;
-    }
-
-    private static class SingleByteWrapper implements SingleByteReader {
-
-        Reader r;
-
-        public SingleByteWrapper(Reader r) {
-            this.r = r;
-        }
-
-        @Override
-        public int read() throws IOException {
-            return r.read();
         }
     }
 

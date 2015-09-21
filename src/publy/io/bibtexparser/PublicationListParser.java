@@ -29,7 +29,7 @@ import publy.data.bibitem.BibItem;
 
 public class PublicationListParser {
 
-    public static List<BibItem> parseFile(Path file) throws IOException {
+    public static List<BibItem> parseFile(Path file) throws IOException, ParseException {
         PublicationListParser parser = new PublicationListParser();
 
         parser.parseFileInternal(file);
@@ -45,7 +45,7 @@ public class PublicationListParser {
     private PublicationListParser() {
     }
 
-    private void parseFileInternal(Path file) throws IOException {
+    private void parseFileInternal(Path file) throws IOException, ParseException {
         try (BufferedReader in = Files.newBufferedReader(file, Charset.forName("UTF-8"))) {
             for (String l = in.readLine(); l != null; l = in.readLine()) {
                 String line = l.trim();

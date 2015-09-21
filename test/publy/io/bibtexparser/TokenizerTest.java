@@ -76,7 +76,7 @@ public class TokenizerTest {
                 String expResult = test[1];
                 String result = Tokenizer.collectBibItem(new BufferedReader(new StringReader(test[0])), "");
                 assertEquals("Input: <" + test[0] + ">", expResult, result);
-            } catch (IOException ex) {
+            } catch (IOException | ParseException ex) {
                 if (!"EX".equals(test[1])) {
                     fail("collectBibItem threw IOException \"" + ex + "\" with input \"" + test[0] + "\"");
                 }
@@ -262,6 +262,9 @@ public class TokenizerTest {
             new String[]{"{The ,ompanion},}",
                 "{The ,ompanion}",
                 ",}"},
+            new String[]{"{submitted}}",
+                "{submitted}",
+                "}"},
         };
 
         for (String[] test : tests) {
@@ -269,7 +272,7 @@ public class TokenizerTest {
                 Pair<String, String> expResult = new Pair<>(test[1], test[2]);
                 Pair<String, String> result = Tokenizer.collectValue(test[0]);
                 assertEquals("Input: <" + test[0] + ">", expResult, result);
-            } catch (IOException ioe) {
+            } catch (ParseException ioe) {
                if (!"EX".equals(test[1])) {
                     fail("collectBibItem threw IOException \"" + ioe + "\" with input \"" + test[0] + "\"");
                 }

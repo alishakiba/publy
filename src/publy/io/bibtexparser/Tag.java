@@ -15,7 +15,9 @@
  */
 package publy.io.bibtexparser;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import publy.data.Author;
 
 public class Tag {
@@ -23,8 +25,13 @@ public class Tag {
         AUTHOR, ABBREVIATION;
     }
     
-    public Type type;
-    public Map<String, String> values;
+    public final Type type;
+    public final Map<String, String> values;
+
+    public Tag(Type type) {
+        this.type = type;
+        values = new HashMap<>();
+    }
     
     public Author toAuthor() {
         if (type != Type.AUTHOR) {
@@ -41,5 +48,31 @@ public class Tag {
     @Override
     public String toString() {
         return "Tag{" + "type=" + type + ", values=" + values + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.type);
+        hash = 97 * hash + Objects.hashCode(this.values);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Tag other = (Tag) obj;
+        if (this.type != other.type) {
+            return false;
+        }
+        if (!Objects.equals(this.values, other.values)) {
+            return false;
+        }
+        return true;
     }
 }

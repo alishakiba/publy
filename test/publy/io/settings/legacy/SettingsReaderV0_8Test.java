@@ -44,6 +44,7 @@ public class SettingsReaderV0_8Test {
 
     @Test
     public void testReadFullSettings() throws IOException {
+        System.out.println("SettingsReaderV0_8Test");
         Settings settings = (new SettingsReaderV0_8()).parseSettings(TEST_DIR.resolve(String.format(BASE_NAME, 1)));
 
         // File settings
