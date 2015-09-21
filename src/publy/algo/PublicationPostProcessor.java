@@ -155,6 +155,10 @@ public class PublicationPostProcessor {
 
     /**
      * Fills missing fields with information from cross-referenced publications.
+     * <p>
+     * Specifically, if publication A has its "crossref" field set to the id of
+     * publication B, then all fields of B that are not set on A will be copied
+     * to A.
      *
      * @param items the publications to process
      */
@@ -170,8 +174,8 @@ public class PublicationPostProcessor {
                 } else {
                     // Copy all missing fields from source to item
                     for (String field : source.getFields()) {
-                        if (source.get(field) != null && !source.get(field).isEmpty() &&
-                                (item.get(field) == null || item.get(field).isEmpty())) {
+                        if (source.get(field) != null && !source.get(field).isEmpty()
+                                && (item.get(field) == null || item.get(field).isEmpty())) {
                             item.put(field, source.get(field));
                         }
                     }
