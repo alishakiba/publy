@@ -117,6 +117,41 @@ public class BibItemParserTest {
                         return this;
                     }
                 }).init()},
+            new Object[]{"@Book{Weyl:1922:STMb,\n"
+                + "  author =       \"Hermann Weyl and Henry L. (Henry Leopold) Brose\",\n"
+                + "  title =        \"Space--time--matter\",\n"
+                + "  publisher =    pub-DOVER,\n"
+                + "  address =      pub-DOVER:adr,\n"
+                + "  edition =      \"Fourth\",\n"
+                + "  pages =        \"xvi + 330\",\n"
+                + "  year =         \"1922\",\n"
+                + "  LCCN =         \"QC6 .W5413 1922; QC6 .W4 1920; QC6 .W4 1922\",\n"
+                + "  bibdate =      \"Tue Oct 10 06:32:10 MDT 2006\",\n"
+                + "  bibsource =    \"http://www.math.utah.edu/pub/tex/bib/einstein.bib;\n"
+                + "                 melvyl.cdlib.org:210/CDL90\",\n"
+                + "  acknowledgement = ack-nhfb,\n"
+                + "  author-dates = \"1885--1955\",\n"
+                + "  subject =      \"Relativity (physics); space and time\",\n"
+                + "}",
+                (new BibItem("book", "Weyl:1922:STMb") {
+                    BibItem init() {
+                        put("author", "Hermann Weyl and Henry L. (Henry Leopold) Brose");
+                        put("title", "Space--time--matter");
+                        put("publisher", "<<pub-DOVER>>");
+                        put("address", "<<pub-DOVER:adr>>");
+                        put("edition", "Fourth");
+                        put("pages", "xvi + 330");
+                        put("year", "1922");
+                        put("lccn", "QC6 .W5413 1922; QC6 .W4 1920; QC6 .W4 1922");
+                        put("bibdate", "Tue Oct 10 06:32:10 MDT 2006");
+                        put("bibsource", "http://www.math.utah.edu/pub/tex/bib/einstein.bib;\n"
+                + "                 melvyl.cdlib.org:210/CDL90");
+                        put("acknowledgement", "<<ack-nhfb>>");
+                        put("author-dates", "1885--1955");
+                        put("subject", "Relativity (physics); space and time");
+                        return this;
+                    }
+                }).init()},
             new Object[]{"@book{companion}", new BibItem("book", "companion")},};
 
         for (Object[] test : tests) {
@@ -167,12 +202,16 @@ public class BibItemParserTest {
             new String[]{"\"Comments on {\"}Filenames and Fonts{\"}\"", "Comments on {\"}Filenames and Fonts{\"}"},
             new String[]{"{Comments on \"Filenames and Fonts\"}", "Comments on \"Filenames and Fonts\""},
             new String[]{"goossens # and # mittelbach # and # samarin", "<<goossens>><<and>><<mittelbach>><<and>><<samarin>>"},
+            new String[]{"goossens#and#mittelbach # and#samarin", "<<goossens>><<and>><<mittelbach>><<and>><<samarin>>"},
             new String[]{"goossens # \" and \" # mittelbach # and # samarin", "<<goossens>> and <<mittelbach>><<and>><<samarin>>"},
             new String[]{"\"goossens\" # \" and \" # mittelbach # and # samarin", "goossens and <<mittelbach>><<and>><<samarin>>"},
             new String[]{"\"goossens #  and \" # mittelbach # and # samarin", "goossens #  and <<mittelbach>><<and>><<samarin>>"},
             new String[]{"\"goos,sens #  and \" # mittelbach # and # samarin", "goos,sens #  and <<mittelbach>><<and>><<samarin>>"},
             new String[]{"goossens # and # {mit,telbach} # and # samarin", "<<goossens>><<and>>mit,telbach<<and>><<samarin>>"},
-            new String[]{"goossens # and # {mit, \"tel\" # bach} # and # samarin", "<<goossens>><<and>>mit, \"tel\" # bach<<and>><<samarin>>"},};
+            new String[]{"goossens # and # {mit, \"tel\" # bach} # and # samarin", "<<goossens>><<and>>mit, \"tel\" # bach<<and>><<samarin>>"},
+            new String[]{"pub-DOVER", "<<pub-DOVER>>"},
+            new String[]{"pub-DOVER:adr", "<<pub-DOVER:adr>>"},
+        };
 
         for (String[] test : tests) {
             try {
