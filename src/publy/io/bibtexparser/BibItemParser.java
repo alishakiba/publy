@@ -61,7 +61,7 @@ public class BibItemParser {
             return new BibItem(type, body.substring(0, body.length() - 1));
         }
 
-        String id = body.substring(0, idEnd).trim().toLowerCase();
+        String id = body.substring(0, idEnd).trim();
         body = body.substring(idEnd + 1).trim();
 
         BibItem result = new BibItem(type, id);
@@ -129,9 +129,7 @@ public class BibItemParser {
                     }
                 }
             } else if (inAbbreviation) {
-                if (Character.isAlphabetic(c) || Character.isLetterOrDigit(c)) {
-                    result.appendCodePoint(c);
-                } else {
+                if (Character.isWhitespace(c) || (char) c == '#' || (char) c == '{' || (char) c == '"') {
                     // End of abbreviation
                     result.append(">>");
                     inAbbreviation = false;
@@ -141,6 +139,8 @@ public class BibItemParser {
                     } else if ((char) c == '"') {
                         inQuotes = true;
                     }
+                } else {
+                    result.appendCodePoint(c);
                 }
             } else {
                 // Brace or quote start new tokens, pound is ignored, numbers just get parsed, text starts a new abbreviation token
