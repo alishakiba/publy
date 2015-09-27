@@ -63,6 +63,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
         progressCheckBox.setSelected(settings.isShowLogs());
         
         // Debug
+        debugCheckBox.setSelected(settings.isShowDebugLog());
         stackTraceCheckBox.setSelected(settings.isShowStackTraces());
     }
     
@@ -93,6 +94,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
         debugSeparator = new javax.swing.JSeparator();
         stackTraceCheckBox = new javax.swing.JCheckBox();
         noCategoryCheckBox = new javax.swing.JCheckBox();
+        debugCheckBox = new javax.swing.JCheckBox();
 
         warnHeader.setText("Warnings");
 
@@ -142,6 +144,13 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        debugCheckBox.setText("Show debug messages");
+        debugCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                debugCheckBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -149,10 +158,6 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(stackTraceCheckBox)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -181,7 +186,13 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
                                 .addComponent(debugHeader)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(debugSeparator)))
-                        .addGap(10, 10, 10))))
+                        .addGap(10, 10, 10))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(debugCheckBox)
+                            .addComponent(stackTraceCheckBox))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,8 +220,10 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
                     .addComponent(debugHeader)
                     .addComponent(debugSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(debugCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(stackTraceCheckBox)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -239,7 +252,12 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
         settings.setWarnNoCategoryForItem(noCategoryCheckBox.isSelected());
     }//GEN-LAST:event_noCategoryCheckBoxActionPerformed
 
+    private void debugCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_debugCheckBoxActionPerformed
+        settings.setShowDebugLog(debugCheckBox.isSelected());
+    }//GEN-LAST:event_debugCheckBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox debugCheckBox;
     private javax.swing.JLabel debugHeader;
     private javax.swing.JSeparator debugSeparator;
     private javax.swing.JCheckBox missingReferencesCheckBox;

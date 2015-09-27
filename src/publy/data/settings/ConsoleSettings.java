@@ -31,6 +31,7 @@ public class ConsoleSettings {
     // Log
     private boolean showLogs = true;
     // Debug
+    private boolean showDebugLog = false;
     private boolean showStackTraces = false;
 
     /**
@@ -182,6 +183,24 @@ public class ConsoleSettings {
      */
     public void setShowLogs(boolean showLogs) {
         this.showLogs = showLogs;
+    }
+
+    /**
+     * Gets whether the console should display debug messages.
+     * 
+     * @return whether to show debug messages
+     */
+    public boolean isShowDebugLog() {
+        return showDebugLog;
+    }
+
+    /**
+     * Sets whether the console should display debug messages.
+     * 
+     * @param showDebugLog whether to show debug messages
+     */
+    public void setShowDebugLog(boolean showDebugLog) {
+        this.showDebugLog = showDebugLog;
     }
 
     /**
