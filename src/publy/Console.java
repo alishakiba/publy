@@ -34,7 +34,8 @@ import publy.gui.ConsoleFrame;
  * preferences, and if so, how it should be shown.
  * <p>
  * There are three kinds of messages:
- * <p><ul>
+ * <p>
+ * <ul>
  * <li> Log messages - typically progress updates,
  * <li> Warnings - for suspicious patterns that could indicate user errors but
  * can be processed normally, and
@@ -54,6 +55,7 @@ public class Console {
     private static final SimpleAttributeSet logAttributes;
     private static final SimpleAttributeSet warnAttributes;
     private static final SimpleAttributeSet errorAttributes;
+    private static final SimpleAttributeSet debugAttributes;
     private static ConsoleSettings settings = new ConsoleSettings();
     private static JTextPane textPane = null; // A styled text area to log to, if the program was invoked without an attached console
 
@@ -71,6 +73,10 @@ public class Console {
         // The same font, but red for errors
         errorAttributes = new SimpleAttributeSet(logAttributes);
         StyleConstants.setForeground(errorAttributes, Color.red);
+        
+        // The same font, but gray for debug messages
+        debugAttributes = new SimpleAttributeSet(logAttributes);
+        StyleConstants.setForeground(debugAttributes, Color.gray);
     }
 
     /**
@@ -238,6 +244,39 @@ public class Console {
         }
     }
 
+    /**
+     * Shows a debug message to the user.
+     * <p>
+     * Debug messages are disabled by default and are probably not very
+     * interesting to most users, but can be critical to diagnose strange bugs.
+     *
+     * @param format the message, in the form of a format string, as per
+     * {@link String#format(java.lang.String, java.lang.Object[])}
+     * @param args arguments referenced by the format string
+     */
+    public static void debug(String format, Object... args) {
+        if (settings.isShowDebugLog()) {
+            if (textPane == null) {
+                if (System.console() == null) {
+                    createConsoleFrame();
+                } else {
+                    System.console().format(" " + format + "%n", args);
+                    System.console().flush();
+                }
+            }
+
+            // Re-check, because textPane might have been set by createConsoleFrame()
+            if (textPane != null) {
+                try {
+                    textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" " + format + "%n", args), debugAttributes);
+                } catch (BadLocationException ex) {
+                    // This should never happen
+                    throw new AssertionError(ex);
+                }
+            }
+        }
+    }
+
     private static boolean showWarnings(WarningType type) {
         if (settings.isShowWarnings()) {
             switch (type) {
@@ -287,6 +326,7 @@ public class Console {
 
     /**
      * Gets the configuration for this Console.
+     *
      * @return the configuration
      */
     public static ConsoleSettings getSettings() {
@@ -295,6 +335,7 @@ public class Console {
 
     /**
      * Sets the configuration for this Console.
+     *
      * @param settings the new configuration
      */
     public static void setSettings(ConsoleSettings settings) {
