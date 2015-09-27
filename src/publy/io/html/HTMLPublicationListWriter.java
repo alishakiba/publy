@@ -47,10 +47,8 @@ import publy.io.TempWriter;
  */
 public class HTMLPublicationListWriter extends PublicationListWriter {
 
-    public static final String DEFAULT_BASEJS_LOCATION = "data/base.js";
-    public static final String DEFAULT_GAJS_LOCATION = "data/ga.js";
-    public static final String DEFAULT_HEADER_LOCATION = "data/defaultHeader.html";
-    public static final String DEFAULT_FOOTER_LOCATION = "data/defaultFooter.html";
+    private static final String DEFAULT_BASEJS_LOCATION = "data/base.js";
+    private static final String DEFAULT_GAJS_LOCATION = "data/ga.js";
     private final static Pattern LINK_PATTERN = Pattern.compile("(href|src)\\s*=\\s*\"([^\"]*)\"");
     private HTMLBibItemWriter itemWriter;
     private int count;

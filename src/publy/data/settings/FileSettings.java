@@ -17,20 +17,22 @@ package publy.data.settings;
 
 import java.nio.file.Path;
 import publy.io.ResourceLocator;
-import publy.io.html.HTMLPublicationListWriter;
 
 /**
  * The location of all relevant user-configurable files.
  */
 public class FileSettings {
 
+    private static final String DEFAULT_HEADER_LOCATION = "data/defaultHeader.html";
+    private static final String DEFAULT_FOOTER_LOCATION = "data/defaultFooter.html";
+    
     // Input file
     private Path publications;
     // Output file
     private Path target;
     // Header and Footer
-    private Path header = ResourceLocator.getFullPath(HTMLPublicationListWriter.DEFAULT_HEADER_LOCATION);
-    private Path footer = ResourceLocator.getFullPath(HTMLPublicationListWriter.DEFAULT_FOOTER_LOCATION);
+    private Path header = ResourceLocator.getFullPath(DEFAULT_HEADER_LOCATION);
+    private Path footer = ResourceLocator.getFullPath(DEFAULT_FOOTER_LOCATION);
 
     /**
      * Gets the location of the user's publication list.
