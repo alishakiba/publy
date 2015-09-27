@@ -46,7 +46,7 @@ public class SettingsReaderCurrent extends DefaultHandler implements SettingsRea
         // Main settings
         FILE_SETTINGS, CATEGORY_SETTINGS, GENERAL_SETTINGS, HTML_SETTINGS, CONSOLE_SETTINGS;
     }
-    
+
     private StringBuilder textBuffer; // Contains the characters that are read between start and end elements (e.g. <item>Text</item>)
     private final Settings settings; // Contains the read settings after parsing.
     private State state = State.DEFAULT;
@@ -383,6 +383,9 @@ public class SettingsReaderCurrent extends DefaultHandler implements SettingsRea
                 break;
             case "showLogs":
                 settings.getConsoleSettings().setShowLogs(Boolean.parseBoolean(text));
+                break;
+            case "showDebugLog":
+                settings.getConsoleSettings().setShowDebugLog(Boolean.parseBoolean(text));
                 break;
             case "showStackTraces":
                 settings.getConsoleSettings().setShowStackTraces(Boolean.parseBoolean(text));
