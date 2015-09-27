@@ -24,12 +24,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import publy.Console;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
 
 public class PublicationListParser {
 
     public static List<BibItem> parseFile(Path file) throws IOException, ParseException {
+        Console.debug("Parsing publication list \"%s\"", file);
         PublicationListParser parser = new PublicationListParser();
 
         parser.parseFileInternal(file);
