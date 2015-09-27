@@ -44,6 +44,7 @@ public class PublicationListGenerator {
      * @param settings the configuration
      */
     public static void generatePublicationList(Settings settings) {
+        Console.debug("Generating publication list.");
         if (checkFileSettings(settings)) {
             List<BibItem> items = parsePublications(settings);
 
@@ -70,6 +71,7 @@ public class PublicationListGenerator {
      * @return true if all conditions are satisfied, false otherwise
      */
     private static boolean checkFileSettings(Settings settings) {
+        Console.debug("Checking file settings.");
         Path pubList = settings.getFileSettings().getPublications();
 
         if (pubList == null) {
@@ -83,6 +85,7 @@ public class PublicationListGenerator {
             return false;
         } else {
             // Everything is okay
+            Console.debug("File settings okay.");
             return true;
         }
     }
@@ -101,7 +104,6 @@ public class PublicationListGenerator {
 
         try {
             items = PublicationListParser.parseFile(settings.getFileSettings().getPublications());
-            //items = BibTeXParser.parseFile(settings.getFileSettings().getPublications());
             Console.log("Publications list \"%s\" parsed.", settings.getFileSettings().getPublications().getFileName());
         } catch (IOException | ParseException ex) {
             Console.except(ex, "Exception while parsing publications list:");
