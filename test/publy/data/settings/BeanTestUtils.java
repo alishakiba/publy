@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -57,12 +58,14 @@ public class BeanTestUtils {
 
     public static void testBean(Object bean) {
         for (Field field : bean.getClass().getDeclaredFields()) {
-            try {
-                testField(field, bean.getClass().newInstance());
-            } catch (InstantiationException ex) {
-                fail("Class could not be instantiated.");
-            } catch (IllegalAccessException ex) {
-                fail(ex.toString());
+            if (!Modifier.isFinal(field.getModifiers())) { // Skip final fields
+                try {
+                    testField(field, bean.getClass().newInstance());
+                } catch (InstantiationException ex) {
+                    fail("Class could not be instantiated.");
+                } catch (IllegalAccessException ex) {
+                    fail(ex.toString());
+                }
             }
         }
     }
@@ -136,7 +139,7 @@ public class BeanTestUtils {
         // Check getter and setter signatures
         Method get = declaringClass.getClass().getMethod(makeGetter(field));
         assertTrue("Getter does not have the correct return type.", get.getReturnType().equals(field.getType()));
-        
+
         Method set = declaringClass.getClass().getMethod(makeSetter(field), field.getType());
         assertTrue("Setter does not have the correct return type.", set.getReturnType().equals(void.class));
 
@@ -160,13 +163,15 @@ public class BeanTestUtils {
         Settings.setSettingsPath(tempSettingsFile);
 
         for (Field field : partialSettings.getClass().getDeclaredFields()) {
-            try {
-                Pair<Object, Object> exampleValues = getExampleValues(field);
-                testFieldIO(settings, field, partialSettings, exampleValues.getFirst());
-                testFieldIO(settings, field, partialSettings, exampleValues.getSecond());
-            } catch (IllegalAccessException | ParserConfigurationException | SAXException ex) {
-                ex.printStackTrace();
-                fail(ex.toString());
+            if (!Modifier.isFinal(field.getModifiers())) { // Skip final fields
+                try {
+                    Pair<Object, Object> exampleValues = getExampleValues(field);
+                    testFieldIO(settings, field, partialSettings, exampleValues.getFirst());
+                    testFieldIO(settings, field, partialSettings, exampleValues.getSecond());
+                } catch (IllegalAccessException | ParserConfigurationException | SAXException ex) {
+                    ex.printStackTrace();
+                    fail(ex.toString());
+                }
             }
         }
     }
