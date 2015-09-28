@@ -27,7 +27,7 @@ public class AuthorTest {
         Map<String, String[]> expected = new LinkedHashMap<>();
 
         expected.put("von Last, Jr., First", new String[]{"First", "von", "Last", "Jr."});
-        
+
         expected.put("Sander Verdonschot", new String[]{"Sander", "", "Verdonschot", ""});
         expected.put("Verdonschot, Sander", new String[]{"Sander", "", "Verdonschot", ""});
         expected.put("Andr\\'e van Renssen", new String[]{"Andr\\'e", "van", "Renssen", ""});
@@ -36,7 +36,7 @@ public class AuthorTest {
         expected.put("Jean-Lou De Carufel", new String[]{"Jean-Lou De", "", "Carufel", ""});
         expected.put("Jean-Lou {D}e Carufel", new String[]{"Jean-Lou", "{D}e", "Carufel", ""});
         expected.put("De Carufel, Jean-Lou", new String[]{"Jean-Lou", "", "De Carufel", ""});
-        
+
         expected.put("\\'Emile Gaudreault", new String[]{"\\'Emile", "", "Gaudreault", ""});
         expected.put("{\\'E}mile Gaudreault", new String[]{"{\\'E}mile", "", "Gaudreault", ""});
 
@@ -71,6 +71,20 @@ public class AuthorTest {
         expected.put("BB,, AA", new String[]{"AA", "", "BB", ""}); // Testing that jr can be empty in between comas.
         expected.put("BB, , AA", new String[]{"AA", "", "BB", ""}); // Idem.
 
+        // Tests copied from Tame the BeaST, by Nicolas Markey
+        expected.put("Jean de La Fontaine", new String[]{"Jean", "de", "La Fontaine", ""});
+        expected.put("jean de la fontaine", new String[]{"", "jean de la", "fontaine", ""});
+        expected.put("Jean de la fontaine", new String[]{"Jean", "de la", "fontaine", ""});
+        expected.put("Jean {de} la fontaine", new String[]{"Jean {de}", "la", "fontaine", ""});
+        expected.put("jean {de} {la} fontaine", new String[]{"", "jean", "{de} {la} fontaine", ""});
+        expected.put("Jean {de} {la} fontaine", new String[]{"Jean {de} {la}", "", "fontaine", ""});
+        expected.put("Jean De La Fontaine", new String[]{"Jean De La", "", "Fontaine", ""});
+        expected.put("jean De la Fontaine", new String[]{"", "jean De la", "Fontaine", ""});
+        expected.put("de la fontaine, Jean", new String[]{"Jean", "de la", "fontaine", ""});
+        expected.put("De La Fontaine, Jean", new String[]{"Jean", "", "De La Fontaine", ""});
+        expected.put("De la Fontaine, Jean", new String[]{"Jean", "De la", "Fontaine", ""});
+        expected.put("de La Fontaine, Jean", new String[]{"Jean", "de", "La Fontaine", ""});
+
         // Test for whitespace normalization
         expected.put("  Sander       Verdonschot ", new String[]{"Sander", "", "Verdonschot", ""});
 
@@ -92,7 +106,7 @@ public class AuthorTest {
         System.out.println("Format - Full");
 
         Map<String, String> expected = new LinkedHashMap<>();
-        
+
         expected.put("von Last, Jr., First", "First von Last, Jr.");
 
         expected.put("Sander Verdonschot", "Sander Verdonschot");
@@ -103,7 +117,7 @@ public class AuthorTest {
         expected.put("Jean-Lou De Carufel", "Jean-Lou De Carufel");
         expected.put("Jean-Lou {D}e Carufel", "Jean-Lou {D}e Carufel");
         expected.put("De Carufel, Jean-Lou", "Jean-Lou De Carufel");
-        
+
         expected.put("\\'Emile Gaudreault", "\\'Emile Gaudreault");
         expected.put("{\\'E}mile Gaudreault", "{\\'E}mile Gaudreault");
 
@@ -143,7 +157,7 @@ public class AuthorTest {
             assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.FirstNameDisplay.FULL, false));
         }
     }
-    
+
     /**
      * Tests name formatting.
      */
@@ -152,7 +166,7 @@ public class AuthorTest {
         System.out.println("Format - Full Reversed");
 
         Map<String, String> expected = new LinkedHashMap<>();
-        
+
         expected.put("von Last, Jr., First", "von Last, Jr., First");
 
         expected.put("Sander Verdonschot", "Verdonschot, Sander");
@@ -163,7 +177,7 @@ public class AuthorTest {
         expected.put("Jean-Lou De Carufel", "Carufel, Jean-Lou De");
         expected.put("Jean-Lou {D}e Carufel", "{D}e Carufel, Jean-Lou");
         expected.put("De Carufel, Jean-Lou", "De Carufel, Jean-Lou");
-        
+
         expected.put("\\'Emile Gaudreault", "Gaudreault, \\'Emile");
         expected.put("{\\'E}mile Gaudreault", "Gaudreault, {\\'E}mile");
 
@@ -203,7 +217,7 @@ public class AuthorTest {
             assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.FirstNameDisplay.FULL, true));
         }
     }
-    
+
     /**
      * Tests name formatting.
      */
@@ -212,7 +226,7 @@ public class AuthorTest {
         System.out.println("Format - None");
 
         Map<String, String> expected = new LinkedHashMap<>();
-        
+
         expected.put("von Last, Jr., First", "von Last, Jr.");
 
         expected.put("Sander Verdonschot", "Verdonschot");
@@ -223,7 +237,7 @@ public class AuthorTest {
         expected.put("Jean-Lou De Carufel", "Carufel");
         expected.put("Jean-Lou {D}e Carufel", "{D}e Carufel");
         expected.put("De Carufel, Jean-Lou", "De Carufel");
-        
+
         expected.put("\\'Emile Gaudreault", "Gaudreault");
         expected.put("{\\'E}mile Gaudreault", "Gaudreault");
 
@@ -265,7 +279,7 @@ public class AuthorTest {
             assertEquals(name + " reversed - ", expected.get(name), a.getFormattedName(GeneralSettings.FirstNameDisplay.NONE, true));
         }
     }
-    
+
     /**
      * Tests name formatting.
      */
@@ -274,20 +288,20 @@ public class AuthorTest {
         System.out.println("Format - Abbreviated");
 
         Map<String, String> expected = new LinkedHashMap<>();
-        
+
         expected.put("von Last, Jr., First", "F. von Last, Jr.");
 
         expected.put("Sander Verdonschot", "S. Verdonschot");
         expected.put("Verdonschot, Sander", "S. Verdonschot");
         expected.put("Andr\\'e van Renssen", "A. van Renssen");
         expected.put("van Renssen, Andr\\'e", "A. van Renssen");
-        
+
         // Dash in first name
         expected.put("Jean-Lou de Carufel", "J.-L. de Carufel");
         expected.put("Jean-Lou De Carufel", "J.-L. D. Carufel");
         expected.put("Jean-Lou {D}e Carufel", "J.-L. {D}e Carufel");
         expected.put("De Carufel, Jean-Lou", "J.-L. De Carufel");
-        
+
         // Special character as first letter
         expected.put("\\'Emile Gaudreault", "E. Gaudreault");
         expected.put("{\\'E}mile Gaudreault", "{\\'E}. Gaudreault");
@@ -328,7 +342,7 @@ public class AuthorTest {
             assertEquals(name + " - ", expected.get(name), a.getFormattedName(GeneralSettings.FirstNameDisplay.INITIAL, false));
         }
     }
-    
+
     /**
      * Tests name formatting.
      */
@@ -337,20 +351,20 @@ public class AuthorTest {
         System.out.println("Format - Abbreviated Reversed");
 
         Map<String, String> expected = new LinkedHashMap<>();
-        
+
         expected.put("von Last, Jr., First", "von Last, Jr., F.");
 
         expected.put("Sander Verdonschot", "Verdonschot, S.");
         expected.put("Verdonschot, Sander", "Verdonschot, S.");
         expected.put("Andr\\'e van Renssen", "van Renssen, A.");
         expected.put("van Renssen, Andr\\'e", "van Renssen, A.");
-        
+
         // Dash in first name
         expected.put("Jean-Lou de Carufel", "de Carufel, J.-L.");
         expected.put("Jean-Lou De Carufel", "Carufel, J.-L. D.");
         expected.put("Jean-Lou {D}e Carufel", "{D}e Carufel, J.-L.");
         expected.put("De Carufel, Jean-Lou", "De Carufel, J.-L.");
-        
+
         // Special character as first letter
         expected.put("\\'Emile Gaudreault", "Gaudreault, E.");
         expected.put("{\\'E}mile Gaudreault", "Gaudreault, {\\'E}.");
