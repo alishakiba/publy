@@ -1,0 +1,196 @@
+/* Overall style */
+body {
+    font-size: 100%;
+    line-height: 125%;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    width: 56em;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 0.5em;
+}
+
+/* Section headings */
+.section-title {
+    font-variant: small-caps;
+    font-weight: normal;
+}
+
+h2 {
+    font-size: 1.2em;
+}
+
+/* Sub-section headings */
+h3 {
+    font-size: 1em;
+    margin: 0;
+}
+
+/* Switch to a 2-column format */
+#publicationlist {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;
+}
+
+/* Make text and navigation span both columns */
+#publicationlist > p {
+    flex-basis: 100%;
+}
+
+/* Make sure two sections fit next to each other */
+.section {
+    width: 27em;
+    padding: 0.5em;
+}
+
+ul.section-list {
+    list-style-type: circle;
+}
+
+/* Separate publications by a little white-space */
+.bibentry {
+    margin-top: 0.2em;
+}
+
+/* Paper titles */
+h4.title {
+    display: inline;
+    font-size: 1em;
+    font-weight: normal;
+}
+
+/* Add quotation marks around the title */
+h4.title:before {
+    content: '\201C';
+}
+h4.title:after {
+    content: '\201D';
+}
+
+/* Italicize journal and conference names */
+.booktitle, .journal {
+    font-style: italic;
+}
+
+/* Don't allow line breaks within author names */
+.author {
+    white-space: nowrap;
+}
+
+/* Make author links unobtrusive */
+a.author:link          { color: black; text-decoration: none; } /* unvisited link */
+a.author:visited    { color: black; text-decoration: none; } /* visited link */
+a.author:hover        { color: black; text-decoration: underline; } /* mouse over link */
+a.author:active      { color: red; text-decoration: underline; } /* selected link */
+
+/* Place buttons on the same line as links */
+.links {
+    display: inline-block;
+}
+
+/* Decrease font size for links */
+.links {
+    font-size: 0.9em;
+}
+
+.navigation {
+    font-size: 0.8em;
+    margin: auto;
+    text-align: center;
+}
+
+.navigation > a:link, .links > a:link          { color: #888; text-decoration: none; } /* unvisited link */
+.navigation > a:visited, .links > a:visited    { color: #888; text-decoration: none; } /* visited link */
+.navigation > a:hover, .links > a:hover        { color: #888; text-decoration: underline; } /* mouse over link */
+.navigation > a:active, .links > a:active      { color: red; text-decoration: underline; } /* selected link */
+
+/* Enclose groups of links in brackets */
+.navigation:before, .links:before {
+    content: "[";
+}
+.navigation:after, .links:after {
+    content: "]";
+}
+
+/* Separate links by a central dot */
+.navigation>a+a:before, .navigation>span+a:before, .navigation>a+span:before, .links>a+a:before {
+    content: "-\a0 "; /* There is a small space between the links naturally, so we only need to add a non-breaking space ('\a0 ') on the right */
+    display: inline-block;
+    color: Black;
+    text-decoration: none;
+}
+
+/* Show a hand cursor for elements that act like buttons */
+.abstract-toggle, .bibtex-toggle {
+    cursor: pointer;
+}
+
+/* Add a grey border around abstracts and BibTeX */
+.abstract, .bibtex {
+    margin: 0.5em 1em 0.5em 0.1em;
+    padding: 5px;
+    border: 2px solid #f1f1f1;
+}
+
+/* Reduce text size and increase line height */
+.abstract {
+    font-size: 0.95em;
+    line-height: 130%;
+}
+
+.abstractword {
+    font-style: italic;
+}
+
+/* Hide BibTeX initially, and for users without JavaScript */
+.bibtex-container {
+    display: none;
+}
+
+/* BibTeX text appearance */
+.bibtex {
+    white-space: pre-wrap; /* Allow long lines to wrap. */
+    line-height: 130%;
+}
+
+/* Buttons that look like regular links */
+button {
+    background: none;
+    border: none;
+    font: inherit;
+    font-size: 0.9em;
+    color: #888;
+    padding: 0;
+}
+button:before {
+    content: "(\2009 ";
+}
+button:after {
+    content: "\2009 )";
+}
+button:before, button:after {
+    font-size: 1.1em;
+    color: Black;
+}
+
+/* Tablets: decrease font size to compensate for closer viewing distance */
+@media all and (max-width: 56em) {
+    body {
+        font-size: 90%;
+        width: 100%;
+    }
+    
+    /* Center text after switching to 1-column layout */
+    .section {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* Smartphones: decrease font size to compensate for closer viewing distance */
+@media all and (max-width: 31em) {
+    body {
+        font-size: 80%;
+    }
+}
