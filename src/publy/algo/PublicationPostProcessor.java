@@ -121,7 +121,7 @@ public class PublicationPostProcessor {
                 sb.append("  ").append(id).append(" (").append(duplicateCount.get(id)).append(")\n");
             }
 
-            Console.error("There were multiple publications with the following identifiers:%n%s Please make sure all identifiers are unique.", sb.toString());
+            Console.warn(Console.WarningType.DUPLICATE_ID, "There were multiple publications with the following identifiers:%n%s Only the first publication with each identifier was included.", sb.toString());
         }
 
         return itemsById;

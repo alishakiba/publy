@@ -369,6 +369,9 @@ public class SettingsReaderCurrent extends DefaultHandler implements SettingsRea
             case "showWarnings":
                 settings.getConsoleSettings().setShowWarnings(Boolean.parseBoolean(text));
                 break;
+            case "warnDuplicateIDs":
+                settings.getConsoleSettings().setWarnDuplicateIDs(Boolean.parseBoolean(text));
+                break;
             case "warnMissingReferences":
                 settings.getConsoleSettings().setWarnMissingReferences(Boolean.parseBoolean(text));
                 break;

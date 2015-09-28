@@ -24,6 +24,7 @@ public class ConsoleSettings {
 
     // Warnings
     private boolean showWarnings = true;
+    private boolean warnDuplicateIDs = true;
     private boolean warnMissingReferences = true;
     private boolean warnNotAuthor = true;
     private boolean warnNoCategoryForItem = true;
@@ -56,6 +57,33 @@ public class ConsoleSettings {
      */
     public void setShowWarnings(boolean showWarnings) {
         this.showWarnings = showWarnings;
+    }
+
+    /**
+     * Gets whether the console should display a warning when multiple
+     * publications have the same identifier.
+     * <p>
+     * If this is false, all warnings of this kind will be hidden. Otherwise,
+     * they will be shown unless warnings are disabled globally.
+     *
+     * @return whether to show warnings for duplicate identifiers
+     */
+    public boolean isWarnDuplicateIDs() {
+        return warnDuplicateIDs;
+    }
+
+    /**
+     * Sets whether the console should display a warning when multiple
+     * publications have the same identifier.
+     * <p>
+     * If this is false, all warnings of this kind will be hidden. Otherwise,
+     * they will be shown unless warnings are disabled globally.
+     *
+     * @param warnDuplicateIDs whether to show warnings for duplicate
+     * identifiers
+     */
+    public void setWarnDuplicateIDs(boolean warnDuplicateIDs) {
+        this.warnDuplicateIDs = warnDuplicateIDs;
     }
 
     /**
@@ -161,7 +189,8 @@ public class ConsoleSettings {
      * If this is false, all warnings of this kind will be hidden. Otherwise,
      * they will be shown unless warnings are disabled globally.
      *
-     * @param warnMandatoryFieldIgnored whether to show warnings for ignored mandatory fields
+     * @param warnMandatoryFieldIgnored whether to show warnings for ignored
+     * mandatory fields
      */
     public void setWarnMandatoryFieldIgnored(boolean warnMandatoryFieldIgnored) {
         this.warnMandatoryFieldIgnored = warnMandatoryFieldIgnored;
@@ -169,7 +198,7 @@ public class ConsoleSettings {
 
     /**
      * Gets whether the console should display progress messages.
-     * 
+     *
      * @return whether to show progress messages
      */
     public boolean isShowLogs() {
@@ -178,7 +207,7 @@ public class ConsoleSettings {
 
     /**
      * Sets whether the console should display progress messages.
-     * 
+     *
      * @param showLogs whether to show progress messages
      */
     public void setShowLogs(boolean showLogs) {
@@ -187,7 +216,7 @@ public class ConsoleSettings {
 
     /**
      * Gets whether the console should display debug messages.
-     * 
+     *
      * @return whether to show debug messages
      */
     public boolean isShowDebugLog() {
@@ -196,7 +225,7 @@ public class ConsoleSettings {
 
     /**
      * Sets whether the console should display debug messages.
-     * 
+     *
      * @param showDebugLog whether to show debug messages
      */
     public void setShowDebugLog(boolean showDebugLog) {
@@ -205,7 +234,7 @@ public class ConsoleSettings {
 
     /**
      * Gets whether the console should display full stack traces of exceptions.
-     * 
+     *
      * @return whether the console should show stack traces
      */
     public boolean isShowStackTraces() {
@@ -214,7 +243,7 @@ public class ConsoleSettings {
 
     /**
      * Sets whether the console should display full stack traces of exceptions.
-     * 
+     *
      * @param showStackTraces whether the console should show stack traces
      */
     public void setShowStackTraces(boolean showStackTraces) {

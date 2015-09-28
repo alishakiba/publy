@@ -50,7 +50,7 @@ public class Console {
 
     public enum WarningType {
 
-        MISSING_REFERENCE, NOT_AUTHORED_BY_USER, ITEM_DOES_NOT_FIT_ANY_CATEGORY, MANDATORY_FIELD_IGNORED, OTHER;
+        DUPLICATE_ID, MISSING_REFERENCE, NOT_AUTHORED_BY_USER, ITEM_DOES_NOT_FIT_ANY_CATEGORY, MANDATORY_FIELD_IGNORED, OTHER;
     }
     private static final SimpleAttributeSet logAttributes;
     private static final SimpleAttributeSet warnAttributes;
@@ -280,6 +280,8 @@ public class Console {
     private static boolean showWarnings(WarningType type) {
         if (settings.isShowWarnings()) {
             switch (type) {
+                case DUPLICATE_ID:
+                    return settings.isWarnDuplicateIDs();
                 case MISSING_REFERENCE:
                     return settings.isWarnMissingReferences();
                 case NOT_AUTHORED_BY_USER:

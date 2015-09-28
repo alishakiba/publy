@@ -213,6 +213,7 @@ public class SettingsWriter {
         out.newLine();
 
         output(out, 4, "showWarnings", makeString(settings.isShowWarnings()));
+        output(out, 4, "warnDuplicateIDs", makeString(settings.isWarnDuplicateIDs()));
         output(out, 4, "warnMissingReferences", makeString(settings.isWarnMissingReferences()));
         output(out, 4, "warnNotAuthor", makeString(settings.isWarnNotAuthor()));
         output(out, 4, "warnNoCategoryForItem", makeString(settings.isWarnNoCategoryForItem()));

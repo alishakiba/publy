@@ -55,6 +55,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
     private void populateValues() {
         // Warnings
         warnCheckBox.setSelected(settings.isShowWarnings());
+        duplicateIDCheckBox.setSelected(settings.isWarnDuplicateIDs());
         missingReferencesCheckBox.setSelected(settings.isWarnMissingReferences());
         notAuthorCheckBox.setSelected(settings.isWarnNotAuthor());
         noCategoryCheckBox.setSelected(settings.isWarnNoCategoryForItem());
@@ -68,6 +69,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
     }
     
     private void updateEnabledStates() {
+        duplicateIDCheckBox.setEnabled(settings.isShowWarnings());
         missingReferencesCheckBox.setEnabled(settings.isShowWarnings());
         notAuthorCheckBox.setEnabled(settings.isShowWarnings());
         noCategoryCheckBox.setEnabled(settings.isShowWarnings());
@@ -95,6 +97,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
         stackTraceCheckBox = new javax.swing.JCheckBox();
         noCategoryCheckBox = new javax.swing.JCheckBox();
         debugCheckBox = new javax.swing.JCheckBox();
+        duplicateIDCheckBox = new javax.swing.JCheckBox();
 
         warnHeader.setText("Warnings");
 
@@ -151,6 +154,13 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        duplicateIDCheckBox.setText("When multiple publications have the same identifier");
+        duplicateIDCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                duplicateIDCheckBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -159,14 +169,23 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(missingReferencesCheckBox)
+                            .addComponent(notAuthorCheckBox)
+                            .addComponent(noCategoryCheckBox)
+                            .addComponent(duplicateIDCheckBox)
+                            .addComponent(warnCheckBox)
+                            .addComponent(progressCheckBox)
+                            .addComponent(debugCheckBox)
+                            .addComponent(stackTraceCheckBox))
+                        .addContainerGap(10, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(missingReferencesCheckBox)
-                                    .addComponent(warnCheckBox)
-                                    .addComponent(notAuthorCheckBox)
-                                    .addComponent(noCategoryCheckBox)))
+                                .addComponent(debugHeader)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(debugSeparator))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(warnHeader)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -175,24 +194,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
                                 .addComponent(progressHeader)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(progressSeparator)))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(progressCheckBox)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(debugHeader)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(debugSeparator)))
-                        .addGap(10, 10, 10))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(debugCheckBox)
-                            .addComponent(stackTraceCheckBox))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,6 +206,8 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(warnCheckBox)
                 .addGap(10, 10, 10)
+                .addComponent(duplicateIDCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(missingReferencesCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(notAuthorCheckBox)
@@ -223,7 +227,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
                 .addComponent(debugCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(stackTraceCheckBox)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -256,10 +260,15 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
         settings.setShowDebugLog(debugCheckBox.isSelected());
     }//GEN-LAST:event_debugCheckBoxActionPerformed
 
+    private void duplicateIDCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_duplicateIDCheckBoxActionPerformed
+        settings.setWarnDuplicateIDs(duplicateIDCheckBox.isSelected());
+    }//GEN-LAST:event_duplicateIDCheckBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox debugCheckBox;
     private javax.swing.JLabel debugHeader;
     private javax.swing.JSeparator debugSeparator;
+    private javax.swing.JCheckBox duplicateIDCheckBox;
     private javax.swing.JCheckBox missingReferencesCheckBox;
     private javax.swing.JCheckBox noCategoryCheckBox;
     private javax.swing.JCheckBox notAuthorCheckBox;

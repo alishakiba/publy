@@ -16,19 +16,29 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="missingReferencesCheckBox" min="-2" max="-2" attributes="0"/>
+                          <Component id="notAuthorCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="noCategoryCheckBox" min="-2" max="-2" attributes="0"/>
+                          <Component id="duplicateIDCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="warnCheckBox" min="-2" max="-2" attributes="0"/>
+                          <Component id="progressCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="debugCheckBox" min="-2" max="-2" attributes="0"/>
+                          <Component id="stackTraceCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="10" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="missingReferencesCheckBox" min="-2" max="-2" attributes="0"/>
-                                  <Component id="warnCheckBox" min="-2" max="-2" attributes="0"/>
-                                  <Component id="notAuthorCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="noCategoryCheckBox" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="debugHeader" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="debugSeparator" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <Component id="warnHeader" min="-2" max="-2" attributes="0"/>
@@ -42,29 +52,6 @@
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                              <Component id="progressCheckBox" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="debugHeader" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="debugSeparator" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="debugCheckBox" min="-2" max="-2" attributes="0"/>
-                          <Component id="stackTraceCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -81,6 +68,8 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="warnCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+              <Component id="duplicateIDCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="missingReferencesCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="notAuthorCheckBox" min="-2" max="-2" attributes="0"/>
@@ -102,7 +91,7 @@
               <Component id="debugCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="stackTraceCheckBox" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="50" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -183,6 +172,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="debugCheckBoxActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="duplicateIDCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="When multiple publications have the same identifier"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="duplicateIDCheckBoxActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
