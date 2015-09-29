@@ -1,0 +1,45 @@
+/* Paper titles */
+h4.title {
+    display: inline;
+    font-size: 1em;
+}
+
+/* Italicize journal and conference names */
+.booktitle, .journal {
+    font-style: italic;
+}
+
+/* Don't allow line breaks within author names */
+.author {
+    white-space: nowrap;
+}
+
+/* Place buttons on the same line as links */
+.links {
+    display: inline-block;
+}
+
+/* Show a hand cursor for elements that act like buttons */
+.abstract-toggle, .bibtex-toggle {
+    cursor: pointer;
+}
+
+/* Hide BibTeX initially, and for users without JavaScript */
+.bibtex-container {
+    display: none;
+}
+
+/* Tablets: decrease font size to compensate for closer viewing distance */
+@media all and (max-width: 56em) {
+    body {
+        font-size: 90%;
+        width: 100%;
+    }
+}
+
+/* Smartphones: decrease font size to compensate for closer viewing distance */
+@media all and (max-width: 31em) {
+    body {
+        font-size: 80%;
+    }
+}
