@@ -15,6 +15,8 @@
  */
 package publy.io.bibtexparser;
 
+import java.io.IOException;
+import java.io.StringReader;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -51,7 +53,7 @@ public class TagParserTest {
      * Test of parseTag method, of class TagParser.
      */
     @Test
-    public void testParseTag() {
+    public void testParseTag() throws IOException, ParseException {
         System.out.println("parseTag");
         
         String[] text = new String[] {
@@ -89,7 +91,7 @@ public class TagParserTest {
         };
         
         for (int i = 0; i < text.length; i++) {
-            Tag result = TagParser.parseTag(text[i]);
+            Tag result = TagParser.parseTag(new StringReader(text[i]));
             assertEquals(expResult[i], result);
         }
     }
