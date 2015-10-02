@@ -211,7 +211,46 @@ public class PublicationListParserTest {
                     }
                 }).init()
                 )
-            }};
+            },
+            new Object[]{
+                "% @Book{steward03,\n"
+                + "  author =	 {Testing},\n"
+                + "}",
+                Arrays.asList(
+                (new BibItem("book", "steward03") {
+                    BibItem init() {
+                        put("author", "Testing");
+                        return this;
+                    }
+                }).init()
+                )
+            },
+            new Object[]{
+                "@comment this entire line is a comment @Book{steward03,\n"
+                + "  author =	 {Testing},\n"
+                + "}",
+                Arrays.asList(
+                (new BibItem("book", "steward03") {
+                    BibItem init() {
+                        put("author", "Testing");
+                        return this;
+                    }
+                }).init()
+                )
+            },
+            new Object[]{
+                "@comment{ this entire line is a comment @Book{steward03,}\n"
+                + "  author =	 {Testing},\n"
+                + "}",
+                Arrays.asList(
+                (new BibItem("book", "steward03") {
+                    BibItem init() {
+                        return this;
+                    }
+                }).init()
+                )
+            }
+        };
 
         for (Object[] test : tests) {
             try {
