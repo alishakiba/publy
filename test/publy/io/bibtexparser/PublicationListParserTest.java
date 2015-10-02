@@ -83,7 +83,7 @@ public class PublicationListParserTest {
                 Arrays.asList(
                 (new BibItem("book", "steward03") {
                     BibItem init() {
-                        put("author", " Martha Steward ");
+                        put("author", "Martha Steward");
                         put("title", "Cooking behind bars");
                         put("publisher", "Culinary Expert Series");
                         put("year", "2003");
