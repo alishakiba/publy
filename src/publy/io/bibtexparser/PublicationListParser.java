@@ -56,34 +56,45 @@ public class PublicationListParser {
             String line = l.trim();
 
             if (line.startsWith("@")) {
-                // A Bibitem
-                BibItem item = BibItemParser.parseBibItem(Tokenizer.collectBibItem(in, line).replaceAll("\\s+", " "));
-
-                if (item != null) {
-                    switch (item.getType()) {
-                        case COMMENT:
-                        case PREAMBLE:
-                            break; // Ignore
-                        case STRING:
-                            // Add to abbreviations
-                            abbreviations.put(item.get("short"), item.get("full"));
-                            break;
-                        default:
-                            items.add(item);
-                    }
-                }
+                handleBibItem(BibItemParser.parseBibItem(normalize(Tokenizer.collectBibItem(in, line))));
             } else if (line.startsWith("<")) {
-                // A custom tag
-                Tag tag = TagParser.parseTag(Tokenizer.collectTag(in, line).replaceAll("\\s+", " "));
-
-                if (tag.type == Tag.Type.ABBREVIATION) {
-                    abbreviations.put(tag.values.get("short"), tag.values.get("full"));
-                } else if (tag.type == Tag.Type.AUTHOR) {
-                    authors.put(tag.values.get("short"), tag.toAuthor());
-                } else {
-                    throw new InternalError("Tag with unexpected type: " + tag);
-                }
+                handleTag(TagParser.parseTag(normalize(Tokenizer.collectTag(in, line))));
             }
         }
+    }
+
+    private void handleBibItem(BibItem item) {
+        if (item == null) {
+            return;
+        }
+
+        switch (item.getType()) {
+            case COMMENT: // fallthrough
+            case PREAMBLE:
+                break; // Ignore
+            case STRING:
+                // Add to abbreviations
+                abbreviations.put(item.get("short"), item.get("full"));
+                break;
+            default:
+                items.add(item);
+        }
+    }
+
+    private void handleTag(Tag tag) throws InternalError {
+        switch (tag.type) {
+            case ABBREVIATION:
+                abbreviations.put(tag.values.get("short"), tag.values.get("full"));
+                break;
+            case AUTHOR:
+                authors.put(tag.values.get("short"), tag.toAuthor());
+                break;
+            default:
+                throw new InternalError("Tag with unexpected type: " + tag);
+        }
+    }
+
+    private String normalize(String s) {
+        return s.replaceAll("\\s+", " ");
     }
 }
