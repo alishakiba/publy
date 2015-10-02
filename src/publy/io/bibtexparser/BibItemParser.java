@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StreamTokenizer;
 import java.util.regex.Pattern;
-import publy.Console;
 import publy.data.Pair;
 import publy.data.bibitem.BibItem;
 
@@ -326,119 +325,6 @@ public class BibItemParser {
         }
 
         return value.toString();
-    }
-
-    private static BibItem parsePublication(String type, String body) throws ParseException {
-        // Syntax: id, (field-value-pair)*
-        int idEnd = body.indexOf(',');
-
-        if (idEnd == -1) {
-            // No fields
-            return new BibItem(type, body.substring(0, body.length() - 1));
-        }
-
-        String id = body.substring(0, idEnd).trim();
-        body = body.substring(idEnd + 1).trim();
-
-        BibItem result = new BibItem(type, id);
-
-        while (!body.isEmpty() && !body.equals("}")) {
-            // Parse the next field-value pair
-            int valueStart = body.indexOf('=');
-
-            if (valueStart == -1) {
-                // No more field-value pairs, but text left: warn
-                System.err.printf("After parsing all fields of publication \"%s\", the following text was left and not part of any field:\n%s\n", id, body);
-                Console.warn(Console.WarningType.OTHER, "After parsing all fields of publication \"%s\", the following text was left and not part of any field:\n%s\n", id, body);
-                break;
-            }
-
-            String field = body.substring(0, valueStart).trim().toLowerCase();
-            body = body.substring(valueStart + 1).trim();
-
-            Pair<String, String> value = Tokenizer.collectValue(body);
-            result.put(field, parseValue(value.getFirst()));
-            body = value.getSecond().trim();
-
-            if (body.startsWith(",")) {
-                body = body.substring(1).trim();
-            }
-        }
-
-        return result;
-    }
-
-    public static String parseValue(String text) {
-        // Drop outer pair of separators (braces or quotes)
-        // Turn @string abbreviations into publy abbreviations ("<<short>>")
-        // Process string concatenation
-
-        StringBuilder result = new StringBuilder();
-        int braceLevel = 0;
-        boolean inQuotes = false;
-        boolean inAbbreviation = false;
-
-        for (int i = 0; i < text.length(); i++) {
-            int c = text.codePointAt(i);
-
-            if (braceLevel > 0) {
-                if ((char) c == '{') {
-                    braceLevel++;
-                } else if ((char) c == '}') {
-                    braceLevel--;
-                }
-
-                if (braceLevel > 0 || inQuotes) {
-                    // Add everything but the closing brace or quote
-                    result.appendCodePoint(c);
-                }
-            } else if (inQuotes) {
-                if ((char) c == '"') {
-                    inQuotes = false;
-                } else {
-                    result.appendCodePoint(c);
-
-                    if ((char) c == '{') {
-                        braceLevel++;
-                    } else if (braceLevel > 0 && (char) c == '}') {
-                        braceLevel--;
-                    }
-                }
-            } else if (inAbbreviation) {
-                if (Character.isWhitespace(c) || (char) c == '#' || (char) c == '{' || (char) c == '"') {
-                    // End of abbreviation
-                    result.append(">>");
-                    inAbbreviation = false;
-
-                    if ((char) c == '{') {
-                        braceLevel = 1;
-                    } else if ((char) c == '"') {
-                        inQuotes = true;
-                    }
-                } else {
-                    result.appendCodePoint(c);
-                }
-            } else {
-                // Brace or quote start new tokens, pound is ignored, numbers just get parsed, text starts a new abbreviation token
-                if ((char) c == '{') {
-                    braceLevel = 1;
-                } else if ((char) c == '"') {
-                    inQuotes = true;
-                } else if (Character.isDigit(c)) {
-                    result.appendCodePoint(c);
-                } else if (Character.isAlphabetic(c)) {
-                    result.append("<<");
-                    result.appendCodePoint(c);
-                    inAbbreviation = true;
-                } // else ignore
-            }
-        }
-
-        if (inAbbreviation) {
-            result.append(">>");
-        }
-
-        return result.toString();
     }
 
     private BibItemParser() {

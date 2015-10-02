@@ -357,49 +357,4 @@ public class BibItemParserTest {
         }
     }
 
-    /**
-     * Test of parseValue method, of class BibItemParser.
-     */
-    @Test
-    public void testParseValue() {
-        System.out.println("parseValue");
-
-        String[][] tests = new String[][]{
-            // Input, output
-            new String[]{"\"Yes\"", "Yes"},
-            new String[]{"{No}", "No"},
-            new String[]{"11", "11"},
-            new String[]{"this", "<<this>>"},
-            new String[]{"\"Goossens, Michel and Mittelbach, Franck and Samarin, Alexander\"", "Goossens, Michel and Mittelbach, Franck and Samarin, Alexander"},
-            new String[]{"\"The {{\\LaTeX}} {C}ompanion\"", "The {{\\LaTeX}} {C}ompanion"},
-            new String[]{"AW", "<<AW>>"},
-            new String[]{"1993", "1993"},
-            new String[]{"\"December\"", "December"},
-            new String[]{"{0-201-54199-8}", "0-201-54199-8"},
-            new String[]{"\"Comments on {\"}Filenames and Fonts{\"}\"", "Comments on {\"}Filenames and Fonts{\"}"},
-            new String[]{"{Comments on \"Filenames and Fonts\"}", "Comments on \"Filenames and Fonts\""},
-            new String[]{"goossens # and # mittelbach # and # samarin", "<<goossens>><<and>><<mittelbach>><<and>><<samarin>>"},
-            new String[]{"goossens#and#mittelbach # and#samarin", "<<goossens>><<and>><<mittelbach>><<and>><<samarin>>"},
-            new String[]{"goossens # \" and \" # mittelbach # and # samarin", "<<goossens>> and <<mittelbach>><<and>><<samarin>>"},
-            new String[]{"\"goossens\" # \" and \" # mittelbach # and # samarin", "goossens and <<mittelbach>><<and>><<samarin>>"},
-            new String[]{"\"goossens #  and \" # mittelbach # and # samarin", "goossens #  and <<mittelbach>><<and>><<samarin>>"},
-            new String[]{"\"goos,sens #  and \" # mittelbach # and # samarin", "goos,sens #  and <<mittelbach>><<and>><<samarin>>"},
-            new String[]{"goossens # and # {mit,telbach} # and # samarin", "<<goossens>><<and>>mit,telbach<<and>><<samarin>>"},
-            new String[]{"goossens # and # {mit, \"tel\" # bach} # and # samarin", "<<goossens>><<and>>mit, \"tel\" # bach<<and>><<samarin>>"},
-            new String[]{"pub-DOVER", "<<pub-DOVER>>"},
-            new String[]{"pub-DOVER:adr", "<<pub-DOVER:adr>>"},
-        };
-
-        for (String[] test : tests) {
-            try {
-                String expResult = test[1];
-                String result = BibItemParser.parseValue(test[0]);
-                assertEquals("Input: <" + test[0] + ">", expResult, result);
-            } catch (Exception ex) {
-                System.err.println("Input: <" + test[0] + ">");
-                throw ex;
-            }
-        }
-    }
-
 }
