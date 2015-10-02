@@ -24,17 +24,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import publy.Console;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
 
 public class PublicationListParser {
 
     public static List<BibItem> parseFile(Path file) throws IOException, ParseException {
-        Console.debug("Parsing publication list \"%s\"", file);
+        try (BufferedReader in = Files.newBufferedReader(file, Charset.forName("UTF-8"))) {
+            return parseBibTeX(in);
+        }
+    }
+
+    public static List<BibItem> parseBibTeX(BufferedReader in) throws IOException, ParseException {
         PublicationListParser parser = new PublicationListParser();
 
-        parser.parseFileInternal(file);
+        parser.parseFileInternal(in);
         AbbreviationHandler.handleAbbreviationsAndAuthors(parser.items, parser.abbreviations, parser.authors);
 
         return parser.items;
@@ -47,39 +51,37 @@ public class PublicationListParser {
     private PublicationListParser() {
     }
 
-    private void parseFileInternal(Path file) throws IOException, ParseException {
-        try (BufferedReader in = Files.newBufferedReader(file, Charset.forName("UTF-8"))) {
-            for (String l = in.readLine(); l != null; l = in.readLine()) {
-                String line = l.trim();
+    private void parseFileInternal(BufferedReader in) throws IOException, ParseException {
+        for (String l = in.readLine(); l != null; l = in.readLine()) {
+            String line = l.trim();
 
-                if (line.startsWith("@")) {
-                    // A Bibitem
-                    BibItem item = BibItemParser.parseBibItem(Tokenizer.collectBibItem(in, line).replaceAll("\\s+", " "));
+            if (line.startsWith("@")) {
+                // A Bibitem
+                BibItem item = BibItemParser.parseBibItem(Tokenizer.collectBibItem(in, line).replaceAll("\\s+", " "));
 
-                    if (item != null) {
-                        switch (item.getType()) {
-                            case COMMENT:
-                            case PREAMBLE:
-                                break; // Ignore
-                            case STRING:
-                                // Add to abbreviations
-                                abbreviations.put(item.get("short"), item.get("full"));
-                                break;
-                            default:
-                                items.add(item);
-                        }
+                if (item != null) {
+                    switch (item.getType()) {
+                        case COMMENT:
+                        case PREAMBLE:
+                            break; // Ignore
+                        case STRING:
+                            // Add to abbreviations
+                            abbreviations.put(item.get("short"), item.get("full"));
+                            break;
+                        default:
+                            items.add(item);
                     }
-                } else if (line.startsWith("<")) {
-                    // A custom tag
-                    Tag tag = TagParser.parseTag(Tokenizer.collectTag(in, line).replaceAll("\\s+", " "));
+                }
+            } else if (line.startsWith("<")) {
+                // A custom tag
+                Tag tag = TagParser.parseTag(Tokenizer.collectTag(in, line).replaceAll("\\s+", " "));
 
-                    if (tag.type == Tag.Type.ABBREVIATION) {
-                        abbreviations.put(tag.values.get("short"), tag.values.get("full"));
-                    } else if (tag.type == Tag.Type.AUTHOR) {
-                        authors.put(tag.values.get("short"), tag.toAuthor());
-                    } else {
-                        throw new InternalError("Tag with unexpected type: " + tag);
-                    }
+                if (tag.type == Tag.Type.ABBREVIATION) {
+                    abbreviations.put(tag.values.get("short"), tag.values.get("full"));
+                } else if (tag.type == Tag.Type.AUTHOR) {
+                    authors.put(tag.values.get("short"), tag.toAuthor());
+                } else {
+                    throw new InternalError("Tag with unexpected type: " + tag);
                 }
             }
         }
