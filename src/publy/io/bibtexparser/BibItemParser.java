@@ -25,7 +25,7 @@ import publy.data.bibitem.BibItem;
 
 public class BibItemParser {
 
-    private static final int MAX_RESET = 6000000; // ~6MB, Accomodates largest bib file I've found (all publications of and relating to Einstein)
+    private static final int MAX_RESET = 6000000; // ~12MB, Easily accomodates largest bib file I've found
     private static final Pattern number = Pattern.compile("(\\d)+");
     private static StreamTokenizer tokenizer;
 
