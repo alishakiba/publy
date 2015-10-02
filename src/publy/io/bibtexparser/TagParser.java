@@ -15,23 +15,38 @@
  */
 package publy.io.bibtexparser;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StreamTokenizer;
 import publy.Console;
 
 public class TagParser {
-    
-    // Patterns for author and abbreviation parsing
-    private static final Pattern nameValuePattern = Pattern.compile("([a-zA-Z]+)\\s?=\\s?\"([^\"]*)\"");
-    
-    public static Tag parseTag(String text) {
-        String type = text.substring(1, Math.min(text.indexOf(' ', 2), text.indexOf('>'))).trim().toLowerCase();
 
-        switch (type) {
-            case "author":
-                return parseAuthor(text);
+    private static final int[] SPECIAL_CHARACTERS = new int[]{
+        '>', // End of tag
+        '=', // Field-value separator
+        '"', // Value delimiter "..."
+    };
+    private static final int MAX_RESET = 6000000; // ~12MB, Easily accomodates largest bib file I've found
+    private static Tokenizer tokenizer;
+
+    public static Tag parseTag(Reader in) throws IOException, ParseException {
+        if (in.markSupported()) {
+            in.mark(MAX_RESET);
+        }
+
+        tokenizer = new Tokenizer(in);
+        tokenizer.setSpecialCharacters(SPECIAL_CHARACTERS);
+
+        try {
+            tokenizer.match(StreamTokenizer.TT_WORD);
+            String type = tokenizer.getLastTokenAsString().toLowerCase();
+
+            switch (type) {
+                case "author":
+                return parseAuthor();
             case "abbr":
-                return parseAbbreviation(text);
+                return parseAbbreviation();
             // Ignore valid HTML tags
             case "a":
             case "acronym":
@@ -111,13 +126,26 @@ public class TagParser {
             case "ul":
             case "var":
                 Console.warn(Console.WarningType.OTHER, "Ignored HTML tag \"%s\" out of publication context.", type);
-                break;
+                return null;
             default:
-                Console.error("Unrecognized tag \"%s\" at line \"%s\".", type, text);
-                break;
+                throw new ParseException(String.format("Unrecognized tag \"%s\".", type));
+            }
+        } catch (IOException | ParseException ex) {
+            in.reset();
+            throw ex;
         }
-        
+    }
+
+    private static Tag parseAuthor() {
         return null;
+    }
+
+    private static Tag parseAbbreviation() {
+        return null;
+    }
+
+    private static void parseFields(Tag result) {
+        
     }
 
     private static Tag parseAuthor(String text) {
@@ -153,10 +181,10 @@ public class TagParser {
     }
     
     private static void parseFields(String text, Tag result) {
-        Matcher matcher = nameValuePattern.matcher(text);
+        /*Matcher matcher = nameValuePattern.matcher(text);
         
         while (matcher.find()) {
             result.values.put(matcher.group(1), matcher.group(2));
-        }
+        }*/
     }
 }
