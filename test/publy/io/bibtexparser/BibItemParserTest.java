@@ -16,6 +16,7 @@
 package publy.io.bibtexparser;
 
 import java.io.IOException;
+import java.io.StringReader;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -57,23 +58,198 @@ public class BibItemParserTest {
         System.out.println("parseBibItem");
 
         Object[][] tests = new Object[][]{
-            new Object[]{"@comment{AW = \"Addison-Wesley\"}", new BibItem("comment", null)},
-            new Object[]{"@preamble{AW = \"Addison-Wesley\"}", new BibItem("preamble", null)},
-            new Object[]{"@string{AW = \"Addison-Wesley\"}", (new BibItem("string", null) {
+            new Object[]{",comment{AW = \"Addison-Wesley\"}", "EX"},
+            new Object[]{"commentComment}", "EX"}, // There should be an open brace
+            new Object[]{"comme\n\t\nComme\nt}", "EX"}, // There should be an open brace
+            new Object[]{"comme{Comme\nt", "EX"}, // There should be a close brace
+            new Object[]{"comme{Co{m}me\nt", "EX"}, // There should be a close brace
+            new Object[]{"comme{{Co{}m}me\nt", "EX"}, // There should be a close brace
+            new Object[]{"comment{Comment}", new BibItem("comment", null)},
+            new Object[]{"comment{Comment} @string{this = \"test\"}", new BibItem("comment", null)},
+            new Object[]{"article{bose,\n title = \"Title\", author = {Bose, {P}rosenjit}}",
+                (new BibItem("article", "bose") {
+                    BibItem init() {
+                        put("author", "Bose, {P}rosenjit");
+                        put("title", "Title");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"comment{Comment\n\t  \t}", new BibItem("comment", null)},
+            new Object[]{"comment{C{{o}m{m}}}ent}", new BibItem("comment", null)},
+
+            new Object[]{"article{test, title = \"Title1\"}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "Title1");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = \"Title2\",}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "Title2");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = {Title3}}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "Title3");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = {Title4},}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "Title4");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = 11}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "11");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = 11,}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "11");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = abbr}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "<<abbr>>");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = abbr,}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "<<abbr>>");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = \"Comments on {\"}Filenames and Fonts{\"}\"}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "Comments on {\"}Filenames and Fonts{\"}");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = {Comments on \"Filenames and Fonts\"}}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "Comments on \"Filenames and Fonts\"");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = \"The {{\\LaTeX}} {C}ompanion\"}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "The {{\\LaTeX}} {C}ompanion");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = \"The {{\\LaTeX,}} {C}ompanion\"}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "The {{\\LaTeX,}} {C}ompanion");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = {The ,ompanion}}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "The ,ompanion");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = {The ,ompanion},}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "The ,ompanion");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = {submitted}}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "submitted");
+                        return this;
+                    }
+                }).init()},
+
+            new Object[]{"article{test, author = goossens # and # mittelbach # and # samarin}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("author", "<<goossens>><<and>><<mittelbach>><<and>><<samarin>>");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, author = goossens # \" and \" # mittelbach # and # samarin}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("author", "<<goossens>> and <<mittelbach>><<and>><<samarin>>");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, author = \"goossens\" # \" and \" # mittelbach # and # samarin}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("author", "goossens and <<mittelbach>><<and>><<samarin>>");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, author = \"goossens #  and \" # mittelbach # and # samarin}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("author", "goossens #  and <<mittelbach>><<and>><<samarin>>");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, author = \"goos,sens #  and \" # mittelbach # and # samarin}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("author", "goos,sens #  and <<mittelbach>><<and>><<samarin>>");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, author = goossens # and # {mit,telbach} # and # samarin}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("author", "<<goossens>><<and>>mit,telbach<<and>><<samarin>>");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, author = goossens # and # {mit, \"tel\" # bach} # and # samarin}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("author", "<<goossens>><<and>>mit, \"tel\" # bach<<and>><<samarin>>");
+                        return this;
+                    }
+                }).init()},
+
+            new Object[]{"comment{AW = \"Addison-Wesley\"}", new BibItem("comment", null)},
+            new Object[]{"preamble{AW = \"Addison-Wesley\"}", new BibItem("preamble", null)},
+            new Object[]{"string{AW = \"Addison-Wesley\"}", (new BibItem("string", null) {
                 BibItem init() {
                     put("short", "AW");
                     put("full", "Addison-Wesley");
                     return this;
                 }
             }).init()},
-            new Object[]{"@string{AW = {Addison-Wesley}}", (new BibItem("string", null) {
+            new Object[]{"string{AW = {Addison-Wesley}}", (new BibItem("string", null) {
                 BibItem init() {
                     put("short", "AW");
                     put("full", "Addison-Wesley");
                     return this;
                 }
             }).init()},
-            new Object[]{"@book{companion,\n"
+            new Object[]{"book{companion,\n"
                 + "author = \"Goossens, Michel and Mittelbach, Franck and Samarin, Alexander\",\n"
                 + "title = \"The {{\\LaTeX}} {C}ompanion\",\n"
                 + "booktitle = \"The {{\\LaTeX}} {C}ompanion\",\n"
@@ -96,7 +272,7 @@ public class BibItemParserTest {
                         return this;
                     }
                 }).init()},
-            new Object[]{"@inproceedings{morin2013average,\n"
+            new Object[]{"inproceedings{morin2013average,\n"
                 + " title={On the Average Number of Edges in Theta Graphs},\n"
                 + " author={<<pat>> and <<me>>},\n"
                 + " booktitle={<<proc>> 11th <<analco>> (ANALCO14)},\n"
@@ -117,7 +293,7 @@ public class BibItemParserTest {
                         return this;
                     }
                 }).init()},
-            new Object[]{"@Book{Weyl:1922:STMb,\n"
+            new Object[]{"Book{Weyl:1922:STMb,\n"
                 + "  author =       \"Hermann Weyl and Henry L. (Henry Leopold) Brose\",\n"
                 + "  title =        \"Space--time--matter\",\n"
                 + "  publisher =    pub-DOVER,\n"
@@ -152,16 +328,17 @@ public class BibItemParserTest {
                         return this;
                     }
                 }).init()},
-            new Object[]{"@book{companion}", new BibItem("book", "companion")},};
+            new Object[]{"book{companion}", new BibItem("book", "companion")},};
 
         for (Object[] test : tests) {
             try {
+                BibItem result = BibItemParser.parseBibItem(new StringReader((String) test[0]));
                 BibItem expResult = (BibItem) test[1];
-                BibItem result = BibItemParser.parseBibItem((String) test[0]);
                 assertEqualItems("Input: <" + test[0] + ">", expResult, result);
             } catch (IOException | ParseException ioe) {
                 if (!"EX".equals(test[1])) {
-                    fail("parseBibItem threw IOException \"" + ioe + "\" with input \"" + test[0] + "\"");
+                    ioe.printStackTrace();
+                    fail("parseBibItem threw Exception \"" + ioe + "\" with input \"" + test[0] + "\".");
                 }
             } catch (Exception ex) {
                 System.err.println("Input: <" + test[0] + ">");

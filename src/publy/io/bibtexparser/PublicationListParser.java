@@ -17,6 +17,7 @@ package publy.io.bibtexparser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,10 +36,10 @@ public class PublicationListParser {
         }
     }
 
-    public static List<BibItem> parseBibTeX(BufferedReader in) throws IOException, ParseException {
+    public static List<BibItem> parseBibTeX(Reader in) throws IOException, ParseException {
         PublicationListParser parser = new PublicationListParser();
 
-        parser.parseFileInternal(in);
+        parser.parseBibTeXInternal(in);
         AbbreviationHandler.handleAbbreviationsAndAuthors(parser.items, parser.abbreviations, parser.authors);
 
         return parser.items;
@@ -51,14 +52,12 @@ public class PublicationListParser {
     private PublicationListParser() {
     }
 
-    private void parseFileInternal(BufferedReader in) throws IOException, ParseException {
-        for (String l = in.readLine(); l != null; l = in.readLine()) {
-            String line = l.trim();
-
-            if (line.startsWith("@")) {
-                handleBibItem(BibItemParser.parseBibItem(normalize(Tokenizer.collectBibItem(in, line))));
-            } else if (line.startsWith("<")) {
-                handleTag(TagParser.parseTag(normalize(Tokenizer.collectTag(in, line))));
+    private void parseBibTeXInternal(Reader in) throws IOException, ParseException {
+        for (int c = in.read(); c != -1; c = in.read()) {
+            if (c == '@') {
+                handleBibItem(BibItemParser.parseBibItem(in));
+            } else if (c == '<') {
+                //handleTag(TagParser.parseTag(in));
             }
         }
     }
@@ -92,9 +91,5 @@ public class PublicationListParser {
             default:
                 throw new InternalError("Tag with unexpected type: " + tag);
         }
-    }
-
-    private String normalize(String s) {
-        return s.replaceAll("\\s+", " ");
     }
 }
