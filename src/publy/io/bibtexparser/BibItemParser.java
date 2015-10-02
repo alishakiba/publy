@@ -24,20 +24,31 @@ import publy.data.bibitem.BibItem;
 
 public class BibItemParser {
 
+    private static final int[] SPECIAL_CHARACTERS = new int[]{
+        '{', // Entry delimiters {...}
+        '}',
+        '(', // Entry delimiters (...)
+        ')',
+        ',', // Field separator
+        '=', // Field-value separator
+        '"', // Value delimiter "..."
+        '#' // String concatenation
+    };
     private static final int MAX_RESET = 6000000; // ~12MB, Easily accomodates largest bib file I've found
     private static final Pattern number = Pattern.compile("(\\d)+");
-    private static StreamTokenizer tokenizer;
+    private static Tokenizer tokenizer;
 
     public static BibItem parseBibItem(Reader in) throws IOException, ParseException {
         if (in.markSupported()) {
             in.mark(MAX_RESET);
         }
 
-        setupTokenizer(in);
+        tokenizer = new Tokenizer(in);
+        tokenizer.setSpecialCharacters(SPECIAL_CHARACTERS);
 
         try {
-            parse(StreamTokenizer.TT_WORD);
-            String type = getLastTokenAsString().toLowerCase();
+            tokenizer.match(StreamTokenizer.TT_WORD);
+            String type = tokenizer.getLastTokenAsString().toLowerCase();
 
             switch (type) {
                 case "comment":
@@ -54,130 +65,6 @@ public class BibItemParser {
         }
     }
 
-    private static void setupTokenizer(Reader in) {
-        tokenizer = new StreamTokenizer(in);
-
-        tokenizer.resetSyntax(); // The default syntax is based on Java code
-        tokenizer.eolIsSignificant(false);
-
-        // Treat everything as a word by default
-        tokenizer.wordChars(0, Character.MAX_CODE_POINT);
-
-        // White space
-        tokenizer.whitespaceChars(0, ' '); // ' ' = 20, and 0-19 are UTF-8 control characters, including \r, \n, and \t.
-
-        // Characters that should never be treated as part of words
-        tokenizer.ordinaryChar('{'); // Entry delimiters {...}
-        tokenizer.ordinaryChar('}');
-        tokenizer.ordinaryChar('('); // Entry delimiters (...)
-        tokenizer.ordinaryChar(')');
-        tokenizer.ordinaryChar(','); // Field separator
-        tokenizer.ordinaryChar('='); // Field-value separator
-        tokenizer.ordinaryChar('"'); // Value delimiter "..."
-        tokenizer.ordinaryChar('#'); // String concatenation
-    }
-
-    private static void setWhiteSpaceMatters(boolean whiteSpaceMatters) {
-        if (whiteSpaceMatters) {
-            tokenizer.ordinaryChars(0, ' ');
-            tokenizer.wordChars(0, ' ');
-        } else {
-            tokenizer.ordinaryChars(0, ' ');
-            tokenizer.whitespaceChars(0, ' ');
-        }
-    }
-
-    /**
-     * Consumes the next token and checks whether it matches any of the given
-     * characters.
-     *
-     * @param characters the characters to accept
-     * @return the string representation of the parsed token
-     * @throws ParseException If the next token is not among the given
-     * characters.
-     */
-    private static int parse(int... characters) throws ParseException, IOException {
-        int token = tokenizer.nextToken();
-
-        for (int c : characters) {
-            if (c == token) {
-                return token;
-            }
-        }
-
-        StringBuilder expected = new StringBuilder();
-        expected.append('[');
-
-        for (int c : characters) {
-            switch (c) {
-                case StreamTokenizer.TT_EOF:
-                    expected.append("EOF (end of file)");
-                    break;
-                case StreamTokenizer.TT_EOL:
-                    expected.append("EOL (end of line)");
-                    break;
-                case StreamTokenizer.TT_NUMBER:
-                    expected.append("NUMBER");
-                    break;
-                case StreamTokenizer.TT_WORD:
-                    expected.append("WORD");
-                    break;
-                default:
-                    expected.append(Character.toString((char) c));
-                    break;
-            }
-            expected.append(',');
-        }
-
-        expected.deleteCharAt(expected.length() - 1); // Delete last ','
-        expected.append(']');
-
-        throw new ParseException(String.format(
-                "I expected one of these tokens: %s, but found \"%s\".",
-                expected.toString(), getLastTokenAsString()));
-    }
-
-    /**
-     * Checks whether the next token is any of the given types, without
-     * consuming the token.
-     *
-     * @param characters the token types to check for
-     * @return true if the next token is of the given types, false otherwise
-     * @throws ParseException
-     * @throws IOException
-     */
-    private static boolean nextTokenIs(int... characters) throws IOException {
-        int token = tokenizer.nextToken();
-        tokenizer.pushBack();
-
-        for (int c : characters) {
-            if (c == token) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static String getLastTokenAsString() {
-        switch (tokenizer.ttype) {
-            case StreamTokenizer.TT_EOF:
-                return "EOF (end of file)";
-            case StreamTokenizer.TT_EOL:
-                return "EOL (end of line)";
-            case StreamTokenizer.TT_NUMBER:
-                if (!Double.isNaN(tokenizer.nval) && !Double.isInfinite(tokenizer.nval) && tokenizer.nval == Math.rint(tokenizer.nval)) {
-                    return Integer.toString((int) tokenizer.nval);
-                } else {
-                    return Double.toString(tokenizer.nval);
-                }
-            case StreamTokenizer.TT_WORD:
-                return tokenizer.sval;
-            default:
-                return Character.toString((char) tokenizer.ttype);
-        }
-    }
-
     /**
      * Parses the body of an "@string" entry.
      *
@@ -187,19 +74,19 @@ public class BibItemParser {
      */
     private static BibItem parseString() throws ParseException, IOException {
         // <string> ::= "(" <short> "=" <value> ")" | "{" <short> "=" <value> "}"
-        int bracket = parse('{', '(');
+        int bracket = tokenizer.match('{', '(');
 
-        parse(StreamTokenizer.TT_WORD);
-        String shortName = getLastTokenAsString();
+        tokenizer.match(StreamTokenizer.TT_WORD);
+        String shortName = tokenizer.getLastTokenAsString();
 
-        parse('=');
+        tokenizer.match('=');
 
         String fullText = parseValue();
 
         if (bracket == '{') {
-            parse('}');
+            tokenizer.match('}');
         } else {
-            parse(')');
+            tokenizer.match(')');
         }
 
         BibItem result = new BibItem("string", null);
@@ -218,15 +105,15 @@ public class BibItemParser {
      */
     private static BibItem parsePublication(String type) throws ParseException, IOException {
         // <body> ::= "{" <id> ("," <field>)* "}" | "(" <id> ("," <field>)* ")"
-        int bracket = parse('{', '(');
+        int bracket = tokenizer.match('{', '(');
 
-        parse(StreamTokenizer.TT_WORD);
-        String id = getLastTokenAsString();
+        tokenizer.match(StreamTokenizer.TT_WORD);
+        String id = tokenizer.getLastTokenAsString();
 
         BibItem result = new BibItem(type, id);
 
-        while (nextTokenIs(',')) {
-            parse(',');
+        while (tokenizer.nextTokenIs(',')) {
+            tokenizer.match(',');
             Pair<String, String> field = parseField();
 
             if (field != null) {
@@ -235,9 +122,9 @@ public class BibItemParser {
         }
 
         if (bracket == '{') {
-            parse('}');
+            tokenizer.match('}');
         } else {
-            parse(')');
+            tokenizer.match(')');
         }
 
         return result;
@@ -245,11 +132,11 @@ public class BibItemParser {
 
     private static Pair<String, String> parseField() throws IOException, ParseException {
         // <field> ::= (<name> "=" <value>)?
-        if (nextTokenIs(StreamTokenizer.TT_WORD)) {
-            parse(StreamTokenizer.TT_WORD);
-            String name = getLastTokenAsString().toLowerCase();
+        if (tokenizer.nextTokenIs(StreamTokenizer.TT_WORD)) {
+            tokenizer.match(StreamTokenizer.TT_WORD);
+            String name = tokenizer.getLastTokenAsString().toLowerCase();
 
-            parse('=');
+            tokenizer.match('=');
 
             return new Pair<>(name, parseValue());
         } else {
@@ -259,11 +146,11 @@ public class BibItemParser {
 
     private static String parseValue() throws IOException, ParseException {
         // <value> ::= (<simple-value> ("#" <simple-value>)*)?
-        if (nextTokenIs(StreamTokenizer.TT_WORD, '{', '"')) {
+        if (tokenizer.nextTokenIs(StreamTokenizer.TT_WORD, '{', '"')) {
             StringBuilder value = new StringBuilder(parseSimpleValue());
 
-            while (nextTokenIs('#')) {
-                parse('#');
+            while (tokenizer.nextTokenIs('#')) {
+                tokenizer.match('#');
                 value.append(parseSimpleValue());
             }
 
@@ -275,10 +162,10 @@ public class BibItemParser {
 
     private static String parseSimpleValue() throws IOException, ParseException {
         // <simple-value> ::= <abbreviation> | <number> | "{" <braced-value> "}" | "\"" <quoted-value> "\""
-        int token = parse(StreamTokenizer.TT_WORD, '{', '"');
+        int token = tokenizer.match(StreamTokenizer.TT_WORD, '{', '"');
 
         if (token == StreamTokenizer.TT_WORD) {
-            String value = getLastTokenAsString();
+            String value = tokenizer.getLastTokenAsString();
 
             if (isNumeric(value)) {
                 return value;
@@ -286,22 +173,18 @@ public class BibItemParser {
                 return "<<" + value + ">>";
             }
         } else {
-            setWhiteSpaceMatters(true);
+            tokenizer.setWhiteSpaceMatters(true);
             String value = parseDelimitedValue(token);
-            setWhiteSpaceMatters(false);
+            tokenizer.setWhiteSpaceMatters(false);
 
             if (token == '{') {
-                parse('}');
+                tokenizer.match('}');
             } else {
-                parse('"');
+                tokenizer.match('"');
             }
-            
+
             return value;
         }
-    }
-
-    private static boolean isNumeric(String input) {
-        return number.matcher(input).matches();
     }
 
     private static String parseDelimitedValue(int delimiter) throws IOException, ParseException {
@@ -313,18 +196,22 @@ public class BibItemParser {
 
         StringBuilder value = new StringBuilder();
 
-        while (nextTokenIs(wordCharacters)) {
-            int token = parse(wordCharacters);
-            value.append(getLastTokenAsString());
+        while (tokenizer.nextTokenIs(wordCharacters)) {
+            int token = tokenizer.match(wordCharacters);
+            value.append(tokenizer.getLastTokenAsString());
 
             if (token == '{') {
                 value.append(parseDelimitedValue('{'));
-                parse('}');
+                tokenizer.match('}');
                 value.append('}');
             }
         }
 
         return value.toString();
+    }
+
+    private static boolean isNumeric(String input) {
+        return number.matcher(input).matches();
     }
 
     private BibItemParser() {

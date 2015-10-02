@@ -57,7 +57,7 @@ public class PublicationListParser {
             if (c == '@') {
                 handleBibItem(BibItemParser.parseBibItem(in));
             } else if (c == '<') {
-                //handleTag(TagParser.parseTag(in));
+                handleTag(TagParser.parseTag(in));
             }
         }
     }

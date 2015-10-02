@@ -15,158 +15,131 @@
  */
 package publy.io.bibtexparser;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
-import publy.data.Pair;
+import java.io.Reader;
+import java.io.StreamTokenizer;
 
-public class Tokenizer {
+public class Tokenizer extends StreamTokenizer {
 
-    public static String collectBibItem(BufferedReader input, String firstLine) throws IOException, ParseException {
-        CombinedReader in = new CombinedReader(input, firstLine);
-        StringBuilder bibitem = new StringBuilder();
+    public Tokenizer(Reader reader) {
+        super(reader);
 
-        // Test for starting with '@'
-        int c = in.read();
+        resetSyntax(); // The default syntax is based on Java code
+        eolIsSignificant(false);
 
-        if ((char) c != '@') {
-            throw new ParseException("First character of bibitem should be '@'.");
-        }
+        // Treat everything as a word by default
+        wordChars(0, Character.MAX_CODE_POINT);
 
-        // Scan for first open brace ('{')
-        bibitem.appendCodePoint(c);
-        c = in.read();
+        // White space
+        whitespaceChars(0, ' '); // ' ' = 20, and 0-19 are UTF-8 control characters, including \r, \n, and \t.
+    }
 
-        while (c != -1 && (char) c != '{') {
-            bibitem.appendCodePoint(c);
-            c = in.read();
-        }
-
-        if (c == -1) {
-            throw new ParseException("No opening brace found when trying to parse bibitem.");
+    public void setWhiteSpaceMatters(boolean whiteSpaceMatters) {
+        if (whiteSpaceMatters) {
+            ordinaryChars(0, ' ');
+            wordChars(0, ' ');
         } else {
-            bibitem.appendCodePoint(c);
+            ordinaryChars(0, ' ');
+            whitespaceChars(0, ' ');
         }
-
-        // Collect the body
-        collectMatchedToken(in, '{', '}', bibitem);
-
-        return bibitem.toString();
     }
 
-    public static String collectTag(BufferedReader input, String firstLine) throws IOException, ParseException {
-        CombinedReader in = new CombinedReader(input, firstLine);
-        StringBuilder tag = new StringBuilder();
-
-        // Test for starting with '<'
-        int c = in.read();
-
-        if ((char) c != '<') {
-            throw new IOException("First character of tag should be '<'.");
+    public void setSpecialCharacters(int[] specialCharacters) {
+        for (int c : specialCharacters) {
+            // StreamTokenizer calls a character 'ordinary'
+            // if it is always a token by itself
+            ordinaryChar(c);
         }
-
-        tag.appendCodePoint(c);
-
-        // Collect the body
-        collectMatchedToken(in, '<', '>', tag);
-
-        return tag.toString();
-    }
-
-    public static Pair<String, String> collectValue(String body) throws ParseException {
-        // Collect until first "level-0" comma or close brace (end of bibitem)
-        // When encountering an open brace, collect until we've matched it
-        // When encountering a quote ("), collect until next quote
-
-        int braceLevel = 0;
-        boolean inQuotes = false;
-
-        for (int i = 0; i < body.length(); i++) {
-            int c = body.codePointAt(i);
-
-            // Check braces
-            if ((char) c == '{') {
-                braceLevel++;
-            } else if (braceLevel > 0 && (char) c == '}') {
-                braceLevel--;
-            } else if (braceLevel == 0) {
-                // Check quotes
-                if ((char) c == '"') {
-                    inQuotes = !inQuotes;
-                } else if (!inQuotes) {
-                    if ((char) c == ',' || (char) c == '}') {
-                        // zero-level end-of-value: we're done!
-                        return new Pair<>(body.substring(0, i), body.substring(i));
-                    }
-                }
-            }
-        }
-
-        throw new ParseException(String.format("End of input reached while collecting value.%nText: %s", body));
     }
 
     /**
-     * Collects characters from the input stream until the first time the number
-     * of close characters seen is larger than the number of open characters.
+     * Consumes the next token and checks whether it matches any of the given
+     * characters.
      *
-     * @param in
-     * @param open
-     * @param close
-     * @return
+     * @param characters the characters to accept
+     * @return the string representation of the parsed token
+     * @throws ParseException If the next token is not among the given
+     * characters.
+     * @throws java.io.IOException
      */
-    private static void collectMatchedToken(CombinedReader in, char open, char close, StringBuilder result) throws ParseException, IOException {
-        int openCount = 1;
+    public int match(int... characters) throws ParseException, IOException {
+        int token = nextToken();
 
-        while (openCount > 0) {
-            int c = in.read();
-
-            if (c == -1) {
-                if (open == '{') {
-                    throw new ParseException("End of input reached while trying to match braces in bibitem body.");
-                } else if (open == '<') {
-                    throw new ParseException("End of input reached while trying to match angle brackets in tag body.");
-                } else {
-                    throw new ParseException("End of input reached while trying to match.");
-                }
-            }
-
-            result.appendCodePoint(c);
-
-            if ((char) c == open) {
-                openCount++;
-            } else if ((char) c == close) {
-                openCount--;
+        for (int c : characters) {
+            if (c == token) {
+                return token;
             }
         }
+
+        StringBuilder expected = new StringBuilder();
+        expected.append('[');
+
+        for (int c : characters) {
+            switch (c) {
+                case StreamTokenizer.TT_EOF:
+                    expected.append("EOF (end of file)");
+                    break;
+                case StreamTokenizer.TT_EOL:
+                    expected.append("EOL (end of line)");
+                    break;
+                case StreamTokenizer.TT_NUMBER:
+                    expected.append("NUMBER");
+                    break;
+                case StreamTokenizer.TT_WORD:
+                    expected.append("WORD");
+                    break;
+                default:
+                    expected.append(Character.toString((char) c));
+                    break;
+            }
+            expected.append(',');
+        }
+
+        expected.deleteCharAt(expected.length() - 1); // Delete last ','
+        expected.append(']');
+
+        throw new ParseException(String.format(
+                "I expected one of these tokens: %s, but found \"%s\".",
+                expected.toString(), getLastTokenAsString()));
     }
 
-    private static class CombinedReader {
+    /**
+     * Checks whether the next token is any of the given types, without
+     * consuming the token.
+     *
+     * @param characters the token types to check for
+     * @return true if the next token is of the given types, false otherwise
+     * @throws IOException
+     */
+    public boolean nextTokenIs(int... characters) throws IOException {
+        int token = nextToken();
+        pushBack();
 
-        boolean endOfString = false;
-        StringReader sr;
-        BufferedReader br;
-
-        public CombinedReader(BufferedReader br, String s) {
-            this.sr = new StringReader(s);
-            this.br = br;
-        }
-
-        public int read() throws IOException {
-            if (endOfString) {
-                return br.read();
-            } else {
-                int c = sr.read();
-
-                if (c == -1) {
-                    endOfString = true;
-                    return br.read();
-                } else {
-                    return c;
-                }
+        for (int c : characters) {
+            if (c == token) {
+                return true;
             }
         }
+
+        return false;
     }
 
-    private Tokenizer() {
+    public String getLastTokenAsString() {
+        switch (ttype) {
+            case StreamTokenizer.TT_EOF:
+                return "EOF (end of file)";
+            case StreamTokenizer.TT_EOL:
+                return "EOL (end of line)";
+            case StreamTokenizer.TT_NUMBER:
+                if (!Double.isNaN(nval) && !Double.isInfinite(nval) && nval == Math.rint(nval)) {
+                    return Integer.toString((int) nval);
+                } else {
+                    return Double.toString(nval);
+                }
+            case StreamTokenizer.TT_WORD:
+                return sval;
+            default:
+                return Character.toString((char) ttype);
+        }
     }
 }
