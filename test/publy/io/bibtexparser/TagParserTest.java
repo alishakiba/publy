@@ -57,11 +57,11 @@ public class TagParserTest {
         System.out.println("parseTag");
         
         String[] text = new String[] {
-            "<author short=\"me\" name=\"Verdonschot, Sander\">",
-            "<author short=\"padawan\" name=\"Wan, Pada\" url=\"http://uni.versity.edu/~pada/\" group=\"student\">",
-            "<abbr short=\"team\" full=\"<<padawan>> and <<me>>\">",
-            "<abbr short=\"proc\" full=\"Proceedings of the\">",
-            "<abbr short=\"acat\" full=\"Awesome Conference on Amazing Things\">"
+            "author short=\"me\" name=\"Verdonschot, Sander\">",
+            "author short=\"padawan\" name=\"Wan, Pada\" url=\"http://uni.versity.edu/~pada/\" group=\"student\">",
+            "abbr short=\"team\" full=\"<<padawan>> and <<me>>\">",
+            "abbr short=\"proc\" full=\"Proceedings of the\">",
+            "abbr short=\"acat\" full=\"Awesome Conference on Amazing Things\">"
         };
         
         Tag tag0 = new Tag(Tag.Type.AUTHOR);
