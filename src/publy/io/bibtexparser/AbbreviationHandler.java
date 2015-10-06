@@ -32,6 +32,7 @@ public class AbbreviationHandler {
 
     public static void handleAbbreviationsAndAuthors(List<BibItem> items, Map<String, String> abbreviations, Map<String, Author> authors) {
         ensureAbbreviationsAreUnique(abbreviations, authors);
+        expandAbbreviationsInAbbreviations(abbreviations, authors);
         expandAbbreviations(items, abbreviations, authors);
         replaceAuthorsAndEditors(items, authors);
     }
@@ -58,6 +59,16 @@ public class AbbreviationHandler {
                 Console.error("The abbreviation %s is used as both an author and a general abbreviation. This could lead to unspecified behaviour.", sb.toString());
             } else {
                 Console.error("Some abbreviations are used as both an author and a general abbreviation. This could lead to unspecified behaviour. The abbreviations in question are:%n%s", sb.toString());
+            }
+        }
+    }
+    
+    private static void expandAbbreviationsInAbbreviations(Map<String, String> abbreviations, Map<String, Author> authors) {
+        for (Map.Entry<String, String> entry : abbreviations.entrySet()) {
+            String fullText = entry.getValue();
+            
+            if (fullText != null && !fullText.isEmpty()) {
+                entry.setValue(expandAbbreviations(fullText, abbreviations, authors));
             }
         }
     }

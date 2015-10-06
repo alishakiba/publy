@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import publy.Console;
@@ -47,7 +48,7 @@ public class PublicationListParser {
     }
 
     private final List<BibItem> items = new ArrayList<>();
-    private final Map<String, String> abbreviations = new HashMap<>();
+    private final Map<String, String> abbreviations = new LinkedHashMap<>(); // Ensure that order is preserved, so that abbreviations that use earlier abbreviations can be expanded properly
     private final Map<String, Author> authors = new HashMap<>();
 
     private PublicationListParser() {
@@ -55,7 +56,7 @@ public class PublicationListParser {
 
     private void parseBibTeXInternal(Reader in) throws IOException {
         int lineNumber = 1;
-        
+
         for (int c = in.read(); c != -1; c = in.read()) {
             if (c == '@') {
                 try {
@@ -99,7 +100,7 @@ public class PublicationListParser {
         if (tag == null) {
             return;
         }
-        
+
         switch (tag.type) {
             case ABBREVIATION:
                 abbreviations.put(tag.values.get("short"), tag.values.get("full"));
