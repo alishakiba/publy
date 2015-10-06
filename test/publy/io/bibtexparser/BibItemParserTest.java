@@ -182,6 +182,48 @@ public class BibItemParserTest {
                         return this;
                     }
                 }).init()},
+            new Object[]{"article{test, title = {Title }}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "Title");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = { Title}}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "Title");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = { Title }}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "Title");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = {The title }}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "The title");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = {The    title}}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "The title");
+                        return this;
+                    }
+                }).init()},
+            new Object[]{"article{test, title = {The \n\r title\t}}",
+                (new BibItem("article", "test") {
+                    BibItem init() {
+                        put("title", "The title");
+                        return this;
+                    }
+                }).init()},
 
             new Object[]{"article{test, author = goossens # and # mittelbach # and # samarin}",
                 (new BibItem("article", "test") {
@@ -207,14 +249,14 @@ public class BibItemParserTest {
             new Object[]{"article{test, author = \"goossens #  and \" # mittelbach # and # samarin}",
                 (new BibItem("article", "test") {
                     BibItem init() {
-                        put("author", "goossens #  and <<mittelbach>><<and>><<samarin>>");
+                        put("author", "goossens # and <<mittelbach>><<and>><<samarin>>");
                         return this;
                     }
                 }).init()},
             new Object[]{"article{test, author = \"goos,sens #  and \" # mittelbach # and # samarin}",
                 (new BibItem("article", "test") {
                     BibItem init() {
-                        put("author", "goos,sens #  and <<mittelbach>><<and>><<samarin>>");
+                        put("author", "goos,sens # and <<mittelbach>><<and>><<samarin>>");
                         return this;
                     }
                 }).init()},
@@ -320,8 +362,7 @@ public class BibItemParserTest {
                         put("year", "1922");
                         put("lccn", "QC6 .W5413 1922; QC6 .W4 1920; QC6 .W4 1922");
                         put("bibdate", "Tue Oct 10 06:32:10 MDT 2006");
-                        put("bibsource", "http://www.math.utah.edu/pub/tex/bib/einstein.bib;\n"
-                + "                 melvyl.cdlib.org:210/CDL90");
+                        put("bibsource", "http://www.math.utah.edu/pub/tex/bib/einstein.bib; melvyl.cdlib.org:210/CDL90");
                         put("acknowledgement", "<<ack-nhfb>>");
                         put("author-dates", "1885--1955");
                         put("subject", "Relativity (physics); space and time");

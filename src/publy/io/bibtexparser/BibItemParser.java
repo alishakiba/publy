@@ -138,7 +138,7 @@ public class BibItemParser {
                 Pair<String, String> field = parseField();
 
                 if (field != null) {
-                    result.put(field.getFirst(), field.getSecond());
+                    result.put(field.getFirst(), normalizeValue(field.getSecond()));
                 }
             }
 
@@ -242,6 +242,10 @@ public class BibItemParser {
 
     private static boolean isNumeric(String input) {
         return number.matcher(input).matches();
+    }
+
+    private static String normalizeValue(String value) {
+        return value.replaceAll("\\s+", " ").trim();
     }
 
     private BibItemParser() {
