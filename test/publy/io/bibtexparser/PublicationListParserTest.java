@@ -213,6 +213,38 @@ public class PublicationListParserTest {
                 )
             },
             new Object[]{
+                "@String{test = \"Test\"}\n"
+                + "@String{test2 = \"<<test>>ing\"}\n"
+                + "\n"
+                + "@Book{steward03,\n"
+                + "  author =	 test2,\n"
+                + "}",
+                Arrays.asList(
+                (new BibItem("book", "steward03") {
+                    BibItem init() {
+                        put("author", "Testing");
+                        return this;
+                    }
+                }).init()
+                )
+            },
+            new Object[]{
+                "@String{test2 = \"<<test>>\"}\n"
+                + "<author short=\"test\" name=\"Test Author\">\n"
+                + "\n"
+                + "@Book{steward03,\n"
+                + "  author =	 test2,\n"
+                + "}",
+                Arrays.asList(
+                (new BibItem("book", "steward03") {
+                    BibItem init() {
+                        put("author", "Test Author");
+                        return this;
+                    }
+                }).init()
+                )
+            },
+            new Object[]{
                 "% @Book{steward03,\n"
                 + "  author =	 {Testing},\n"
                 + "}",
