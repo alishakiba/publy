@@ -59,8 +59,14 @@ public class BibItemParser {
                 default:
                     return parsePublication(type);
             }
-        } catch (IOException | ParseException ex) {
+        } catch (ParseException ex) { // Do not reset upon IOException, as that is likely to be unrecoverable
             in.reset();
+            ex.setLineNumber(tokenizer.lineno());
+
+            if (ex.getType() == null || ex.getType().isEmpty()) {
+                ex.setType("entry");
+            }
+
             throw ex;
         }
     }
@@ -74,26 +80,38 @@ public class BibItemParser {
      */
     private static BibItem parseString() throws ParseException, IOException {
         // <string> ::= "(" <short> "=" <value> ")" | "{" <short> "=" <value> "}"
-        int bracket = tokenizer.match('{', '(');
+        String shortName = null;
 
-        tokenizer.match(StreamTokenizer.TT_WORD);
-        String shortName = tokenizer.getLastTokenAsString();
+        try {
+            int bracket = tokenizer.match('{', '(');
 
-        tokenizer.match('=');
+            tokenizer.match(StreamTokenizer.TT_WORD);
+            shortName = tokenizer.getLastTokenAsString();
 
-        String fullText = parseValue();
+            tokenizer.match('=');
 
-        if (bracket == '{') {
-            tokenizer.match('}');
-        } else {
-            tokenizer.match(')');
+            String fullText = parseValue();
+
+            if (bracket == '{') {
+                tokenizer.match('}');
+            } else {
+                tokenizer.match(')');
+            }
+
+            BibItem result = new BibItem("string", null);
+            result.put("short", shortName);
+            result.put("full", fullText);
+
+            return result;
+        } catch (ParseException pe) {
+            pe.setType("@string entry");
+
+            if (shortName != null) {
+                pe.setItem(shortName);
+            }
+
+            throw pe;
         }
-
-        BibItem result = new BibItem("string", null);
-        result.put("short", shortName);
-        result.put("full", fullText);
-
-        return result;
     }
 
     /**
@@ -105,29 +123,41 @@ public class BibItemParser {
      */
     private static BibItem parsePublication(String type) throws ParseException, IOException {
         // <body> ::= "{" <id> ("," <field>)* "}" | "(" <id> ("," <field>)* ")"
-        int bracket = tokenizer.match('{', '(');
+        String id = null;
 
-        tokenizer.match(StreamTokenizer.TT_WORD);
-        String id = tokenizer.getLastTokenAsString();
+        try {
+            int bracket = tokenizer.match('{', '(');
 
-        BibItem result = new BibItem(type, id);
+            tokenizer.match(StreamTokenizer.TT_WORD);
+            id = tokenizer.getLastTokenAsString();
 
-        while (tokenizer.nextTokenIs(',')) {
-            tokenizer.match(',');
-            Pair<String, String> field = parseField();
+            BibItem result = new BibItem(type, id);
 
-            if (field != null) {
-                result.put(field.getFirst(), field.getSecond());
+            while (tokenizer.nextTokenIs(',')) {
+                tokenizer.match(',');
+                Pair<String, String> field = parseField();
+
+                if (field != null) {
+                    result.put(field.getFirst(), field.getSecond());
+                }
             }
-        }
 
-        if (bracket == '{') {
-            tokenizer.match('}');
-        } else {
-            tokenizer.match(')');
-        }
+            if (bracket == '{') {
+                tokenizer.match('}');
+            } else {
+                tokenizer.match(')');
+            }
 
-        return result;
+            return result;
+        } catch (ParseException pe) {
+            pe.setType('@' + type + " entry");
+
+            if (id != null) {
+                pe.setItem(id);
+            }
+
+            throw pe;
+        }
     }
 
     private static Pair<String, String> parseField() throws IOException, ParseException {

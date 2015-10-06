@@ -18,6 +18,9 @@ package publy.io.bibtexparser;
 public class ParseException extends Exception {
 
     private static final long serialVersionUID = 1L;
+    private int lineNumber = -1;
+    private String item;
+    private String type;
 
     public ParseException(String message) {
         super(message);
@@ -27,4 +30,49 @@ public class ParseException extends Exception {
         super(message, cause);
     }
 
+    public String getErrorText() {
+        StringBuilder result = new StringBuilder("Error while parsing ");
+        
+        if (type != null && !type.isEmpty()) {
+            result.append(type);
+        } else {
+            result.append("item");
+        }
+        
+        if (item != null && !item.isEmpty()) {
+            result.append(" \"").append(item).append('"');
+        }
+        
+        if (lineNumber >= 0) {
+            result.append(", starting on line ").append(lineNumber);
+        }
+        
+        result.append(": ").append(getMessage());
+        
+        return result.toString();
+    }
+    
+    public int getLineNumber() {
+        return lineNumber;
+    }
+
+    public void setLineNumber(int lineNumber) {
+        this.lineNumber = lineNumber;
+    }
+
+    public String getItem() {
+        return item;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
+    
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }
