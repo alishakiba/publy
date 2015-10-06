@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import publy.Console;
 import publy.data.Author;
 import publy.data.bibitem.BibItem;
 
@@ -52,12 +53,26 @@ public class PublicationListParser {
     private PublicationListParser() {
     }
 
-    private void parseBibTeXInternal(Reader in) throws IOException, ParseException {
+    private void parseBibTeXInternal(Reader in) throws IOException {
+        int lineNumber = 1;
+        
         for (int c = in.read(); c != -1; c = in.read()) {
             if (c == '@') {
-                handleBibItem(BibItemParser.parseBibItem(in));
+                try {
+                    handleBibItem(BibItemParser.parseBibItem(in));
+                } catch (ParseException ex) {
+                    ex.setLineNumber(ex.getLineNumber() + lineNumber - 1);
+                    Console.error(ex.getErrorText());
+                }
             } else if (c == '<') {
-                handleTag(TagParser.parseTag(in));
+                try {
+                    handleTag(TagParser.parseTag(in));
+                } catch (ParseException ex) {
+                    ex.setLineNumber(ex.getLineNumber() + lineNumber - 1);
+                    Console.error(ex.getErrorText());
+                }
+            } else if (c == '\n') {
+                lineNumber++;
             }
         }
     }
@@ -81,6 +96,10 @@ public class PublicationListParser {
     }
 
     private void handleTag(Tag tag) throws InternalError {
+        if (tag == null) {
+            return;
+        }
+        
         switch (tag.type) {
             case ABBREVIATION:
                 abbreviations.put(tag.values.get("short"), tag.values.get("full"));

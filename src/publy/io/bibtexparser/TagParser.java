@@ -38,9 +38,11 @@ public class TagParser {
         tokenizer = new Tokenizer(in);
         tokenizer.setSpecialCharacters(SPECIAL_CHARACTERS);
 
+        String type = null;
+
         try {
             tokenizer.match(StreamTokenizer.TT_WORD);
-            String type = tokenizer.getLastTokenAsString().toLowerCase();
+            type = tokenizer.getLastTokenAsString().toLowerCase();
 
             switch (type) {
                 case "author":
@@ -125,13 +127,26 @@ public class TagParser {
                 case "tt":
                 case "ul":
                 case "var":
-                    Console.warn(Console.WarningType.OTHER, "Ignored HTML tag \"%s\" out of publication context.", type);
+                    Console.warn(Console.WarningType.OTHER, "Ignored HTML tag \"<%s>\" out of publication context.", type);
                     return null;
                 default:
-                    throw new ParseException(String.format("Unrecognized tag \"%s\".", type));
+                    if (type.startsWith("<")) {
+                        // Abbreviation: silently ignore
+                        return null;
+                    } else {
+                        throw new ParseException(String.format("Unrecognized tag \"<%s>\".", type));
+                    }
             }
-        } catch (IOException | ParseException ex) {
+        } catch (ParseException ex) { // Do not reset upon IOException, as that is likely to be unrecoverable
             in.reset();
+            ex.setLineNumber(tokenizer.lineno());
+
+            if (type == null) {
+                ex.setType("tag");
+            } else {
+                ex.setType(type + " tag");
+            }
+
             throw ex;
         }
     }
@@ -143,11 +158,9 @@ public class TagParser {
         tokenizer.match('>');
 
         if (!result.values.containsKey("short")) {
-            Console.error("Author tag is missing mandatory field \"short\".");
-            return null;
+            throw new ParseException("Author tag is missing mandatory field \"short\".");
         } else if (!result.values.containsKey("name")) {
-            Console.error("Author tag is missing mandatory field \"name\".");
-            return null;
+            throw new ParseException("Author tag is missing mandatory field \"name\".");
         } else {
             return result;
         }
@@ -160,11 +173,9 @@ public class TagParser {
         tokenizer.match('>');
 
         if (!result.values.containsKey("short")) {
-            Console.error("Abbreviation tag is missing mandatory field \"short\".");
-            return null;
+            throw new ParseException("Abbreviation tag is missing mandatory field \"short\".");
         } else if (!result.values.containsKey("full")) {
-            Console.error("Abbreviation tag is missing mandatory field \"full\".");
-            return null;
+            throw new ParseException("Abbreviation tag is missing mandatory field \"full\".");
         } else {
             return result;
         }
