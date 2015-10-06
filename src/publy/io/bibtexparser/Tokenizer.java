@@ -57,7 +57,7 @@ public class Tokenizer extends StreamTokenizer {
      * characters.
      *
      * @param characters the characters to accept
-     * @return the string representation of the parsed token
+     * @return the parsed token
      * @throws ParseException If the next token is not among the given
      * characters.
      * @throws java.io.IOException

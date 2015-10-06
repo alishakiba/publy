@@ -183,11 +183,11 @@ public class TagParser {
             StringBuilder value = new StringBuilder();
 
             while (!tokenizer.nextTokenIs('"')) {
-                tokenizer.match(SPECIAL_CHARACTERS)
+                tokenizer.nextToken();
+                value.append(tokenizer.getLastTokenAsString());
             }
 
-            tokenizer.match(StreamTokenizer.TT_WORD);
-            result.values.put(name, tokenizer.getLastTokenAsString());
+            result.values.put(name, value.toString());
 
             tokenizer.setWhiteSpaceMatters(false);
             tokenizer.match('"');
