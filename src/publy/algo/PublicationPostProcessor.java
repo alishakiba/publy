@@ -502,6 +502,8 @@ public class PublicationPostProcessor {
      */
     private static void warnIfIAmNotAuthor(Settings settings, List<BibItem> items) {
         if (settings.getConsoleSettings().isShowWarnings() && settings.getConsoleSettings().isWarnNotAuthor()) {
+            List<BibItem> notAuthoredByMe = new ArrayList<>();
+
             for (BibItem item : items) {
                 boolean imAuthor = false;
 
@@ -515,19 +517,58 @@ public class PublicationPostProcessor {
                 if (!imAuthor) {
                     boolean imEditor = false;
 
-                    for (Author author : item.getEditors()) {
-                        if (author.isMe(settings.getGeneralSettings())) {
+                    for (Author editor : item.getEditors()) {
+                        if (editor.isMe(settings.getGeneralSettings())) {
                             imEditor = true;
                             break;
                         }
                     }
 
                     if (!imEditor) {
-                        Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER, "None of the authors or editors of entry \"%s\" match your name.", item.getId());
+                        notAuthoredByMe.add(item);
                     }
                 }
             }
+
+            if (!notAuthoredByMe.isEmpty()) {
+                Console.warn(Console.WarningType.NOT_AUTHORED_BY_USER,
+                        "None of the authors or editors of the following %s match %s (%s):%n%s",
+                        (notAuthoredByMe.size() == 1 ? "publication" : notAuthoredByMe.size() + " publications"),
+                        (settings.getGeneralSettings().getMyNames().size() == 1 ? "your name" : "any of your names"),
+                        getMyNames(settings),
+                        listPaperIDs(notAuthoredByMe));
+            }
         }
+    }
+
+    private static String getMyNames(Settings settings) {
+        StringBuilder myNames = new StringBuilder();
+
+        for (int i = 0; i < settings.getGeneralSettings().getMyNames().size(); i++) {
+            myNames.append('"').append(settings.getGeneralSettings().getMyNames().get(i)).append('"');
+
+            if (i < settings.getGeneralSettings().getMyNames().size() - 2) {
+                myNames.append(", ");
+            } else if (i == settings.getGeneralSettings().getMyNames().size() - 2) {
+                myNames.append(", or ");
+            }
+        }
+
+        return myNames.toString();
+    }
+
+    private static String listPaperIDs(List<BibItem> items) {
+        StringBuilder ids = new StringBuilder();
+
+        for (BibItem item : items) {
+            ids.append(item.getId()).append('\n');
+        }
+
+        if (ids.length() > 0) {
+            ids.delete(ids.length() - 1, ids.length()); // Remove the last newline
+        }
+
+        return ids.toString();
     }
 
     /**
