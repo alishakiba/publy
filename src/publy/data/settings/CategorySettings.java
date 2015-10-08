@@ -17,7 +17,6 @@ package publy.data.settings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import publy.data.category.OutputCategory;
 import publy.data.category.conditions.FieldEqualsCondition;
@@ -141,6 +140,11 @@ public class CategorySettings {
         // JOURNAL
         OutputCategory journal = new OutputCategory("Journal", "Journal papers", new TypeCondition(false, "article"));
         journal.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
+        journal.getFieldConditions().add(new FieldEqualsCondition(true, "journal", "CoRR"));
+        // PREPRINT
+        OutputCategory preprint = new OutputCategory("Preprint", "Preprint papers", new TypeCondition(false, "article"));
+        preprint.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
+        preprint.getFieldConditions().add(new FieldEqualsCondition(false, "journal", "CoRR"));
         // OTHER
         OutputCategory other = new OutputCategory("Other", "Other", new TypeCondition(false, "*"));
         other.getFieldConditions().add(new FieldEqualsCondition(true, "pubstate", "submitted"));
@@ -156,9 +160,9 @@ public class CategorySettings {
         // UNPUBLISHED
         OutputCategory unpublished = new OutputCategory("Unpublished", "Unpublished manuscripts", new TypeCondition(false, "unpublished"));
 
-        setAllCategories(Arrays.asList(books, chapters, conference, journal, other, submitted, talks, theses, unpublished));
+        setAllCategories(Arrays.asList(books, chapters, conference, journal, preprint, other, submitted, talks, theses, unpublished));
 
         // Active categories
-        setActiveCategories(Arrays.asList(submitted, journal, conference, books, chapters, theses, other));
+        setActiveCategories(Arrays.asList(submitted, books, journal, conference, chapters, preprint, theses));
     }
 }
