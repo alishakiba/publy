@@ -26,7 +26,7 @@ public class ConsoleSettings {
     private boolean showWarnings = true;
     private boolean warnDuplicateIDs = true;
     private boolean warnMissingReferences = true;
-    private boolean warnNotAuthor = true;
+    private boolean warnNotAuthor = false;
     private boolean warnNoCategoryForItem = true;
     private boolean warnMandatoryFieldIgnored = true;
     // Log
