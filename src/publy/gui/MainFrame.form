@@ -221,6 +221,9 @@
               </SubComponents>
             </Container>
             <Container class="javax.swing.JScrollPane" name="consoleScrollPane">
+              <Properties>
+                <Property name="verticalScrollBarPolicy" type="int" value="22"/>
+              </Properties>
               <AuxValues>
                 <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
               </AuxValues>
