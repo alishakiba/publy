@@ -53,7 +53,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void changeTabs() {
-        if (isMacOS()) { // OSX doesn't handle custom tabs well
+        if (Runner.isMacOS()) { // OSX doesn't handle custom tabs well
             settingsTabbedPane.setTabPlacement(JTabbedPane.TOP);
             this.setPreferredSize(new Dimension(getWidth(), getHeight() + 50));
             pack();
@@ -65,10 +65,6 @@ public class MainFrame extends javax.swing.JFrame {
             settingsTabbedPane.setTabComponentAt(4, new TabTitle("Console", new ImageIcon(getClass().getResource("/publy/gui/resources/console-32.png")))); // Console
             settingsTabbedPane.setTabComponentAt(5, new TabTitle("About", new ImageIcon(getClass().getResource("/publy/gui/resources/about-32.png")))); // About
         }
-    }
-    
-    private static boolean isMacOS() {
-        return System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0;
     }
 
     public Settings getSettings() {
