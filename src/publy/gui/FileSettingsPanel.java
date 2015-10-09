@@ -15,6 +15,11 @@
  */
 package publy.gui;
 
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.awt.HeadlessException;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.nio.file.Path;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
@@ -23,6 +28,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import publy.Runner;
 import publy.data.settings.FileSettings;
 import publy.io.ResourceLocator;
 
@@ -33,6 +39,8 @@ import publy.io.ResourceLocator;
 public class FileSettingsPanel extends javax.swing.JPanel {
 
     private final FileSettings settings;
+    private FileDialog pubFileChooserMac;
+    private FileDialog htmlFileChooserMac; // OS X doesn't save the current directory per file chooser, so there's no point duplicating these.
 
     /**
      * Empty constructor, for use in the NetBeans GUI editor.
@@ -56,13 +64,37 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         populateValues();
 
         // Set the correct file filters
-        FileFilter bibFilter = new FileNameExtensionFilter("BibTeX files (*.bib)", "bib");
-        FileFilter htmlFilter = new FileNameExtensionFilter("HTML files (*.htm;*.html)", "htm", "html");
+        if (Runner.isMacOS()) { // The OS X Java guidelines reccommend using FileDialog instead of JFileChooser
+            pubFileChooserMac = new FileDialog((Frame) null);
+            htmlFileChooserMac = new FileDialog((Frame) null);
+                    
+            FilenameFilter bibFilter = new FilenameFilter() {
 
-        pubFileChooser.setFileFilter(bibFilter);
-        targetFileChooser.setFileFilter(htmlFilter);
-        headerFileChooser.setFileFilter(htmlFilter);
-        footerFileChooser.setFileFilter(htmlFilter);
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.toLowerCase().endsWith(".bib");
+                }
+            };
+            FilenameFilter htmlFilter = new FilenameFilter() {
+
+                @Override
+                public boolean accept(File dir, String name) {
+                    String lowercaseName = name.toLowerCase();
+                    return lowercaseName.endsWith(".html") || lowercaseName.endsWith(".htm");
+                }
+            };
+        
+            pubFileChooserMac.setFilenameFilter(bibFilter);
+            htmlFileChooserMac.setFilenameFilter(htmlFilter);
+        } else {
+            FileFilter bibFilter = new FileNameExtensionFilter("BibTeX files (*.bib)", "bib");
+            FileFilter htmlFilter = new FileNameExtensionFilter("HTML files (*.htm;*.html)", "htm", "html");
+
+            pubFileChooser.setFileFilter(bibFilter);
+            targetFileChooser.setFileFilter(htmlFilter);
+            headerFileChooser.setFileFilter(htmlFilter);
+            footerFileChooser.setFileFilter(htmlFilter);
+        }
     }
 
     private void applyStyles() {
@@ -301,10 +333,9 @@ public class FileSettingsPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void pubBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pubBrowseButtonActionPerformed
-        int opened = pubFileChooser.showOpenDialog(this);
-
-        if (opened == JFileChooser.APPROVE_OPTION) {
-            Path selected = pubFileChooser.getSelectedFile().toPath();
+        Path selected = selectFile(pubFileChooser, pubFileChooserMac);
+        
+        if (selected != null) {
             pubTextField.setText(ResourceLocator.getRelativePath(selected));
             settings.setPublications(selected);
 
@@ -362,26 +393,26 @@ public class FileSettingsPanel extends javax.swing.JPanel {
     }
 
     private void targetBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_targetBrowseButtonActionPerformed
-        int opened = targetFileChooser.showOpenDialog(this);
+        Path selected = selectFile(targetFileChooser, htmlFileChooserMac);
 
-        if (opened == JFileChooser.APPROVE_OPTION) {
-            targetTextField.setText(ResourceLocator.getRelativePath(targetFileChooser.getSelectedFile().toPath()));
+        if (selected != null) {
+            targetTextField.setText(ResourceLocator.getRelativePath(selected));
         }
     }//GEN-LAST:event_targetBrowseButtonActionPerformed
 
     private void footerBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_footerBrowseButtonActionPerformed
-        int opened = footerFileChooser.showOpenDialog(this);
-
-        if (opened == JFileChooser.APPROVE_OPTION) {
-            footerTextField.setText(ResourceLocator.getRelativePath(footerFileChooser.getSelectedFile().toPath()));
+        Path selected = selectFile(footerFileChooser, htmlFileChooserMac);
+        
+        if (selected != null) {
+            footerTextField.setText(ResourceLocator.getRelativePath(selected));
         }
     }//GEN-LAST:event_footerBrowseButtonActionPerformed
 
     private void headerBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_headerBrowseButtonActionPerformed
-        int opened = headerFileChooser.showOpenDialog(this);
-
-        if (opened == JFileChooser.APPROVE_OPTION) {
-            headerTextField.setText(ResourceLocator.getRelativePath(headerFileChooser.getSelectedFile().toPath()));
+        Path selected = selectFile(headerFileChooser, htmlFileChooserMac);
+        
+        if (selected != null) {
+            headerTextField.setText(ResourceLocator.getRelativePath(selected));
         }
     }//GEN-LAST:event_headerBrowseButtonActionPerformed
 
@@ -405,4 +436,23 @@ public class FileSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JSeparator targetSeparator;
     private javax.swing.JTextField targetTextField;
     // End of variables declaration//GEN-END:variables
+
+    private Path selectFile(JFileChooser fileChooser, FileDialog fileChooserMac) {
+        if (Runner.isMacOS()) {
+            fileChooserMac.setVisible(true);
+            File[] selectedFiles = fileChooserMac.getFiles();
+            
+            if (selectedFiles != null && selectedFiles.length > 0) {
+                return selectedFiles[0].toPath();
+            }
+        } else {
+            int opened = fileChooser.showOpenDialog(this);
+
+            if (opened == JFileChooser.APPROVE_OPTION) {
+                return fileChooser.getSelectedFile().toPath();
+            }
+        }
+        
+        return null;
+    }
 }
