@@ -226,6 +226,10 @@ public class Runner {
             }
         }
     }
+    
+    public static boolean isMacOS() {
+        return System.getProperty("os.name").toLowerCase().contains("mac");
+    }
 
     private Runner() {
     }
