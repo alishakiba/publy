@@ -16,7 +16,9 @@
 package publy.gui;
 
 import java.awt.Cursor;
+import java.awt.Dimension;
 import javax.swing.ImageIcon;
+import javax.swing.JTabbedPane;
 import publy.Console;
 import publy.Runner;
 import publy.algo.PublicationListGenerator;
@@ -39,9 +41,9 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame(Settings settings) {
         this.settings = settings;
 
-        initComponents();
-        setLocationRelativeTo(null); // Center
+        initComponents();        
         changeTabs();
+        setLocationRelativeTo(null); // Center
 
         // Make sure all console output from the generation is redirected to the text area.
         Console.setOutputTarget(consoleTextPane);
@@ -51,12 +53,22 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void changeTabs() {
-        settingsTabbedPane.setTabComponentAt(0, new TabTitle("Files", new ImageIcon(getClass().getResource("/publy/gui/resources/folder-32.png")))); // Files
-        settingsTabbedPane.setTabComponentAt(1, new TabTitle("Categories", new ImageIcon(getClass().getResource("/publy/gui/resources/puzzle-32.png")))); // Categories
-        settingsTabbedPane.setTabComponentAt(2, new TabTitle("General", new ImageIcon(getClass().getResource("/publy/gui/resources/document-32.png")))); // General
-        settingsTabbedPane.setTabComponentAt(3, new TabTitle("HTML", new ImageIcon(getClass().getResource("/publy/gui/resources/globe-32.png")))); // HTML
-        settingsTabbedPane.setTabComponentAt(4, new TabTitle("Console", new ImageIcon(getClass().getResource("/publy/gui/resources/console-32.png")))); // Console
-        settingsTabbedPane.setTabComponentAt(5, new TabTitle("About", new ImageIcon(getClass().getResource("/publy/gui/resources/about-32.png")))); // About
+        if (isMacOS()) { // OSX doesn't handle custom tabs well
+            settingsTabbedPane.setTabPlacement(JTabbedPane.TOP);
+            this.setPreferredSize(new Dimension(getWidth(), getHeight() + 50));
+            pack();
+        } else {
+            settingsTabbedPane.setTabComponentAt(0, new TabTitle("Files", new ImageIcon(getClass().getResource("/publy/gui/resources/folder-32.png")))); // Files
+            settingsTabbedPane.setTabComponentAt(1, new TabTitle("Categories", new ImageIcon(getClass().getResource("/publy/gui/resources/puzzle-32.png")))); // Categories
+            settingsTabbedPane.setTabComponentAt(2, new TabTitle("General", new ImageIcon(getClass().getResource("/publy/gui/resources/document-32.png")))); // General
+            settingsTabbedPane.setTabComponentAt(3, new TabTitle("HTML", new ImageIcon(getClass().getResource("/publy/gui/resources/globe-32.png")))); // HTML
+            settingsTabbedPane.setTabComponentAt(4, new TabTitle("Console", new ImageIcon(getClass().getResource("/publy/gui/resources/console-32.png")))); // Console
+            settingsTabbedPane.setTabComponentAt(5, new TabTitle("About", new ImageIcon(getClass().getResource("/publy/gui/resources/about-32.png")))); // About
+        }
+    }
+    
+    private static boolean isMacOS() {
+        return System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0;
     }
 
     public Settings getSettings() {
@@ -137,7 +149,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(buttonPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(generateButton, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
+                    .addComponent(generateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 83, Short.MAX_VALUE)
                     .addComponent(saveNQuitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -146,7 +158,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(buttonPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(generateButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(saveNQuitButton)
                 .addContainerGap())
         );
