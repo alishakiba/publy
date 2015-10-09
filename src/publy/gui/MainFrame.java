@@ -161,6 +161,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         bottomPanel.add(buttonPanel, java.awt.BorderLayout.LINE_END);
 
+        consoleScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
         consoleTextPane.setEditable(false);
         consoleScrollPane.setViewportView(consoleTextPane);
 

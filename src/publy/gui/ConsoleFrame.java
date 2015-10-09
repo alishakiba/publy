@@ -105,6 +105,8 @@ public class ConsoleFrame extends javax.swing.JFrame {
 
         getContentPane().add(buttonPanel, java.awt.BorderLayout.LINE_END);
 
+        consoleScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
         consoleTextPane.setEditable(false);
         consoleTextPane.setPreferredSize(new java.awt.Dimension(300, 20));
         consoleScrollPane.setViewportView(consoleTextPane);
