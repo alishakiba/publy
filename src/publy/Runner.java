@@ -15,6 +15,7 @@
  */
 package publy;
 
+import com.apple.eawt.Application;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,6 +24,7 @@ import javax.swing.JOptionPane;
 import publy.algo.PublicationListGenerator;
 import publy.data.settings.Settings;
 import publy.gui.MainFrame;
+import publy.gui.UIConstants;
 import publy.gui.WelcomeDialog;
 import publy.io.ResourceLocator;
 import publy.io.settings.SettingsReaderCurrent;
@@ -63,6 +65,10 @@ public class Runner {
      * @param arguments the command-line arguments
      */
     public static void runWithGUI(CommandLineArguments arguments) {
+        if (isMacOS()) {
+            changeDockIcon();
+        }
+        
         Settings settings = readSettings(arguments.getConfig());
 
         if (settings == null) {
@@ -85,6 +91,10 @@ public class Runner {
      * @param arguments the command-line arguments
      */
     public static void runInMixedMode(CommandLineArguments arguments) {
+        if (isMacOS()) {
+            changeDockIcon();
+        }
+        
         Settings settings = readSettings(arguments.getConfig());
 
         // Decide whether to show the settings GUI
@@ -229,6 +239,17 @@ public class Runner {
     
     public static boolean isMacOS() {
         return System.getProperty("os.name").toLowerCase().contains("mac");
+    }
+    
+    private static void changeDockIcon() {
+        Application application = Application.getApplication();
+        
+        if (application == null) {
+            return;
+        }
+        
+        // Use the largest icon we have
+        application.setDockIconImage(UIConstants.PUBLY_ICONS.get(UIConstants.PUBLY_ICONS.size() - 1));
     }
 
     private Runner() {
