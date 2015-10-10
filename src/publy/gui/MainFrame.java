@@ -15,8 +15,17 @@
  */
 package publy.gui;
 
+import com.apple.eawt.AboutHandler;
+import com.apple.eawt.AppEvent.AboutEvent;
+import com.apple.eawt.AppEvent.PreferencesEvent;
+import com.apple.eawt.AppEvent.QuitEvent;
+import com.apple.eawt.Application;
+import com.apple.eawt.PreferencesHandler;
+import com.apple.eawt.QuitHandler;
+import com.apple.eawt.QuitResponse;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JTabbedPane;
 import publy.Console;
@@ -31,6 +40,9 @@ import publy.io.settings.SettingsWriter;
  */
 public class MainFrame extends javax.swing.JFrame {
 
+    public enum Tab {
+        FILE_SETTINGS, CATEGORY_SETTINGS, GENERAL_SETTINGS, HTML_SETTINGS, CONSOLE_SETTINGS, ABOUT;
+    }
     private final Settings settings;
 
     /**
@@ -41,9 +53,13 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame(Settings settings) {
         this.settings = settings;
 
-        initComponents();        
+        initComponents();
         changeTabs();
         setLocationRelativeTo(null); // Center
+
+        if (Runner.isMacOS()) {
+            addMacMenuListeners();
+        }
 
         // Make sure all console output from the generation is redirected to the text area.
         Console.setOutputTarget(consoleTextPane);
@@ -67,8 +83,71 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Adds listeners for the default Mac application menu 'Quit', 'About', and
+     * 'Preferences' buttons.
+     */
+    private void addMacMenuListeners() {
+        Application macApplication = Application.getApplication();
+
+        if (macApplication == null) {
+            return;
+        }
+
+        macApplication.setAboutHandler(new AboutHandler() {
+            @Override
+            public void handleAbout(AboutEvent ae) {
+                setTab(Tab.ABOUT);
+            }
+        });
+
+        macApplication.setPreferencesHandler(new PreferencesHandler() {
+            @Override
+            public void handlePreferences(PreferencesEvent pe) {
+                setTab(Tab.FILE_SETTINGS);
+            }
+        });
+
+        macApplication.setQuitHandler(new QuitHandler() {
+            @Override
+            public void handleQuitRequestWith(QuitEvent qe, QuitResponse qr) {
+                try {
+                    SettingsWriter.writeSettings(settings);
+                    qr.performQuit();
+                } catch (IOException ex) {
+                    Console.except(ex, "Exception when saving settings:");
+                }
+            }
+        });
+    }
+
     public Settings getSettings() {
         return settings;
+    }
+
+    public void setTab(Tab tab) {
+        switch (tab) {
+            case FILE_SETTINGS:
+                settingsTabbedPane.setSelectedComponent(fileSettingsPanel);
+                break;
+            case CATEGORY_SETTINGS:
+                settingsTabbedPane.setSelectedComponent(categorySettingsPanel);
+                break;
+            case GENERAL_SETTINGS:
+                settingsTabbedPane.setSelectedComponent(generalSettingsPanel);
+                break;
+            case HTML_SETTINGS:
+                settingsTabbedPane.setSelectedComponent(htmlSettingsPanel);
+                break;
+            case CONSOLE_SETTINGS:
+                settingsTabbedPane.setSelectedComponent(consoleSettingsPanel);
+                break;
+            case ABOUT:
+                settingsTabbedPane.setSelectedComponent(aboutPanel);
+                break;
+            default:
+                throw new AssertionError("Unexpected tab: " + tab);
+        }
     }
 
     /**
@@ -176,7 +255,6 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-        // Change cursor to hourglass
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         // Clear the console before generating
@@ -187,9 +265,8 @@ public class MainFrame extends javax.swing.JFrame {
         // Move to the top of the console output
         consoleTextPane.setCaretPosition(0);
 
-        // Change cursor back
         setCursor(Cursor.getDefaultCursor());
-        
+
         // Open the output file in the browser
         Runner.openFileInBrowser(settings.getFileSettings().getTarget());
     }//GEN-LAST:event_generateButtonActionPerformed
@@ -210,7 +287,6 @@ public class MainFrame extends javax.swing.JFrame {
             Console.except(ex, "Exception when saving settings:");
         }
     }//GEN-LAST:event_formWindowClosing
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private publy.gui.AboutPanel aboutPanel;
     private javax.swing.JPanel bottomPanel;
