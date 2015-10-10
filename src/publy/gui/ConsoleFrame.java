@@ -15,6 +15,10 @@
  */
 package publy.gui;
 
+import com.apple.eawt.AboutHandler;
+import com.apple.eawt.AppEvent;
+import com.apple.eawt.Application;
+import com.apple.eawt.PreferencesHandler;
 import java.awt.Cursor;
 import java.io.IOException;
 import javax.swing.JOptionPane;
@@ -32,9 +36,74 @@ public class ConsoleFrame extends javax.swing.JFrame {
     public ConsoleFrame() {
         initComponents();
         setLocationRelativeTo(null); // Center
+        
+        if (Runner.isMacOS()) {
+            addMacMenuListeners();
+        }
+        
         Console.setOutputTarget(consoleTextPane);
     }
 
+    /**
+     * Adds listeners for the default Mac application menu 'Quit', 'About', and 'Preferences' buttons.
+     */
+    private void addMacMenuListeners() {
+        Application macApplication = Application.getApplication();
+        
+        if (macApplication == null) {
+            return;
+        }
+
+        macApplication.setAboutHandler(new AboutHandler() {
+            @Override
+            public void handleAbout(AppEvent.AboutEvent ae) {
+                openSettings(MainFrame.Tab.ABOUT);
+            }
+        });
+        
+        macApplication.setPreferencesHandler(new PreferencesHandler() {
+            @Override
+            public void handlePreferences(AppEvent.PreferencesEvent pe) {
+                openSettings();
+            }
+        });
+        
+        // Quit menu handler is unnecessary: we don't need to do anything special before terminating
+    }
+    
+    private void openSettings() {
+        openSettings(null);
+    }
+    
+    private void openSettings(MainFrame.Tab initialTab) {
+        // Parse the settings again (the user might have changed them manually)
+        Settings settings = null;
+
+        try {
+            settings = (new SettingsReaderCurrent()).parseSettings();
+        } catch (IOException ex) {
+            Console.except(ex, "Exception occurred while parsing the configuration:");
+        }
+
+        if (settings == null) {
+            // Display an alert to the user
+            JOptionPane.showMessageDialog(null, "The configuration could not be parsed. The default configuration will be shown.", "Publy - Launching Settings Window", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        // Create the settings GUI
+        MainFrame mainFrame = new MainFrame(settings);
+        
+        if (initialTab != null) {
+            mainFrame.setTab(initialTab);
+        }
+        
+        // The current console text is copied automatically
+
+        // Close this window and open the settings GUI
+        dispose();
+        mainFrame.setVisible(true);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -144,27 +213,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void settingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsButtonActionPerformed
-        // Parse the settings again (the user might have changed them manually)
-        Settings settings = null;
-
-        try {
-            settings = (new SettingsReaderCurrent()).parseSettings();
-        } catch (IOException ex) {
-            Console.except(ex, "Exception occurred while parsing the configuration:");
-        }
-
-        if (settings == null) {
-            // Display an alert to the user
-            JOptionPane.showMessageDialog(null, "The configuration could not be parsed. The default configuration will be shown.", "Publy - Launching Settings Window", JOptionPane.WARNING_MESSAGE);
-        }
-        
-        // Create the settings GUI
-        MainFrame mainFrame = new MainFrame(settings);
-        // The current console text is copied automatically
-
-        // Close this window and open the settings GUI
-        dispose();
-        mainFrame.setVisible(true);
+        openSettings();
     }//GEN-LAST:event_settingsButtonActionPerformed
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
