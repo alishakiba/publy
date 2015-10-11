@@ -30,7 +30,7 @@ import publy.data.category.OutputCategory;
 public class Section {
 
     // Section properties
-    private String shortName, name, htmlNote;
+    private final String shortName, name, htmlNote;
     // Bibitems in this section
     private final List<BibItem> items;
     // Sub-sections in this section
@@ -85,18 +85,6 @@ public class Section {
     }
 
     /**
-     * Sets the short name of this section.
-     * <p>
-     * This is a one-word description that is used to refer to this section via
-     * links or in the GUI.
-     *
-     * @param shortName the new short name
-     */
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
-
-    /**
      * Gets the name of this section.
      * <p>
      * This is a longer description of this section that is used as a heading in
@@ -106,18 +94,6 @@ public class Section {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Sets the name of this section.
-     * <p>
-     * This is a longer description of this section that is used as a heading in
-     * the publication lists.
-     *
-     * @param name the new name
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -131,19 +107,6 @@ public class Section {
      */
     public String getHtmlNote() {
         return htmlNote;
-    }
-
-    /**
-     * Sets the HTML note of this section.
-     * <p>
-     * This is text that is displayed immediately after the section heading in
-     * the HTML version of the publication list. The text can contain arbitrary
-     * HTML code, including figures and structural elements.
-     *
-     * @param htmlNote the new HTML note
-     */
-    public void setHtmlNote(String htmlNote) {
-        this.htmlNote = htmlNote;
     }
 
     /**
