@@ -16,6 +16,7 @@
 package publy.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import publy.Console;
 import publy.data.settings.GeneralSettings;
@@ -37,11 +38,11 @@ import publy.data.settings.GeneralSettings;
  */
 public class Author {
 
-    private String abbreviation; // The abbreviation associated with this author in the bibtex file
-    private String firstName = "", lastName = "", vonPart = "", juniorPart = ""; // The four parts of this name
+    private final String abbreviation; // The abbreviation associated with this author in the bibtex file
+    private final String firstName, lastName, vonPart, juniorPart; // The four parts of this name
     private String url; // The url associated with this author
     private String group; // The group associated with this author
-    private String name; // The name in LaTeX format, as given in the input
+    private final String name; // The name in LaTeX format, as given in the input
 
     /**
      * Creates a new Author from the given LaTeX name.
@@ -62,7 +63,11 @@ public class Author {
     public Author(String abbreviation, String name) {
         this.abbreviation = abbreviation;
         this.name = name;
-        splitName(name);
+        List<String> nameParts = splitName(name);
+        firstName = nameParts.get(0);
+        vonPart = nameParts.get(1);
+        lastName = nameParts.get(2);
+        juniorPart = nameParts.get(3);
     }
 
     /**
@@ -331,7 +336,9 @@ public class Author {
         return sb.toString();
     }
 
-    private void splitName(String name) {
+    private List<String> splitName(String name) {
+        String first = "", von = "", last = "", junior = "";
+        
         // Sanitize
         String cleanName = name.replaceAll("\\s+", " ").trim();
 
@@ -348,36 +355,46 @@ public class Author {
 
             while (firstNameIndex < spaceParts.size() - 1 && !startsWithLowercaseLetter(spaceParts.get(firstNameIndex))) {
                 if (!spaceParts.get(firstNameIndex).isEmpty()) {
-                    firstName = (firstName.isEmpty() ? spaceParts.get(firstNameIndex) : firstName + " " + spaceParts.get(firstNameIndex));
+                    first = (first.isEmpty() ? spaceParts.get(firstNameIndex) : first + " " + spaceParts.get(firstNameIndex));
                 }
 
                 firstNameIndex++;
             }
 
             // Collect the remaining von Last part
-            parseVonLast(spaceParts.subList(firstNameIndex, spaceParts.size()));
+            Pair<String, String> vonLast = parseVonLast(spaceParts.subList(firstNameIndex, spaceParts.size()));
+            von = vonLast.getFirst();
+            last = vonLast.getSecond();
         } else if (commaParts.size() == 2) {
             // von Last, First format
-            parseVonLast(getParts(commaParts.get(0).trim(), ' '));
-            firstName = commaParts.get(1).trim();
+            Pair<String, String> vonLast = parseVonLast(getParts(commaParts.get(0).trim(), ' '));
+            von = vonLast.getFirst();
+            last = vonLast.getSecond();
+            first = commaParts.get(1).trim();
         } else if (commaParts.size() == 3) {
             // von Last, Jr, First format
-            parseVonLast(getParts(commaParts.get(0).trim(), ' '));
-            juniorPart = commaParts.get(1).trim();
-            firstName = commaParts.get(2).trim();
+            Pair<String, String> vonLast = parseVonLast(getParts(commaParts.get(0).trim(), ' '));
+            von = vonLast.getFirst();
+            last = vonLast.getSecond();
+            junior = commaParts.get(1).trim();
+            first = commaParts.get(2).trim();
         } else {
             Console.error("Name has too many comma-separated parts: %s%nCommas that are part of a name should be contained in braces \"{}\".", name);
         }
+        
+        return Arrays.asList(first, von, last, junior);
     }
 
-    private void parseVonLast(List<String> parts) {
+    private Pair<String, String> parseVonLast(List<String> parts) {
+        String von = "", last = "";
+        
         // Collect the last name
         int lastNameIndex = parts.size() - 2; // Last part that does not belong to the last name
-        lastName = parts.get(parts.size() - 1); // The last part always belongs to the last name
+        last = parts.get(parts.size() - 1); // The last part always belongs to the last name
 
         while (lastNameIndex >= 0 && !startsWithLowercaseLetter(parts.get(lastNameIndex))) {
             if (!parts.get(lastNameIndex).isEmpty()) {
-                lastName = parts.get(lastNameIndex) + " " + lastName;
+                last = parts.get(lastNameIndex) + " " + last;
             }
             lastNameIndex--;
         }
@@ -385,9 +402,11 @@ public class Author {
         // Collect the von part (the rest)
         for (int i = 0; i <= lastNameIndex; i++) {
             if (!parts.get(i).isEmpty()) {
-                vonPart = (vonPart.isEmpty() ? parts.get(i) : vonPart + " " + parts.get(i));
+                von = (von.isEmpty() ? parts.get(i) : von + " " + parts.get(i));
             }
         }
+        
+        return new Pair<>(von, last);
     }
 
     private List<String> getParts(String name, char... separator) {
