@@ -25,12 +25,12 @@ import publy.Console;
  */
 public class BibItem {
 
-    private String id;
-    private Type type;
-    private String originalType; // The type as specified in the input file (for example 'article', or 'inproceedings')
-    private HashMap<String, String> values;
-    private List<Author> authors;
-    private List<Author> editors;
+    private final String id;
+    private final Type type;
+    private final String originalType; // The type as specified in the input file (for example 'article', or 'inproceedings')
+    private final HashMap<String, String> values;
+    private final List<Author> authors;
+    private final List<Author> editors;
 
     /**
      * Creates a new publication with the given type and identifier.
