@@ -50,8 +50,9 @@ public class LinkLabel extends JLabel {
     }
 
     /**
-     * Creates a new LinkLabel with the specified text, linking to the specified URI.
-     * 
+     * Creates a new LinkLabel with the specified text, linking to the specified
+     * URI.
+     *
      * @param text the text of the link
      * @param uri the URI to link to
      */
@@ -63,7 +64,7 @@ public class LinkLabel extends JLabel {
             styleAsLink();
             makeClickable();
         } else {
-            setText(text + " (" + uri.toString() + ")");
+            setText(text + " (" + uri + ")");
         }
     }
 
