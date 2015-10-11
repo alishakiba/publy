@@ -34,9 +34,9 @@ public class Section {
     // Bibitems in this section
     private final List<BibItem> items;
     // Sub-sections in this section
-    private List<Section> subsections;
+    private final List<Section> subsections;
     // Fields that should be ignored for publications in this section
-    private List<String> ignoredFields;
+    private final List<String> ignoredFields;
 
     /**
      * Creates a new section with the given names.
@@ -194,7 +194,8 @@ public class Section {
      * @param subsections the new sub-sections
      */
     public void setSubsections(List<Section> subsections) {
-        this.subsections = subsections;
+        this.subsections.clear();
+        this.subsections.addAll(subsections);
     }
 
     /**
@@ -220,7 +221,8 @@ public class Section {
      * @param ignoredFields the new ignored fields
      */
     public void setIgnoredFields(List<String> ignoredFields) {
-        this.ignoredFields = ignoredFields;
+        this.ignoredFields.clear();
+        this.ignoredFields.addAll(ignoredFields);
     }
 
     @Override
