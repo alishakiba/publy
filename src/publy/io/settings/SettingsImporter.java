@@ -26,7 +26,7 @@ import javax.swing.JOptionPane;
 import publy.data.Pair;
 import publy.data.settings.FileSettings;
 import publy.data.settings.Settings;
-import publy.gui.UIConstants;
+import publy.Constants;
 import publy.io.settings.legacy.SettingsReaderV0_8;
 
 public class SettingsImporter {
@@ -73,7 +73,7 @@ public class SettingsImporter {
         int majorVersion = version.getFirst();
         int minorVersion = version.getSecond();
 
-        if (majorVersion > UIConstants.MAJOR_VERSION || (majorVersion == UIConstants.MAJOR_VERSION && minorVersion > UIConstants.MINOR_VERSION)) {
+        if (majorVersion > Constants.MAJOR_VERSION || (majorVersion == Constants.MAJOR_VERSION && minorVersion > Constants.MINOR_VERSION)) {
             JOptionPane.showMessageDialog(null,
                     "<html>The detected configuration file was created by a newer version of Publy.<br>We'll try to import it anyway, but this might not work.</html>",
                     "Publy - Import warning",

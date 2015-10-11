@@ -30,6 +30,11 @@ public class UIStyles {
 
     private static final int HEADER_FONT_STYLE = Font.BOLD;
     private static final Color HEADER_TEXT_COLOR = new Color(51, 51, 102);
+    
+    /**
+     * The background color for text fields that contain an invalid value.
+     */
+    public static final Color TEXTFIELD_ERROR_COLOR = new Color(255, 210, 210);
 
     /**
      * Applies the header style to all given labels. The font used will be

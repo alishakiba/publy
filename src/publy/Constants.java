@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package publy.gui;
+package publy;
 
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
@@ -25,7 +24,7 @@ import java.util.List;
 /**
  * Constants that are used throughout the UI.
  */
-public class UIConstants {
+public class Constants {
 
     /**
      * Publy's major version number.
@@ -43,29 +42,25 @@ public class UIConstants {
      * Publy's logo in all its glory.
      */
     public static final Image PUBLY_LOGO; // Initialized in the static block
-    /**
-     * The background color for textfields that contain an incorrect version.
-     */
-    public static final Color TEXTFIELD_ERROR_COLOR = new Color(255, 210, 210);
 
     static {
         // Prepare our icons
-        String[] icons = {"resources/icon-16.png",
-            "resources/icon-24.png",
-            "resources/icon-32.png",
-            "resources/icon-48.png",
-            "resources/icon-64.png",
-            "resources/icon-256.png"};
+        String[] icons = {"gui/resources/icon-16.png",
+            "gui/resources/icon-24.png",
+            "gui/resources/icon-32.png",
+            "gui/resources/icon-48.png",
+            "gui/resources/icon-64.png",
+            "gui/resources/icon-256.png"};
 
         PUBLY_ICONS = new ArrayList<>(icons.length);
 
         for (String fileName : icons) {
-            URL iconUrl = UIConstants.class.getResource(fileName);
-            UIConstants.PUBLY_ICONS.add(Toolkit.getDefaultToolkit().createImage(iconUrl));
+            URL iconUrl = Constants.class.getResource(fileName);
+            Constants.PUBLY_ICONS.add(Toolkit.getDefaultToolkit().createImage(iconUrl));
         }
 
         // Import the logo
-        URL logoUrl = UIConstants.class.getResource("resources/logo.png");
+        URL logoUrl = Constants.class.getResource("gui/resources/logo.png");
         PUBLY_LOGO = Toolkit.getDefaultToolkit().createImage(logoUrl);
     }
 }

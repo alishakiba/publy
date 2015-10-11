@@ -19,7 +19,6 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import publy.gui.UIConstants;
 
 /**
  * The entrypoint to Publy. This class interprets the command-line arguments and
@@ -92,6 +91,6 @@ public class Publy {
                 + "Copyright (c) 2013-2015 Sander Verdonschot%n"
                 + "License Apache v2%n"
                 + "This is free software. You are free to change and redistribute it.%n",
-                UIConstants.MAJOR_VERSION, UIConstants.MINOR_VERSION);
+                Constants.MAJOR_VERSION, Constants.MINOR_VERSION);
     }
 }

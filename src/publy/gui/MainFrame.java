@@ -15,6 +15,7 @@
  */
 package publy.gui;
 
+import publy.Constants;
 import com.apple.eawt.AboutHandler;
 import com.apple.eawt.AppEvent.AboutEvent;
 import com.apple.eawt.AppEvent.PreferencesEvent;
@@ -175,8 +176,8 @@ public class MainFrame extends javax.swing.JFrame {
         consoleTextPane = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION);
-        setIconImages(UIConstants.PUBLY_ICONS);
+        setTitle("Publy " + publy.Constants.MAJOR_VERSION + "." + publy.Constants.MINOR_VERSION);
+        setIconImages(publy.Constants.PUBLY_ICONS);
         setPreferredSize(new java.awt.Dimension(670, 720));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -224,7 +225,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(buttonPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(generateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 83, Short.MAX_VALUE)
+                    .addComponent(generateButton, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
                     .addComponent(saveNQuitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
