@@ -24,7 +24,6 @@ import javax.swing.JOptionPane;
 import publy.algo.PublicationListGenerator;
 import publy.data.settings.Settings;
 import publy.gui.MainFrame;
-import publy.gui.UIConstants;
 import publy.gui.WelcomeDialog;
 import publy.io.ResourceLocator;
 import publy.io.settings.SettingsReaderCurrent;
@@ -249,7 +248,7 @@ public class Runner {
         }
         
         // Use the largest icon we have
-        application.setDockIconImage(UIConstants.PUBLY_ICONS.get(UIConstants.PUBLY_ICONS.size() - 1));
+        application.setDockIconImage(Constants.PUBLY_ICONS.get(Constants.PUBLY_ICONS.size() - 1));
     }
 
     private Runner() {

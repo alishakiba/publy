@@ -15,6 +15,7 @@
  */
 package publy.gui;
 
+import publy.Constants;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -97,7 +98,7 @@ public class AboutPanel extends javax.swing.JPanel {
 
         versionHeader.setText("Version info");
 
-        versionLabel.setText(String.format("%d.%d", UIConstants.MAJOR_VERSION, UIConstants.MINOR_VERSION));
+        versionLabel.setText(String.format("%d.%d", publy.Constants.MAJOR_VERSION, publy.Constants.MINOR_VERSION));
         versionLabel.setFont(versionLabel.getFont().deriveFont(Font.BOLD, versionLabel.getFont().getSize2D() + 2));
 
         checkLabel.setText("Check ");
@@ -106,7 +107,7 @@ public class AboutPanel extends javax.swing.JPanel {
 
         legalHeader.setText("Legal stuff");
 
-        copyrightLabel.setText("Copyright © 2013-2015 Sander Verdonschot.");
+        copyrightLabel.setText("Copyright © 2013-2014 Sander Verdonschot.");
 
         licensedLabel.setText("Licensed under the ");
 

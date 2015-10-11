@@ -15,6 +15,7 @@
  */
 package publy.gui;
 
+import publy.Constants;
 import java.awt.Component;
 import java.awt.Rectangle;
 import java.awt.font.TextAttribute;
@@ -149,7 +150,7 @@ public class ConditionsDialog extends javax.swing.JDialog {
         testOutputTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Publy " + UIConstants.MAJOR_VERSION + "." + UIConstants.MINOR_VERSION + " - Filters");
+        setTitle("Publy " + publy.Constants.MAJOR_VERSION + "." + publy.Constants.MINOR_VERSION + " - Filters");
 
         typeHeader.setText("Types");
 

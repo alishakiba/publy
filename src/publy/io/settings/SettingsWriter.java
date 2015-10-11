@@ -32,7 +32,7 @@ import publy.data.settings.FileSettings;
 import publy.data.settings.GeneralSettings;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
-import publy.gui.UIConstants;
+import publy.Constants;
 import publy.io.ResourceLocator;
 import publy.io.TempWriter;
 
@@ -58,7 +58,7 @@ public class SettingsWriter {
             // Write header
             out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             out.newLine();
-            out.write("<publysettings majorversion=\"" + UIConstants.MAJOR_VERSION + "\" minorversion=\"" + UIConstants.MINOR_VERSION + "\">");
+            out.write("<publysettings majorversion=\"" + Constants.MAJOR_VERSION + "\" minorversion=\"" + Constants.MINOR_VERSION + "\">");
             out.newLine();
 
             writeFileSettings(settings.getFileSettings(), out);

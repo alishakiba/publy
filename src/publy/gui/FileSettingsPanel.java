@@ -15,9 +15,9 @@
  */
 package publy.gui;
 
+import publy.Constants;
 import java.awt.FileDialog;
 import java.awt.Frame;
-import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.nio.file.Path;
@@ -123,7 +123,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             fileChooser.setCurrentDirectory(ResourceLocator.getBaseDirectory().toFile());
 
             if (errorWhenEmpty) {
-                textField.setBackground(UIConstants.TEXTFIELD_ERROR_COLOR);
+                textField.setBackground(UIStyles.TEXTFIELD_ERROR_COLOR);
             }
         } else {
             textField.setText(ResourceLocator.getRelativePath(newValue));
@@ -364,7 +364,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
 
         // Remove the error background?
         if (pubTextField.getText().isEmpty()) {
-            pubTextField.setBackground(UIConstants.TEXTFIELD_ERROR_COLOR);
+            pubTextField.setBackground(UIStyles.TEXTFIELD_ERROR_COLOR);
         } else {
             pubTextField.setBackground(UIManager.getColor("TextField.background"));
         }
@@ -376,7 +376,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
 
         // Remove the error background?
         if (targetTextField.getText().isEmpty()) {
-            targetTextField.setBackground(UIConstants.TEXTFIELD_ERROR_COLOR);
+            targetTextField.setBackground(UIStyles.TEXTFIELD_ERROR_COLOR);
         } else {
             targetTextField.setBackground(UIManager.getColor("TextField.background"));
         }
