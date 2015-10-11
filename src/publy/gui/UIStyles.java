@@ -38,11 +38,11 @@ public class UIStyles {
      * @param labels the labels to style
      */
     static void applyHeaderStyle(JLabel... labels) {
-        Font headerFont = null;
-
-        if (labels.length > 0) {
-            headerFont = labels[0].getFont().deriveFont(HEADER_FONT_STYLE);
+        if (labels == null || labels.length == 0) {
+            return;
         }
+
+        Font headerFont = labels[0].getFont().deriveFont(HEADER_FONT_STYLE);
 
         for (JLabel label : labels) {
             label.setFont(headerFont);
@@ -57,17 +57,14 @@ public class UIStyles {
      * @param borders the borders to style
      */
     static void applyHeaderStyle(TitledBorder... borders) {
-        Font headerFont = null;
-
-        if (borders.length > 0) {
-            Font current = borders[0].getTitleFont();
-
-            if (current == null) {
-                current = UIManager.getDefaults().getFont("TitledBorder.font");
-            }
-
-            headerFont = current.deriveFont(HEADER_FONT_STYLE);
+        if (borders == null || borders.length == 0) {
+            return;
         }
+
+        Font current = (borders[0].getTitleFont() == null
+                ? UIManager.getDefaults().getFont("TitledBorder.font")
+                : borders[0].getTitleFont());
+        Font headerFont = current.deriveFont(HEADER_FONT_STYLE);
 
         for (TitledBorder border : borders) {
             border.setTitleFont(headerFont);
