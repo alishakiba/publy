@@ -67,7 +67,7 @@ public enum PublicationStatus {
             case ACCEPTED:
                 return "Accepted papers";
             case ARXIV:
-                return "Accepted or arXiv papers";
+                return "Accepted or preprint papers";
             case ALL:
                 return "All papers";
             default:
@@ -95,36 +95,38 @@ public enum PublicationStatus {
     public static boolean matches(PublicationStatus type, BibItem item) {
         if (type == ALL) {
             return true;
-        } else if (type == NONE) {
-            return false;
-        } else {
-            // The type is either PUBLISHED, ACCEPTED, or ARXIV
-            String pubstate = item.get("pubstate");
-
-            if (pubstate == null || pubstate.isEmpty()) {
-                // The paper has been published, matching all remaining types
-                return true;
-            } else {
-                // The paper has not been published
-                if (type == PUBLISHED) {
-                    return false;
-                } else {
-                    // The type is either ACCEPTED or ARXIV
-                    if (ACCEPTED_STATES.contains(pubstate)) {
-                        // The paper has been accepted, matching all remaining types
-                        return true;
-                    } else {
-                        // The paper has not been accepted
-                        if (type == ACCEPTED) {
-                            return false;
-                        } else {
-                            // The type is ARXIV
-                            String arxiv = item.get("arxiv");
-                            return arxiv != null && !arxiv.isEmpty();
-                        }
-                    }
-                }
-            }
         }
+
+        if (type == NONE) {
+            return false;
+        }
+
+        // The type is either PUBLISHED, ACCEPTED, or ARXIV
+        String pubstate = item.get("pubstate");
+
+        if (pubstate == null || pubstate.isEmpty()) {
+            // The paper has been published, matching all remaining types
+            return true;
+        }
+
+        // The paper has not been published
+        if (type == PUBLISHED) {
+            return false;
+        }
+
+        // The type is either ACCEPTED or ARXIV
+        if (ACCEPTED_STATES.contains(pubstate)) {
+            // The paper has been accepted, matching all remaining types
+            return true;
+        }
+
+        // The paper has not been accepted
+        if (type == ACCEPTED) {
+            return false;
+        }
+
+        // The type is ARXIV
+        String arxiv = item.get("arxiv");
+        return arxiv != null && !arxiv.isEmpty();
     }
 }
