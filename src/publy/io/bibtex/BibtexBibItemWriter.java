@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import publy.data.Author;
 import publy.data.bibitem.BibItem;
 import publy.data.bibitem.FieldData;
 import publy.data.settings.Settings;
@@ -42,27 +41,12 @@ public class BibtexBibItemWriter extends BibItemWriter {
         out.write("@" + item.getOriginalType() + "{" + item.getId() + ",");
         out.newLine();
 
-        // The first field should omit the connecting ",".
-        boolean first = true;
-
-        // Get the proper format for authors
-        if (isPresent(item, "author")) {
-            out.write("  author={");
-
-            for (int i = 0; i < item.getAuthors().size(); i++) {
-                out.write(item.getAuthors().get(i).getName());
-
-                if (i < item.getAuthors().size() - 1) {
-                    out.write(" and ");
-                }
-            }
-
-            out.write("}");
-
-            first = false;
-        }
-
+        printAuthor(item);
+        
         Set<String> fieldsToPrint = getFieldsToPrint(item);
+        
+        // The first field should omit the connecting ",".
+        boolean first = isPresent(item, "author");
 
         for (String field : fieldsToPrint) {
             String v = item.get(field);
@@ -82,6 +66,23 @@ public class BibtexBibItemWriter extends BibItemWriter {
         out.newLine();
         out.write("}");
         out.newLine();
+    }
+
+    private void printAuthor(BibItem item) throws IOException {
+        // Get the proper format for authors
+        if (isPresent(item, "author")) {
+            out.write("  author={");
+            
+            for (int i = 0; i < item.getAuthors().size(); i++) {
+                out.write(item.getAuthors().get(i).getName());
+                
+                if (i < item.getAuthors().size() - 1) {
+                    out.write(" and ");
+                }
+            }
+            
+            out.write("}");
+        }
     }
 
     private Set<String> getFieldsToPrint(BibItem item) {
