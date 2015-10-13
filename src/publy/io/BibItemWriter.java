@@ -19,7 +19,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import publy.Console;
@@ -34,16 +34,16 @@ import publy.data.settings.Settings;
  */
 public abstract class BibItemWriter {
 
-    protected BufferedWriter out;
-    protected Settings settings;
-    protected Set<String> ignoredFields;
+    protected final BufferedWriter out;
+    protected final Settings settings;
+    protected final Set<String> ignoredFields;
     protected int indentationLevel = 0;
     protected String indentString = "";
 
     public BibItemWriter(BufferedWriter out, Settings settings) {
         this.out = out;
         this.settings = settings;
-        ignoredFields = Collections.<String>emptySet();
+        ignoredFields = new HashSet<>();
     }
 
     public abstract void write(BibItem item) throws IOException;
@@ -53,7 +53,8 @@ public abstract class BibItemWriter {
     }
 
     public void setIgnoredFields(Set<String> ignoredFields) {
-        this.ignoredFields = ignoredFields;
+        this.ignoredFields.clear();
+        this.ignoredFields.addAll(ignoredFields);
     }
 
     public int getIndentationLevel() {
