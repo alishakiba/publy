@@ -29,7 +29,7 @@ import publy.data.settings.Settings;
  */
 public abstract class PublicationListWriter {
 
-    protected Settings settings;
+    protected final Settings settings;
 
     public PublicationListWriter(Settings settings) {
         this.settings = settings;
