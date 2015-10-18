@@ -35,7 +35,7 @@ public class Tag {
     
     public Author toAuthor() {
         if (type != Type.AUTHOR) {
-            throw new InternalError("This should only be called for Author tags!");
+            throw new AssertionError("This should only be called for Author tags!");
         }
         
         Author author = new Author(values.get("short"), values.get("name"));

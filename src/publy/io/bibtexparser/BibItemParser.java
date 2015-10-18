@@ -60,7 +60,10 @@ public class BibItemParser {
                     return parsePublication(type);
             }
         } catch (ParseException ex) { // Do not reset upon IOException, as that is likely to be unrecoverable
-            in.reset();
+            if (in.markSupported()) {
+                in.reset();
+            }
+            
             ex.setLineNumber(tokenizer.lineno());
 
             if (ex.getType() == null || ex.getType().isEmpty()) {

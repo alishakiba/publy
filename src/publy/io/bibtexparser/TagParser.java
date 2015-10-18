@@ -72,7 +72,7 @@ public class TagParser {
                 case "dfn":
                 case "div":
                 case "dl":
-                case "DOCTYPE":
+                case "doctype":
                 case "dt":
                 case "em":
                 case "fieldset":
@@ -138,7 +138,10 @@ public class TagParser {
                     }
             }
         } catch (ParseException ex) { // Do not reset upon IOException, as that is likely to be unrecoverable
-            in.reset();
+            if (in.markSupported()) {
+                in.reset();
+            }
+
             ex.setLineNumber(tokenizer.lineno());
 
             if (type == null) {
