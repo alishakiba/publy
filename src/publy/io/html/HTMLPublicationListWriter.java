@@ -53,7 +53,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     private static final String DEFAULT_STYLE_LOCATION = "data/themes/minimalist.css";
     private static final String DEFAULT_BASEJS_LOCATION = "data/base.js";
     private static final String DEFAULT_GAJS_LOCATION = "data/ga.js";
-    private final static Pattern LINK_PATTERN = Pattern.compile("(href|src)\\s*=\\s*\"([^\"]*)\"");
+    private static final Pattern LINK_PATTERN = Pattern.compile("(href|src)\\s*=\\s*\"([^\"]*)\"");
     private HTMLBibItemWriter itemWriter;
     private int count;
 
@@ -63,23 +63,20 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
     @Override
     protected void writePublicationList(List<Section> sections, BufferedWriter out) throws IOException {
-        copyAuxiliaryFiles();
-
         itemWriter = new HTMLBibItemWriter(out, settings);
-
-        // Initialize the count
-        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL) {
-            if (settings.getGeneralSettings().isReverseNumbering()) {
-                count = 0;
-
-                for (Section s : sections) {
-                    count += s.countAllItems();
-                }
-            } else {
-                count = 1;
-            }
+        
+        copyAuxiliaryFiles();
+        initializeCount(sections);
+        writePreamble(out, sections);
+        
+        for (Section s : sections) {
+            writeSection(s, sections, new ArrayList<Section>(), out);
         }
 
+        writePostamble(sections, out);
+    }
+
+    private void writePreamble(BufferedWriter out, List<Section> sections) throws IOException {
         // Generated file warning
         out.write("<!-- " + GENERATED_COMMENT + " -->");
         out.newLine();
@@ -128,12 +125,11 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                 || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM) {
             writeNavigation(sections, out);
         }
-
+        
         out.newLine();
-        for (Section s : sections) {
-            writeSection(s, sections, new ArrayList<Section>(), out);
-        }
-
+    }
+    
+    private void writePostamble(List<Section> sections, BufferedWriter out) throws IOException {
         // Navigation?
         if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM
                 || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
@@ -154,6 +150,20 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         } else {
             // Copy the footer from the footer file
             copyFileToWriter(settings.getFileSettings().getFooter(), out);
+        }
+    }
+
+    private void initializeCount(List<Section> sections) {
+        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL) {
+            if (settings.getGeneralSettings().isReverseNumbering()) {
+                count = 0;
+                
+                for (Section s : sections) {
+                    count += s.countAllItems();
+                }
+            } else {
+                count = 1;
+            }
         }
     }
 

@@ -32,8 +32,8 @@ import publy.io.ResourceLocator;
 public class Settings {
 
     // Static properties that concern Settings
-    public static final String DEFAULT_SETTINGS_FILE = "PublySettings.xml";
-    public static final String DEFAULT_SETTINGS_PATH = "data/" + DEFAULT_SETTINGS_FILE;
+    public static final String DEFAULT_SETTINGS_FILENAME = "PublySettings.xml";
+    public static final String DEFAULT_SETTINGS_PATH = "data/" + DEFAULT_SETTINGS_FILENAME;
     private static Path settingsPath = ResourceLocator.getFullPath(DEFAULT_SETTINGS_PATH);
 
     private final FileSettings fileSettings;

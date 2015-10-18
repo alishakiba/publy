@@ -58,22 +58,21 @@ public class PublicationListParser {
         int lineNumber = 1;
 
         for (int c = in.read(); c != -1; c = in.read()) {
-            if (c == '@') {
-                try {
-                    handleBibItem(BibItemParser.parseBibItem(in));
-                } catch (ParseException ex) {
-                    ex.setLineNumber(ex.getLineNumber() + lineNumber - 1);
-                    Console.error(ex.getErrorText());
+            try {
+                switch (c) {
+                    case '@':
+                        handleBibItem(BibItemParser.parseBibItem(in));
+                        break;
+                    case '<':
+                        handleTag(TagParser.parseTag(in));
+                        break;
+                    case '\n':
+                        lineNumber++;
+                        break;
                 }
-            } else if (c == '<') {
-                try {
-                    handleTag(TagParser.parseTag(in));
-                } catch (ParseException ex) {
-                    ex.setLineNumber(ex.getLineNumber() + lineNumber - 1);
-                    Console.error(ex.getErrorText());
-                }
-            } else if (c == '\n') {
-                lineNumber++;
+            } catch (ParseException ex) {
+                ex.setLineNumber(ex.getLineNumber() + lineNumber - 1);
+                Console.error(ex.getErrorText());
             }
         }
     }

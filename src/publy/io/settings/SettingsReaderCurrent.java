@@ -62,6 +62,7 @@ public class SettingsReaderCurrent extends DefaultHandler implements SettingsRea
         return parseSettings(Settings.getSettingsPath());
     }
 
+    @Override
     public Settings parseSettings(Path inputFile) throws IOException {
         // Use the default (non-validating) parser
         SAXParserFactory factory = SAXParserFactory.newInstance();
