@@ -325,6 +325,9 @@ public class SettingsReaderCurrent extends DefaultHandler implements SettingsRea
                 state = State.DEFAULT;
                 break;
             // HTML-specific settings
+            case "theme":
+                settings.getHtmlSettings().setTheme(ResourceLocator.getFullPath(text));
+                break;
             case "generateTextVersion":
                 settings.getHtmlSettings().setGenerateTextVersion(Boolean.parseBoolean(text));
                 break;
