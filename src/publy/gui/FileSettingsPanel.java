@@ -15,7 +15,6 @@
  */
 package publy.gui;
 
-import publy.Constants;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.File;
@@ -67,7 +66,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         if (Runner.isMacOS()) { // The OS X Java guidelines reccommend using FileDialog instead of JFileChooser
             pubFileChooserMac = new FileDialog((Frame) null);
             htmlFileChooserMac = new FileDialog((Frame) null);
-                    
+
             FilenameFilter bibFilter = new FilenameFilter() {
 
                 @Override
@@ -83,7 +82,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                     return lowercaseName.endsWith(".html") || lowercaseName.endsWith(".htm");
                 }
             };
-        
+
             pubFileChooserMac.setFilenameFilter(bibFilter);
             htmlFileChooserMac.setFilenameFilter(htmlFilter);
         } else {
@@ -334,7 +333,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
 
     private void pubBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pubBrowseButtonActionPerformed
         Path selected = selectFile(pubFileChooser, pubFileChooserMac);
-        
+
         if (selected != null) {
             pubTextField.setText(ResourceLocator.getRelativePath(selected));
             settings.setPublications(selected);
@@ -402,7 +401,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
 
     private void footerBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_footerBrowseButtonActionPerformed
         Path selected = selectFile(footerFileChooser, htmlFileChooserMac);
-        
+
         if (selected != null) {
             footerTextField.setText(ResourceLocator.getRelativePath(selected));
         }
@@ -410,7 +409,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
 
     private void headerBrowseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_headerBrowseButtonActionPerformed
         Path selected = selectFile(headerFileChooser, htmlFileChooserMac);
-        
+
         if (selected != null) {
             headerTextField.setText(ResourceLocator.getRelativePath(selected));
         }
@@ -441,7 +440,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         if (Runner.isMacOS()) {
             fileChooserMac.setVisible(true);
             File[] selectedFiles = fileChooserMac.getFiles();
-            
+
             if (selectedFiles != null && selectedFiles.length > 0) {
                 return selectedFiles[0].toPath();
             }
@@ -452,7 +451,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                 return fileChooser.getSelectedFile().toPath();
             }
         }
-        
+
         return null;
     }
 }

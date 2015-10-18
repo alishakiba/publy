@@ -189,6 +189,7 @@ public class SettingsWriter {
         out.write("  <htmlSettings>");
         out.newLine();
 
+        output(out, 4, "theme", makeString(settings.getTheme()));
         output(out, 4, "generateTextVersion", makeString(settings.isGenerateTextVersion()));
         output(out, 4, "generateBibtexVersion", makeString(settings.isGenerateBibtexVersion()));
         output(out, 4, "linkToAlternateVersions", makeString(settings.isLinkToAlternateVersions()));

@@ -38,7 +38,7 @@ public class SettingsImporter {
         Pair<Integer, Integer> version = detectVersion(settingsFile);
         SettingsReader reader = selectSettingsReader(version);
         Settings settings = reader.parseSettings(settingsFile);
-        correctFilePaths(settingsFile, settings.getFileSettings());
+        correctFilePaths(settingsFile, settings);
         
         return settings;
     }
@@ -88,11 +88,14 @@ public class SettingsImporter {
         }
     }
 
-    private static void correctFilePaths(Path settingsFile, FileSettings fileSettings) {
+    private static void correctFilePaths(Path settingsFile, Settings settings) {
+        FileSettings fileSettings = settings.getFileSettings();
         fileSettings.setPublications(settingsFile.getParent().resolveSibling(fileSettings.getPublications()).normalize());
         fileSettings.setTarget(settingsFile.getParent().resolveSibling(fileSettings.getTarget()).normalize());
         fileSettings.setHeader(settingsFile.getParent().resolveSibling(fileSettings.getHeader()).normalize());
         fileSettings.setFooter(settingsFile.getParent().resolveSibling(fileSettings.getFooter()).normalize());
+        
+        settings.getHtmlSettings().setTheme(settingsFile.getParent().resolveSibling(settings.getHtmlSettings().getTheme()).normalize());
     }
 
     private SettingsImporter() {

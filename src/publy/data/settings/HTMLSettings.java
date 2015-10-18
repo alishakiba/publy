@@ -15,12 +15,17 @@
  */
 package publy.data.settings;
 
+import java.nio.file.Path;
 import publy.data.PublicationStatus;
+import publy.io.ResourceLocator;
 
 /**
  * All settings specific to the HTML version of the publication list.
  */
 public class HTMLSettings {
+
+    public static final String THEME_DIRECTORY = "data/themes/";
+    private static final String DEFAULT_THEME = THEME_DIRECTORY + "minimalist.css";
 
     /**
      * Where the paper title should link to.
@@ -71,6 +76,8 @@ public class HTMLSettings {
             }
         }
     }
+    // Theme
+    private Path theme = ResourceLocator.getFullPath(DEFAULT_THEME);
     // Alternate versions
     private boolean generateTextVersion = false;
     private boolean generateBibtexVersion = false;
@@ -87,6 +94,24 @@ public class HTMLSettings {
     private String presentedText = null;
     // Google analytics
     private String googleAnalyticsUser = null;
+
+    /**
+     * Gets the location of the selected theme (a CSS file).
+     *
+     * @return the location of the selected theme (a CSS file)
+     */
+    public Path getTheme() {
+        return theme;
+    }
+
+    /**
+     * Sets the location of the selected theme (a CSS file).
+     * 
+     * @param theme the location of the new theme (a CSS file)
+     */
+    public void setTheme(Path theme) {
+        this.theme = theme;
+    }
 
     /**
      * Gets whether a separate BibTeX version of the publication list should be

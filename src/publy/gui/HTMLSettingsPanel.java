@@ -15,12 +15,27 @@
  */
 package publy.gui;
 
+import java.awt.Component;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import publy.Console;
 import publy.data.PublicationStatus;
 import publy.data.settings.HTMLSettings;
+import publy.io.ResourceLocator;
 
 /**
  *
@@ -39,9 +54,11 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         applyStyles();
         populateValues();
     }
-    
+
     /**
      * Creates new form GeneralSettingsPanel
+     *
+     * @param settings
      */
     public HTMLSettingsPanel(HTMLSettings settings) {
         this.settings = settings;
@@ -49,18 +66,21 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         applyStyles();
         populateValues();
     }
-    
+
     private void applyStyles() {
-        UIStyles.applyHeaderStyle(linkToTextLabel, navigationLabel, linksLabel, titleLinkLabel, presentedLabel, analyticsLabel);
+        UIStyles.applyHeaderStyle(themeLabel, linkToTextLabel, navigationLabel, linksLabel, titleLinkLabel, presentedLabel, analyticsLabel);
     }
-    
+
     private void populateValues() {
+        // Theme
+        themeComboBox.setSelectedItem(settings.getTheme());
+        
         // Links
         linkToTextCheckBox.setSelected(settings.isGenerateTextVersion());
         linkToBibtexCheckBox.setSelected(settings.isGenerateBibtexVersion());
         insertLinksCheckBox.setSelected(settings.isLinkToAlternateVersions());
         insertLinksCheckBox.setEnabled(settings.isGenerateTextVersion() || settings.isGenerateBibtexVersion());
-        
+
         // Navigation
         navigationComboBox.setSelectedItem(settings.getNavPlacement());
 
@@ -68,7 +88,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         abstractComboBox.setSelectedItem(settings.getIncludeAbstract());
         bibtexComboBox.setSelectedItem(settings.getIncludeBibtex());
         paperComboBox.setSelectedItem(settings.getIncludePaper());
-        
+
         // Title link
         titleLinkComboBox.setSelectedItem(settings.getTitleTarget());
 
@@ -77,7 +97,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         analyticsUserTextField.setText(user);
         analyticsUserTextField.setEnabled(user != null && !user.isEmpty());
         analyticsCheckBox.setSelected(user != null && !user.isEmpty());
-        
+
         // PresentedText
         if (settings.getPresentedText() == null) {
             presentedTextField.setText("");
@@ -86,6 +106,71 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         }
     }
 
+    private Path[] discoverThemes() {
+        final List<Path> paths = new ArrayList<>();
+
+        try {
+            Files.walkFileTree(ResourceLocator.getFullPath(HTMLSettings.THEME_DIRECTORY), new SimpleFileVisitor<Path>() {
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (file.getFileName().toString().endsWith(".css")) {
+                        paths.add(file);
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                    // If we don't implement this, a failed visit terminates the search with an IOException
+                    Console.warn(Console.WarningType.OTHER, "Could not examine potential theme \"%s\".", toRelativePath(file));
+                    return FileVisitResult.CONTINUE;
+                }
+
+            });
+        } catch (IOException ex) {
+            Console.except(ex, "Exception when searching for themes:");
+            return new Path[0];
+        }
+        
+        Collections.sort(paths, new Comparator<Path>() {
+
+            @Override
+            public int compare(Path o1, Path o2) {
+                int diff = 0;
+                
+                // Find the first part of the path that differs
+                while (diff < o1.getNameCount() && diff < o2.getNameCount() && o1.getName(diff).equals(o2.getName(diff))) {
+                    diff++;
+                }
+                
+                if (diff == o1.getNameCount()) {
+                    return -1;
+                }
+                if (diff == o2.getNameCount()) {
+                    return 1;
+                }
+                
+                boolean isComposite1 = diff < o1.getNameCount() - 1;
+                boolean isComposite2 = diff < o2.getNameCount() - 1;
+                
+                if (isComposite1 && !isComposite2) {
+                    return 1;
+                } else if (!isComposite1 && isComposite2) {
+                    return -1;
+                } else {
+                    return o1.getName(diff).compareTo(o2.getName(diff));
+                }
+            }
+        });
+
+        return paths.toArray(new Path[paths.size()]);
+    }
+
+    private String toRelativePath(Path theme) {
+        return ResourceLocator.getFullPath(HTMLSettings.THEME_DIRECTORY).relativize(theme).toString();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -123,6 +208,10 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         navigationSeparator = new javax.swing.JSeparator();
         navigationComboLabel = new javax.swing.JLabel();
         navigationComboBox = new javax.swing.JComboBox<>();
+        themeLabel = new javax.swing.JLabel();
+        themeSeparator = new javax.swing.JSeparator();
+        themeComboLabel = new javax.swing.JLabel();
+        themeComboBox = new javax.swing.JComboBox<>();
 
         linkToTextLabel.setText("Alternative versions");
 
@@ -144,7 +233,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
 
         abstractLabel.setText("Include the abstract for:");
 
-        abstractComboBox.setModel(new DefaultComboBoxModel<>(PublicationStatus.values()));
+        abstractComboBox.setModel(new DefaultComboBoxModel<>(publy.data.PublicationStatus.values()));
         abstractComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 abstractComboBoxActionPerformed(evt);
@@ -155,14 +244,14 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
 
         paperLabel.setText("Include the paper for:");
 
-        bibtexComboBox.setModel(new DefaultComboBoxModel<>(Arrays.copyOfRange(PublicationStatus.values(), 0, 4)));
+        bibtexComboBox.setModel(new DefaultComboBoxModel<>(Arrays.copyOfRange(publy.data.PublicationStatus.values(), 0, 4)));
         bibtexComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bibtexComboBoxActionPerformed(evt);
             }
         });
 
-        paperComboBox.setModel(new DefaultComboBoxModel<>(PublicationStatus.values()));
+        paperComboBox.setModel(new DefaultComboBoxModel<>(publy.data.PublicationStatus.values()));
         paperComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 paperComboBoxActionPerformed(evt);
@@ -239,6 +328,18 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        themeLabel.setText("Theme");
+
+        themeComboLabel.setText("Theme:");
+
+        themeComboBox.setModel(new DefaultComboBoxModel<>(discoverThemes()));
+        themeComboBox.setRenderer(new ThemeNameRenderer());
+        themeComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                themeComboBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -246,6 +347,10 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(themeLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(themeSeparator))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(linkToTextLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -273,6 +378,10 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(themeComboLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(themeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(titleLinkComboText)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -309,8 +418,16 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(themeLabel)
+                    .addComponent(themeSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(themeComboLabel)
+                    .addComponent(themeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(linkToTextLabel)
                     .addComponent(linkToTextSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -422,26 +539,45 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     private void navigationComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_navigationComboBoxActionPerformed
         settings.setNavPlacement((HTMLSettings.NavigationPlacement) navigationComboBox.getSelectedItem());
     }//GEN-LAST:event_navigationComboBoxActionPerformed
-    
+
+    private void themeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_themeComboBoxActionPerformed
+        settings.setTheme((Path) themeComboBox.getSelectedItem());
+    }//GEN-LAST:event_themeComboBoxActionPerformed
+
     private void analyticsUserTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
         settings.setGoogleAnalyticsUser(analyticsUserTextField.getText());
     }
-    
+
     private void presentedTextFieldTextChanged(javax.swing.event.DocumentEvent evt) {
         // Update the settings
         settings.setPresentedText(presentedTextField.getText());
     }
+
+    private class ThemeNameRenderer extends DefaultListCellRenderer {
+
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus); // Correctly sets the appearance of this instance (DefaultListCellRenderer extends JLabel)
+            
+            String relativePath = toRelativePath((Path) value);
+            relativePath = relativePath.substring(0, relativePath.length() - ".css".length());
+            setText(relativePath);
+            
+            return this;
+        }
+        
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<PublicationStatus> abstractComboBox;
+    private javax.swing.JComboBox<publy.data.PublicationStatus> abstractComboBox;
     private javax.swing.JLabel abstractLabel;
     private javax.swing.JCheckBox analyticsCheckBox;
     private javax.swing.JLabel analyticsLabel;
     private javax.swing.JSeparator analyticsSeparator;
     private javax.swing.JLabel analyticsUserLabel;
     private javax.swing.JTextField analyticsUserTextField;
-    private javax.swing.JComboBox<PublicationStatus> bibtexComboBox;
+    private javax.swing.JComboBox<publy.data.PublicationStatus> bibtexComboBox;
     private javax.swing.JLabel bibtexLabel;
     private javax.swing.JCheckBox insertLinksCheckBox;
     private javax.swing.JCheckBox linkToBibtexCheckBox;
@@ -454,11 +590,15 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel navigationComboLabel;
     private javax.swing.JLabel navigationLabel;
     private javax.swing.JSeparator navigationSeparator;
-    private javax.swing.JComboBox<PublicationStatus> paperComboBox;
+    private javax.swing.JComboBox<publy.data.PublicationStatus> paperComboBox;
     private javax.swing.JLabel paperLabel;
     private javax.swing.JLabel presentedLabel;
     private javax.swing.JSeparator presentedSeparator;
     private javax.swing.JTextField presentedTextField;
+    private javax.swing.JComboBox<Path> themeComboBox;
+    private javax.swing.JLabel themeComboLabel;
+    private javax.swing.JLabel themeLabel;
+    private javax.swing.JSeparator themeSeparator;
     private javax.swing.JComboBox<HTMLSettings.TitleLinkTarget> titleLinkComboBox;
     private javax.swing.JLabel titleLinkComboText;
     private javax.swing.JLabel titleLinkLabel;
