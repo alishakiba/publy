@@ -122,7 +122,7 @@ public class IntegrationTest {
                         if (!workLine.contains("Last modified on ")) {
                             fail(String.format("Generated file %s differs from expected output at line %d.%nExpected:  %s%nGenerated: %s%n", fileName, lineNo, inputLine, workLine));
                         } else {
-                        // Verify only the part before the time stamp
+                            // Verify only the part before the time stamp
                             String inputBeforeDate = inputLine.substring(0, inputLine.indexOf("Last modified on "));
                             String workBeforeDate = workLine.substring(0, workLine.indexOf("Last modified on "));
                             assertEquals(String.format("Generated file %s differs from expected output at line %d.%nExpected:  %s%nGenerated: %s%n", fileName, lineNo, inputLine, workLine), inputBeforeDate, workBeforeDate);
