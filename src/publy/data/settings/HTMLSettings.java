@@ -25,7 +25,7 @@ import publy.io.ResourceLocator;
 public class HTMLSettings {
 
     public static final String THEME_DIRECTORY = "data/themes/";
-    private static final String DEFAULT_THEME = THEME_DIRECTORY + "minimalist.css";
+    private static final String DEFAULT_THEME = THEME_DIRECTORY + "Minimalist.css";
 
     /**
      * Where the paper title should link to.

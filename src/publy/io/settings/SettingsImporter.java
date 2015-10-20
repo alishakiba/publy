@@ -27,6 +27,7 @@ import publy.data.Pair;
 import publy.data.settings.FileSettings;
 import publy.data.settings.Settings;
 import publy.Constants;
+import publy.io.ResourceLocator;
 import publy.io.settings.legacy.SettingsReaderV0_8;
 
 public class SettingsImporter {
@@ -39,7 +40,7 @@ public class SettingsImporter {
         SettingsReader reader = selectSettingsReader(version);
         Settings settings = reader.parseSettings(settingsFile);
         correctFilePaths(settingsFile, settings);
-        
+
         return settings;
     }
 
@@ -90,12 +91,46 @@ public class SettingsImporter {
 
     private static void correctFilePaths(Path settingsFile, Settings settings) {
         FileSettings fileSettings = settings.getFileSettings();
-        fileSettings.setPublications(settingsFile.getParent().resolveSibling(fileSettings.getPublications()).normalize());
-        fileSettings.setTarget(settingsFile.getParent().resolveSibling(fileSettings.getTarget()).normalize());
-        fileSettings.setHeader(settingsFile.getParent().resolveSibling(fileSettings.getHeader()).normalize());
-        fileSettings.setFooter(settingsFile.getParent().resolveSibling(fileSettings.getFooter()).normalize());
-        
-        settings.getHtmlSettings().setTheme(settingsFile.getParent().resolveSibling(settings.getHtmlSettings().getTheme()).normalize());
+        fileSettings.setPublications(correctPath(settingsFile, fileSettings.getPublications()));
+        fileSettings.setTarget(correctPath(settingsFile, fileSettings.getTarget()));
+        fileSettings.setHeader(correctPath(settingsFile, fileSettings.getHeader()));
+        fileSettings.setFooter(correctPath(settingsFile, fileSettings.getFooter()));
+
+        settings.getHtmlSettings().setTheme(correctPath(settingsFile, settings.getHtmlSettings().getTheme()));
+    }
+
+    private static Path correctPath(Path settingsFile, Path path) {
+        // The path we get is resolved from the current base directory, but it should be resolved from the old base directory
+        Path corrected = settingsFile.getParent().resolveSibling(ResourceLocator.getRelativePath(path)).normalize();
+
+        if (inPublyDirectory(settingsFile, corrected)) {
+            // If the file is in the settings file's Publy directory, copy it to ours if it doesn't already exist
+            try {
+                if (!Files.exists(path)) {
+                    Files.copy(corrected, path);
+                }
+                return path;
+            } catch (IOException ioe) {
+                // Just refer to the old file
+                return corrected;
+            }
+        } else {
+            // If the path is to a file outside the Publy directory, just return it
+            return corrected;
+        }
+    }
+
+    private static boolean inPublyDirectory(Path settingsFile, Path path) {
+        // Check whether the settings file is in a Publy directory
+        Path potentialPublyDir = settingsFile.normalize().getParent().getParent();
+        Path publyJar = potentialPublyDir.resolve("Publy.jar");
+
+        if (Files.notExists(publyJar)) {
+            return false;
+        }
+
+        // Check whether the given path is in the same Publy directory
+        return path.normalize().startsWith(potentialPublyDir);
     }
 
     private SettingsImporter() {
