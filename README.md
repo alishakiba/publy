@@ -6,7 +6,7 @@ Publy turns a BibTeX file with a list of your publications into a professional w
 
 ## Features
 
- * Understands most BibTeX files
+ * Understands all valid BibTeX files
  * Automatically translates LaTeX-encoded special characters to Unicode
  * Renders mathematics with [MathJax](http://www.mathjax.org/)
  * Abstracts and BibTeX citation information can be displayed for each paper
