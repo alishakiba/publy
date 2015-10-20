@@ -46,7 +46,7 @@ public class BibtexBibItemWriter extends BibItemWriter {
         Set<String> fieldsToPrint = getFieldsToPrint(item);
         
         // The first field should omit the connecting ",".
-        boolean first = isPresent(item, "author");
+        boolean first = !isPresent(item, "author");
 
         for (String field : fieldsToPrint) {
             String v = item.get(field);
