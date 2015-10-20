@@ -74,7 +74,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     private void populateValues() {
         // Theme
         themeComboBox.setSelectedItem(settings.getTheme());
-        
+
         // Links
         linkToTextCheckBox.setSelected(settings.isGenerateTextVersion());
         linkToBibtexCheckBox.setSelected(settings.isGenerateBibtexVersion());
@@ -132,28 +132,28 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
             Console.except(ex, "Exception when searching for themes:");
             return new Path[0];
         }
-        
+
         Collections.sort(paths, new Comparator<Path>() {
 
             @Override
             public int compare(Path o1, Path o2) {
                 int diff = 0;
-                
+
                 // Find the first part of the path that differs
                 while (diff < o1.getNameCount() && diff < o2.getNameCount() && o1.getName(diff).equals(o2.getName(diff))) {
                     diff++;
                 }
-                
+
                 if (diff == o1.getNameCount()) {
                     return -1;
                 }
                 if (diff == o2.getNameCount()) {
                     return 1;
                 }
-                
+
                 boolean isComposite1 = diff < o1.getNameCount() - 1;
                 boolean isComposite2 = diff < o2.getNameCount() - 1;
-                
+
                 if (isComposite1 && !isComposite2) {
                     return 1;
                 } else if (!isComposite1 && isComposite2) {
@@ -170,7 +170,7 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
     private String toRelativePath(Path theme) {
         return ResourceLocator.getFullPath(HTMLSettings.THEME_DIRECTORY).relativize(theme).toString();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -559,16 +559,16 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus); // Correctly sets the appearance of this instance (DefaultListCellRenderer extends JLabel)
-            
+
             String relativePath = toRelativePath((Path) value);
             relativePath = relativePath.substring(0, relativePath.length() - ".css".length());
             setText(relativePath);
-            
+
             return this;
         }
-        
+
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<publy.data.PublicationStatus> abstractComboBox;
     private javax.swing.JLabel abstractLabel;
