@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plgsettings majorversion="0" minorversion="8">
+<publysettings majorversion="0" minorversion="10">
   <!-- File settings -->
   <fileSettings>
     <publications>testOutput/test040/publications.bib</publications>
@@ -48,6 +48,18 @@
         <TypeCondition inverted="false"><![CDATA[article]]></TypeCondition>
         <fieldConditions>
           <FieldEqualsCondition inverted="true" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
+          <FieldEqualsCondition inverted="true" field="journal"><![CDATA[CoRR]]></FieldEqualsCondition>
+        </fieldConditions>
+        <ignoredFields><![CDATA[]]></ignoredFields>
+      </category>
+      <category>
+        <shortName><![CDATA[Preprint]]></shortName>
+        <name><![CDATA[Preprint papers]]></name>
+        <htmlNote><![CDATA[]]></htmlNote>
+        <TypeCondition inverted="false"><![CDATA[article]]></TypeCondition>
+        <fieldConditions>
+          <FieldEqualsCondition inverted="true" field="pubstate"><![CDATA[submitted]]></FieldEqualsCondition>
+          <FieldEqualsCondition inverted="false" field="journal"><![CDATA[CoRR]]></FieldEqualsCondition>
         </fieldConditions>
         <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
@@ -101,12 +113,12 @@
         <ignoredFields><![CDATA[]]></ignoredFields>
       </category>
     </allCategories>
-    <activeCategories>5;3;2;0;1;7;4</activeCategories>
+    <activeCategories>6;0;3;2;1;4;8</activeCategories>
   </categorySettings>
 
   <!-- General settings -->
   <generalSettings>
-    <myNames><![CDATA[]]></myNames>
+    <myNames><![CDATA[Verdonschot, Sander]]></myNames>
     <nameDisplay>FULL</nameDisplay>
     <reverseNames>false</reverseNames>
     <listAllAuthors>true</listAllAuthors>
@@ -114,15 +126,18 @@
     <useNewLines>true</useNewLines>
     <numbering>NO_NUMBERS</numbering>
     <reverseNumbering>false</reverseNumbering>
+    <grouping>NO_GROUPING</grouping>
+    <groupWithinCategories>true</groupWithinCategories>
   </generalSettings>
 
   <!-- HTML-specific settings -->
   <htmlSettings>
+    <theme>data/themes/Minimalist.css</theme>
     <generateTextVersion>true</generateTextVersion>
     <generateBibtexVersion>true</generateBibtexVersion>
     <linkToAlternateVersions>false</linkToAlternateVersions>
     <navPlacement>TOP</navPlacement>
-    <includeAbstract>ALL</includeAbstract>
+    <includeAbstract>NONE</includeAbstract>
     <includeBibtex>ARXIV</includeBibtex>
     <includePaper>ARXIV</includePaper>
     <titleTarget>NONE</titleTarget>
@@ -133,12 +148,14 @@
   <!-- Console settings -->
   <consoleSettings>
     <showWarnings>true</showWarnings>
+    <warnDuplicateIDs>true</warnDuplicateIDs>
     <warnMissingReferences>true</warnMissingReferences>
-    <warnNotAuthor>true</warnNotAuthor>
+    <warnNotAuthor>false</warnNotAuthor>
     <warnNoCategoryForItem>true</warnNoCategoryForItem>
     <warnMandatoryFieldIgnored>true</warnMandatoryFieldIgnored>
     <showLogs>true</showLogs>
+    <showDebugLog>false</showDebugLog>
     <showStackTraces>true</showStackTraces>
   </consoleSettings>
 
-</plgsettings>
+</publysettings>
