@@ -63,11 +63,11 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     @Override
     protected void writePublicationList(List<Section> sections, BufferedWriter out) throws IOException {
         itemWriter = new HTMLBibItemWriter(out, settings);
-        
+
         copyAuxiliaryFiles();
         initializeCount(sections);
         writePreamble(out, sections);
-        
+
         for (Section s : sections) {
             writeSection(s, sections, new ArrayList<Section>(), out);
         }
@@ -76,11 +76,6 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     }
 
     private void writePreamble(BufferedWriter out, List<Section> sections) throws IOException {
-        // Generated file warning
-        out.write("<!-- " + GENERATED_COMMENT + " -->");
-        out.newLine();
-        out.newLine();
-
         // Header
         if (settings.getFileSettings().getHeader() == null) {
             publy.Console.error("No header found. The generated HTML file will not be valid.");
@@ -118,23 +113,23 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         // Start publication list
         out.write("    <div id=\"publicationlist\">");
         out.newLine();
-        
+
         // Navigation?
         if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP
                 || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM) {
             writeNavigation(sections, out);
         }
-        
+
         out.newLine();
     }
-    
+
     private void writePostamble(List<Section> sections, BufferedWriter out) throws IOException {
         // Navigation?
         if (settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.TOP_AND_BOTTOM
                 || settings.getHtmlSettings().getNavPlacement() == HTMLSettings.NavigationPlacement.BEFORE_SECTION_AND_BOTTOM) {
             writeNavigation(sections, out);
         }
-        
+
         // End publication list
         out.write("    </div>");
         out.newLine();
@@ -156,7 +151,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL) {
             if (settings.getGeneralSettings().isReverseNumbering()) {
                 count = 0;
-                
+
                 for (Section s : sections) {
                     count += s.countAllItems();
                 }
@@ -170,19 +165,28 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         try (BufferedReader reader = Files.newBufferedReader(inputFile, Charset.forName("UTF-8"))) {
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 // Detect the end of the HEAD element, so we can insert the Google Analytics Javascript
-                int index = line.indexOf("</head>");
+                int headIndex = line.indexOf("</head>");
 
-                if (index > -1) {
+                if (headIndex > -1) {
                     // Splice in required Javascript
-                    out.write(line.substring(0, index));
+                    out.write(line.substring(0, headIndex));
                     out.newLine();
 
                     writeJavascript(out);
 
-                    out.write(line.substring(index));
+                    out.write(line.substring(headIndex));
                     out.newLine();
                 } else {
                     out.write(line);
+                    out.newLine();
+                }
+
+                if (line.toLowerCase().contains("doctype")) {
+                    // Generated file warning. This needs to be after the
+                    // DOCTYPE, otherwise it triggers quirks mode in older
+                    // versions of IE.
+                    out.write("<!-- " + GENERATED_COMMENT + " -->");
+                    out.newLine();
                     out.newLine();
                 }
 
@@ -207,7 +211,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
 
             if (strippedFile.contains("#")) {
                 strippedFile = strippedFile.substring(0, strippedFile.indexOf('#'));
-                
+
                 if (strippedFile.isEmpty()) {
                     return;
                 }
