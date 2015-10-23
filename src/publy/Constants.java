@@ -29,11 +29,11 @@ public class Constants {
     /**
      * Publy's major version number.
      */
-    public static final int MAJOR_VERSION = 0;
+    public static final int MAJOR_VERSION = 1;
     /**
      * Publy's minor version number.
      */
-    public static final int MINOR_VERSION = 10;
+    public static final int MINOR_VERSION = 0;
     /**
      * Publy's application icons.
      */
