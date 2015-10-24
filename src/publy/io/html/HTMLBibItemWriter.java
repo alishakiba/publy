@@ -17,6 +17,7 @@ package publy.io.html;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -36,11 +37,8 @@ import publy.io.bibtex.BibtexBibItemWriter;
  */
 public class HTMLBibItemWriter extends BibItemWriter {
 
-    private final BibtexBibItemWriter bibtexWriter;
-
     public HTMLBibItemWriter(BufferedWriter out, Settings settings) {
         super(out, settings);
-        bibtexWriter = new BibtexBibItemWriter(out, settings);
     }
 
     @Override
@@ -778,7 +776,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write(indentString + "  <pre class=\"bibtex\">");
         out.newLine();
 
+        StringWriter bibtex = new StringWriter();
+        BufferedWriter buffer = new BufferedWriter(bibtex);
+        BibItemWriter bibtexWriter = new BibtexBibItemWriter(buffer, settings);
         bibtexWriter.write(item);
+        buffer.flush();
+        out.write(bibtex.toString());
 
         out.write("</pre>"); // No indent, as this would end up as part of the BibTeX
         out.newLine();
