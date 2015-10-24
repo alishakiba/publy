@@ -15,7 +15,6 @@
  */
 package publy.gui;
 
-import publy.Constants;
 import com.apple.eawt.AboutHandler;
 import com.apple.eawt.AppEvent.AboutEvent;
 import com.apple.eawt.AppEvent.PreferencesEvent;

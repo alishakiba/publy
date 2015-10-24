@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import publy.Console;
@@ -49,10 +51,10 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
      * Empty constructor, for use in the NetBeans GUI editor.
      */
     public HTMLSettingsPanel() {
-        settings = new HTMLSettings();
+        // Don't initialize settings, as NetBeans will error on ResourceLocator
+        settings = null;
         initComponents();
         applyStyles();
-        populateValues();
     }
 
     /**
@@ -332,8 +334,8 @@ public class HTMLSettingsPanel extends javax.swing.JPanel {
 
         themeComboLabel.setText("Theme:");
 
-        themeComboBox.setModel(new DefaultComboBoxModel<>(discoverThemes()));
-        themeComboBox.setRenderer(new ThemeNameRenderer());
+        themeComboBox.setModel(settings == null ? new DefaultComboBoxModel<>(new Path[]{Paths.get("Placeholder")}) : new DefaultComboBoxModel<>(discoverThemes()));
+        themeComboBox.setRenderer((ListCellRenderer<? super Path>) (settings == null ? themeComboBox.getRenderer() : new ThemeNameRenderer()));
         themeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 themeComboBoxActionPerformed(evt);

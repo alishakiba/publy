@@ -408,10 +408,10 @@
     <Component class="javax.swing.JComboBox" name="themeComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new DefaultComboBoxModel&lt;&gt;(discoverThemes())" type="code"/>
+          <Connection code="settings == null ? new DefaultComboBoxModel&lt;&gt;(new Path[]{Paths.get(&quot;Placeholder&quot;)}) : new DefaultComboBoxModel&lt;&gt;(discoverThemes())" type="code"/>
         </Property>
         <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new ThemeNameRenderer()" type="code"/>
+          <Connection code="(ListCellRenderer&lt;? super Path&gt;) (settings == null ? themeComboBox.getRenderer() : new ThemeNameRenderer())" type="code"/>
         </Property>
       </Properties>
       <Events>
