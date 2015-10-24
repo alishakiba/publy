@@ -79,9 +79,14 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         // Header
         if (settings.getFileSettings().getHeader() == null) {
             publy.Console.error("No header found. The generated HTML file will not be valid.");
+            
+            // Write the generated comment
+            out.write("<!-- " + GENERATED_COMMENT + " -->");
+            out.newLine();
+            out.newLine();
         } else {
             // Copy the header from the header file
-            copyFileToWriter(settings.getFileSettings().getHeader(), out);
+            copyHeader(settings.getFileSettings().getHeader(), out);
         }
 
         // Alternate version links
@@ -143,7 +148,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             publy.Console.error("No footer found. The generated HTML file will not be valid.");
         } else {
             // Copy the footer from the footer file
-            copyFileToWriter(settings.getFileSettings().getFooter(), out);
+            copyFooter(settings.getFileSettings().getFooter(), out);
         }
     }
 
@@ -161,9 +166,24 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         }
     }
 
-    private void copyFileToWriter(Path inputFile, BufferedWriter out) throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(inputFile, Charset.forName("UTF-8"))) {
-            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+    private void copyHeader(Path headerFile, BufferedWriter out) throws IOException {
+        try (BufferedReader reader = Files.newBufferedReader(headerFile, Charset.forName("UTF-8"))) {
+            String line = reader.readLine();
+            out.write(line);
+            out.newLine();
+
+            if (!line.toLowerCase().contains("doctype")) {
+                Console.warn(Console.WarningType.OTHER, "The first line of the header does not include a DOCTYPE declaration. This may prevent the generated HTML file from displaying properly in all browsers.");
+            }
+            
+            // Generated file warning. This needs to be after the
+            // DOCTYPE, otherwise it triggers quirks mode in older
+            // versions of IE.
+            out.write("<!-- " + GENERATED_COMMENT + " -->");
+            out.newLine();
+            out.newLine();
+
+            for (line = reader.readLine(); line != null; line = reader.readLine()) {
                 // Detect the end of the HEAD element, so we can insert the Google Analytics Javascript
                 int headIndex = line.indexOf("</head>");
 
@@ -181,15 +201,6 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                     out.newLine();
                 }
 
-                if (line.toLowerCase().contains("doctype")) {
-                    // Generated file warning. This needs to be after the
-                    // DOCTYPE, otherwise it triggers quirks mode in older
-                    // versions of IE.
-                    out.write("<!-- " + GENERATED_COMMENT + " -->");
-                    out.newLine();
-                    out.newLine();
-                }
-
                 // Check if referenced files exist, warn if they do not
                 Matcher m = LINK_PATTERN.matcher(line);
 
@@ -200,6 +211,15 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
                         ensureReferencedFileExists(path);
                     }
                 }
+            }
+        }
+    }
+
+    private void copyFooter(Path footerFile, BufferedWriter out) throws IOException {
+        try (BufferedReader reader = Files.newBufferedReader(footerFile, Charset.forName("UTF-8"))) {
+            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+                out.write(line);
+                out.newLine();
             }
         }
     }
