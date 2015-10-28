@@ -332,7 +332,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         out.write(indentString);
-        
+
         // Title
         if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
             output("<h4 class=\"title abstract-toggle\">", title, "</h4>");
@@ -481,13 +481,16 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     protected void writeStatus(BibItem item) throws IOException {
         String venue;
+        String venueType;
 
         switch (item.getType()) {
             case ARTICLE:
                 venue = get(item, "journal");
+                venueType = "article";
                 break;
             case INPROCEEDINGS:
                 venue = get(item, "booktitle");
+                venueType = "booktitle";
 
                 if (venue.startsWith("Proceedings of ")) {
                     venue = venue.substring("Proceedings of ".length());
@@ -496,6 +499,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 break;
             default:
                 venue = null;
+                venueType = null;
                 break;
         }
 
@@ -554,7 +558,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                     throw new AssertionError("Item \"" + item.getId() + "\" has an unrecognized pubstate: \"" + get(item, "pubstate") + "\"");
             }
 
-            output("<span class=\"booktitle\">", venue, "</span>.", true);
+            output("<span class=\"" + venueType + "\">", venue, "</span>.", true);
         }
     }
 
@@ -776,18 +780,25 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.write(indentString + "  <pre class=\"bibtex\">");
         out.newLine();
 
-        StringWriter bibtex = new StringWriter();
-        BufferedWriter buffer = new BufferedWriter(bibtex);
-        BibItemWriter bibtexWriter = new BibtexBibItemWriter(buffer, settings);
-        bibtexWriter.write(item);
-        buffer.flush();
-        out.write(bibtex.toString());
+        String bibtex = htmlEscape(getBibtex(item));
+        out.write(bibtex);
 
         out.write("</pre>"); // No indent, as this would end up as part of the BibTeX
         out.newLine();
 
         out.write(indentString + "</div>");
         out.newLine();
+    }
+
+    private String getBibtex(BibItem item) throws IOException {
+        StringWriter bibtex = new StringWriter();
+        BufferedWriter buffer = new BufferedWriter(bibtex);
+        BibItemWriter bibtexWriter = new BibtexBibItemWriter(buffer, settings);
+        
+        bibtexWriter.write(item);
+        buffer.flush();
+
+        return bibtex.toString();
     }
 
     private void writeArxivBibtexHTML(BibItem item) throws IOException {
@@ -797,7 +808,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.newLine();
 
         // Item type
-        out.write("@article{" + item.getId() + ",");
+        out.write("@article{" + htmlEscape(item.getId()) + ",");
         out.newLine();
 
         // The first field should omit the connecting ",".
@@ -808,7 +819,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             out.write("  author={");
 
             for (int i = 0; i < item.getAuthors().size(); i++) {
-                out.write(item.getAuthors().get(i).getName());
+                out.write(htmlEscape(item.getAuthors().get(i).getName()));
 
                 if (i < item.getAuthors().size() - 1) {
                     out.write(" and ");
@@ -828,7 +839,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 out.newLine();
             }
 
-            out.write("  " + field + "={" + get(item, field) + "}");
+            out.write(htmlEscape("  " + field + "={" + get(item, field) + "}"));
         }
 
         out.write(",");
@@ -837,20 +848,20 @@ public class HTMLBibItemWriter extends BibItemWriter {
         out.newLine();
         out.write("  archivePrefix={arXiv},");
         out.newLine();
-        out.write("  eprint={" + get(item, "arxiv") + "},");
+        out.write("  eprint={" + htmlEscape(get(item, "arxiv")) + "},");
         out.newLine();
 
         if (isPresent(item, "primaryclass")) {
-            out.write("  primaryClass={" + get(item, "primaryclass") + "},");
+            out.write("  primaryClass={" + htmlEscape(get(item, "primaryclass")) + "},");
             out.newLine();
-            out.write(String.format("  note={\\href{http://arxiv.org/abs/%s}{arXiv:%s} [%s]},", get(item, "arxiv"), get(item, "arxiv"), get(item, "primaryclass")));
+            out.write(String.format("  note={\\href{http://arxiv.org/abs/%s}{arXiv:%s} [%s]},", htmlEscape(get(item, "arxiv")), htmlEscape(get(item, "arxiv")), htmlEscape(get(item, "primaryclass"))));
             out.newLine();
         } else {
-            out.write(String.format("  note={\\href{http://arxiv.org/abs/%s}{arXiv:%s}},", get(item, "arxiv"), get(item, "arxiv")));
+            out.write(String.format("  note={\\href{http://arxiv.org/abs/%s}{arXiv:%s}},", htmlEscape(get(item, "arxiv")), htmlEscape(get(item, "arxiv"))));
             out.newLine();
         }
 
-        out.write(String.format("  url={http://arxiv.org/abs/%s}", get(item, "arxiv")));
+        out.write(String.format("  url={http://arxiv.org/abs/%s}", htmlEscape(get(item, "arxiv"))));
 
         out.newLine(); // No comma after the last element
         out.write("}</pre>");
@@ -885,5 +896,12 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         out.newLine();
+    }
+    
+    private String htmlEscape(String text) {
+        return text.replaceAll("&", "&amp;")
+                .replaceAll("\u00A0", "&nbsp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;");
     }
 }
