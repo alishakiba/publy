@@ -42,9 +42,12 @@ public class PublicationListGenerator {
      * the {@link Console}). Otherwise, progress messages are shown.
      *
      * @param settings the configuration
+     * @return true iff the HTML version was successfully generated
      */
-    public static void generatePublicationList(Settings settings) {
+    public static boolean generatePublicationList(Settings settings) {
         Console.debug("Generating publication list.");
+        boolean success = false;
+        
         if (checkFileSettings(settings)) {
             List<BibItem> items = parsePublications(settings);
 
@@ -53,11 +56,13 @@ public class PublicationListGenerator {
 
                 writeTextVersion(settings, sections);
                 writeBibtexVersion(settings, sections);
-                writeHtmlVersion(settings, sections);
+                success = writeHtmlVersion(settings, sections);
             }
 
             Console.log("Done.");
         }
+        
+        return success;
     }
 
     /**
@@ -153,14 +158,17 @@ public class PublicationListGenerator {
      *
      * @param settings the configuration
      * @param sections the publication list sections
+     * @return true iff the HTML version was successfully generated
      */
-    private static void writeHtmlVersion(Settings settings, List<Section> sections) {
+    private static boolean writeHtmlVersion(Settings settings, List<Section> sections) {
         try {
             PublicationListWriter writer = new HTMLPublicationListWriter(settings);
             writer.writePublicationList(sections, settings.getFileSettings().getTarget());
             Console.log("HTML publication list written.");
+            return true;
         } catch (Exception | AssertionError ex) {
             Console.except(ex, "Exception while writing HTML publication list:");
+            return false;
         }
     }
 
