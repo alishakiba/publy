@@ -41,6 +41,7 @@ import publy.io.settings.SettingsWriter;
 public class MainFrame extends javax.swing.JFrame {
 
     public enum Tab {
+
         FILE_SETTINGS, CATEGORY_SETTINGS, GENERAL_SETTINGS, HTML_SETTINGS, CONSOLE_SETTINGS, ABOUT;
     }
     private final Settings settings;
@@ -260,15 +261,17 @@ public class MainFrame extends javax.swing.JFrame {
         // Clear the console before generating
         consoleTextPane.setText("");
 
-        PublicationListGenerator.generatePublicationList(settings);
+        boolean htmlGenerated = PublicationListGenerator.generatePublicationList(settings);
 
         // Move to the top of the console output
         consoleTextPane.setCaretPosition(0);
 
         setCursor(Cursor.getDefaultCursor());
 
-        // Open the output file in the browser
-        Runner.openFileInBrowser(settings.getFileSettings().getTarget());
+        if (htmlGenerated) {
+            // Open the output file in the browser
+            Runner.openFileInBrowser(settings.getFileSettings().getTarget());
+        }
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void saveNQuitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveNQuitButtonActionPerformed

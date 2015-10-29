@@ -67,7 +67,7 @@ public class Runner {
         if (isMacOS()) {
             changeDockIcon();
         }
-        
+
         Settings settings = readSettings(arguments.getConfig());
 
         if (settings == null) {
@@ -93,7 +93,7 @@ public class Runner {
         if (isMacOS()) {
             changeDockIcon();
         }
-        
+
         Settings settings = readSettings(arguments.getConfig());
 
         // Decide whether to show the settings GUI
@@ -124,8 +124,10 @@ public class Runner {
         if (showSettings) {
             launchGUI(settings);
         } else {
-            PublicationListGenerator.generatePublicationList(settings);
-            openFileInBrowser(settings.getFileSettings().getTarget());
+            boolean htmlGenerated = PublicationListGenerator.generatePublicationList(settings);
+            if (htmlGenerated) {
+                openFileInBrowser(settings.getFileSettings().getTarget());
+            }
         }
     }
 
@@ -235,18 +237,18 @@ public class Runner {
             }
         }
     }
-    
+
     public static boolean isMacOS() {
         return System.getProperty("os.name").toLowerCase().contains("mac");
     }
-    
+
     private static void changeDockIcon() {
         Application application = Application.getApplication();
-        
+
         if (application == null) {
             return;
         }
-        
+
         // Use the largest icon we have
         application.setDockIconImage(Constants.PUBLY_ICONS.get(Constants.PUBLY_ICONS.size() - 1));
     }
