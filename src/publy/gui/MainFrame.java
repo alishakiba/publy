@@ -72,7 +72,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void changeTabs() {
         if (Runner.isMacOS()) { // OSX doesn't handle custom tabs well
             settingsTabbedPane.setTabPlacement(JTabbedPane.TOP);
-            this.setPreferredSize(new Dimension(getWidth(), getHeight() + 50));
+            this.setPreferredSize(new Dimension(getWidth(), getHeight() + 100));
             pack();
         } else {
             settingsTabbedPane.setTabComponentAt(0, new TabTitle("Files", new ImageIcon(getClass().getResource("/publy/gui/resources/folder-32.png")))); // Files
@@ -225,7 +225,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(buttonPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(generateButton, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
+                    .addComponent(generateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 83, Short.MAX_VALUE)
                     .addComponent(saveNQuitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
