@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION_FILE="src/publy/gui/UIConstants.java"
+VERSION_FILE="src/publy/Constants.java"
 JAR_FILE="dist/Publy.jar"
 PROJECT_DIR=${PWD##*/}
 
