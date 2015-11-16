@@ -85,6 +85,7 @@ fi
 echo "done."
 
 
+# Finalize release
 if [ $opt_final ]
 then
     # Commit these changes
