@@ -78,6 +78,10 @@ ZIP_FILE="Publy $version.zip"
 zip "$ZIP_FILE" "LICENSE" "NOTICE" "publications.bib"
 zip -r "$ZIP_FILE" data lib # Recursively add these directories
 zip -j "$ZIP_FILE" "$JAR_FILE" # Add the jar file without directory information
+if [ -e "data/PublySettings.xml" ]
+then
+    zip -d "$ZIP_FILE" data/PublySettings.xml # Remove any existing settings file
+fi
 echo "done."
 
 
