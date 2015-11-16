@@ -50,9 +50,9 @@ version="${codeMajorVersion}.${codeMinorVersion}"
 
 
 # Clean and build the project
-echo -n "Cleaning and building the project... "
-ant clean
-ant jar
+echo "Cleaning and building the project... "
+ant -S clean
+ant -S jar
 echo "done."
 
 
@@ -75,12 +75,12 @@ echo "done."
 # Create a new zip file
 echo -n "Creating new zip file... "
 ZIP_FILE="Publy $version.zip"
-zip "$ZIP_FILE" "LICENSE" "NOTICE" "publications.bib"
-zip -r "$ZIP_FILE" data lib # Recursively add these directories
-zip -j "$ZIP_FILE" "$JAR_FILE" # Add the jar file without directory information
+zip -q "$ZIP_FILE" "LICENSE" "NOTICE" "publications.bib"
+zip -qr "$ZIP_FILE" data lib # Recursively add these directories
+zip -qj "$ZIP_FILE" "$JAR_FILE" # Add the jar file without directory information
 if [ -e "data/PublySettings.xml" ]
 then
-    zip -d "$ZIP_FILE" data/PublySettings.xml # Remove any existing settings file
+    zip -qd "$ZIP_FILE" data/PublySettings.xml # Remove any existing settings file
 fi
 echo "done."
 
