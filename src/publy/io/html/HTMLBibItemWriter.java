@@ -21,6 +21,8 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import publy.Console;
 import publy.data.PublicationStatus;
 import publy.data.Author;
@@ -43,6 +45,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     @Override
     public void write(BibItem item) throws IOException {
+        writeImage(item);
         writeTitleAndAuthorsHTML(item);
 
         if (isPresent(item, "pubstate")) {
@@ -296,6 +299,19 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
     protected void writeUnpublished(BibItem item) throws IOException {
         output("<span class=\"note\">", get(item, "note"), "</span>, ");
+    }
+
+    protected void writeImage(BibItem item) throws IOException {
+        if (isPresent(item, "image")) {
+            try {
+                String image = (new URI(null, null, item.get("image"), null)).toString();
+
+                out.write(indentString + "<img src=\"" + image + "\" alt = \"" + item.get("title") + "\">");
+                out.newLine();
+            } catch (URISyntaxException ex) {
+                Console.except(ex, "Could not parse the image location for publication \"%s\":", item.getId());
+            }
+        }
     }
 
     protected void writeTitleAndAuthorsHTML(BibItem item) throws IOException {
