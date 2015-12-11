@@ -33,7 +33,7 @@ public class Constants {
     /**
      * Publy's minor version number.
      */
-    public static final int MINOR_VERSION = 0;
+    public static final int MINOR_VERSION = 1;
     /**
      * Publy's application icons.
      */
