@@ -34,7 +34,7 @@ h3 {
 }
 
 /* Make text and navigation span both columns */
-#publicationlist > p {
+#publicationlist>p {
     flex-basis: 100%;
 }
 
@@ -51,6 +51,13 @@ ul.section-list {
 /* Separate publications by a little white-space */
 .bibentry {
     margin-top: 0.2em;
+}
+
+/* Place images above the publication */
+.bibentry>img {
+    display: block;
+    margin: 0.5em auto;
+    height: 5em;
 }
 
 /* Paper titles */

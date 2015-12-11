@@ -1,3 +1,9 @@
+/* Images */
+.bibentry>img {
+    float: right;
+    height: 5em;
+}
+
 /* Paper titles */
 h4.title {
     display: inline;
