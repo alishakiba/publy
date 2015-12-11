@@ -21,8 +21,6 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import publy.Console;
 import publy.data.PublicationStatus;
 import publy.data.Author;
