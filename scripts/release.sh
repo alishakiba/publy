@@ -30,7 +30,7 @@ branch="$(hg branch)"
 
 if [ ! $branch = "release" ]
 then
-    echo "Current branch is \"$branch\". To use this script, switch to the release branch with \"hg update release\", merge all the necessary changes from the main branch, clean and build in NetBeans, then run this script again."
+    echo "Current branch is \"$branch\". To use this script, switch to the release branch with \"hg update release\", merge all the necessary changes from the main branch, then run this script again."
     exit 1
 fi
 
