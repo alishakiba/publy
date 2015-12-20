@@ -373,7 +373,7 @@ public class BibItemParserTest {
 
         for (Object[] test : tests) {
             try {
-                BibItem result = BibItemParser.parseBibItem(new StringReader((String) test[0]));
+                BibItem result = BibItemParser.parseBibItem(new StringReader((String) test[0])).getSecond();
                 BibItem expResult = (BibItem) test[1];
                 assertEqualItems("Input: <" + test[0] + ">", expResult, result);
             } catch (IOException | ParseException ioe) {

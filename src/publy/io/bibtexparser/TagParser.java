@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StreamTokenizer;
 import publy.Console;
+import publy.data.Pair;
 
 public class TagParser {
 
@@ -30,7 +31,7 @@ public class TagParser {
     private static final int MAX_RESET = 6000000; // ~12MB, Easily accomodates largest bib file I've found
     private static Tokenizer tokenizer;
 
-    public static Tag parseTag(Reader in) throws IOException, ParseException {
+    public static Pair<Integer, Tag> parseTag(Reader in) throws IOException, ParseException {
         if (in.markSupported()) {
             in.mark(MAX_RESET);
         }
@@ -39,6 +40,7 @@ public class TagParser {
         tokenizer.setSpecialCharacters(SPECIAL_CHARACTERS);
 
         String type = null;
+        Tag result = null;
 
         try {
             tokenizer.match(StreamTokenizer.TT_WORD);
@@ -46,9 +48,11 @@ public class TagParser {
 
             switch (type) {
                 case "author":
-                    return parseAuthor();
+                    result = parseAuthor();
+                    break;
                 case "abbr":
-                    return parseAbbreviation();
+                    result = parseAbbreviation();
+                    break;
                 // Ignore valid HTML tags
                 case "a":
                 case "acronym":
@@ -128,11 +132,10 @@ public class TagParser {
                 case "ul":
                 case "var":
                     Console.warn(Console.WarningType.OTHER, "Ignored HTML tag \"<%s>\" out of publication context.", type);
-                    return null;
+                    break;
                 default:
                     if (type.startsWith("<")) {
                         // Abbreviation: silently ignore
-                        return null;
                     } else {
                         throw new ParseException(String.format("Unrecognized tag \"<%s>\".", type));
                     }
@@ -152,6 +155,8 @@ public class TagParser {
 
             throw ex;
         }
+        
+        return new Pair<>(tokenizer.lineno(), result);
     }
 
     private static Tag parseAuthor() throws IOException, ParseException {

@@ -91,7 +91,7 @@ public class TagParserTest {
         };
         
         for (int i = 0; i < text.length; i++) {
-            Tag result = TagParser.parseTag(new StringReader(text[i]));
+            Tag result = TagParser.parseTag(new StringReader(text[i])).getSecond();
             assertEquals(expResult[i], result);
         }
     }
