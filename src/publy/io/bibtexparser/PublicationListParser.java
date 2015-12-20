@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import publy.Console;
 import publy.data.Author;
+import publy.data.Pair;
 import publy.data.bibitem.BibItem;
 
 public class PublicationListParser {
@@ -61,10 +62,14 @@ public class PublicationListParser {
             try {
                 switch (c) {
                     case '@':
-                        handleBibItem(BibItemParser.parseBibItem(in));
+                        Pair<Integer, BibItem> parsedItem = BibItemParser.parseBibItem(in);
+                        lineNumber += parsedItem.getFirst() - 1;
+                        handleBibItem(parsedItem.getSecond());
                         break;
                     case '<':
-                        handleTag(TagParser.parseTag(in));
+                        Pair<Integer, Tag> parsedTag = TagParser.parseTag(in);
+                        lineNumber += parsedTag.getFirst() - 1;
+                        handleTag(parsedTag.getSecond());
                         break;
                     case '\n':
                         lineNumber++;

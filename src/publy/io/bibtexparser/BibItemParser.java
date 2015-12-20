@@ -38,7 +38,7 @@ public class BibItemParser {
     private static final Pattern number = Pattern.compile("(\\d)+");
     private static Tokenizer tokenizer;
 
-    public static BibItem parseBibItem(Reader in) throws IOException, ParseException {
+    public static Pair<Integer, BibItem> parseBibItem(Reader in) throws IOException, ParseException {
         if (in.markSupported()) {
             in.mark(MAX_RESET);
         }
@@ -46,6 +46,8 @@ public class BibItemParser {
         tokenizer = new Tokenizer(in);
         tokenizer.setSpecialCharacters(SPECIAL_CHARACTERS);
 
+        BibItem result = null;
+        
         try {
             tokenizer.match(StreamTokenizer.TT_WORD);
             String type = tokenizer.getLastTokenAsString().toLowerCase();
@@ -53,11 +55,14 @@ public class BibItemParser {
             switch (type) {
                 case "comment":
                 case "preamble":
-                    return new BibItem(type, null); // Ignore contents
+                    result = new BibItem(type, null); // Ignore contents
+                    break;
                 case "string":
-                    return parseString();
+                    result = parseString();
+                    break;
                 default:
-                    return parsePublication(type);
+                    result = parsePublication(type);
+                    break;
             }
         } catch (ParseException ex) { // Do not reset upon IOException, as that is likely to be unrecoverable
             if (in.markSupported()) {
@@ -72,6 +77,8 @@ public class BibItemParser {
 
             throw ex;
         }
+        
+        return new Pair<>(tokenizer.lineno(), result);
     }
 
     /**
