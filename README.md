@@ -1,5 +1,3 @@
-# Publy
-
 ## Overview
 
 Publy turns a BibTeX file with a list of your publications into a professional webpage. Fast, effortless, and exactly the way you want it.
@@ -38,3 +36,5 @@ Publy turns a BibTeX file with a list of your publications into a professional w
  * [Sander Verdonschot's publications](http://cg.scs.carleton.ca/~sander/publications.html)
  * [André van Renssen's publications](http://cg.scs.carleton.ca/~andre/publications.html)
  * A [bibliography for a class project](http://cglab.ca/~cgrimm/parallelalgs/relatedwork.html)
+
+![Publy](http://i.imgur.com/cVDKFVR.png)
