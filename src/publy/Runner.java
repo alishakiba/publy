@@ -125,7 +125,7 @@ public class Runner {
             launchGUI(settings);
         } else {
             boolean htmlGenerated = PublicationListGenerator.generatePublicationList(settings);
-            if (htmlGenerated) {
+            if (htmlGenerated && settings.getFileSettings().isOpenOutput()) {
                 openFileInBrowser(settings.getFileSettings().getTarget());
             }
         }

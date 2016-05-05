@@ -30,6 +30,7 @@ public class FileSettings {
     private Path publications;
     // Output file
     private Path target;
+    private boolean openOutput = true; // Whether to automatically open the output file in a browser after generating
     // Header and Footer
     private Path header = ResourceLocator.getFullPath(DEFAULT_HEADER_LOCATION);
     private Path footer = ResourceLocator.getFullPath(DEFAULT_FOOTER_LOCATION);
@@ -68,6 +69,24 @@ public class FileSettings {
      */
     public void setTarget(Path target) {
         this.target = target;
+    }
+
+    /**
+     * Gets whether to automatically open the output file in a browser.
+     * 
+     * @return whether to automatically open the output file in a browser
+     */
+    public boolean isOpenOutput() {
+        return openOutput;
+    }
+
+    /**
+     * Sets whether to automatically open the output file in a browser.
+     * 
+     * @param openOutput 
+     */
+    public void setOpenOutput(boolean openOutput) {
+        this.openOutput = openOutput;
     }
 
     /**

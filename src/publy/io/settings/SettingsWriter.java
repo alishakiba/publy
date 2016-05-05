@@ -84,6 +84,7 @@ public class SettingsWriter {
 
         output(out, 4, "publications", makeString(settings.getPublications()));
         output(out, 4, "target", makeString(settings.getTarget()));
+        output(out, 4, "openOutput", makeString(settings.isOpenOutput()));
         output(out, 4, "header", makeString(settings.getHeader()));
         output(out, 4, "footer", makeString(settings.getFooter()));
 

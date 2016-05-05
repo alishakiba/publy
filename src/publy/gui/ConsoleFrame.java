@@ -210,7 +210,7 @@ public class ConsoleFrame extends javax.swing.JFrame {
         // Change cursor back
         setCursor(Cursor.getDefaultCursor());
 
-        if (htmlGenerated) {
+        if (htmlGenerated && settings.getFileSettings().isOpenOutput()) {
             // Open the output file in the browser
             Runner.openFileInBrowser(settings.getFileSettings().getTarget());
         }
