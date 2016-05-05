@@ -431,7 +431,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
             out.newLine();
             out.write("    <!-- Google Analytics JavaScript file -->");
             out.newLine();
-            out.write("    <script src=\"ga.js\"></script>");
+            out.write("    <script src=\"ga.js\" async></script>");
             out.newLine();
         }
     }
