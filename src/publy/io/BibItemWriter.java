@@ -366,6 +366,11 @@ public abstract class BibItemWriter {
                     case '\\':
                         state = RemoveBracesState.ESCAPE;
                         break;
+                    case '^':
+                    case '_':
+                        state = RemoveBracesState.BEFORE_POSSIBLE_ARGUMENT;
+                        result.append(c);
+                        break;
                     default:
                         result.append(c);
                         break;

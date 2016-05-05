@@ -6,7 +6,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -223,6 +222,10 @@ public class BibItemWriterTest {
         expected.put("It is of the \\emph[very]{utmost} importance", "It is of the \\emph[very]{utmost} importance");
         expected.put("It is of \\emph[a little]{great} importance", "It is of \\emph[a little]{great} importance");
         expected.put("It is of \\emph[less]{not too much} importance", "It is of \\emph[less]{not too much} importance");
+        
+        // Hard cases
+        expected.put("$O(\\mathcal{C} dN^{1/d})$", "$O(\\mathcal{C} dN^{1/d})$");
+        expected.put("$O(\\mathcal{C} dN_{1/d})$", "$O(\\mathcal{C} dN_{1/d})$");
 
         BibItemWriter testInstance = new TestBibItemWriter(null, null);
 
