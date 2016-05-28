@@ -35,6 +35,20 @@ then
 fi
 
 
+# Verify that all tests are passing
+# TODO: Fix this.
+echo "Verifying that all unit tests are passing... "
+ant test > test-output.tmp
+if grep -Fxq "BUILD FAILED" test-output.tmp
+then
+    echo "Some tests failed. For details see \"test-output.tmp\"."
+    exit 1
+else
+    #rm test-output.tmp
+fi
+echo "done."
+
+
 # Get the version number from Constants.java
 versionRegex="_VERSION ?= ?([0-9][0-9]*);"
 
