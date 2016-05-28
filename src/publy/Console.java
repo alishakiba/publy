@@ -16,6 +16,7 @@
 package publy;
 
 import java.awt.Color;
+import java.awt.GraphicsEnvironment;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.swing.JTextPane;
@@ -73,7 +74,7 @@ public class Console {
         // The same font, but red for errors
         errorAttributes = new SimpleAttributeSet(logAttributes);
         StyleConstants.setForeground(errorAttributes, Color.red);
-        
+
         // The same font, but gray for debug messages
         debugAttributes = new SimpleAttributeSet(logAttributes);
         StyleConstants.setForeground(debugAttributes, Color.gray);
@@ -97,7 +98,12 @@ public class Console {
         if (settings.isShowLogs()) {
             if (textPane == null) {
                 if (System.console() == null) {
-                    createConsoleFrame();
+                    if (GraphicsEnvironment.isHeadless()) {
+                        System.out.format(" " + format + "%n", args);
+                        System.out.flush();
+                    } else {
+                        createConsoleFrame();
+                    }
                 } else {
                     System.console().format(" " + format + "%n", args);
                     System.console().flush();
@@ -137,7 +143,12 @@ public class Console {
         if (showWarnings(type)) {
             if (textPane == null) {
                 if (System.console() == null) {
-                    createConsoleFrame();
+                    if (GraphicsEnvironment.isHeadless()) {
+                        System.out.format(" WARNING: " + format + "%n", args);
+                        System.out.flush();
+                    } else {
+                        createConsoleFrame();
+                    }
                 } else {
                     System.console().format(" WARNING: " + format + "%n", args);
                     System.console().flush();
@@ -174,7 +185,12 @@ public class Console {
     public static void error(String format, Object... args) {
         if (textPane == null) {
             if (System.console() == null) {
-                createConsoleFrame();
+                if (GraphicsEnvironment.isHeadless()) {
+                    System.out.format(" ERROR: " + format + "%n", args);
+                    System.out.flush();
+                } else {
+                    createConsoleFrame();
+                }
             } else {
                 System.console().format(" ERROR: " + format + "%n", args);
                 System.console().flush();
@@ -224,7 +240,13 @@ public class Console {
 
         if (textPane == null) {
             if (System.console() == null) {
-                createConsoleFrame();
+                if (GraphicsEnvironment.isHeadless()) {
+                    System.out.format(" ERROR: " + format + "%n", args);
+                    System.out.format("%s%n", exceptionText);
+                    System.out.flush();
+                } else {
+                    createConsoleFrame();
+                }
             } else {
                 System.console().format(" ERROR: " + format + "%n", args);
                 System.console().format("%s%n", exceptionText);
@@ -258,7 +280,12 @@ public class Console {
         if (settings.isShowDebugLog()) {
             if (textPane == null) {
                 if (System.console() == null) {
-                    createConsoleFrame();
+                    if (GraphicsEnvironment.isHeadless()) {
+                        System.out.format(" " + format + "%n", args);
+                        System.out.flush();
+                    } else {
+                        createConsoleFrame();
+                    }
                 } else {
                     System.console().format(" " + format + "%n", args);
                     System.console().flush();
