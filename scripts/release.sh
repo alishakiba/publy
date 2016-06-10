@@ -2,6 +2,8 @@
 
 # Set constants
 VERSION_FILE="src/publy/Constants.java"
+CHANGELOG="CHANGELOG.md"
+TEST_OUTPUT="test-output.tmp"
 JAR_FILE="dist/Publy.jar"
 PROJECT_DIR=${PWD##*/}
 
@@ -30,23 +32,9 @@ branch="$(hg branch)"
 
 if [ ! $branch = "release" ]
 then
-    echo "Current branch is \"$branch\". To use this script, switch to the release branch with \"hg update release\", merge all the necessary changes from the main branch, then run this script again."
+    echo "ERROR: Current branch is \"$branch\". To use this script, switch to the release branch with \"hg update release\", merge all the necessary changes from the main branch, then run this script again."
     exit 1
 fi
-
-
-# Verify that all tests are passing
-echo "Verifying that all unit tests are passing... "
-ant test > "test-output.tmp"
-if grep -Fq "FAILED" "test-output.tmp"
-then
-    echo "Some tests failed. For details, see \"test-output.tmp\"."
-    exit 1
-else
-    #rm "test-output.tmp"
-    echo "Success?"
-fi
-echo "done."
 
 
 # Get the version number from Constants.java
@@ -61,6 +49,51 @@ codeMinorVersionLine="$(grep MINOR_VERSION $VERSION_FILE)"
 codeMinorVersion="${BASH_REMATCH[1]}"
 
 version="${codeMajorVersion}.${codeMinorVersion}"
+
+
+# Verify that the change log has been updated
+latestVersionChangeLine="$(grep --max-count=1 "## \[" $CHANGELOG)"
+
+# Check that the version is correct
+changelogVersionRegex="\[([0-9][0-9]*\.[0-9][0-9]*)\]"
+[[ $latestVersionChangeLine =~ $changelogVersionRegex ]]
+changelogVersion="${BASH_REMATCH[1]}"
+
+if [ ! $changelogVersion = $version ]
+then
+    echo "ERROR: Latest change log version (${changelogVersion}) does not match current code version (${version})."
+    exit 1
+fi
+
+# Check that the date is correct
+changelogDateRegex="([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9])"
+[[ $latestVersionChangeLine =~ $changelogDateRegex ]]
+changelogDate="${BASH_REMATCH[1]}"
+
+if [[ -z $changelogDate ]]
+then
+    echo "ERROR: No date specified for latest version."
+    exit 1
+fi
+
+if [[ ! $changelogDate = "$(date +'%Y-%m-%d')" ]]
+then
+    echo "ERROR: Latest version date (${changelogDate}) does not match today's date ($(date +'%Y-%m-%d'))."
+    exit 1
+fi
+
+
+# Verify that all tests are passing
+echo "Verifying that all unit tests are passing... "
+ant test > "$TEST_OUTPUT"
+if grep -Fq "FAILED" "$TEST_OUTPUT"
+then
+    echo "ERROR: Some tests failed. For details, see \"$TEST_OUTPUT\"."
+    exit 1
+else
+    rm "$TEST_OUTPUT"
+fi
+echo "done."
 
 
 # Clean and build the project
@@ -89,7 +122,7 @@ echo "done."
 # Create a new zip file
 echo -n "Creating new zip file... "
 ZIP_FILE="Publy $version.zip"
-zip -q "$ZIP_FILE" "LICENSE" "NOTICE" "publications.bib"
+zip -q "$ZIP_FILE" "LICENSE" "NOTICE" "CHANGELOG.md" "publications.bib"
 zip -qr "$ZIP_FILE" data lib # Recursively add these directories
 zip -qj "$ZIP_FILE" "$JAR_FILE" # Add the jar file without directory information
 if [ -e "data/PublySettings.xml" ]
