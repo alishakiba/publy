@@ -36,15 +36,15 @@ fi
 
 
 # Verify that all tests are passing
-# TODO: Fix this.
 echo "Verifying that all unit tests are passing... "
-ant test > test-output.tmp
-if grep -Fxq "BUILD FAILED" test-output.tmp
+ant test > "test-output.tmp"
+if grep -Fq "FAILED" "test-output.tmp"
 then
-    echo "Some tests failed. For details see \"test-output.tmp\"."
+    echo "Some tests failed. For details, see \"test-output.tmp\"."
     exit 1
 else
-    #rm test-output.tmp
+    #rm "test-output.tmp"
+    echo "Success?"
 fi
 echo "done."
 
