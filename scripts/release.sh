@@ -78,9 +78,16 @@ fi
 
 if [[ ! $changelogDate = "$(date +'%Y-%m-%d')" ]]
 then
-    echo "ERROR: Latest version date (${changelogDate}) does not match today's date ($(date +'%Y-%m-%d'))."
+    echo "ERROR: Latest change log version date (${changelogDate}) does not match today's date ($(date +'%Y-%m-%d'))."
     exit 1
 fi
+
+
+# Clean and build the project
+echo "Cleaning and building the project... "
+ant -S clean
+ant -S jar
+echo "done."
 
 
 # Verify that all tests are passing
@@ -93,13 +100,6 @@ then
 else
     rm "$TEST_OUTPUT"
 fi
-echo "done."
-
-
-# Clean and build the project
-echo "Cleaning and building the project... "
-ant -S clean
-ant -S jar
 echo "done."
 
 
