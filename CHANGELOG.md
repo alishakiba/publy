@@ -1,11 +1,11 @@
 # Publy - Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.1] - 2016-??-??
+## [1.1] - 2016-06-11
 ### Added
-- The ability to add per-publication images.
+- The ability to add per-publication images (Issue #198).
 - Optimized JS code placement.
-- Option to disable the automatic opening of the generated webpage.
+- Option to disable the automatic opening of the generated webpage (Issue #237).
 
 ### Fixed
 - Line counts in parser error messages (Issue #238).
