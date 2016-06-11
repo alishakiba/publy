@@ -137,7 +137,8 @@ if [ $opt_final ]
 then
     # Commit these changes
     echo -n "Committing changes... "
-    hg commit -A -m "Updated release zip."
+    hg add "$ZIP_FILE"
+    hg commit -m "Updated release zip."
 
 
     # Tag the current revision with the release number
