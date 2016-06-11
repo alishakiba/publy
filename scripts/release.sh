@@ -72,7 +72,7 @@ changelogDate="${BASH_REMATCH[1]}"
 
 if [[ -z $changelogDate ]]
 then
-    echo "ERROR: No date specified for latest version."
+    echo "ERROR: The change log does not specify a date for the latest version."
     exit 1
 fi
 
