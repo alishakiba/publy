@@ -6,10 +6,10 @@ Publy turns a BibTeX file with a list of your publications into a professional w
 
  * Understands all valid BibTeX files
  * Automatically translates LaTeX-encoded special characters to Unicode
- * Renders mathematics with [MathJax](http://www.mathjax.org/)
- * Abstracts and BibTeX citation information can be displayed for each paper
- * Fully customizable with CSS
- * Google Analytics integration
+ * Renders LaTeX-encoded mathematics with [MathJax](http://www.mathjax.org/)
+ * Shows expandable Abstract and BibTeX citation information
+ * Appearance is fully customizable with CSS
+ * Integrates with Google Analytics
  
 ## Getting started
 
