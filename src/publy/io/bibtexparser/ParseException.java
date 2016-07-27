@@ -44,7 +44,7 @@ public class ParseException extends Exception {
         }
         
         if (lineNumber >= 0) {
-            result.append(", starting on line ").append(lineNumber);
+            result.append(", on line ").append(lineNumber);
         }
         
         result.append(": ").append(getMessage());
