@@ -168,9 +168,9 @@ public class BibItemParser {
             }
 
             if (bracket == '{') {
-                tokenizer.match('}');
+                tokenizer.match(',', '}'); // this won't be a comma ',', but including it here makes the error message much clearer
             } else {
-                tokenizer.match(')');
+                tokenizer.match(',', ')');
             }
 
             return new Pair<>(fieldBodyNewLines, result);
