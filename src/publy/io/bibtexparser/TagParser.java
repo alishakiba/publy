@@ -212,4 +212,7 @@ public class TagParser {
             tokenizer.match('"');
         }
     }
+
+    private TagParser() {
+    }
 }
