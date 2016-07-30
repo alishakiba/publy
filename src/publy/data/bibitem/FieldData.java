@@ -44,7 +44,7 @@ public class FieldData {
         mandatoryFields.put(Type.MISC, Arrays.asList("author;editor", "title", "year"));
         mandatoryFields.put(Type.ONLINE, Arrays.asList("author", "title", "year", "url"));
         mandatoryFields.put(Type.PATENT, Arrays.asList("author", "title", "number", "year"));
-        mandatoryFields.put(Type.PROCEEDINGS, Arrays.asList("author;editor", "title", "year"));
+        mandatoryFields.put(Type.PROCEEDINGS, Arrays.asList("editor;organization", "title", "year"));
         mandatoryFields.put(Type.INPROCEEDINGS, Arrays.asList("author", "title", "booktitle", "year"));
         mandatoryFields.put(Type.REPORT, Arrays.asList("author", "title", "type", "institution", "year"));
         mandatoryFields.put(Type.THESIS, Arrays.asList("author", "title", "type", "school;institution", "year"));
@@ -61,7 +61,7 @@ public class FieldData {
         optionalFields.put(Type.MISC, Arrays.asList("editor", "howpublished", "type", "organization", "address", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.ONLINE, Arrays.asList("organization", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "urldate"));
         optionalFields.put(Type.PATENT, Arrays.asList("holder", "type", "address", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
-        optionalFields.put(Type.PROCEEDINGS, Arrays.asList("editor", "publisher", "volume", "number", "series", "organization", "address", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
+        optionalFields.put(Type.PROCEEDINGS, Arrays.asList("author", "editor", "publisher", "volume", "number", "series", "organization", "address", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.INPROCEEDINGS, Arrays.asList("editor", "publisher", "volume", "number", "series", "organization", "address", "pages", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.REPORT, Arrays.asList("number", "address", "isrn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
         optionalFields.put(Type.THESIS, Arrays.asList("address", "isbn", "month", "note", "doi", "eprint", "eprintclass", "eprinttype", "url", "urldate"));
