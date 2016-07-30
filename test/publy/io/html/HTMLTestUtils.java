@@ -96,7 +96,7 @@ public class HTMLTestUtils {
         testInstance = new HTMLBibItemWriter(buffer, bibtexSettings);
         
         // Prevent errors from popping up the Console
-        Console.setOutputTarget(new JTextPane());
+        Console.setHeadless(true);
     }
 
     public static Settings getBibtexSettings() {
