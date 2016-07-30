@@ -25,6 +25,7 @@ import org.junit.Test;
 import publy.algo.PublicationListGenerator;
 import publy.io.settings.SettingsReaderCurrent;
 import static org.junit.Assert.*;
+import publy.Console;
 import publy.data.settings.Settings;
 
 public class IntegrationTest {
@@ -40,6 +41,7 @@ public class IntegrationTest {
     @Test
     public void testIntegration() throws IOException {
         Files.createDirectories(WORKING_DIR);
+        Console.setHeadless(true);
 
         int count = 1;
 
