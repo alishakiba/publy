@@ -56,17 +56,9 @@ public class BibItemParser {
             switch (type) {
                 case "comment":
                 case "preamble":
-                    result = new BibItem(type, null); // Ignore contents
-                    
-                    // Make sure all line numbers are counted, so later line numbers are correct
-                    while (!tokenizer.nextTokenIs(StreamTokenizer.TT_EOF)) {
-                        if (tokenizer.nextTokenIs(SPECIAL_CHARACTERS)) {
-                            tokenizer.match(SPECIAL_CHARACTERS);
-                        } else {
-                            tokenizer.match(StreamTokenizer.TT_WORD, StreamTokenizer.TT_NUMBER, StreamTokenizer.TT_EOL);
-                        }
-                    }
-                    
+                    result = new BibItem(type, null);
+                    // Don't parse the contents and pass control back to the list parser
+                    // BibTeX still processes publications inside an @comment, so we can't consume it here
                     break;
                 case "string":
                     result = parseString();
