@@ -51,7 +51,13 @@ public class Console {
 
     public enum WarningType {
 
-        DUPLICATE_ID, MISSING_REFERENCE, NOT_AUTHORED_BY_USER, ITEM_DOES_NOT_FIT_ANY_CATEGORY, MANDATORY_FIELD_IGNORED, OTHER;
+        DUPLICATE_ID,
+        MISSING_REFERENCE,
+        NOT_AUTHORED_BY_USER,
+        ITEM_DOES_NOT_FIT_ANY_CATEGORY,
+        MANDATORY_FIELD_IGNORED,
+        POSSIBLE_MISTAKEN_ABBREVIATION,
+        OTHER;
     }
     private static final SimpleAttributeSet logAttributes;
     private static final SimpleAttributeSet warnAttributes;
@@ -317,6 +323,8 @@ public class Console {
                     return settings.isWarnNoCategoryForItem();
                 case MANDATORY_FIELD_IGNORED:
                     return settings.isWarnMandatoryFieldIgnored();
+                case POSSIBLE_MISTAKEN_ABBREVIATION:
+                    return settings.isWarnPossibleMistakenAbbreviation();
                 case OTHER:
                     return true;
                 default:
@@ -369,5 +377,8 @@ public class Console {
      */
     public static void setSettings(ConsoleSettings settings) {
         Console.settings = settings;
+    }
+
+    private Console() {
     }
 }

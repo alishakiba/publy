@@ -391,6 +391,9 @@ public class SettingsReaderCurrent extends DefaultHandler implements SettingsRea
             case "warnMandatoryFieldIgnored":
                 settings.getConsoleSettings().setWarnMandatoryFieldIgnored(Boolean.parseBoolean(text));
                 break;
+            case "warnPossibleMistakenAbbreviation":
+                settings.getConsoleSettings().setWarnPossibleMistakenAbbreviation(Boolean.parseBoolean(text));
+                break;
             case "showLogs":
                 settings.getConsoleSettings().setShowLogs(Boolean.parseBoolean(text));
                 break;
