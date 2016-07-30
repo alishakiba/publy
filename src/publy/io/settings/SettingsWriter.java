@@ -33,13 +33,10 @@ import publy.data.settings.GeneralSettings;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
 import publy.Constants;
+import publy.data.category.conditions.FieldCondition;
 import publy.io.ResourceLocator;
 import publy.io.TempWriter;
 
-/**
- *
- *
- */
 public class SettingsWriter {
 
     public static void writeSettings(Settings settings) throws IOException {
@@ -233,11 +230,11 @@ public class SettingsWriter {
         if (condition instanceof TypeCondition) {
             output(out, indent, "TypeCondition", makeCData(((TypeCondition) condition).getTypes()), "inverted", makeString(condition.isInverted()));
         } else if (condition instanceof FieldExistsCondition) {
-            output(out, indent, "FieldExistsCondition", "", "inverted", makeString(condition.isInverted()), "field", ((FieldExistsCondition) condition).getField());
+            output(out, indent, "FieldExistsCondition", "", "inverted", makeString(condition.isInverted()), "field", ((FieldCondition) condition).getField());
         } else if (condition instanceof FieldEqualsCondition) {
-            output(out, indent, "FieldEqualsCondition", makeCData(((FieldEqualsCondition) condition).getValues()), "inverted", makeString(condition.isInverted()), "field", ((FieldEqualsCondition) condition).getField());
+            output(out, indent, "FieldEqualsCondition", makeCData(((FieldEqualsCondition) condition).getValues()), "inverted", makeString(condition.isInverted()), "field", ((FieldCondition) condition).getField());
         } else if (condition instanceof FieldContainsCondition) {
-            output(out, indent, "FieldContainsCondition", makeCData(((FieldContainsCondition) condition).getValues()), "inverted", makeString(condition.isInverted()), "field", ((FieldContainsCondition) condition).getField());
+            output(out, indent, "FieldContainsCondition", makeCData(((FieldContainsCondition) condition).getValues()), "inverted", makeString(condition.isInverted()), "field", ((FieldCondition) condition).getField());
         } else {
             throw new AssertionError("Unknown condition type: " + condition);
         }
@@ -346,5 +343,8 @@ public class SettingsWriter {
         }
 
         return "<![CDATA[" + sb.toString() + "]]>";
+    }
+
+    private SettingsWriter() {
     }
 }
