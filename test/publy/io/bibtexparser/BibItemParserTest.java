@@ -75,7 +75,7 @@ public class BibItemParserTest {
                         return this;
                     }
                 }).init(), 2},
-            new Object[]{"comment{Comment\n\t  \t}", new BibItem("comment", null), 2},
+            new Object[]{"comment{Comment\n\t  \t}", new BibItem("comment", null), 1}, // Control needs to go back to the list parser, because BibTeX still parses stuff inside
             new Object[]{"comment{C{{o}m{m}}}ent}", new BibItem("comment", null), 1},
             new Object[]{"article{test, title = \"Title1\"}",
                 (new BibItem("article", "test") {
