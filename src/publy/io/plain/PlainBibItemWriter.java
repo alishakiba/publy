@@ -322,7 +322,7 @@ public class PlainBibItemWriter extends BibItemWriter {
                 indent();
                 return;
             } else {
-                Console.error("No editor or organization found for entry \"%s\".", item.getId());
+                Console.error("No editor or organization found for @proceedings entry \"%s\".", item.getId());
                 return;
             }
         } else {

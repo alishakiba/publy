@@ -412,7 +412,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 output(indentString + "<span class=\"organization\">", get(item, "organization"), "</span>.", true);
                 return;
             } else {
-                Console.error("No editor or organization found for entry \"%s\".", item.getId());
+                Console.error("No editor or organization found for @proceedings entry \"%s\".", item.getId());
                 return;
             }
         } else {
