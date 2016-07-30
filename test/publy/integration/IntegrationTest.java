@@ -73,8 +73,14 @@ public class IntegrationTest {
         Settings.setSettingsPath(inputDir.resolve("TestSettings.xml"));
 
         try {
-            // Run the show
-            PublicationListGenerator.generatePublicationList((new SettingsReaderCurrent()).parseSettings());
+            Settings settings = (new SettingsReaderCurrent()).parseSettings();
+            
+            // Make it quiet
+            settings.getConsoleSettings().setShowLogs(false);
+            settings.getConsoleSettings().setShowWarnings(false);
+            Console.setSettings(settings.getConsoleSettings());
+            
+            PublicationListGenerator.generatePublicationList(settings);
         } catch (IOException ex) {
             fail("Exception while parsing: " + ex);
             ex.printStackTrace();
