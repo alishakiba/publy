@@ -59,6 +59,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
         missingReferencesCheckBox.setSelected(settings.isWarnMissingReferences());
         notAuthorCheckBox.setSelected(settings.isWarnNotAuthor());
         noCategoryCheckBox.setSelected(settings.isWarnNoCategoryForItem());
+        possibleMistakenAbbreviationCheckBox.setSelected(settings.isWarnPossibleMistakenAbbreviation());
         
         // Progress
         progressCheckBox.setSelected(settings.isShowLogs());
@@ -73,6 +74,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
         missingReferencesCheckBox.setEnabled(settings.isShowWarnings());
         notAuthorCheckBox.setEnabled(settings.isShowWarnings());
         noCategoryCheckBox.setEnabled(settings.isShowWarnings());
+        possibleMistakenAbbreviationCheckBox.setEnabled(settings.isShowWarnings());
     }
     
     /**
@@ -98,6 +100,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
         noCategoryCheckBox = new javax.swing.JCheckBox();
         debugCheckBox = new javax.swing.JCheckBox();
         duplicateIDCheckBox = new javax.swing.JCheckBox();
+        possibleMistakenAbbreviationCheckBox = new javax.swing.JCheckBox();
 
         warnHeader.setText("Warnings");
 
@@ -161,6 +164,13 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        possibleMistakenAbbreviationCheckBox.setText("For likely mistakes with abbreviations");
+        possibleMistakenAbbreviationCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                possibleMistakenAbbreviationCheckBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -176,20 +186,24 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
                             .addComponent(noCategoryCheckBox)
                             .addComponent(duplicateIDCheckBox)
                             .addComponent(warnCheckBox)
-                            .addComponent(progressCheckBox)
-                            .addComponent(debugCheckBox)
-                            .addComponent(stackTraceCheckBox))
+                            .addComponent(possibleMistakenAbbreviationCheckBox))
                         .addContainerGap(10, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(debugHeader)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(debugSeparator))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(warnHeader)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(warnSeparator))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(progressCheckBox)
+                                    .addComponent(debugCheckBox)
+                                    .addComponent(stackTraceCheckBox)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(debugHeader)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(debugSeparator))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(progressHeader)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -213,6 +227,8 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
                 .addComponent(notAuthorCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(noCategoryCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(possibleMistakenAbbreviationCheckBox)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(progressHeader)
@@ -264,6 +280,10 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
         settings.setWarnDuplicateIDs(duplicateIDCheckBox.isSelected());
     }//GEN-LAST:event_duplicateIDCheckBoxActionPerformed
 
+    private void possibleMistakenAbbreviationCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_possibleMistakenAbbreviationCheckBoxActionPerformed
+        settings.setWarnPossibleMistakenAbbreviation(possibleMistakenAbbreviationCheckBox.isSelected());
+    }//GEN-LAST:event_possibleMistakenAbbreviationCheckBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox debugCheckBox;
     private javax.swing.JLabel debugHeader;
@@ -272,6 +292,7 @@ public class ConsoleSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox missingReferencesCheckBox;
     private javax.swing.JCheckBox noCategoryCheckBox;
     private javax.swing.JCheckBox notAuthorCheckBox;
+    private javax.swing.JCheckBox possibleMistakenAbbreviationCheckBox;
     private javax.swing.JCheckBox progressCheckBox;
     private javax.swing.JLabel progressHeader;
     private javax.swing.JSeparator progressSeparator;

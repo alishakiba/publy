@@ -217,6 +217,7 @@ public class SettingsWriter {
         output(out, 4, "warnNotAuthor", makeString(settings.isWarnNotAuthor()));
         output(out, 4, "warnNoCategoryForItem", makeString(settings.isWarnNoCategoryForItem()));
         output(out, 4, "warnMandatoryFieldIgnored", makeString(settings.isWarnMandatoryFieldIgnored()));
+        output(out, 4, "warnPossibleMistakenAbbreviation", makeString(settings.isWarnPossibleMistakenAbbreviation()));
         output(out, 4, "showLogs", makeString(settings.isShowLogs()));
         output(out, 4, "showDebugLog", makeString(settings.isShowDebugLog()));
         output(out, 4, "showStackTraces", makeString(settings.isShowStackTraces()));
