@@ -79,7 +79,7 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         // Header
         if (settings.getFileSettings().getHeader() == null) {
             publy.Console.error("No header found. The generated HTML file will not be valid.");
-            
+
             // Write the generated comment
             out.write("<!-- " + GENERATED_COMMENT + " -->");
             out.newLine();
@@ -169,13 +169,16 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     private void copyHeader(Path headerFile, BufferedWriter out) throws IOException {
         try (BufferedReader reader = Files.newBufferedReader(headerFile, Charset.forName("UTF-8"))) {
             String line = reader.readLine();
-            out.write(line);
-            out.newLine();
 
-            if (!line.toLowerCase().contains("doctype")) {
+            if (line != null) {
+                out.write(line);
+                out.newLine();
+            }
+
+            if (line == null || !line.toLowerCase().contains("doctype")) {
                 Console.warn(Console.WarningType.OTHER, "The first line of the header does not include a DOCTYPE declaration. This may prevent the generated HTML file from displaying properly in all browsers.");
             }
-            
+
             // Generated file warning. This needs to be after the
             // DOCTYPE, otherwise it triggers quirks mode in older
             // versions of IE.
