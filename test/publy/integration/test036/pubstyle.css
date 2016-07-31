@@ -30,6 +30,13 @@ h3 {
     margin-top: 1em;
 }
 
+/* Place images to the right */
+.bibentry>img {
+    float: right;
+    height: 5em;
+    margin-right: 0.7em;
+}
+
 /* Paper titles */
 h4.title {
     display: inline;

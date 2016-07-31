@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<publysettings majorversion="0" minorversion="10">
+<publysettings majorversion="1" minorversion="2">
   <!-- File settings -->
   <fileSettings>
     <publications>testOutput/test097/publications.bib</publications>
     <target>testOutput/test097/TestPublications.html</target>
+    <openOutput>true</openOutput>
     <header></header>
     <footer></footer>
   </fileSettings>
@@ -119,12 +120,12 @@
   <!-- General settings -->
   <generalSettings>
     <myNames><![CDATA[Verdonschot, Sander]]></myNames>
-    <nameDisplay>FULL</nameDisplay>
+    <nameDisplay>NONE</nameDisplay>
     <reverseNames>false</reverseNames>
     <listAllAuthors>true</listAllAuthors>
     <titleFirst>true</titleFirst>
     <useNewLines>true</useNewLines>
-    <numbering>NO_NUMBERS</numbering>
+    <numbering>WITHIN_CATEGORIES</numbering>
     <reverseNumbering>false</reverseNumbering>
     <grouping>NO_GROUPING</grouping>
     <groupWithinCategories>true</groupWithinCategories>
@@ -137,11 +138,11 @@
     <generateBibtexVersion>true</generateBibtexVersion>
     <linkToAlternateVersions>false</linkToAlternateVersions>
     <navPlacement>TOP_AND_BOTTOM</navPlacement>
-    <includeAbstract>ALL</includeAbstract>
-    <includeBibtex>ARXIV</includeBibtex>
-    <includePaper>ARXIV</includePaper>
+    <includeAbstract>NONE</includeAbstract>
+    <includeBibtex>ALL</includeBibtex>
+    <includePaper>ALL</includePaper>
     <titleTarget>NONE</titleTarget>
-    <presentedText><![CDATA[]]></presentedText>
+    <presentedText><![CDATA[TestString]]></presentedText>
     <googleAnalyticsUser><![CDATA[]]></googleAnalyticsUser>
   </htmlSettings>
 
@@ -153,6 +154,7 @@
     <warnNotAuthor>false</warnNotAuthor>
     <warnNoCategoryForItem>true</warnNoCategoryForItem>
     <warnMandatoryFieldIgnored>true</warnMandatoryFieldIgnored>
+    <warnPossibleMistakenAbbreviation>true</warnPossibleMistakenAbbreviation>
     <showLogs>true</showLogs>
     <showDebugLog>false</showDebugLog>
     <showStackTraces>true</showStackTraces>

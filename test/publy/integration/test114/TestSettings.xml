@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<publysettings majorversion="0" minorversion="10">
+<publysettings majorversion="1" minorversion="2">
   <!-- File settings -->
   <fileSettings>
     <publications>testOutput/test114/publications.bib</publications>
     <target>testOutput/test114/TestPublications.html</target>
+    <openOutput>true</openOutput>
     <header></header>
     <footer></footer>
   </fileSettings>
@@ -119,9 +120,9 @@
   <!-- General settings -->
   <generalSettings>
     <myNames><![CDATA[Verdonschot, Sander]]></myNames>
-    <nameDisplay>FULL</nameDisplay>
-    <reverseNames>false</reverseNames>
-    <listAllAuthors>true</listAllAuthors>
+    <nameDisplay>INITIAL</nameDisplay>
+    <reverseNames>true</reverseNames>
+    <listAllAuthors>false</listAllAuthors>
     <titleFirst>true</titleFirst>
     <useNewLines>true</useNewLines>
     <numbering>NO_NUMBERS</numbering>
@@ -134,15 +135,15 @@
   <htmlSettings>
     <theme>data/themes/Minimalist.css</theme>
     <generateTextVersion>true</generateTextVersion>
-    <generateBibtexVersion>true</generateBibtexVersion>
-    <linkToAlternateVersions>false</linkToAlternateVersions>
+    <generateBibtexVersion>false</generateBibtexVersion>
+    <linkToAlternateVersions>true</linkToAlternateVersions>
     <navPlacement>TOP</navPlacement>
-    <includeAbstract>ALL</includeAbstract>
-    <includeBibtex>ARXIV</includeBibtex>
-    <includePaper>ARXIV</includePaper>
+    <includeAbstract>NONE</includeAbstract>
+    <includeBibtex>ALL</includeBibtex>
+    <includePaper>NONE</includePaper>
     <titleTarget>NONE</titleTarget>
-    <presentedText><![CDATA[]]></presentedText>
-    <googleAnalyticsUser><![CDATA[]]></googleAnalyticsUser>
+    <presentedText><![CDATA[TestString]]></presentedText>
+    <googleAnalyticsUser><![CDATA[TestString]]></googleAnalyticsUser>
   </htmlSettings>
 
   <!-- Console settings -->
@@ -153,6 +154,7 @@
     <warnNotAuthor>false</warnNotAuthor>
     <warnNoCategoryForItem>true</warnNoCategoryForItem>
     <warnMandatoryFieldIgnored>true</warnMandatoryFieldIgnored>
+    <warnPossibleMistakenAbbreviation>true</warnPossibleMistakenAbbreviation>
     <showLogs>true</showLogs>
     <showDebugLog>false</showDebugLog>
     <showStackTraces>true</showStackTraces>

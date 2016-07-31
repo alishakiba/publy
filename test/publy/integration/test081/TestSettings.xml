@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<publysettings majorversion="0" minorversion="10">
+<publysettings majorversion="1" minorversion="2">
   <!-- File settings -->
   <fileSettings>
     <publications>testOutput/test081/publications.bib</publications>
     <target>testOutput/test081/TestPublications.html</target>
+    <openOutput>true</openOutput>
     <header></header>
     <footer></footer>
   </fileSettings>
@@ -120,27 +121,27 @@
   <generalSettings>
     <myNames><![CDATA[Verdonschot, Sander]]></myNames>
     <nameDisplay>FULL</nameDisplay>
-    <reverseNames>false</reverseNames>
+    <reverseNames>true</reverseNames>
     <listAllAuthors>true</listAllAuthors>
-    <titleFirst>true</titleFirst>
-    <useNewLines>true</useNewLines>
-    <numbering>NO_NUMBERS</numbering>
-    <reverseNumbering>true</reverseNumbering>
+    <titleFirst>false</titleFirst>
+    <useNewLines>false</useNewLines>
+    <numbering>WITHIN_CATEGORIES</numbering>
+    <reverseNumbering>false</reverseNumbering>
     <grouping>NO_GROUPING</grouping>
     <groupWithinCategories>true</groupWithinCategories>
   </generalSettings>
 
   <!-- HTML-specific settings -->
   <htmlSettings>
-    <theme>data/themes/Minimalist.css</theme>
-    <generateTextVersion>true</generateTextVersion>
-    <generateBibtexVersion>true</generateBibtexVersion>
-    <linkToAlternateVersions>false</linkToAlternateVersions>
-    <navPlacement>TOP</navPlacement>
+    <theme>data/themes/Purple.css</theme>
+    <generateTextVersion>false</generateTextVersion>
+    <generateBibtexVersion>false</generateBibtexVersion>
+    <linkToAlternateVersions>true</linkToAlternateVersions>
+    <navPlacement>BEFORE_SECTION_TITLE</navPlacement>
     <includeAbstract>ALL</includeAbstract>
-    <includeBibtex>ARXIV</includeBibtex>
-    <includePaper>ARXIV</includePaper>
-    <titleTarget>NONE</titleTarget>
+    <includeBibtex>ALL</includeBibtex>
+    <includePaper>NONE</includePaper>
+    <titleTarget>ABSTRACT</titleTarget>
     <presentedText><![CDATA[]]></presentedText>
     <googleAnalyticsUser><![CDATA[]]></googleAnalyticsUser>
   </htmlSettings>
@@ -153,6 +154,7 @@
     <warnNotAuthor>false</warnNotAuthor>
     <warnNoCategoryForItem>true</warnNoCategoryForItem>
     <warnMandatoryFieldIgnored>true</warnMandatoryFieldIgnored>
+    <warnPossibleMistakenAbbreviation>true</warnPossibleMistakenAbbreviation>
     <showLogs>true</showLogs>
     <showDebugLog>false</showDebugLog>
     <showStackTraces>true</showStackTraces>

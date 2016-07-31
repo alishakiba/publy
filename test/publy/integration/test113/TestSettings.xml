@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<publysettings majorversion="0" minorversion="10">
+<publysettings majorversion="1" minorversion="2">
   <!-- File settings -->
   <fileSettings>
     <publications>testOutput/test113/publications.bib</publications>
     <target>testOutput/test113/TestPublications.html</target>
+    <openOutput>true</openOutput>
     <header></header>
     <footer></footer>
   </fileSettings>
@@ -121,28 +122,28 @@
     <myNames><![CDATA[Verdonschot, Sander]]></myNames>
     <nameDisplay>FULL</nameDisplay>
     <reverseNames>false</reverseNames>
-    <listAllAuthors>true</listAllAuthors>
-    <titleFirst>true</titleFirst>
+    <listAllAuthors>false</listAllAuthors>
+    <titleFirst>false</titleFirst>
     <useNewLines>true</useNewLines>
     <numbering>NO_NUMBERS</numbering>
-    <reverseNumbering>false</reverseNumbering>
-    <grouping>NO_GROUPING</grouping>
-    <groupWithinCategories>true</groupWithinCategories>
+    <reverseNumbering>true</reverseNumbering>
+    <grouping>GROUP_BY_YEAR</grouping>
+    <groupWithinCategories>false</groupWithinCategories>
   </generalSettings>
 
   <!-- HTML-specific settings -->
   <htmlSettings>
     <theme>data/themes/Minimalist.css</theme>
-    <generateTextVersion>true</generateTextVersion>
+    <generateTextVersion>false</generateTextVersion>
     <generateBibtexVersion>true</generateBibtexVersion>
-    <linkToAlternateVersions>false</linkToAlternateVersions>
-    <navPlacement>TOP</navPlacement>
-    <includeAbstract>ALL</includeAbstract>
-    <includeBibtex>ARXIV</includeBibtex>
+    <linkToAlternateVersions>true</linkToAlternateVersions>
+    <navPlacement>BEFORE_SECTION_TITLE</navPlacement>
+    <includeAbstract>NONE</includeAbstract>
+    <includeBibtex>PUBLISHED</includeBibtex>
     <includePaper>ACCEPTED</includePaper>
-    <titleTarget>NONE</titleTarget>
-    <presentedText><![CDATA[]]></presentedText>
-    <googleAnalyticsUser><![CDATA[]]></googleAnalyticsUser>
+    <titleTarget>PAPER</titleTarget>
+    <presentedText><![CDATA[TestString]]></presentedText>
+    <googleAnalyticsUser><![CDATA[TestString]]></googleAnalyticsUser>
   </htmlSettings>
 
   <!-- Console settings -->
@@ -153,6 +154,7 @@
     <warnNotAuthor>false</warnNotAuthor>
     <warnNoCategoryForItem>true</warnNoCategoryForItem>
     <warnMandatoryFieldIgnored>true</warnMandatoryFieldIgnored>
+    <warnPossibleMistakenAbbreviation>true</warnPossibleMistakenAbbreviation>
     <showLogs>true</showLogs>
     <showDebugLog>false</showDebugLog>
     <showStackTraces>true</showStackTraces>

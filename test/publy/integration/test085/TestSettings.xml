@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<publysettings majorversion="0" minorversion="10">
+<publysettings majorversion="1" minorversion="2">
   <!-- File settings -->
   <fileSettings>
     <publications>testOutput/test085/publications.bib</publications>
     <target>testOutput/test085/TestPublications.html</target>
+    <openOutput>true</openOutput>
     <header></header>
     <footer></footer>
   </fileSettings>
@@ -119,28 +120,28 @@
   <!-- General settings -->
   <generalSettings>
     <myNames><![CDATA[Verdonschot, Sander]]></myNames>
-    <nameDisplay>FULL</nameDisplay>
-    <reverseNames>false</reverseNames>
-    <listAllAuthors>true</listAllAuthors>
-    <titleFirst>true</titleFirst>
+    <nameDisplay>NONE</nameDisplay>
+    <reverseNames>true</reverseNames>
+    <listAllAuthors>false</listAllAuthors>
+    <titleFirst>false</titleFirst>
     <useNewLines>true</useNewLines>
-    <numbering>NO_NUMBERS</numbering>
+    <numbering>GLOBAL</numbering>
     <reverseNumbering>false</reverseNumbering>
-    <grouping>GROUP_BY_YEAR</grouping>
+    <grouping>NO_GROUPING</grouping>
     <groupWithinCategories>true</groupWithinCategories>
   </generalSettings>
 
   <!-- HTML-specific settings -->
   <htmlSettings>
-    <theme>data/themes/Minimalist.css</theme>
+    <theme>data/themes/Purple.css</theme>
     <generateTextVersion>true</generateTextVersion>
     <generateBibtexVersion>true</generateBibtexVersion>
     <linkToAlternateVersions>false</linkToAlternateVersions>
-    <navPlacement>TOP</navPlacement>
-    <includeAbstract>ALL</includeAbstract>
+    <navPlacement>BEFORE_SECTION_AND_BOTTOM</navPlacement>
+    <includeAbstract>NONE</includeAbstract>
     <includeBibtex>ARXIV</includeBibtex>
-    <includePaper>ARXIV</includePaper>
-    <titleTarget>NONE</titleTarget>
+    <includePaper>ALL</includePaper>
+    <titleTarget>ABSTRACT</titleTarget>
     <presentedText><![CDATA[]]></presentedText>
     <googleAnalyticsUser><![CDATA[]]></googleAnalyticsUser>
   </htmlSettings>
@@ -153,6 +154,7 @@
     <warnNotAuthor>false</warnNotAuthor>
     <warnNoCategoryForItem>true</warnNoCategoryForItem>
     <warnMandatoryFieldIgnored>true</warnMandatoryFieldIgnored>
+    <warnPossibleMistakenAbbreviation>true</warnPossibleMistakenAbbreviation>
     <showLogs>true</showLogs>
     <showDebugLog>false</showDebugLog>
     <showStackTraces>true</showStackTraces>

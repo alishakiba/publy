@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<publysettings majorversion="0" minorversion="10">
+<publysettings majorversion="1" minorversion="2">
   <!-- File settings -->
   <fileSettings>
     <publications>testOutput/test075/publications.bib</publications>
     <target>testOutput/test075/TestPublications.html</target>
+    <openOutput>true</openOutput>
     <header></header>
     <footer></footer>
   </fileSettings>
@@ -119,30 +120,30 @@
   <!-- General settings -->
   <generalSettings>
     <myNames><![CDATA[Verdonschot, Sander]]></myNames>
-    <nameDisplay>FULL</nameDisplay>
-    <reverseNames>false</reverseNames>
-    <listAllAuthors>true</listAllAuthors>
-    <titleFirst>false</titleFirst>
+    <nameDisplay>INITIAL</nameDisplay>
+    <reverseNames>true</reverseNames>
+    <listAllAuthors>false</listAllAuthors>
+    <titleFirst>true</titleFirst>
     <useNewLines>true</useNewLines>
-    <numbering>NO_NUMBERS</numbering>
-    <reverseNumbering>false</reverseNumbering>
-    <grouping>NO_GROUPING</grouping>
-    <groupWithinCategories>true</groupWithinCategories>
+    <numbering>WITHIN_CATEGORIES</numbering>
+    <reverseNumbering>true</reverseNumbering>
+    <grouping>GROUP_BY_YEAR</grouping>
+    <groupWithinCategories>false</groupWithinCategories>
   </generalSettings>
 
   <!-- HTML-specific settings -->
   <htmlSettings>
     <theme>data/themes/Minimalist.css</theme>
-    <generateTextVersion>true</generateTextVersion>
-    <generateBibtexVersion>true</generateBibtexVersion>
-    <linkToAlternateVersions>false</linkToAlternateVersions>
-    <navPlacement>TOP</navPlacement>
-    <includeAbstract>ALL</includeAbstract>
-    <includeBibtex>ARXIV</includeBibtex>
-    <includePaper>ARXIV</includePaper>
-    <titleTarget>NONE</titleTarget>
+    <generateTextVersion>false</generateTextVersion>
+    <generateBibtexVersion>false</generateBibtexVersion>
+    <linkToAlternateVersions>true</linkToAlternateVersions>
+    <navPlacement>TOP_AND_BOTTOM</navPlacement>
+    <includeAbstract>NONE</includeAbstract>
+    <includeBibtex>ACCEPTED</includeBibtex>
+    <includePaper>ALL</includePaper>
+    <titleTarget>PAPER</titleTarget>
     <presentedText><![CDATA[]]></presentedText>
-    <googleAnalyticsUser><![CDATA[]]></googleAnalyticsUser>
+    <googleAnalyticsUser><![CDATA[TestString]]></googleAnalyticsUser>
   </htmlSettings>
 
   <!-- Console settings -->
@@ -153,6 +154,7 @@
     <warnNotAuthor>false</warnNotAuthor>
     <warnNoCategoryForItem>true</warnNoCategoryForItem>
     <warnMandatoryFieldIgnored>true</warnMandatoryFieldIgnored>
+    <warnPossibleMistakenAbbreviation>true</warnPossibleMistakenAbbreviation>
     <showLogs>true</showLogs>
     <showDebugLog>false</showDebugLog>
     <showStackTraces>true</showStackTraces>

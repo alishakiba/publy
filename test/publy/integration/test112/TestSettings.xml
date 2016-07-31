@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<publysettings majorversion="0" minorversion="10">
+<publysettings majorversion="1" minorversion="2">
   <!-- File settings -->
   <fileSettings>
     <publications>testOutput/test112/publications.bib</publications>
     <target>testOutput/test112/TestPublications.html</target>
+    <openOutput>true</openOutput>
     <header></header>
     <footer></footer>
   </fileSettings>
@@ -119,10 +120,10 @@
   <!-- General settings -->
   <generalSettings>
     <myNames><![CDATA[Verdonschot, Sander]]></myNames>
-    <nameDisplay>FULL</nameDisplay>
-    <reverseNames>false</reverseNames>
-    <listAllAuthors>true</listAllAuthors>
-    <titleFirst>true</titleFirst>
+    <nameDisplay>INITIAL</nameDisplay>
+    <reverseNames>true</reverseNames>
+    <listAllAuthors>false</listAllAuthors>
+    <titleFirst>false</titleFirst>
     <useNewLines>true</useNewLines>
     <numbering>NO_NUMBERS</numbering>
     <reverseNumbering>false</reverseNumbering>
@@ -135,13 +136,13 @@
     <theme>data/themes/Minimalist.css</theme>
     <generateTextVersion>true</generateTextVersion>
     <generateBibtexVersion>true</generateBibtexVersion>
-    <linkToAlternateVersions>false</linkToAlternateVersions>
+    <linkToAlternateVersions>true</linkToAlternateVersions>
     <navPlacement>TOP</navPlacement>
-    <includeAbstract>ALL</includeAbstract>
-    <includeBibtex>ARXIV</includeBibtex>
+    <includeAbstract>ARXIV</includeAbstract>
+    <includeBibtex>NONE</includeBibtex>
     <includePaper>PUBLISHED</includePaper>
-    <titleTarget>NONE</titleTarget>
-    <presentedText><![CDATA[]]></presentedText>
+    <titleTarget>ABSTRACT</titleTarget>
+    <presentedText><![CDATA[TestString]]></presentedText>
     <googleAnalyticsUser><![CDATA[]]></googleAnalyticsUser>
   </htmlSettings>
 
@@ -153,6 +154,7 @@
     <warnNotAuthor>false</warnNotAuthor>
     <warnNoCategoryForItem>true</warnNoCategoryForItem>
     <warnMandatoryFieldIgnored>true</warnMandatoryFieldIgnored>
+    <warnPossibleMistakenAbbreviation>true</warnPossibleMistakenAbbreviation>
     <showLogs>true</showLogs>
     <showDebugLog>false</showDebugLog>
     <showStackTraces>true</showStackTraces>
