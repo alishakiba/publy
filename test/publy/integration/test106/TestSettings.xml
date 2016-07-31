@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<publysettings majorversion="0" minorversion="10">
+<publysettings majorversion="1" minorversion="2">
   <!-- File settings -->
   <fileSettings>
     <publications>testOutput/test106/publications.bib</publications>
     <target>testOutput/test106/TestPublications.html</target>
+    <openOutput>true</openOutput>
     <header></header>
     <footer></footer>
   </fileSettings>
@@ -119,12 +120,12 @@
   <!-- General settings -->
   <generalSettings>
     <myNames><![CDATA[Verdonschot, Sander]]></myNames>
-    <nameDisplay>FULL</nameDisplay>
-    <reverseNames>false</reverseNames>
+    <nameDisplay>NONE</nameDisplay>
+    <reverseNames>true</reverseNames>
     <listAllAuthors>true</listAllAuthors>
-    <titleFirst>true</titleFirst>
-    <useNewLines>true</useNewLines>
-    <numbering>NO_NUMBERS</numbering>
+    <titleFirst>false</titleFirst>
+    <useNewLines>false</useNewLines>
+    <numbering>GLOBAL</numbering>
     <reverseNumbering>false</reverseNumbering>
     <grouping>NO_GROUPING</grouping>
     <groupWithinCategories>true</groupWithinCategories>
@@ -133,14 +134,14 @@
   <!-- HTML-specific settings -->
   <htmlSettings>
     <theme>data/themes/Minimalist.css</theme>
-    <generateTextVersion>true</generateTextVersion>
-    <generateBibtexVersion>true</generateBibtexVersion>
+    <generateTextVersion>false</generateTextVersion>
+    <generateBibtexVersion>false</generateBibtexVersion>
     <linkToAlternateVersions>false</linkToAlternateVersions>
-    <navPlacement>TOP</navPlacement>
-    <includeAbstract>ALL</includeAbstract>
+    <navPlacement>BEFORE_SECTION_AND_BOTTOM</navPlacement>
+    <includeAbstract>NONE</includeAbstract>
     <includeBibtex>NONE</includeBibtex>
-    <includePaper>ARXIV</includePaper>
-    <titleTarget>NONE</titleTarget>
+    <includePaper>ALL</includePaper>
+    <titleTarget>ABSTRACT</titleTarget>
     <presentedText><![CDATA[]]></presentedText>
     <googleAnalyticsUser><![CDATA[]]></googleAnalyticsUser>
   </htmlSettings>
@@ -153,6 +154,7 @@
     <warnNotAuthor>false</warnNotAuthor>
     <warnNoCategoryForItem>true</warnNoCategoryForItem>
     <warnMandatoryFieldIgnored>true</warnMandatoryFieldIgnored>
+    <warnPossibleMistakenAbbreviation>true</warnPossibleMistakenAbbreviation>
     <showLogs>true</showLogs>
     <showDebugLog>false</showDebugLog>
     <showStackTraces>true</showStackTraces>

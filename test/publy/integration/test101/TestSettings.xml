@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<publysettings majorversion="0" minorversion="10">
+<publysettings majorversion="1" minorversion="2">
   <!-- File settings -->
   <fileSettings>
     <publications>testOutput/test101/publications.bib</publications>
     <target>testOutput/test101/TestPublications.html</target>
+    <openOutput>true</openOutput>
     <header></header>
     <footer></footer>
   </fileSettings>
@@ -119,29 +120,29 @@
   <!-- General settings -->
   <generalSettings>
     <myNames><![CDATA[Verdonschot, Sander]]></myNames>
-    <nameDisplay>FULL</nameDisplay>
+    <nameDisplay>INITIAL</nameDisplay>
     <reverseNames>false</reverseNames>
     <listAllAuthors>true</listAllAuthors>
     <titleFirst>true</titleFirst>
     <useNewLines>true</useNewLines>
-    <numbering>NO_NUMBERS</numbering>
-    <reverseNumbering>false</reverseNumbering>
+    <numbering>GLOBAL</numbering>
+    <reverseNumbering>true</reverseNumbering>
     <grouping>NO_GROUPING</grouping>
-    <groupWithinCategories>true</groupWithinCategories>
+    <groupWithinCategories>false</groupWithinCategories>
   </generalSettings>
 
   <!-- HTML-specific settings -->
   <htmlSettings>
-    <theme>data/themes/Minimalist.css</theme>
+    <theme>data/themes/Purple.css</theme>
     <generateTextVersion>true</generateTextVersion>
     <generateBibtexVersion>true</generateBibtexVersion>
-    <linkToAlternateVersions>false</linkToAlternateVersions>
-    <navPlacement>TOP</navPlacement>
-    <includeAbstract>NONE</includeAbstract>
-    <includeBibtex>ARXIV</includeBibtex>
+    <linkToAlternateVersions>true</linkToAlternateVersions>
+    <navPlacement>NO_NAVIGATION</navPlacement>
+    <includeAbstract>ACCEPTED</includeAbstract>
+    <includeBibtex>NONE</includeBibtex>
     <includePaper>ARXIV</includePaper>
-    <titleTarget>NONE</titleTarget>
-    <presentedText><![CDATA[]]></presentedText>
+    <titleTarget>ABSTRACT</titleTarget>
+    <presentedText><![CDATA[TestString]]></presentedText>
     <googleAnalyticsUser><![CDATA[]]></googleAnalyticsUser>
   </htmlSettings>
 
@@ -153,6 +154,7 @@
     <warnNotAuthor>false</warnNotAuthor>
     <warnNoCategoryForItem>true</warnNoCategoryForItem>
     <warnMandatoryFieldIgnored>true</warnMandatoryFieldIgnored>
+    <warnPossibleMistakenAbbreviation>true</warnPossibleMistakenAbbreviation>
     <showLogs>true</showLogs>
     <showDebugLog>false</showDebugLog>
     <showStackTraces>true</showStackTraces>

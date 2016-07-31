@@ -1,85 +1,54 @@
 Currently under review.
 
-   On the average number of edges in theta graphs.
-   Pat Morin and Sander Verdonschot.
-   Submitted to the 11th Meeting on Analytic Algorithmics and Combinatorics (ANALCO14).
+  2014.
 
-   On the number of regular edge labelings.
-   Kevin Buchin, Bettina Speckmann, and Sander Verdonschot.
-   Submitted to Discrete Mathematics & Theoretical Computer Science.
+     On the average number of edges in theta graphs. Morin, Pat and Verdonschot, Sander. Submitted to the 11th Meeting on Analytic Algorithmics and Combinatorics (ANALCO14). 
 
 
 Journal papers.
 
-   Making triangulations 4-connected using flips.
-   Prosenjit Bose, Dana Jansens, André van Renssen, Maria Saumell, and Sander Verdonschot.
-   Computational Geometry: Theory and Applications, 2012.
-   Special issue for CCCG 2011.
+  2012.
+
+     On the number of regular edge labelings. Buchin, Kevin, Speckmann, Bettina, and Verdonschot, Sander. Accepted to Discrete Mathematics & Theoretical Computer Science. 
+     Making triangulations 4-connected using flips. Bose, Prosenjit, Jansens, Dana, van Renssen, André, Saumell, Maria, and Verdonschot, Sander. Computational Geometry: Theory and Applications special issue for CCCG 2011, 2012. 
 
 
 Conference papers.
 
-   Theta-3 is connected.
-   Oswin Aichholzer, Sang Won Bae, Luis Barba, Prosenjit Bose, Matias Korman, André van Renssen, Perouz Taslakian, and Sander Verdonschot.
-   In Proceedings of the 25th Canadian Conference on Computational Geometry (CCCG 2013), pages 205-210, 2013.
+  2013.
 
-   On the spanning ratio of theta-graphs.
-   Prosenjit Bose, André van Renssen, and Sander Verdonschot.
-   In Proceedings of the 13th Algorithms and Data Structures Symposium (WADS 2013), 2013.
+     Theta-3 is connected. Aichholzer, Oswin, Bae, Sang Won, Barba, Luis, Bose, Prosenjit, Korman, Matias, van Renssen, André, Taslakian, Perouz, and Verdonschot, Sander. In Proceedings of the 25th Canadian Conference on Computational Geometry (CCCG 2013), pages 205-210, 2013. 
+     On the spanning ratio of theta-graphs. Bose, Prosenjit, van Renssen, André, and Verdonschot, Sander. In Proceedings of the 13th Algorithms and Data Structures Symposium (WADS 2013), 2013. 
+     On the stretch factor of the theta-4 graph. Barba, Luis, Bose, Prosenjit, De Carufel, Jean-Lou, van Renssen, André, and Verdonschot, Sander. In Proceedings of the 13th Algorithms and Data Structures Symposium (WADS 2013), 2013. 
+     The $\theta_5$-graph is a spanner. Bose, Prosenjit, Morin, Pat, van Renssen, André, and Verdonschot, Sander. In Proceedings of the 39th International Workshop on Graph-Theoretic Concepts in Computer Science (WG 2013), 2013. 
 
-   On the stretch factor of the theta-4 graph.
-   Luis Barba, Prosenjit Bose, Jean-Lou De Carufel, André van Renssen, and Sander Verdonschot.
-   In Proceedings of the 13th Algorithms and Data Structures Symposium (WADS 2013), 2013.
+  2012.
 
-   The $\theta_5$-graph is a spanner.
-   Prosenjit Bose, Pat Morin, André van Renssen, and Sander Verdonschot.
-   In Proceedings of the 39th International Workshop on Graph-Theoretic Concepts in Computer Science (WG 2013), 2013.
+     Competitive routing on a bounded-degree plane spanner. Bose, Prosenjit, Fagerberg, Rolf, van Renssen, André, and Verdonschot, Sander. In Proceedings of the 24th Canadian Conference on Computational Geometry (CCCG 2012), pages 299-304, 2012. 
+     Optimal bounds on theta-graphs: more is not always better. Bose, Prosenjit, De Carufel, Jean-Lou, Morin, Pat, van Renssen, André, and Verdonschot, Sander. In Proceedings of the 24th Canadian Conference on Computational Geometry (CCCG 2012), pages 305-310, 2012. 
+     Evolution strategies for optimizing rectangular cartograms. Buchin, Kevin, Speckmann, Bettina, and Verdonschot, Sander. In Proceedings of the 7th International Conference on Geographic Information Science (GIScience 2012), volume 7478 of Lecture Notes in Computer Science, pages 29-42, 2012. 
+     On plane constrained bounded-degree spanners. Bose, Prosenjit, Fagerberg, Rolf, van Renssen, André, and Verdonschot, Sander. In Proceedings of the 10th Latin American Symposium on Theoretical Informatics (LATIN 2012), volume 7256 of Lecture Notes in Computer Science, pages 85-96, 2012. 
+     Competitive routing in the half-$\theta_6$-graph. Bose, Prosenjit, Fagerberg, Rolf, van Renssen, André, and Verdonschot, Sander. In Proceedings of the 23rd ACM-SIAM Symposium on Discrete Algorithms (SODA 2012), pages 1319-1328, 2012. 
 
-   Competitive routing on a bounded-degree plane spanner.
-   Prosenjit Bose, Rolf Fagerberg, André van Renssen, and Sander Verdonschot.
-   In Proceedings of the 24th Canadian Conference on Computational Geometry (CCCG 2012), pages 299-304, 2012.
+  2011.
 
-   Optimal bounds on theta-graphs: more is not always better.
-   Prosenjit Bose, Jean-Lou De Carufel, Pat Morin, André van Renssen, and Sander Verdonschot.
-   In Proceedings of the 24th Canadian Conference on Computational Geometry (CCCG 2012), pages 305-310, 2012.
-
-   Evolution strategies for optimizing rectangular cartograms.
-   Kevin Buchin, Bettina Speckmann, and Sander Verdonschot.
-   In Proceedings of the 7th International Conference on Geographic Information Science (GIScience 2012), pages 29-42, 2012.
-
-   On plane constrained bounded-degree spanners.
-   Prosenjit Bose, Rolf Fagerberg, André van Renssen, and Sander Verdonschot.
-   In Proceedings of the 10th Latin American Symposium on Theoretical Informatics (LATIN 2012), pages 85-96, 2012.
-
-   Competitive routing in the half-$\theta_6$-graph.
-   Prosenjit Bose, Rolf Fagerberg, André van Renssen, and Sander Verdonschot.
-   In Proceedings of the 23rd ACM-SIAM Symposium on Discrete Algorithms (SODA 2012), pages 1319-1328, 2012.
-
-   On rectilinear partitions with minimum stabbing number.
-   Mark de Berg, Amirali Khosravi, Sander Verdonschot, and Vincent van der Weele.
-   In Proceedings of the 12th Algorithms and Data Structures Symposium (WADS 2011), pages 302-313, 2011.
-
-   Making triangulations 4-connected using flips.
-   Prosenjit Bose, Dana Jansens, André van Renssen, Maria Saumell, and Sander Verdonschot.
-   In Proceedings of the 23rd Canadian Conference on Computational Geometry (CCCG 2011), pages 241-247, 2011.
-
-   Optimizing regular edge labelings.
-   Kevin Buchin, Bettina Speckmann, and Sander Verdonschot.
-   In Proceedings of the 18th International Symposium on Graph drawing (GD 2010), pages 117-128, 2011.
+     On rectilinear partitions with minimum stabbing number. de Berg, Mark, Khosravi, Amirali, Verdonschot, Sander, and van der Weele, Vincent. In Proceedings of the 12th Algorithms and Data Structures Symposium (WADS 2011), pages 302-313, 2011. 
+     Making triangulations 4-connected using flips. Bose, Prosenjit, Jansens, Dana, van Renssen, André, Saumell, Maria, and Verdonschot, Sander. In Proceedings of the 23rd Canadian Conference on Computational Geometry (CCCG 2011), pages 241-247, 2011. 
+     Optimizing regular edge labelings. Buchin, Kevin, Speckmann, Bettina, and Verdonschot, Sander. In Proceedings of the 18th International Symposium on Graph drawing (GD 2010), volume 6502 of Lecture Notes in Computer Science, pages 117-128, Heidelberg, 2011. Springer-Verlag. 
 
 
 Chapters in Books.
 
-   A history of flips in combinatorial triangulations.
-   Prosenjit Bose and Sander Verdonschot.
-   In Alberto Márquez, Pedro Ramos, and Jorge Urrutia, editors, Proceedings of the XIV Spanish Meeting on Computational Geometry (EGC 2011), volume 7579 of Lecture Notes in Computer Science, pages 29-44. Springer Berlin Heidelberg, 2012.
+  2012.
+
+     A history of flips in combinatorial triangulations. Bose, Prosenjit and Verdonschot, Sander. In Márquez, Alberto, Ramos, Pedro, and Urrutia, Jorge, editors, Proceedings of the XIV Spanish Meeting on Computational Geometry (EGC 2011), volume 7579 of Lecture Notes in Computer Science, pages 29-44. Springer Berlin Heidelberg, 2012. 
 
 
 Theses.
 
-   Optimizing regular edge labelings.
-   Sander Verdonschot.
-   Master’s thesis, Eindhoven University of Technology, 2010.
+  2010.
+
+     Optimizing regular edge labelings. Verdonschot, Sander. Master’s thesis, Eindhoven University of Technology, 2010. 
 
 
-Generated by Publy 1.2.  Last modified on 20 October 2015.
+Generated by Publy 1.2.  Last modified on 30 July 2016.

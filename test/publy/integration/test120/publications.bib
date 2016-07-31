@@ -1,11 +1,13 @@
--- This is a comment. In fact, any line not starting with '@' or '<' is ignored during parsing.
+-- This is a comment. In fact, anything outside of entries (starting with an "at" symbol) and tags (starting with a "less-than" symbol) is ignored during parsing.
 
 -- Authors
--- Format: <author short="Abbreviation for use in this file" name="Author's name, using LaTeX syntax for special characters">
+-- Format:
+     <author short="Abbreviation for use in this file" name="Author's name, using LaTeX syntax for special characters">
 -- There are a few optional arguments:
 --   url: the author's website
 --   group: a css class that will be applied to this author in the HTML file.
--- Example: <author short="padawan" name="Wan, Pada" url="http://uni.versity.edu/~pada/" group="student">
+-- Example:
+     <author short="padawan" name="Wan, Pada" url="http://uni.versity.edu/~pada/" group="student">
 -- This author can be added to a publication by writing <<padawan>> in the author or editor field of a bibtex entry.
 <author short="me"         name="Verdonschot, Sander"     url="http://cg.scs.carleton.ca/~sander/">
 <author short="oswin"      name="Aichholzer, Oswin"       url="http://www.ist.tugraz.at/staff/aichholzer/">
@@ -27,9 +29,10 @@
 <author short="vincent"    name="van der Weele, Vincent">
 
 -- Abbreviations
--- Format: <abbr short="abbreviation for use in this file" full="expanded text">
+-- Format:
+     <abbr short="abbreviation for use in this file" full="expanded text">
 -- Abbreviations are invoked in the same way as authors, except they can occur in every field and get expanded first.
--- This means that abbreviations can contain author links (<abbr short="Group" full="<<a>> and <<b>>">), but not the other way around.
+-- This means that abbreviations can contain author links (<abbr short="Group" full="<<me>> and <<padawan>>">), but not the other way around.
 <abbr short="proc" full="Proceedings of the">
 
 -- Conferences
@@ -49,18 +52,14 @@
 
 -- Journals
 <abbr short="cgta" full="Computational Geometry: Theory and Applications">
-<abbr short="dmtcs" full="Discrete Mathematics & Theoretical Computer Science">
+<abbr short="dmtcs" full="Discrete Mathematics {\&} Theoretical Computer Science">
 <abbr short="ijcga" full="International Journal of Computational Geometry and Applications">
 <abbr short="jap" full="Journal of Applied Probability">
 <abbr short="jocg" full="Journal of Computational Geometry">
 <abbr short="lncs" full="Lecture Notes in Computer Science">
 
 -- Publications (in the order you want them to appear in your list of publications; Publy does not sort these)
--- Format: standard BibTeX format, with a few exceptions and additions:
---   @String is not supported (use the abbr tag instead)
---   Concatenation (via '#') is not supported
---   Crossref is not supported
---  
+-- Format: standard BibTeX format, with a few additions:
 --   The above defined author abbreviations can be used in the "author" and "editor" fields: author={<<a>> and <<b>>}
 --   The above defined abbreviations can be used in the value of any field (i.e. not in the type or identifier): booktitle={<<proc>> <<soda>>}
 --
@@ -72,12 +71,14 @@
 --     arxiv={1212.0570 [cs.cg]}
 --   doi: The DOI of the paper.
 --     doi={10.1007/978-3-642-33024-7_3}
+--   image: An image that is displayed next to the citation information. Recommended formats are SVG for vector drawings, and PNG for raster images. JPEG, GIF, and BMP are also widely supported.
+--     image={images/paper10.svg}
 --   link: An arbitrary link. Consists of an anchor text, followed by either a relative path locating a file on the website, a "#" followed by the bibtex identifier of another publication in this list, or a fully qualified url to an external resource. Examples:
 --     link={Anchor|images/anchor.png}
 --     link2={Slides (pdf)|slides/AwesomeTalk.pdf}
 --     link3={Full version|#fullversion}
 --     link4={Demonstration|http://www.youtube.com/watch?v=SomeVideo}
---     link5={Corresponding author|mailto:author@example.com}
+--     link5={Corresponding author|mailto:author (at) example.com}
 --   pubstate: The status of the manuscript. Possible values are:
 --     "inpreparation" for manuscripts being prepared for publication,
 --     "submitted" for manuscripts submitted to a journal or conference,
@@ -176,7 +177,7 @@
   year={2012},
   abstract={We prove that any irreducible triangulation on $n$ vertices has $O(4.6807^n)$ regular edge labelings and that there are irreducible triangulations on $n$ vertices with $\Omega(3.0426^n)$ regular edge labelings.},
   link={Conference version|#buchin2011optimizing},
-  pubstate={submitted}
+  pubstate={accepted}
 }
 
 @misc{dec2011tue,
@@ -192,13 +193,12 @@
 @article{bose2012making,
   title={Making triangulations 4-connected using flips},
   author={<<jit>> and <<dana>> and <<andre>> and <<maria>> and <<me>>},
-  journal={<<cgta>>},
+  journal={<<cgta>> special issue for CCCG 2011},
   year={2012},
-  note={Special issue for CCCG 2011},
   abstract={We show that any combinatorial triangulation on $n$ vertices can be transformed into a 4-connected one using at most $\lfloor(3n - 9)/5\rfloor$ edge flips. We also give an example of an infinite family of triangulations that requires this many flips to be made 4-connected, showing that our bound is tight. In addition, for $n \geq 19$, we improve the upper bound on the number of flips required to transform any 4-connected triangulation into the canonical triangulation (the triangulation with two dominant vertices), matching the known lower bound of $2n - 15$. Our results imply a new upper bound on the diameter of the flip graph of $5.2 n - 33.6$, improving on the previous best known bound of $6n - 30$.},
   arxiv={1110.6473},
   doi={10.1016/j.comgeo.2012.10.012},
-  link2={Conference version|#bose2011making}
+  link2={Conference version|#bose2011making},
 }
 
 @inproceedings{bose2012plane,
