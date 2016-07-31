@@ -30,6 +30,8 @@ import publy.data.settings.Settings;
 
 public class IntegrationTest {
 
+    private static final Path HEADER = Paths.get("test/publy/integration/EmptyFileForTests.txt");
+    private static final Path FOOTER = Paths.get("test/publy/integration/EmptyFileForTests.txt");
     private static final Path TEST_DIR = Paths.get("test/publy/integration");
     private static final Path WORKING_DIR = Paths.get("testOutput");
 
@@ -79,6 +81,9 @@ public class IntegrationTest {
             settings.getConsoleSettings().setShowLogs(false);
             settings.getConsoleSettings().setShowWarnings(false);
             Console.setSettings(settings.getConsoleSettings());
+            
+            settings.getFileSettings().setHeader(HEADER);
+            settings.getFileSettings().setFooter(FOOTER);
             
             PublicationListGenerator.generatePublicationList(settings);
         } catch (IOException ex) {
