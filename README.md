@@ -4,7 +4,6 @@ Publy turns a BibTeX file with a list of your publications into a professional w
 
 ## Features
 
- * Understands all valid BibTeX files
  * Automatically translates LaTeX-encoded special characters to Unicode
  * Renders LaTeX-encoded mathematics with [MathJax](http://www.mathjax.org/)
  * Shows expandable Abstract and BibTeX citation information
@@ -52,3 +51,5 @@ Publy is written and maintained by [Sander Verdonschot](http://cglab.ca/~sander/
  * [Prosenjit Bose's publications](http://www.jitbose.ca/Publy/Bose-Prosenjit.html)
 
 ![Publy logo](http://i.imgur.com/cVDKFVR.png)
+
+[![Build Status](https://drone.io/bitbucket.org/Mangara/publy/status.png)](https://drone.io/bitbucket.org/Mangara/publy/latest)
