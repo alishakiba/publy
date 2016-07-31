@@ -16,6 +16,7 @@
 package publy.io.settings;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import javax.xml.parsers.ParserConfigurationException;
@@ -72,7 +73,7 @@ public class SettingsReaderCurrent extends DefaultHandler implements SettingsRea
         // Parse the input
         try {
             SAXParser saxParser = factory.newSAXParser();
-            saxParser.parse(inputFile.toFile(), handler);
+            saxParser.parse(Files.newInputStream(inputFile), handler);
         } catch (ParserConfigurationException | SAXException ex) {
             throw new IOException(ex);
         }

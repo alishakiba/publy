@@ -18,6 +18,8 @@ package publy.integration;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,7 +34,7 @@ public class IntegrationTest {
 
     private static final Path HEADER = Paths.get("test/publy/integration/EmptyFileForTests.txt");
     private static final Path FOOTER = Paths.get("test/publy/integration/EmptyFileForTests.txt");
-    private static final Path TEST_DIR = Paths.get("test/publy/integration");
+    private static final Path TEST_ARCHIVE = Paths.get("test/publy/integration/integration.zip");
     private static final Path WORKING_DIR = Paths.get("testOutput");
 
     /**
@@ -45,24 +47,26 @@ public class IntegrationTest {
         Files.createDirectories(WORKING_DIR);
         Console.setHeadless(true);
 
+        FileSystem zipFs = FileSystems.newFileSystem(TEST_ARCHIVE, null);
+
         int count = 1;
 
-        while (testExists(count)) {
+        while (testExists(count, zipFs)) {
             cleanUp();
             System.out.printf("Test %03d%n", count);
-            runTest(count);
+            runTest(count, zipFs);
             count++;
         }
 
         cleanUp();
     }
 
-    private boolean testExists(int count) {
-        return Files.exists(TEST_DIR.resolve(String.format("test%03d", count)));
+    private boolean testExists(int count, FileSystem zipFs) {
+        return Files.exists(zipFs.getPath(String.format("test%03d", count)));
     }
 
-    private void runTest(int count) throws IOException {
-        Path inputDir = TEST_DIR.resolve(String.format("test%03d", count));
+    private void runTest(int count, FileSystem zipFs) throws IOException {
+        Path inputDir = zipFs.getPath(String.format("test%03d", count));
         Path workDir = WORKING_DIR.resolve(String.format("test%03d", count));
 
         Files.createDirectories(workDir);
@@ -76,15 +80,15 @@ public class IntegrationTest {
 
         try {
             Settings settings = (new SettingsReaderCurrent()).parseSettings();
-            
+
             // Make it quiet
             settings.getConsoleSettings().setShowLogs(false);
             settings.getConsoleSettings().setShowWarnings(false);
             Console.setSettings(settings.getConsoleSettings());
-            
+
             settings.getFileSettings().setHeader(HEADER);
             settings.getFileSettings().setFooter(FOOTER);
-            
+
             PublicationListGenerator.generatePublicationList(settings);
         } catch (IOException ex) {
             fail("Exception while parsing: " + ex);
@@ -105,7 +109,7 @@ public class IntegrationTest {
                         Files.delete(path2);
                     }
                 }
-                
+
                 Files.delete(path);
             } else if (Files.isRegularFile(path)) {
                 Files.delete(path);
