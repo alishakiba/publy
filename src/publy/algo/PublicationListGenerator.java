@@ -18,7 +18,9 @@ package publy.algo;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
+import mangara.miniweb.MiniWeb;
 import publy.Console;
 import publy.data.Section;
 import publy.data.bibitem.BibItem;
@@ -163,7 +165,9 @@ public class PublicationListGenerator {
     private static boolean writeHtmlVersion(Settings settings, List<Section> sections) {
         try {
             PublicationListWriter writer = new HTMLPublicationListWriter(settings);
-            writer.writePublicationList(sections, settings.getFileSettings().getTarget());
+            Path target = settings.getFileSettings().getTarget();
+            writer.writePublicationList(sections, target);
+            MiniWeb.minify(Collections.singleton(target), true);
             Console.log("HTML publication list written.");
             return true;
         } catch (Exception | AssertionError ex) {
