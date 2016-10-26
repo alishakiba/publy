@@ -25,12 +25,13 @@ public class FileSettings {
 
     private static final String DEFAULT_HEADER_LOCATION = "data/defaultHeader.html";
     private static final String DEFAULT_FOOTER_LOCATION = "data/defaultFooter.html";
-    
+
     // Input file
     private Path publications;
     // Output file
     private Path target;
     private boolean openOutput = true; // Whether to automatically open the output file in a browser after generating
+    private boolean minifyOutput = true;
     // Header and Footer
     private Path header = ResourceLocator.getFullPath(DEFAULT_HEADER_LOCATION);
     private Path footer = ResourceLocator.getFullPath(DEFAULT_FOOTER_LOCATION);
@@ -73,7 +74,7 @@ public class FileSettings {
 
     /**
      * Gets whether to automatically open the output file in a browser.
-     * 
+     *
      * @return whether to automatically open the output file in a browser
      */
     public boolean isOpenOutput() {
@@ -82,11 +83,29 @@ public class FileSettings {
 
     /**
      * Sets whether to automatically open the output file in a browser.
-     * 
-     * @param openOutput 
+     *
+     * @param openOutput
      */
     public void setOpenOutput(boolean openOutput) {
         this.openOutput = openOutput;
+    }
+
+    /**
+     * Gets whether to reduce the output file size as much as possible.
+     *
+     * @return whether to reduce the output file size as much as possible
+     */
+    public boolean isMinifyOutput() {
+        return minifyOutput;
+    }
+
+    /**
+     * Sets whether to reduce the output file size as much as possible.
+     *
+     * @param minifyOutput
+     */
+    public void setMinifyOutput(boolean minifyOutput) {
+        this.minifyOutput = minifyOutput;
     }
 
     /**

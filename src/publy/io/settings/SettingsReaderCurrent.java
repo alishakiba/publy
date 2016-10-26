@@ -200,6 +200,9 @@ public class SettingsReaderCurrent extends DefaultHandler implements SettingsRea
             case "openOutput":
                 settings.getFileSettings().setOpenOutput(Boolean.parseBoolean(text));
                 break;
+            case "minifyOutput":
+                settings.getFileSettings().setMinifyOutput(Boolean.parseBoolean(text));
+                break;
             case "header":
                 settings.getFileSettings().setHeader(ResourceLocator.getFullPath(text));
                 break;
