@@ -19,7 +19,6 @@ import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.event.ItemEvent;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.nio.file.Path;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
@@ -32,10 +31,6 @@ import publy.Runner;
 import publy.data.settings.FileSettings;
 import publy.io.ResourceLocator;
 
-/**
- *
- *
- */
 public class FileSettingsPanel extends javax.swing.JPanel {
 
     private final FileSettings settings;
@@ -68,24 +63,11 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             pubFileChooserMac = new FileDialog((Frame) null);
             htmlFileChooserMac = new FileDialog((Frame) null);
 
-            FilenameFilter bibFilter = new FilenameFilter() {
-
-                @Override
-                public boolean accept(File dir, String name) {
-                    return name.toLowerCase().endsWith(".bib");
-                }
-            };
-            FilenameFilter htmlFilter = new FilenameFilter() {
-
-                @Override
-                public boolean accept(File dir, String name) {
-                    String lowercaseName = name.toLowerCase();
-                    return lowercaseName.endsWith(".html") || lowercaseName.endsWith(".htm");
-                }
-            };
-
-            pubFileChooserMac.setFilenameFilter(bibFilter);
-            htmlFileChooserMac.setFilenameFilter(htmlFilter);
+            pubFileChooserMac.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith(".bib"));
+            htmlFileChooserMac.setFilenameFilter((dir, name) -> {
+                String lowercaseName = name.toLowerCase();
+                return lowercaseName.endsWith(".htm") || lowercaseName.endsWith(".html");
+            });
         } else {
             FileFilter bibFilter = new FileNameExtensionFilter("BibTeX files (*.bib)", "bib");
             FileFilter htmlFilter = new FileNameExtensionFilter("HTML files (*.htm;*.html)", "htm", "html");
