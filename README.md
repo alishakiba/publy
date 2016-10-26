@@ -12,7 +12,7 @@ Publy turns a BibTeX file with a list of your publications into a professional w
  
 ## Getting started
 
- 1. Make sure you have a recent version of [Java](http://www.java.com) (7+)
+ 1. Make sure you have a recent version of [Java](http://www.java.com)
  2. Download the latest [release version](https://bitbucket.org/Mangara/publy/downloads) of Publy
  3. Make sure you have a BibTeX file with all your publications
  4. Run Publy
