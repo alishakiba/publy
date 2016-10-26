@@ -45,10 +45,6 @@
                               <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="openOutputCheckBox" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
                                       <Component id="pubTextField" pref="208" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="pubBrowseButton" min="-2" max="-2" attributes="0"/>
@@ -57,6 +53,13 @@
                                       <Component id="targetTextField" pref="0" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="targetBrowseButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="minifyOutputCheckBox" min="-2" max="-2" attributes="0"/>
+                                          <Component id="openOutputCheckBox" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -122,6 +125,8 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="openOutputCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="minifyOutputCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="headerSeparator" alignment="1" min="-2" pref="7" max="-2" attributes="0"/>
@@ -252,6 +257,14 @@
       </Properties>
       <Events>
         <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="openOutputCheckBoxItemStateChanged"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="minifyOutputCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Minimize output file size"/>
+      </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="minifyOutputCheckBoxItemStateChanged"/>
       </Events>
     </Component>
   </SubComponents>

@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 Bumped the target Java version to Java 8. If you have trouble running this version (or get an error including "Unsupported major.minor version 52.0"), please [download the latest version of Java](https://www.java.com/).
 
 ### Added
-- Site minification using [MiniWeb](https://bitbucket.org/Mangara/miniweb). This will result in smaller file sizes and bandwidth savings. If you really want to, you can turn it off in the General options.
+- Site minification using [MiniWeb](https://bitbucket.org/Mangara/miniweb). This will result in smaller file sizes and bandwidth savings. If you really want to, you can turn it off in the Files settings tab.
 - Warnings when the BibTeX contains `<abbr>` instead of `<<abbr>>`, where `abbr` is a valid abbreviation for Publy. This is most likely a mistake, but these were silently being included as weird HTML-tags.
 
 ### Fixed

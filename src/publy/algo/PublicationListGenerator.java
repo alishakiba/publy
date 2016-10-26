@@ -49,7 +49,7 @@ public class PublicationListGenerator {
     public static boolean generatePublicationList(Settings settings) {
         Console.debug("Generating publication list.");
         boolean success = false;
-        
+
         if (checkFileSettings(settings)) {
             List<BibItem> items = parsePublications(settings);
 
@@ -63,7 +63,7 @@ public class PublicationListGenerator {
 
             Console.log("Done.");
         }
-        
+
         return success;
     }
 
@@ -167,7 +167,11 @@ public class PublicationListGenerator {
             PublicationListWriter writer = new HTMLPublicationListWriter(settings);
             Path target = settings.getFileSettings().getTarget();
             writer.writePublicationList(sections, target);
-            MiniWeb.minify(Collections.singleton(target), true);
+
+            if (settings.getFileSettings().isMinifyOutput()) {
+                MiniWeb.minify(Collections.singleton(target), true);
+            }
+
             Console.log("HTML publication list written.");
             return true;
         } catch (Exception | AssertionError ex) {
