@@ -51,5 +51,3 @@ Publy is written and maintained by [Sander Verdonschot](http://cglab.ca/~sander/
  * [Prosenjit Bose's publications](http://www.jitbose.ca/Publy/Bose-Prosenjit.html)
 
 ![Publy logo](http://i.imgur.com/cVDKFVR.png)
-
-[![Build Status](https://drone.io/bitbucket.org/Mangara/publy/status.png)](https://drone.io/bitbucket.org/Mangara/publy/latest)
