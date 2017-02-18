@@ -51,3 +51,5 @@ Publy is written and maintained by [Sander Verdonschot](http://cglab.ca/~sander/
  * [Prosenjit Bose's publications](http://www.jitbose.ca/Publy/Bose-Prosenjit.html)
 
 ![Publy logo](http://i.imgur.com/cVDKFVR.png)
+
+[ ![Codeship Status for Mangara/publy](https://app.codeship.com/projects/eb44dd30-d828-0134-f965-4e471868a2e5/status?branch=default)](https://app.codeship.com/projects/203172)
