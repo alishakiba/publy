@@ -350,16 +350,15 @@ public class HTMLBibItemWriter extends BibItemWriter {
         // Title
         if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.ABSTRACT && includeAbstract(item)) {
             output("<h4 class=\"title abstract-toggle\">", title, "</h4>");
-        } else if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && includePaper(item)) {
-            try {
-                String href = (new URI(null, null, get(item, "file"), null)).toString();
-
-                out.write("<a href=\"" + href + "\">");
+        } else if (settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER) {
+            String link = getPaperLink(settings, item);
+            
+            if (link == null) {
+                output("<h4 class=\"title\">", title, "</h4>");
+            } else {
+                out.write("<a href=\"" + link + "\">");
                 output("<h4 class=\"title\">", title, "</h4>");
                 out.write("</a>");
-            } catch (URISyntaxException ex) {
-                Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
-                output("<h4 class=\"title\">", title, "</h4>");
             }
         } else {
             output("<h4 class=\"title\">", title, "</h4>");
@@ -621,7 +620,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         boolean divOpened = false;
 
         // Paper link
-        if (includePaper(item) && settings.getHtmlSettings().getTitleTarget() != HTMLSettings.TitleLinkTarget.PAPER) {
+        if (includePaper(item) && !(settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && "file".equals(getPaperLinkField(settings, item)))) {
             try {
                 String link = (new URI(null, null, get(item, "file"), null)).toString();
                 String text;
@@ -648,13 +647,13 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         // arXiv link
-        if (isPresent(item, "arxiv")) {
+        if (isPresent(item, "arxiv") && !(settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && "arxiv".equals(getPaperLinkField(settings, item)))) {
             writeLink(divOpened, "http://arxiv.org/abs/" + get(item, "arxiv"), "arXiv");
             divOpened = true;
         }
 
         // DOI link
-        if (isPresent(item, "doi")) {
+        if (isPresent(item, "doi") && !(settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && "doi".equals(getPaperLinkField(settings, item)))) {
             String link = get(item, "doi");
 
             // Add the general DOI part if necessary 
@@ -681,7 +680,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         }
 
         // URL link
-        if (isPresent(item, "url")) {
+        if (isPresent(item, "url") && !(settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && "url".equals(getPaperLinkField(settings, item)))) {
             String link = get(item, "url");
             boolean addUrl = true;
 
@@ -808,7 +807,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
         StringWriter bibtex = new StringWriter();
         BufferedWriter buffer = new BufferedWriter(bibtex);
         BibItemWriter bibtexWriter = new BibtexBibItemWriter(buffer, settings);
-        
+
         bibtexWriter.write(item);
         buffer.flush();
 
@@ -903,6 +902,62 @@ public class HTMLBibItemWriter extends BibItemWriter {
         return isPresent(item, "file") && settings.getHtmlSettings().getIncludePaper().matches(item);
     }
 
+    private String getPaperLinkField(Settings settings, BibItem item) {
+        if (!settings.getHtmlSettings().getIncludePaper().matches(item)) {
+            // There should be no link to the paper
+            return null;
+        }
+
+        if (isPresent(item, "file")) {
+            return "file";
+        }
+        if (isPresent(item, "doi")) {
+            return "doi";
+        }
+        if (isPresent(item, "arxiv")) {
+            return "arxiv";
+        }
+        if (isPresent(item, "url")) {
+            return "url";
+        }
+
+        return null;
+    }
+
+    private String getPaperLink(Settings settings, BibItem item) {
+        String field = getPaperLinkField(settings, item);
+
+        // We have to check for null first, otherwise the switch doesn't work
+        if (field == null) {
+            return null;
+        }
+
+        switch (field) {
+            case "file":
+                try {
+                    return new URI(null, null, get(item, "file"), null).toString();
+                } catch (URISyntaxException ex) {
+                    Console.except(ex, "Paper link for entry \"%s\" is not formatted properly:", item.getId());
+                    return null;
+                }
+            case "doi":
+                String link = get(item, "doi");
+
+                // Add the general DOI part if necessary 
+                if (!link.startsWith("http://dx.doi.org/")) {
+                    link = "http://dx.doi.org/" + link;
+                }
+
+                return link;
+            case "arxiv":
+                return "http://arxiv.org/abs/" + get(item, "arxiv");
+            case "url":
+                return get(item, "url");
+            default:
+                throw new AssertionError("Unrecognized paper link field: \"" + field + "\"");
+        }
+    }
+
     @Override
     protected void newline() throws IOException {
         if (settings.getGeneralSettings().isUseNewLines()) {
@@ -911,7 +966,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
 
         out.newLine();
     }
-    
+
     private String htmlEscape(String text) {
         return text.replaceAll("&", "&amp;")
                 .replaceAll("\u00A0", "&nbsp;")
