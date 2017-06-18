@@ -15,6 +15,8 @@
  */
 package publy.integration;
 
+import difflib.DiffUtils;
+import difflib.Patch;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -25,6 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import org.junit.Test;
 import publy.algo.PublicationListGenerator;
 import publy.io.settings.SettingsReaderCurrent;
@@ -169,6 +172,21 @@ public class IntegrationTest {
                 } else if (inputLine != null && workLine == null) {
                     fail(String.format("Generated file %s ends before expected output ends.%nNext input line: %s", fileName, inputLine));
                 }
+            } catch (AssertionError e) {
+                // Generate a diff
+                List<String> input = Files.readAllLines(inputFile, StandardCharsets.UTF_8);
+                Patch<String> p = DiffUtils.diff(input, Files.readAllLines(workFile, StandardCharsets.UTF_8));
+                List<String> diff = DiffUtils.generateUnifiedDiff(fileName + " (expected)", fileName + " (generated)", input, p, 2);
+                
+                System.out.println("==== Test " + testNumber + " ====");
+                System.out.println();
+                for (String line : diff) {
+                    System.out.println(line);
+                }
+                System.out.println();
+                System.out.println();
+                
+                throw e;
             }
         }
     }
