@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2016 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,13 @@ public class Console {
 
     public enum WarningType {
 
-        DUPLICATE_ID, MISSING_REFERENCE, NOT_AUTHORED_BY_USER, ITEM_DOES_NOT_FIT_ANY_CATEGORY, MANDATORY_FIELD_IGNORED, OTHER;
+        DUPLICATE_ID,
+        MISSING_REFERENCE,
+        NOT_AUTHORED_BY_USER,
+        ITEM_DOES_NOT_FIT_ANY_CATEGORY,
+        MANDATORY_FIELD_IGNORED,
+        POSSIBLE_MISTAKEN_ABBREVIATION,
+        OTHER;
     }
     private static final SimpleAttributeSet logAttributes;
     private static final SimpleAttributeSet warnAttributes;
@@ -59,6 +65,7 @@ public class Console {
     private static final SimpleAttributeSet debugAttributes;
     private static ConsoleSettings settings = new ConsoleSettings();
     private static JTextPane textPane = null; // A styled text area to log to, if the program was invoked without an attached console
+    private static boolean headless = GraphicsEnvironment.isHeadless();
 
     // Static font initialization
     static {
@@ -96,29 +103,7 @@ public class Console {
      */
     public static void log(String format, Object... args) {
         if (settings.isShowLogs()) {
-            if (textPane == null) {
-                if (System.console() == null) {
-                    if (GraphicsEnvironment.isHeadless()) {
-                        System.out.format(" " + format + "%n", args);
-                        System.out.flush();
-                    } else {
-                        createConsoleFrame();
-                    }
-                } else {
-                    System.console().format(" " + format + "%n", args);
-                    System.console().flush();
-                }
-            }
-
-            // Re-check, because textPane might have been set by createConsoleFrame()
-            if (textPane != null) {
-                try {
-                    textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" " + format + "%n", args), logAttributes);
-                } catch (BadLocationException ex) {
-                    // This should never happen
-                    throw new AssertionError(ex);
-                }
-            }
+            output("", String.format(" " + format + "%n", args), logAttributes);
         }
     }
 
@@ -141,29 +126,7 @@ public class Console {
      */
     public static void warn(WarningType type, String format, Object... args) {
         if (showWarnings(type)) {
-            if (textPane == null) {
-                if (System.console() == null) {
-                    if (GraphicsEnvironment.isHeadless()) {
-                        System.out.format(" WARNING: " + format + "%n", args);
-                        System.out.flush();
-                    } else {
-                        createConsoleFrame();
-                    }
-                } else {
-                    System.console().format(" WARNING: " + format + "%n", args);
-                    System.console().flush();
-                }
-            }
-
-            // Re-check, because textPane might have been set by createConsoleFrame()
-            if (textPane != null) {
-                try {
-                    textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" Warning: " + format + "%n", args), warnAttributes);
-                } catch (BadLocationException ex) {
-                    // This should never happen
-                    throw new AssertionError(ex);
-                }
-            }
+            output("", String.format(" Warning: " + format + "%n", args), warnAttributes);
         }
     }
 
@@ -183,29 +146,7 @@ public class Console {
      * @param args arguments referenced by the format string
      */
     public static void error(String format, Object... args) {
-        if (textPane == null) {
-            if (System.console() == null) {
-                if (GraphicsEnvironment.isHeadless()) {
-                    System.out.format(" ERROR: " + format + "%n", args);
-                    System.out.flush();
-                } else {
-                    createConsoleFrame();
-                }
-            } else {
-                System.console().format(" ERROR: " + format + "%n", args);
-                System.console().flush();
-            }
-        }
-
-        // Re-check, because textPane might have been set by createConsoleFrame()
-        if (textPane != null) {
-            try {
-                textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" " + format + "%n", args), errorAttributes);
-            } catch (BadLocationException ex) {
-                // This should never happen
-                throw new AssertionError(ex);
-            }
-        }
+        output(" ERROR:", String.format(" " + format + "%n", args), errorAttributes);
     }
 
     /**
@@ -238,32 +179,7 @@ public class Console {
             exceptionText = exception.toString();
         }
 
-        if (textPane == null) {
-            if (System.console() == null) {
-                if (GraphicsEnvironment.isHeadless()) {
-                    System.out.format(" ERROR: " + format + "%n", args);
-                    System.out.format("%s%n", exceptionText);
-                    System.out.flush();
-                } else {
-                    createConsoleFrame();
-                }
-            } else {
-                System.console().format(" ERROR: " + format + "%n", args);
-                System.console().format("%s%n", exceptionText);
-                System.console().flush();
-            }
-        }
-
-        // Re-check, because textPane might have been set by createConsoleFrame()
-        if (textPane != null) {
-            try {
-                textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" " + format + "%n", args), errorAttributes);
-                textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format("%s%n", exceptionText), errorAttributes);
-            } catch (BadLocationException ex) {
-                // This should never happen
-                throw new AssertionError(ex);
-            }
-        }
+        output(" ERROR:", String.format(" " + format + "%n", args) + String.format("%s%n", exceptionText), errorAttributes);
     }
 
     /**
@@ -278,28 +194,32 @@ public class Console {
      */
     public static void debug(String format, Object... args) {
         if (settings.isShowDebugLog()) {
-            if (textPane == null) {
-                if (System.console() == null) {
-                    if (GraphicsEnvironment.isHeadless()) {
-                        System.out.format(" " + format + "%n", args);
-                        System.out.flush();
-                    } else {
-                        createConsoleFrame();
-                    }
-                } else {
-                    System.console().format(" " + format + "%n", args);
-                    System.console().flush();
-                }
-            }
+            output("", String.format(" " + format + "%n", args), debugAttributes);
+        }
+    }
 
-            // Re-check, because textPane might have been set by createConsoleFrame()
-            if (textPane != null) {
-                try {
-                    textPane.getDocument().insertString(textPane.getDocument().getLength(), String.format(" " + format + "%n", args), debugAttributes);
-                } catch (BadLocationException ex) {
-                    // This should never happen
-                    throw new AssertionError(ex);
+    private static void output(String headlessPrefix, String text, SimpleAttributeSet attributes) {
+        if (textPane == null) {
+            if (System.console() == null) {
+                if (headless) {
+                    System.out.print(headlessPrefix + text);
+                    System.out.flush();
+                } else {
+                    createConsoleFrame();
                 }
+            } else {
+                System.console().format(headlessPrefix + text);
+                System.console().flush();
+            }
+        }
+
+        // Re-check, because textPane might have been set by createConsoleFrame()
+        if (textPane != null) {
+            try {
+                textPane.getDocument().insertString(textPane.getDocument().getLength(), text, attributes);
+            } catch (BadLocationException ex) {
+                // This should never happen
+                throw new AssertionError(ex);
             }
         }
     }
@@ -317,6 +237,8 @@ public class Console {
                     return settings.isWarnNoCategoryForItem();
                 case MANDATORY_FIELD_IGNORED:
                     return settings.isWarnMandatoryFieldIgnored();
+                case POSSIBLE_MISTAKEN_ABBREVIATION:
+                    return settings.isWarnPossibleMistakenAbbreviation();
                 case OTHER:
                     return true;
                 default:
@@ -369,5 +291,28 @@ public class Console {
      */
     public static void setSettings(ConsoleSettings settings) {
         Console.settings = settings;
+    }
+
+    /**
+     * Gets whether the console is running in headless mode, where it doesn't
+     * try to open a GUI to report errors.
+     *
+     * @return
+     */
+    public static boolean isHeadless() {
+        return headless;
+    }
+
+    /**
+     * Sets whether the console is running in headless mode, where it doesn't
+     * try to open a GUI to report errors.
+     *
+     * @param headless
+     */
+    public static void setHeadless(boolean headless) {
+        Console.headless = headless;
+    }
+
+    private Console() {
     }
 }

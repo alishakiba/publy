@@ -133,8 +133,6 @@ public class PlainBibItemWriterTest {
                     fail("write threw Exception on input:\n" + item + "\nException:\n" + ex);
                 }
             }
-
-            System.out.println("PlainBibItemWriter - Tests for " + type + " were successful");
         }
     }
 

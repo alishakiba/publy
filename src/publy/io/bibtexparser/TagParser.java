@@ -134,8 +134,8 @@ public class TagParser {
                     Console.warn(Console.WarningType.OTHER, "Ignored HTML tag \"<%s>\" out of publication context.", type);
                     break;
                 default:
-                    if (type.startsWith("<")) {
-                        // Abbreviation: silently ignore
+                    if (type.startsWith("<") || type.startsWith("/")) {
+                        // Abbreviation or closing tag: silently ignore
                     } else {
                         throw new ParseException(String.format("Unrecognized tag \"<%s>\".", type));
                     }
@@ -211,5 +211,8 @@ public class TagParser {
             tokenizer.setWhiteSpaceMatters(false);
             tokenizer.match('"');
         }
+    }
+
+    private TagParser() {
     }
 }

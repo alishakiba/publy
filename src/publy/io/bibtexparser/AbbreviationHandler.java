@@ -29,10 +29,13 @@ public class AbbreviationHandler {
 
     // Pattern for detecting an abbreviation
     private static final Pattern abbrPattern = Pattern.compile("<<([^>]*)>>");
+    // Pattern to detect mistakes of the form <abbr>, <<abbr>, or <abbr>>
+    private static final Pattern mistakePattern = Pattern.compile("(?:^|[^<])<([^<>]*)>(?:$|[^>])|<<([^<>]*)>(?:$|[^>])|(?:^|[^<])<([^<>]*)>>");
 
     public static void handleAbbreviationsAndAuthors(List<BibItem> items, Map<String, String> abbreviations, Map<String, Author> authors) {
         ensureAbbreviationsAreUnique(abbreviations, authors);
         expandAbbreviationsInAbbreviations(abbreviations, authors);
+        warnForPossibleAbbreviationMistakes(items, abbreviations, authors);
         expandAbbreviations(items, abbreviations, authors);
         replaceAuthorsAndEditors(items, authors);
     }
@@ -62,11 +65,11 @@ public class AbbreviationHandler {
             }
         }
     }
-    
+
     private static void expandAbbreviationsInAbbreviations(Map<String, String> abbreviations, Map<String, Author> authors) {
         for (Map.Entry<String, String> entry : abbreviations.entrySet()) {
             String fullText = entry.getValue();
-            
+
             if (fullText != null && !fullText.isEmpty()) {
                 entry.setValue(expandAbbreviations(fullText, abbreviations, authors));
             }
@@ -80,6 +83,27 @@ public class AbbreviationHandler {
 
                 if (currentValue != null && !currentValue.isEmpty()) {
                     item.put(field, expandAbbreviations(currentValue, abbreviations, authors));
+                }
+            }
+        }
+    }
+
+    private static void warnForPossibleAbbreviationMistakes(List<BibItem> items, Map<String, String> abbreviations, Map<String, Author> authors) {
+        for (BibItem item : items) {
+            for (String field : item.getFields()) {
+                String currentValue = item.get(field);
+
+                if (currentValue != null && !currentValue.isEmpty()) {
+                    Matcher matcher = mistakePattern.matcher(currentValue);
+
+                    while (matcher.find()) {
+                        // This is in the only non-null group
+                        String abbreviation = (matcher.group(1) != null ? matcher.group(1) : (matcher.group(2) != null ? matcher.group(2) : matcher.group(3)));
+
+                        if (abbreviations.containsKey(abbreviation) || authors.containsKey(abbreviation)) {
+                            Console.warn(Console.WarningType.POSSIBLE_MISTAKEN_ABBREVIATION, "I found the text \"%s\" in field \"%s\" of publication \"%s\". Did you mean to use an abbreviation (\"%s\") here?", matcher.group().trim(), field, item.getId(), "<<" + abbreviation + ">>");
+                        }
+                    }
                 }
             }
         }
@@ -145,7 +169,7 @@ public class AbbreviationHandler {
                 }
             }
         }
-        
+
         // Update the author field
         StringBuilder newFieldValue = new StringBuilder();
         boolean first = true;

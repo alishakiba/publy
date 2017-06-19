@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2016 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package publy.io.settings;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import javax.xml.parsers.ParserConfigurationException;
@@ -72,7 +73,7 @@ public class SettingsReaderCurrent extends DefaultHandler implements SettingsRea
         // Parse the input
         try {
             SAXParser saxParser = factory.newSAXParser();
-            saxParser.parse(inputFile.toFile(), handler);
+            saxParser.parse(Files.newInputStream(inputFile), handler);
         } catch (ParserConfigurationException | SAXException ex) {
             throw new IOException(ex);
         }
@@ -198,6 +199,9 @@ public class SettingsReaderCurrent extends DefaultHandler implements SettingsRea
                 break;
             case "openOutput":
                 settings.getFileSettings().setOpenOutput(Boolean.parseBoolean(text));
+                break;
+            case "minifyOutput":
+                settings.getFileSettings().setMinifyOutput(Boolean.parseBoolean(text));
                 break;
             case "header":
                 settings.getFileSettings().setHeader(ResourceLocator.getFullPath(text));
@@ -390,6 +394,9 @@ public class SettingsReaderCurrent extends DefaultHandler implements SettingsRea
                 break;
             case "warnMandatoryFieldIgnored":
                 settings.getConsoleSettings().setWarnMandatoryFieldIgnored(Boolean.parseBoolean(text));
+                break;
+            case "warnPossibleMistakenAbbreviation":
+                settings.getConsoleSettings().setWarnPossibleMistakenAbbreviation(Boolean.parseBoolean(text));
                 break;
             case "showLogs":
                 settings.getConsoleSettings().setShowLogs(Boolean.parseBoolean(text));

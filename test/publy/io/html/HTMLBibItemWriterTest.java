@@ -1,5 +1,3 @@
-/*
- */
 package publy.io.html;
 
 import java.io.IOException;
@@ -14,10 +12,6 @@ import publy.data.bibitem.BibItem;
 import publy.data.bibitem.Type;
 import publy.io.TestUtils;
 
-/**
- *
- *
- */
 public class HTMLBibItemWriterTest {
 
     public HTMLBibItemWriterTest() {

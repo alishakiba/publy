@@ -92,7 +92,7 @@ echo "done."
 
 # Verify that all tests are passing
 echo "Verifying that all unit tests are passing... "
-ant test > "$TEST_OUTPUT"
+ant test > "$TEST_OUTPUT" 2> "$TEST_OUTPUT"
 if grep -Fq "FAILED" "$TEST_OUTPUT"
 then
     echo "ERROR: Some tests failed. For details, see \"$TEST_OUTPUT\"."

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2016 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,13 +33,10 @@ import publy.data.settings.GeneralSettings;
 import publy.data.settings.HTMLSettings;
 import publy.data.settings.Settings;
 import publy.Constants;
+import publy.data.category.conditions.FieldCondition;
 import publy.io.ResourceLocator;
 import publy.io.TempWriter;
 
-/**
- *
- *
- */
 public class SettingsWriter {
 
     public static void writeSettings(Settings settings) throws IOException {
@@ -85,6 +82,7 @@ public class SettingsWriter {
         output(out, 4, "publications", makeString(settings.getPublications()));
         output(out, 4, "target", makeString(settings.getTarget()));
         output(out, 4, "openOutput", makeString(settings.isOpenOutput()));
+        output(out, 4, "minifyOutput", makeString(settings.isMinifyOutput()));
         output(out, 4, "header", makeString(settings.getHeader()));
         output(out, 4, "footer", makeString(settings.getFooter()));
 
@@ -220,6 +218,7 @@ public class SettingsWriter {
         output(out, 4, "warnNotAuthor", makeString(settings.isWarnNotAuthor()));
         output(out, 4, "warnNoCategoryForItem", makeString(settings.isWarnNoCategoryForItem()));
         output(out, 4, "warnMandatoryFieldIgnored", makeString(settings.isWarnMandatoryFieldIgnored()));
+        output(out, 4, "warnPossibleMistakenAbbreviation", makeString(settings.isWarnPossibleMistakenAbbreviation()));
         output(out, 4, "showLogs", makeString(settings.isShowLogs()));
         output(out, 4, "showDebugLog", makeString(settings.isShowDebugLog()));
         output(out, 4, "showStackTraces", makeString(settings.isShowStackTraces()));
@@ -233,11 +232,11 @@ public class SettingsWriter {
         if (condition instanceof TypeCondition) {
             output(out, indent, "TypeCondition", makeCData(((TypeCondition) condition).getTypes()), "inverted", makeString(condition.isInverted()));
         } else if (condition instanceof FieldExistsCondition) {
-            output(out, indent, "FieldExistsCondition", "", "inverted", makeString(condition.isInverted()), "field", ((FieldExistsCondition) condition).getField());
+            output(out, indent, "FieldExistsCondition", "", "inverted", makeString(condition.isInverted()), "field", ((FieldCondition) condition).getField());
         } else if (condition instanceof FieldEqualsCondition) {
-            output(out, indent, "FieldEqualsCondition", makeCData(((FieldEqualsCondition) condition).getValues()), "inverted", makeString(condition.isInverted()), "field", ((FieldEqualsCondition) condition).getField());
+            output(out, indent, "FieldEqualsCondition", makeCData(((FieldEqualsCondition) condition).getValues()), "inverted", makeString(condition.isInverted()), "field", ((FieldCondition) condition).getField());
         } else if (condition instanceof FieldContainsCondition) {
-            output(out, indent, "FieldContainsCondition", makeCData(((FieldContainsCondition) condition).getValues()), "inverted", makeString(condition.isInverted()), "field", ((FieldContainsCondition) condition).getField());
+            output(out, indent, "FieldContainsCondition", makeCData(((FieldContainsCondition) condition).getValues()), "inverted", makeString(condition.isInverted()), "field", ((FieldCondition) condition).getField());
         } else {
             throw new AssertionError("Unknown condition type: " + condition);
         }
@@ -346,5 +345,8 @@ public class SettingsWriter {
         }
 
         return "<![CDATA[" + sb.toString() + "]]>";
+    }
+
+    private SettingsWriter() {
     }
 }

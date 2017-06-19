@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2016 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ public class ConsoleSettings {
     private boolean warnNotAuthor = false;
     private boolean warnNoCategoryForItem = true;
     private boolean warnMandatoryFieldIgnored = true;
+    private boolean warnPossibleMistakenAbbreviation = true;
     // Log
     private boolean showLogs = true;
     // Debug
@@ -194,6 +195,33 @@ public class ConsoleSettings {
      */
     public void setWarnMandatoryFieldIgnored(boolean warnMandatoryFieldIgnored) {
         this.warnMandatoryFieldIgnored = warnMandatoryFieldIgnored;
+    }
+
+    /**
+     * Gets whether the console should display a warning when a field contains
+     * patterns that are slightly off from being a valid abbreviation.
+     * <p>
+     * If this is false, all warnings of this kind will be hidden. Otherwise,
+     * they will be shown unless warnings are disabled globally.
+     *
+     * @return whether to show warnings for possible incorrect abbreviations
+     */
+    public boolean isWarnPossibleMistakenAbbreviation() {
+        return warnPossibleMistakenAbbreviation;
+    }
+
+    /**
+     * Sets whether the console should display a warning when a field contains
+     * patterns that are slightly off from being a valid abbreviation.
+     * <p>
+     * If this is false, all warnings of this kind will be hidden. Otherwise,
+     * they will be shown unless warnings are disabled globally.
+     *
+     * @param warnPossibleMistakenAbbreviation whether to show warnings for
+     * possible incorrect abbreviations
+     */
+    public void setWarnPossibleMistakenAbbreviation(boolean warnPossibleMistakenAbbreviation) {
+        this.warnPossibleMistakenAbbreviation = warnPossibleMistakenAbbreviation;
     }
 
     /**
