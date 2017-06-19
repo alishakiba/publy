@@ -1,15 +1,19 @@
 # Publy - Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.2] - ????-??-??
+## [1.2] - 2017-06-19
 Bumped the target Java version to Java 8. If you have trouble running this version (or get an error including "Unsupported major.minor version 52.0"), please [download the latest version of Java](https://www.java.com/).
 
 ### Added
-- Site minification using [MiniWeb](https://bitbucket.org/Mangara/miniweb). This will result in smaller file sizes and bandwidth savings. If you really want to, you can turn it off in the Files settings tab.
-- Warnings when the BibTeX contains `<abbr>` instead of `<<abbr>>`, where `abbr` is a valid abbreviation for Publy. This is most likely a mistake, but these were silently being included as weird HTML-tags.
+- Site minification using [MiniWeb](https://bitbucket.org/Mangara/miniweb). This will result in smaller file sizes and bandwidth savings. If you really want to, you can turn it off in the Files settings tab. (Issue #227)
+- Warnings when the BibTeX contains `<abbr>` instead of `<<abbr>>`, where `abbr` is a valid abbreviation for Publy. This is most likely a mistake, but these were silently being included as weird HTML-tags. (Issue #244)
+
+### Changed
+- When the title is set to link to the paper, but there's no associated file, it might link to other fields such as the DOI or arXiv version instead. (Issue #188)
 
 ### Fixed
-- Improved parser error messages.
+- Improved parser error messages. (Issues #241 and #242)
+- Updated the MathJax code in DefaultHeader.html. MathJax shut down their own CDN, so this is necessary for mathematics to properly render.
 
 ## [1.1] - 2016-06-11
 ### Added
