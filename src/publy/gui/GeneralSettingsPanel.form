@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.ButtonGroup" name="numGroup">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="firstNameGroup">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="groupingGroup">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="groupCategoriesGroup">
+    </Component>
+  </NonVisualComponents>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="reverseNamesCheckBox" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="firstNameLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="fullFirstNameRadioButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="abbrFirstNameRadioButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="noFirstNameRadioButton" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="listOnlyCoauthorsCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="authorLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="authorSeparator" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="titleFirstLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="titleFirstSeparator" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="yourNameLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="yourNameSeparator" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                              <Component id="yourNameTextField" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+          </Group>
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="numLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="numSeparator" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="numNoneRadioButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="numLocalRadioButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="numGlobalRadioButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="reverseNumberingCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="titleFirstCheckBox" min="-2" max="-2" attributes="0"/>
+                          <Component id="newlinesCheckbox" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="groupingLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="groupingSeparator" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="noGroupingRadioButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="byYearRadioButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="groupWithinCategoriesRadioButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="categorizeWithinGroupsRadioButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="yourNameLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="yourNameSeparator" min="-2" pref="7" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="yourNameTextField" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="authorSeparator" min="-2" pref="7" max="-2" attributes="0"/>
+                  <Component id="authorLabel" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="firstNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="fullFirstNameRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="abbrFirstNameRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="noFirstNameRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="reverseNamesCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="listOnlyCoauthorsCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="titleFirstSeparator" alignment="1" min="-2" pref="7" max="-2" attributes="0"/>
+                  <Component id="titleFirstLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="titleFirstCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="newlinesCheckbox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="numLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="numSeparator" min="-2" pref="7" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="numNoneRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="numLocalRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="numGlobalRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="reverseNumberingCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="groupingLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="groupingSeparator" min="-2" pref="7" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="noGroupingRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="byYearRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="groupWithinCategoriesRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="categorizeWithinGroupsRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JRadioButton" name="numNoneRadioButton">
+      <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="numGroup"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="None"/>
+        <Property name="toolTipText" type="java.lang.String" value="Do not number any publications."/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numNoneRadioButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="numGlobalRadioButton">
+      <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="numGroup"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Global numbering"/>
+        <Property name="toolTipText" type="java.lang.String" value="Number all publications sequentially, with no regard to sections."/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numGlobalRadioButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="numLocalRadioButton">
+      <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="numGroup"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Category numbering"/>
+        <Property name="toolTipText" type="java.lang.String" value="Number the publications in each section independently."/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numLocalRadioButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="authorLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Author information"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="authorSeparator">
+    </Component>
+    <Component class="javax.swing.JLabel" name="numLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Numbering"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="numSeparator">
+    </Component>
+    <Component class="javax.swing.JSeparator" name="titleFirstSeparator">
+    </Component>
+    <Component class="javax.swing.JLabel" name="titleFirstLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Formatting"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="titleFirstCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Title before authors"/>
+      </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="titleFirstCheckBoxItemStateChanged"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="reverseNumberingCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Reverse numbering"/>
+      </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="reverseNumberingCheckBoxItemStateChanged"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="listOnlyCoauthorsCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="List only my co-authors"/>
+        <Property name="toolTipText" type="java.lang.String" value="The authors will be displayed as &quot;With&quot;, followed by a list of the other authors on the paper. If you are the only author, no author information is displayed."/>
+      </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="listOnlyCoauthorsCheckBoxItemStateChanged"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="firstNameLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="First names:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="fullFirstNameRadioButton">
+      <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="firstNameGroup"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Full"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fullFirstNameRadioButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="abbrFirstNameRadioButton">
+      <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="firstNameGroup"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Abbreviated"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="abbrFirstNameRadioButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="noFirstNameRadioButton">
+      <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="firstNameGroup"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="None"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="noFirstNameRadioButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="reverseNamesCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Last names first (Last name, First name)"/>
+      </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="reverseNamesCheckBoxItemStateChanged"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="yourNameLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Your name"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="yourNameSeparator">
+    </Component>
+    <Component class="javax.swing.JTextField" name="yourNameTextField">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Semicolon-separated list of names or author abbreviations from the BibTeX file that denote you."/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="yourNameTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        yourNameTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        yourNameTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="newlinesCheckbox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Spread over multiple lines"/>
+      </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="newlinesCheckboxItemStateChanged"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="groupingLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Grouping"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="groupingSeparator">
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="noGroupingRadioButton">
+      <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="groupingGroup"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="No grouping"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="noGroupingRadioButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="byYearRadioButton">
+      <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="groupingGroup"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="By year of publication"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="byYearRadioButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="groupWithinCategoriesRadioButton">
+      <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="groupCategoriesGroup"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Group within categories"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="groupWithinCategoriesRadioButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="categorizeWithinGroupsRadioButton">
+      <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="groupCategoriesGroup"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Categorize within groups"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="categorizeWithinGroupsRadioButtonActionPerformed"/>
+      </Events>
+    </Component>
+  </SubComponents>
+</Form>

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.JFileChooser" name="pubFileChooser">
+    </Component>
+    <Component class="javax.swing.JFileChooser" name="targetFileChooser">
+    </Component>
+    <Component class="javax.swing.JFileChooser" name="headerFileChooser">
+    </Component>
+    <Component class="javax.swing.JFileChooser" name="footerFileChooser">
+    </Component>
+  </NonVisualComponents>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="targetLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="targetSeparator" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="pubLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="pubSeparator" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="pubTextField" pref="208" max="32767" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="pubBrowseButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="targetTextField" pref="0" max="32767" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="targetBrowseButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="minifyOutputCheckBox" min="-2" max="-2" attributes="0"/>
+                                          <Component id="openOutputCheckBox" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="headerLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="headerSeparator" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="footerTextField" pref="0" max="32767" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="footerBrowseButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="headerTextField" pref="0" max="32767" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="headerBrowseButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="pubLabel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                      <Component id="pubSeparator" min="-2" pref="7" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="pubTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="pubBrowseButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="targetLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="targetSeparator" alignment="1" min="-2" pref="7" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="targetTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="targetBrowseButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="openOutputCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="minifyOutputCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="headerSeparator" alignment="1" min="-2" pref="7" max="-2" attributes="0"/>
+                  <Component id="headerLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="headerTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="headerBrowseButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="footerTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="footerBrowseButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="pubLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="List of publications"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="pubTextField">
+      <Properties>
+        <Property name="columns" type="int" value="50"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="pubTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;            public void insertUpdate(DocumentEvent e) {&#xa;                pubTextFieldTextChanged(e);&#xa;            }&#xa;            public void removeUpdate(DocumentEvent e) {&#xa;                pubTextFieldTextChanged(e);&#xa;            }&#xa;            public void changedUpdate(DocumentEvent e) {&#xa;                //Plain text components do not fire these events&#xa;            }&#xa;        });"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JButton" name="pubBrowseButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Browse..."/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pubBrowseButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="pubSeparator">
+      <Properties>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[0, 5]"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="targetSeparator">
+      <Properties>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[0, 5]"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="targetLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Output file"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="targetTextField">
+      <Properties>
+        <Property name="columns" type="int" value="30"/>
+        <Property name="toolTipText" type="java.lang.String" value="This file will be created or overridden with a list of your publications."/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="targetTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        targetTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        targetTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JButton" name="targetBrowseButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Browse..."/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="targetBrowseButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="headerLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Header &amp; Footer"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="headerSeparator">
+      <Properties>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[0, 5]"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="headerTextField">
+      <Properties>
+        <Property name="columns" type="int" value="29"/>
+        <Property name="toolTipText" type="java.lang.String" value="The contents of this file will be copied to your publication list before the publications themselves are listed. See the provided default header for an example."/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="headerTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        headerTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        headerTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JTextField" name="footerTextField">
+      <Properties>
+        <Property name="columns" type="int" value="29"/>
+        <Property name="toolTipText" type="java.lang.String" value="The contents of this file will be copied to your publication list after the publications themselves are listed. See the provided default footer for an example."/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="footerTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        footerTextFieldTextChanged(e);&#xa;    }&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        footerTextFieldTextChanged(e);&#xa;    }&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        //Plain text components do not fire these events&#xa;    }&#xa;});"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JButton" name="footerBrowseButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Browse..."/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="footerBrowseButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="headerBrowseButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Browse..."/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="headerBrowseButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="openOutputCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Open output file after generating"/>
+      </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="openOutputCheckBoxItemStateChanged"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="minifyOutputCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Minimize output file size"/>
+      </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="minifyOutputCheckBoxItemStateChanged"/>
+      </Events>
+    </Component>
+  </SubComponents>
+</Form>
