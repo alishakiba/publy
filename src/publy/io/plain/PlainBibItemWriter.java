@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2016 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -322,7 +322,7 @@ public class PlainBibItemWriter extends BibItemWriter {
                 indent();
                 return;
             } else {
-                Console.error("No editor or organization found for entry \"%s\".", item.getId());
+                Console.error("No editor or organization found for @proceedings entry \"%s\".", item.getId());
                 return;
             }
         } else {

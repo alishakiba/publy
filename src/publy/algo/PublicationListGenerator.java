@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2014-2016 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,9 @@ package publy.algo;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
+import mangara.miniweb.MiniWeb;
 import publy.Console;
 import publy.data.Section;
 import publy.data.bibitem.BibItem;
@@ -47,7 +49,7 @@ public class PublicationListGenerator {
     public static boolean generatePublicationList(Settings settings) {
         Console.debug("Generating publication list.");
         boolean success = false;
-        
+
         if (checkFileSettings(settings)) {
             List<BibItem> items = parsePublications(settings);
 
@@ -61,7 +63,7 @@ public class PublicationListGenerator {
 
             Console.log("Done.");
         }
-        
+
         return success;
     }
 
@@ -163,7 +165,13 @@ public class PublicationListGenerator {
     private static boolean writeHtmlVersion(Settings settings, List<Section> sections) {
         try {
             PublicationListWriter writer = new HTMLPublicationListWriter(settings);
-            writer.writePublicationList(sections, settings.getFileSettings().getTarget());
+            Path target = settings.getFileSettings().getTarget();
+            writer.writePublicationList(sections, target);
+
+            if (settings.getFileSettings().isMinifyOutput()) {
+                MiniWeb.minify(Collections.singleton(target), true);
+            }
+
             Console.log("HTML publication list written.");
             return true;
         } catch (Exception | AssertionError ex) {

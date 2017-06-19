@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import publy.data.Pair;
 import publy.data.bibitem.BibItem;
 
 /**
@@ -64,8 +65,8 @@ public class BibItemParserTest {
             new Object[]{"comme{Comme\nt", "EX"}, // There should be a close brace
             new Object[]{"comme{Co{m}me\nt", "EX"}, // There should be a close brace
             new Object[]{"comme{{Co{}m}me\nt", "EX"}, // There should be a close brace
-            new Object[]{"comment{Comment}", new BibItem("comment", null)},
-            new Object[]{"comment{Comment} @string{this = \"test\"}", new BibItem("comment", null)},
+            new Object[]{"comment{Comment}", new BibItem("comment", null), 1},
+            new Object[]{"comment{Comment} @string{this = \"test\"}", new BibItem("comment", null), 1},
             new Object[]{"article{bose,\n title = \"Title\", author = {Bose, {P}rosenjit}}",
                 (new BibItem("article", "bose") {
                     BibItem init() {
@@ -73,224 +74,221 @@ public class BibItemParserTest {
                         put("title", "Title");
                         return this;
                     }
-                }).init()},
-            new Object[]{"comment{Comment\n\t  \t}", new BibItem("comment", null)},
-            new Object[]{"comment{C{{o}m{m}}}ent}", new BibItem("comment", null)},
-
+                }).init(), 2},
+            new Object[]{"comment{Comment\n\t  \t}", new BibItem("comment", null), 1}, // Control needs to go back to the list parser, because BibTeX still parses stuff inside
+            new Object[]{"comment{C{{o}m{m}}}ent}", new BibItem("comment", null), 1},
             new Object[]{"article{test, title = \"Title1\"}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "Title1");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = \"Title2\",}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "Title2");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = {Title3}}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "Title3");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = {Title4},}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "Title4");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = 11}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "11");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = 11,}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "11");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = abbr}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "<<abbr>>");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = abbr,}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "<<abbr>>");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = \"Comments on {\"}Filenames and Fonts{\"}\"}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "Comments on {\"}Filenames and Fonts{\"}");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = {Comments on \"Filenames and Fonts\"}}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "Comments on \"Filenames and Fonts\"");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = \"The {{\\LaTeX}} {C}ompanion\"}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "The {{\\LaTeX}} {C}ompanion");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = \"The {{\\LaTeX,}} {C}ompanion\"}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "The {{\\LaTeX,}} {C}ompanion");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = {The ,ompanion}}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "The ,ompanion");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = {The ,ompanion},}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "The ,ompanion");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = {submitted}}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "submitted");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = {Title }}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "Title");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = { Title}}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "Title");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = { Title }}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "Title");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = {The title }}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "The title");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, title = {The    title}}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "The title");
                         return this;
                     }
-                }).init()},
-            new Object[]{"article{test, title = {The \n\r title\t}}",
+                }).init(), 1},
+            new Object[]{"article{test, title = {The \r\n title\t}}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("title", "The title");
                         return this;
                     }
-                }).init()},
-
+                }).init(), 2},
             new Object[]{"article{test, author = goossens # and # mittelbach # and # samarin}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("author", "<<goossens>><<and>><<mittelbach>><<and>><<samarin>>");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, author = goossens # \" and \" # mittelbach # and # samarin}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("author", "<<goossens>> and <<mittelbach>><<and>><<samarin>>");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, author = \"goossens\" # \" and \" # mittelbach # and # samarin}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("author", "goossens and <<mittelbach>><<and>><<samarin>>");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, author = \"goossens #  and \" # mittelbach # and # samarin}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("author", "goossens # and <<mittelbach>><<and>><<samarin>>");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, author = \"goos,sens #  and \" # mittelbach # and # samarin}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("author", "goos,sens # and <<mittelbach>><<and>><<samarin>>");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, author = goossens # and # {mit,telbach} # and # samarin}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("author", "<<goossens>><<and>>mit,telbach<<and>><<samarin>>");
                         return this;
                     }
-                }).init()},
+                }).init(), 1},
             new Object[]{"article{test, author = goossens # and # {mit, \"tel\" # bach} # and # samarin}",
                 (new BibItem("article", "test") {
                     BibItem init() {
                         put("author", "<<goossens>><<and>>mit, \"tel\" # bach<<and>><<samarin>>");
                         return this;
                     }
-                }).init()},
-
-            new Object[]{"comment{AW = \"Addison-Wesley\"}", new BibItem("comment", null)},
-            new Object[]{"preamble{AW = \"Addison-Wesley\"}", new BibItem("preamble", null)},
+                }).init(), 1},
+            new Object[]{"comment{AW = \"Addison-Wesley\"}", new BibItem("comment", null), 1},
+            new Object[]{"preamble{AW = \"Addison-Wesley\"}", new BibItem("preamble", null), 1},
             new Object[]{"string{AW = \"Addison-Wesley\"}", (new BibItem("string", null) {
                 BibItem init() {
                     put("short", "AW");
                     put("full", "Addison-Wesley");
                     return this;
                 }
-            }).init()},
+            }).init(), 1},
             new Object[]{"string{AW = {Addison-Wesley}}", (new BibItem("string", null) {
                 BibItem init() {
                     put("short", "AW");
                     put("full", "Addison-Wesley");
                     return this;
                 }
-            }).init()},
+            }).init(), 1},
             new Object[]{"book{companion,\n"
                 + "author = \"Goossens, Michel and Mittelbach, Franck and Samarin, Alexander\",\n"
                 + "title = \"The {{\\LaTeX}} {C}ompanion\",\n"
@@ -313,7 +311,7 @@ public class BibItemParserTest {
                         put("library", "Yes");
                         return this;
                     }
-                }).init()},
+                }).init(), 10},
             new Object[]{"inproceedings{morin2013average,\n"
                 + " title={On the Average Number of Edges in Theta Graphs},\n"
                 + " author={<<pat>> and <<me>>},\n"
@@ -334,7 +332,7 @@ public class BibItemParserTest {
                         put("pubstate", "submitted");
                         return this;
                     }
-                }).init()},
+                }).init(), 9},
             new Object[]{"Book{Weyl:1922:STMb,\n"
                 + "  author =       \"Hermann Weyl and Henry L. (Henry Leopold) Brose\",\n"
                 + "  title =        \"Space--time--matter\",\n"
@@ -368,21 +366,50 @@ public class BibItemParserTest {
                         put("subject", "Relativity (physics); space and time");
                         return this;
                     }
-                }).init()},
-            new Object[]{"book{companion}", new BibItem("book", "companion")},};
+                }).init(), 16},
+            new Object[]{"unpublished{dynamic-graph-coloring,\n"
+                + " title={Dynamic Graph Coloring},\n"
+                + " author={<<luis>> and <<jeanc>> and <<matias>> and <<stefanl>> and <<andre>> and <<marcelr>> and <<me>>},\n"
+                + " year={2016},\n"
+                + " abstract={<p>In this paper we study the number of vertex recolorings that an algorithm needs to perform in order to maintain a proper coloring of a $\\mathcal{C}$-colorable graph under insertion and deletion of vertices and edges.\n"
+                + "We assume that all updates keep the graph $\\mathcal{C}$-colorable and that $N$ is the maximum number of vertices in the graph at any point in time.</p>\n"
+                + "\n"
+                + " <p>We present two algorithms to maintain an approximation of the optimal coloring that, together, present a trade-off between the number of recolorings and the number of colors used: For any $d>0$, the first algorithm maintains a proper $O(\\mathcal{C} dN^{1/d})$-coloring and recolors at most $O(d)$ vertices per update. The second maintains an $O(\\mathcal{C} d)$-coloring using $O(dN^{1/d})$ recolorings per update. Both algorithms achieve the same asymptotic performance when $d = \\log N$.</p>\n"
+                + "\n"
+                + " <p>Moreover, we show that for any algorithm that maintains a $c$-coloring of a $2$-colorable graph on $N$ vertices during a sequence of $m$ updates, there is a sequence of updates that forces the algorithm to recolor at least $\\Omega(m\\cdot N^\\frac{2}{c(c-1)})$ vertices.</p>},\n"
+                + " file={publications/papers/2016/Dynamic Graph Coloring.pdf}\n"
+                + "}",
+                (new BibItem("unpublished", "dynamic-graph-coloring") {
+                    BibItem init() {
+                        put("author", "<<luis>> and <<jeanc>> and <<matias>> and <<stefanl>> and <<andre>> and <<marcelr>> and <<me>>");
+                        put("title", "Dynamic Graph Coloring");
+                        put("year", "2016");
+                        put("abstract", "<p>In this paper we study the number of vertex recolorings that an algorithm needs to perform in order to maintain a proper coloring of a $\\mathcal{C}$-colorable graph under insertion and deletion of vertices and edges. We assume that all updates keep the graph $\\mathcal{C}$-colorable and that $N$ is the maximum number of vertices in the graph at any point in time.</p> <p>We present two algorithms to maintain an approximation of the optimal coloring that, together, present a trade-off between the number of recolorings and the number of colors used: For any $d>0$, the first algorithm maintains a proper $O(\\mathcal{C} dN^{1/d})$-coloring and recolors at most $O(d)$ vertices per update. The second maintains an $O(\\mathcal{C} d)$-coloring using $O(dN^{1/d})$ recolorings per update. Both algorithms achieve the same asymptotic performance when $d = \\log N$.</p> <p>Moreover, we show that for any algorithm that maintains a $c$-coloring of a $2$-colorable graph on $N$ vertices during a sequence of $m$ updates, there is a sequence of updates that forces the algorithm to recolor at least $\\Omega(m\\cdot N^\\frac{2}{c(c-1)})$ vertices.</p>");
+                        put("file", "publications/papers/2016/Dynamic Graph Coloring.pdf");
+                        return this;
+                    }
+                }).init(), 12},
+            new Object[]{"book{companion}", new BibItem("book", "companion"), 1},};
 
+        int i = 0;
         for (Object[] test : tests) {
+            i++;
             try {
-                BibItem result = BibItemParser.parseBibItem(new StringReader((String) test[0])).getSecond();
-                BibItem expResult = (BibItem) test[1];
-                assertEqualItems("Input: <" + test[0] + ">", expResult, result);
+                Pair<Integer, BibItem> result = BibItemParser.parseBibItem(new StringReader((String) test[0]));
+
+                if ("EX".equals(test[1])) {
+                    fail("parseBibItem did not throw an Exception with input " + i + " \"" + test[0] + "\".");
+                } else {
+                    assertEqualItems("Input " + i + ": <" + test[0] + ">", (BibItem) test[1], result.getSecond());
+                    assertEquals("Input " + i + ": <" + test[0] + ">", test[2], result.getFirst());
+                }
             } catch (IOException | ParseException ioe) {
                 if (!"EX".equals(test[1])) {
                     ioe.printStackTrace();
-                    fail("parseBibItem threw Exception \"" + ioe + "\" with input \"" + test[0] + "\".");
+                    fail("parseBibItem threw Exception \"" + ioe + "\" with input " + i + " \"" + test[0] + "\".");
                 }
             } catch (Exception ex) {
-                System.err.println("Input: <" + test[0] + ">");
+                System.err.println("Input " + i + ": <" + test[0] + ">");
                 throw ex;
             }
         }

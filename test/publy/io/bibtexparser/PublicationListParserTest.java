@@ -286,6 +286,7 @@ public class PublicationListParserTest {
 
         for (Object[] test : tests) {
             try {
+                @SuppressWarnings("unchecked")
                 List<BibItem> expResult = (List<BibItem>) test[1];
                 List<BibItem> result = PublicationListParser.parseBibTeX(new BufferedReader(new StringReader((String) test[0])));
                 assertEqualLists("Input: <" + test[0] + ">", expResult, result);

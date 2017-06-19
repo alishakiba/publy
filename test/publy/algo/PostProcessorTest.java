@@ -27,10 +27,6 @@ import publy.Console;
 import publy.data.bibitem.BibItem;
 import publy.data.settings.Settings;
 
-/**
- *
- * @author Sander
- */
 public class PostProcessorTest {
 
     public PostProcessorTest() {
@@ -62,6 +58,7 @@ public class PostProcessorTest {
         Settings settings = new Settings();
         settings.getConsoleSettings().setShowWarnings(false);
         Console.setSettings(settings.getConsoleSettings());
+        Console.setHeadless(true);
 
         BibItem item1 = new BibItem("inproceedings", "Kang2011");
         item1.put("author", "Kang, Hongwen and Hebert, Martial and Kanade, Takeo");

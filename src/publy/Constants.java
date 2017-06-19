@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2016 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public class Constants {
     /**
      * Publy's minor version number.
      */
-    public static final int MINOR_VERSION = 1;
+    public static final int MINOR_VERSION = 2;
     /**
      * Publy's application icons.
      */

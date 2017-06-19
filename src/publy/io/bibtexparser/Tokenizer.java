@@ -89,13 +89,13 @@ public class Tokenizer extends StreamTokenizer {
                     expected.append("WORD");
                     break;
                 default:
-                    expected.append(Character.toString((char) c));
+                    expected.append('\'').append(Character.toString((char) c)).append('\'');
                     break;
             }
-            expected.append(',');
+            expected.append(", ");
         }
 
-        expected.deleteCharAt(expected.length() - 1); // Delete last ','
+        expected.delete(expected.length() - 2, expected.length()); // Delete last ", "
         expected.append(']');
 
         throw new ParseException(String.format(

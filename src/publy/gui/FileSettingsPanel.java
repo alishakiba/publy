@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sander Verdonschot <sander.verdonschot at gmail.com>.
+ * Copyright 2013-2016 Sander Verdonschot <sander.verdonschot at gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.event.ItemEvent;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.nio.file.Path;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
@@ -32,10 +31,6 @@ import publy.Runner;
 import publy.data.settings.FileSettings;
 import publy.io.ResourceLocator;
 
-/**
- *
- *
- */
 public class FileSettingsPanel extends javax.swing.JPanel {
 
     private final FileSettings settings;
@@ -68,24 +63,11 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             pubFileChooserMac = new FileDialog((Frame) null);
             htmlFileChooserMac = new FileDialog((Frame) null);
 
-            FilenameFilter bibFilter = new FilenameFilter() {
-
-                @Override
-                public boolean accept(File dir, String name) {
-                    return name.toLowerCase().endsWith(".bib");
-                }
-            };
-            FilenameFilter htmlFilter = new FilenameFilter() {
-
-                @Override
-                public boolean accept(File dir, String name) {
-                    String lowercaseName = name.toLowerCase();
-                    return lowercaseName.endsWith(".html") || lowercaseName.endsWith(".htm");
-                }
-            };
-
-            pubFileChooserMac.setFilenameFilter(bibFilter);
-            htmlFileChooserMac.setFilenameFilter(htmlFilter);
+            pubFileChooserMac.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith(".bib"));
+            htmlFileChooserMac.setFilenameFilter((dir, name) -> {
+                String lowercaseName = name.toLowerCase();
+                return lowercaseName.endsWith(".htm") || lowercaseName.endsWith(".html");
+            });
         } else {
             FileFilter bibFilter = new FileNameExtensionFilter("BibTeX files (*.bib)", "bib");
             FileFilter htmlFilter = new FileNameExtensionFilter("HTML files (*.htm;*.html)", "htm", "html");
@@ -108,6 +90,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         // Target
         updateField(targetTextField, targetFileChooser, settings.getTarget(), true);
         openOutputCheckBox.setSelected(settings.isOpenOutput());
+        minifyOutputCheckBox.setSelected(settings.isMinifyOutput());
 
         // Header and Footer
         updateField(headerTextField, headerFileChooser, settings.getHeader(), false);
@@ -160,6 +143,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         footerBrowseButton = new javax.swing.JButton();
         headerBrowseButton = new javax.swing.JButton();
         openOutputCheckBox = new javax.swing.JCheckBox();
+        minifyOutputCheckBox = new javax.swing.JCheckBox();
 
         pubLabel.setText("List of publications");
 
@@ -263,6 +247,13 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             }
         });
 
+        minifyOutputCheckBox.setText("Minimize output file size");
+        minifyOutputCheckBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                minifyOutputCheckBoxItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -284,16 +275,18 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                                 .addGap(10, 10, 10)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(openOutputCheckBox)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
                                         .addComponent(pubTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(pubBrowseButton))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(targetTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(targetBrowseButton)))))
+                                        .addComponent(targetBrowseButton))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(minifyOutputCheckBox)
+                                            .addComponent(openOutputCheckBox))
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
                         .addGap(10, 10, 10))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -338,6 +331,8 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                     .addComponent(targetBrowseButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(openOutputCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(minifyOutputCheckBox)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(headerSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -446,6 +441,14 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_openOutputCheckBoxItemStateChanged
 
+    private void minifyOutputCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_minifyOutputCheckBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.DESELECTED) {
+            settings.setMinifyOutput(false);
+        } else if (evt.getStateChange() == ItemEvent.SELECTED) {
+            settings.setMinifyOutput(true);
+        }
+    }//GEN-LAST:event_minifyOutputCheckBoxItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton footerBrowseButton;
     private javax.swing.JFileChooser footerFileChooser;
@@ -455,6 +458,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel headerLabel;
     private javax.swing.JSeparator headerSeparator;
     private javax.swing.JTextField headerTextField;
+    private javax.swing.JCheckBox minifyOutputCheckBox;
     private javax.swing.JCheckBox openOutputCheckBox;
     private javax.swing.JButton pubBrowseButton;
     private javax.swing.JFileChooser pubFileChooser;

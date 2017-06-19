@@ -47,6 +47,7 @@ public class BibItemParser {
         tokenizer.setSpecialCharacters(SPECIAL_CHARACTERS);
 
         BibItem result = null;
+        int extraNewLines = 0;
         
         try {
             tokenizer.match(StreamTokenizer.TT_WORD);
@@ -55,13 +56,17 @@ public class BibItemParser {
             switch (type) {
                 case "comment":
                 case "preamble":
-                    result = new BibItem(type, null); // Ignore contents
+                    result = new BibItem(type, null);
+                    // Don't parse the contents and pass control back to the list parser
+                    // BibTeX still processes publications inside an @comment, so we can't consume it here
                     break;
                 case "string":
                     result = parseString();
                     break;
                 default:
-                    result = parsePublication(type);
+                    Pair<Integer, BibItem> pub = parsePublication(type);
+                    extraNewLines = pub.getFirst();
+                    result = pub.getSecond();
                     break;
             }
         } catch (ParseException ex) { // Do not reset upon IOException, as that is likely to be unrecoverable
@@ -78,7 +83,7 @@ public class BibItemParser {
             throw ex;
         }
         
-        return new Pair<>(tokenizer.lineno(), result);
+        return new Pair<>(tokenizer.lineno() + extraNewLines, result);
     }
 
     /**
@@ -131,11 +136,12 @@ public class BibItemParser {
      * @return
      * @throws ParseException
      */
-    private static BibItem parsePublication(String type) throws ParseException, IOException {
+    private static Pair<Integer, BibItem> parsePublication(String type) throws ParseException, IOException {
         // <body> ::= "{" <id> ("," <field>)* "}" | "(" <id> ("," <field>)* ")"
         String id = null;
 
         try {
+            int fieldBodyNewLines = 0;
             int bracket = tokenizer.match('{', '(');
 
             tokenizer.match(StreamTokenizer.TT_WORD);
@@ -148,17 +154,18 @@ public class BibItemParser {
                 Pair<String, String> field = parseField();
 
                 if (field != null) {
+                    fieldBodyNewLines += countNewLines(field.getSecond());
                     result.put(field.getFirst(), normalizeValue(field.getSecond()));
                 }
             }
 
             if (bracket == '{') {
-                tokenizer.match('}');
+                tokenizer.match(',', '}'); // this won't be a comma ',', but including it here makes the error message much clearer
             } else {
-                tokenizer.match(')');
+                tokenizer.match(',', ')');
             }
 
-            return result;
+            return new Pair<>(fieldBodyNewLines, result);
         } catch (ParseException pe) {
             pe.setType('@' + type + " entry");
 
@@ -256,6 +263,13 @@ public class BibItemParser {
 
     private static String normalizeValue(String value) {
         return value.replaceAll("\\s+", " ").trim();
+    }
+    
+    private static int countNewLines(String value) {
+        // (value + " ") so that it counts newlines on the end of value
+        // "\r?\n|\r" matches \r\n, \n, and \r
+        // - 1, because we only care about new lines, not the current one
+        return (value + " ").split("\r?\n|\r").length - 1;
     }
 
     private BibItemParser() {
