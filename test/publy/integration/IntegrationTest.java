@@ -15,6 +15,8 @@
  */
 package publy.integration;
 
+import difflib.DiffUtils;
+import difflib.Patch;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -23,13 +25,20 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.junit.Test;
 import publy.algo.PublicationListGenerator;
 import publy.io.settings.SettingsReaderCurrent;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import publy.Console;
 import publy.data.settings.Settings;
 
+@RunWith(Parameterized.class)
 public class IntegrationTest {
 
     private static final Path HEADER = Paths.get("test/publy/integration/EmptyFileForTests.txt");
@@ -37,37 +46,40 @@ public class IntegrationTest {
     private static final Path TEST_ARCHIVE = Paths.get("test/publy/integration/integration.zip");
     private static final Path WORKING_DIR = Paths.get("testOutput");
 
-    /**
-     * Run all integration tests.
-     *
-     * @throws java.io.IOException
-     */
-    @Test
-    public void testIntegration() throws IOException {
+    private static FileSystem zipFs;
+    private final int testNumber;
+
+    public IntegrationTest(int testNumber) throws IOException {
+        this.testNumber = testNumber;
+    }
+
+    @Parameters
+    public static Collection<Object[]> data() throws IOException {
         Files.createDirectories(WORKING_DIR);
         Console.setHeadless(true);
+        zipFs = FileSystems.newFileSystem(TEST_ARCHIVE, null);
 
-        FileSystem zipFs = FileSystems.newFileSystem(TEST_ARCHIVE, null);
-
+        Collection<Object[]> tests = new ArrayList<>();
         int count = 1;
 
-        while (testExists(count, zipFs)) {
-            cleanUp();
-            System.out.printf("Test %03d%n", count);
-            runTest(count, zipFs);
+        while (testExists(count)) {
+            tests.add(new Object[]{count});
             count++;
         }
 
-        cleanUp();
+        return tests;
     }
 
-    private boolean testExists(int count, FileSystem zipFs) {
+    private static boolean testExists(int count) {
         return Files.exists(zipFs.getPath(String.format("test%03d", count)));
     }
 
-    private void runTest(int count, FileSystem zipFs) throws IOException {
-        Path inputDir = zipFs.getPath(String.format("test%03d", count));
-        Path workDir = WORKING_DIR.resolve(String.format("test%03d", count));
+    @Test
+    public void runTest() throws IOException {
+        cleanUp();
+
+        Path inputDir = zipFs.getPath(String.format("test%03d", testNumber));
+        Path workDir = WORKING_DIR.resolve(String.format("test%03d", testNumber));
 
         Files.createDirectories(workDir);
 
@@ -99,6 +111,8 @@ public class IntegrationTest {
         checkFileEquality("TestPublications.html", inputDir, workDir);
         checkFileEquality("TestPublications.utf8.txt", inputDir, workDir);
         checkFileEquality("TestPublications-generated.bib", inputDir, workDir);
+
+        cleanUp();
     }
 
     private void cleanUp() throws IOException {
@@ -158,6 +172,21 @@ public class IntegrationTest {
                 } else if (inputLine != null && workLine == null) {
                     fail(String.format("Generated file %s ends before expected output ends.%nNext input line: %s", fileName, inputLine));
                 }
+            } catch (AssertionError e) {
+                // Generate a diff
+                List<String> input = Files.readAllLines(inputFile, StandardCharsets.UTF_8);
+                Patch<String> p = DiffUtils.diff(input, Files.readAllLines(workFile, StandardCharsets.UTF_8));
+                List<String> diff = DiffUtils.generateUnifiedDiff(fileName + " (expected)", fileName + " (generated)", input, p, 2);
+                
+                System.out.println("==== Test " + testNumber + " ====");
+                System.out.println();
+                for (String line : diff) {
+                    System.out.println(line);
+                }
+                System.out.println();
+                System.out.println();
+                
+                throw e;
             }
         }
     }
