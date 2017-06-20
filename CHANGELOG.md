@@ -1,7 +1,7 @@
 # Publy - Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.2] - 2017-06-19
+## [1.2] - 2017-06-20
 Bumped the target Java version to Java 8. If you have trouble running this version (or get an error including "Unsupported major.minor version 52.0"), please [download the latest version of Java](https://www.java.com/).
 
 ### Added
