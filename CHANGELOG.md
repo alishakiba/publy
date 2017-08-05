@@ -1,6 +1,13 @@
 # Publy - Change Log
 All notable changes to this project will be documented in this file.
 
+
+## [1.2.1] - 2017-08-05
+
+### Fixed
+- Added missing manifest to the release JAR.
+
+
 ## [1.2] - 2017-06-20
 Bumped the target Java version to Java 8. If you have trouble running this version (or get an error including "Unsupported major.minor version 52.0"), please [download the latest version of Java](https://www.java.com/).
 
@@ -15,6 +22,7 @@ Bumped the target Java version to Java 8. If you have trouble running this versi
 - Improved parser error messages. (Issues #241 and #242)
 - Updated the MathJax code in DefaultHeader.html. MathJax shut down their own CDN, so this is necessary for mathematics to properly render.
 
+
 ## [1.1] - 2016-06-11
 ### Added
 - The ability to add per-publication images (Issue #198).
@@ -24,6 +32,7 @@ Bumped the target Java version to Java 8. If you have trouble running this versi
 ### Fixed
 - Line counts in parser error messages (Issue #238).
 - A bug where braces after ^ and _ were discarded in abstracts, resulting in incorrect display of complex exponents or subscripts (Issue #240).
+
 
 ## [1.0] - 2015-11-16
 First feature-complete release.
