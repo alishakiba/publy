@@ -656,9 +656,9 @@ public class HTMLBibItemWriter extends BibItemWriter {
         if (isPresent(item, "doi") && !(settings.getHtmlSettings().getTitleTarget() == HTMLSettings.TitleLinkTarget.PAPER && "doi".equals(getPaperLinkField(settings, item)))) {
             String link = get(item, "doi");
 
-            // Add the general DOI part if necessary 
-            if (!link.startsWith("http://dx.doi.org/")) {
-                link = "http://dx.doi.org/" + link;
+            // Add the general DOI part if necessary
+            if (!link.startsWith("http")) {
+                link = "https://dx.doi.org/" + link;
             }
 
             writeLink(divOpened, link, "DOI");
@@ -690,7 +690,7 @@ public class HTMLBibItemWriter extends BibItemWriter {
             }
 
             // Don't add it if it points to the DOI and the item already has a DOI link
-            if (link.startsWith("http://dx.doi.org/") && isPresent(item, "doi")) {
+            if (link.matches("^https?://(dx\\.)?doi\\.org/.*") && isPresent(item, "doi")) {
                 addUrl = false;
             }
 
@@ -944,8 +944,8 @@ public class HTMLBibItemWriter extends BibItemWriter {
                 String link = get(item, "doi");
 
                 // Add the general DOI part if necessary 
-                if (!link.startsWith("http://dx.doi.org/")) {
-                    link = "http://dx.doi.org/" + link;
+                if (!link.startsWith("http")) {
+                    link = "https://dx.doi.org/" + link;
                 }
 
                 return link;
