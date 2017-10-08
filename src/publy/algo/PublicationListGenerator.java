@@ -169,7 +169,8 @@ public class PublicationListGenerator {
             writer.writePublicationList(sections, target);
 
             if (settings.getFileSettings().isMinifyOutput()) {
-                MiniWeb.minify(Collections.singleton(target), true);
+                MiniWeb.setMungeClassNames(false);
+                MiniWeb.minify(Collections.singleton(target), false);
             }
 
             Console.log("HTML publication list written.");
