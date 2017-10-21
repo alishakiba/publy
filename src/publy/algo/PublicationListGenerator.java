@@ -165,14 +165,7 @@ public class PublicationListGenerator {
     private static boolean writeHtmlVersion(Settings settings, List<Section> sections) {
         try {
             PublicationListWriter writer = new HTMLPublicationListWriter(settings);
-            Path target = settings.getFileSettings().getTarget();
-            writer.writePublicationList(sections, target);
-
-            if (settings.getFileSettings().isMinifyOutput()) {
-                MiniWeb.setMungeClassNames(false);
-                MiniWeb.minify(Collections.singleton(target), false);
-            }
-
+            writer.writePublicationList(sections, settings.getFileSettings().getTarget());
             Console.log("HTML publication list written.");
             return true;
         } catch (Exception | AssertionError ex) {

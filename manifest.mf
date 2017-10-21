@@ -3,4 +3,3 @@ X-COMMENT: Main-Class will be added automatically by build
 Class-Path: 
  lib/JCommander.jar 
  lib/orange-extensions-1.3.0.jar 
- lib/MiniWeb-v1.1.jar 
