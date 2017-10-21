@@ -90,7 +90,6 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         // Target
         updateField(targetTextField, targetFileChooser, settings.getTarget(), true);
         openOutputCheckBox.setSelected(settings.isOpenOutput());
-        minifyOutputCheckBox.setSelected(settings.isMinifyOutput());
 
         // Header and Footer
         updateField(headerTextField, headerFileChooser, settings.getHeader(), false);
@@ -143,7 +142,6 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         footerBrowseButton = new javax.swing.JButton();
         headerBrowseButton = new javax.swing.JButton();
         openOutputCheckBox = new javax.swing.JCheckBox();
-        minifyOutputCheckBox = new javax.swing.JCheckBox();
 
         pubLabel.setText("List of publications");
 
@@ -247,13 +245,6 @@ public class FileSettingsPanel extends javax.swing.JPanel {
             }
         });
 
-        minifyOutputCheckBox.setText("Minimize output file size");
-        minifyOutputCheckBox.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                minifyOutputCheckBoxItemStateChanged(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -283,9 +274,7 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(targetBrowseButton))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(minifyOutputCheckBox)
-                                            .addComponent(openOutputCheckBox))
+                                        .addComponent(openOutputCheckBox)
                                         .addGap(0, 0, Short.MAX_VALUE)))))
                         .addGap(10, 10, 10))
                     .addGroup(layout.createSequentialGroup()
@@ -331,8 +320,6 @@ public class FileSettingsPanel extends javax.swing.JPanel {
                     .addComponent(targetBrowseButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(openOutputCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(minifyOutputCheckBox)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(headerSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -441,14 +428,6 @@ public class FileSettingsPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_openOutputCheckBoxItemStateChanged
 
-    private void minifyOutputCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_minifyOutputCheckBoxItemStateChanged
-        if (evt.getStateChange() == ItemEvent.DESELECTED) {
-            settings.setMinifyOutput(false);
-        } else if (evt.getStateChange() == ItemEvent.SELECTED) {
-            settings.setMinifyOutput(true);
-        }
-    }//GEN-LAST:event_minifyOutputCheckBoxItemStateChanged
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton footerBrowseButton;
     private javax.swing.JFileChooser footerFileChooser;
@@ -458,7 +437,6 @@ public class FileSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel headerLabel;
     private javax.swing.JSeparator headerSeparator;
     private javax.swing.JTextField headerTextField;
-    private javax.swing.JCheckBox minifyOutputCheckBox;
     private javax.swing.JCheckBox openOutputCheckBox;
     private javax.swing.JButton pubBrowseButton;
     private javax.swing.JFileChooser pubFileChooser;

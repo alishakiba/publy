@@ -31,7 +31,6 @@ public class FileSettings {
     // Output file
     private Path target;
     private boolean openOutput = true; // Whether to automatically open the output file in a browser after generating
-    private boolean minifyOutput = true;
     // Header and Footer
     private Path header = ResourceLocator.getFullPath(DEFAULT_HEADER_LOCATION);
     private Path footer = ResourceLocator.getFullPath(DEFAULT_FOOTER_LOCATION);
@@ -88,24 +87,6 @@ public class FileSettings {
      */
     public void setOpenOutput(boolean openOutput) {
         this.openOutput = openOutput;
-    }
-
-    /**
-     * Gets whether to reduce the output file size as much as possible.
-     *
-     * @return whether to reduce the output file size as much as possible
-     */
-    public boolean isMinifyOutput() {
-        return minifyOutput;
-    }
-
-    /**
-     * Sets whether to reduce the output file size as much as possible.
-     *
-     * @param minifyOutput
-     */
-    public void setMinifyOutput(boolean minifyOutput) {
-        this.minifyOutput = minifyOutput;
     }
 
     /**

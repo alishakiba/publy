@@ -2,10 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 
-## [1.2.2] - 2017-10-09
+## [1.2.2] - 2017-10-21
 
-### Changed
-- Publy no longer overwrites generated files and linked CSS and JS files with minified versions when site minification is enabled. Instead, the minified files are placed alongside the original files with a ".min" extension. In addition, class names in the HTML and CSS files are no longer shortened.
+### Removed
+- Publy no longer tries to minimize the output files.
 
 
 ## [1.2.1] - 2017-08-05
