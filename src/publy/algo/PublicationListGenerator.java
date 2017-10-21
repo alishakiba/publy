@@ -164,6 +164,7 @@ public class PublicationListGenerator {
         try {
             PublicationListWriter writer = new HTMLPublicationListWriter(settings);
             writer.writePublicationList(sections, settings.getFileSettings().getTarget());
+
             Console.log("HTML publication list written.");
             return true;
         } catch (Exception | AssertionError ex) {
