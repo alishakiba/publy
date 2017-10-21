@@ -42,24 +42,3 @@ Bumped the target Java version to Java 8. If you have trouble running this versi
 
 ## [1.0] - 2015-11-16
 First feature-complete release.
-
-<!---
-Example of a more complicated release:
-
-## [0.0.7] - 2015-02-16
-### Added
-- Link, and make it obvious that date format is ISO 8601.
-
-### Changed
-- Clarified the section on "Is there a standard change log format?".
-
-### Fixed
-- Fix Markdown links to tag comparison URL with footnote-style links.
-
-### Removed
-- Remove empty sections from CHANGELOG, they occupy too much space and
-create too much noise in the file. People will have to assume that the
-missing sections were intentionally left out because they contained no
-notable changes.
-
---->
