@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 
-## [1.2.2] - 2017-10-21
+## [1.3] - 2017-10-21
 
 ### Removed
 - Publy no longer tries to minimize the output files.
