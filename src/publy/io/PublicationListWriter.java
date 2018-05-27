@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import publy.data.Section;
+import publy.data.settings.GeneralSettings;
 import publy.data.settings.Settings;
 
 /**
@@ -47,4 +48,21 @@ public abstract class PublicationListWriter {
     }
 
     protected abstract void writePublicationList(List<Section> sections, BufferedWriter out) throws IOException;
+
+    protected int getInitialCount(List<Section> sections) {
+        if (settings.getGeneralSettings().getNumbering() != GeneralSettings.Numbering.GLOBAL) {
+            return 0;
+        }
+        if (!settings.getGeneralSettings().isReverseNumbering()) {
+            return 1;
+        }
+
+        int count = 0;
+
+        for (Section s : sections) {
+            count += s.countAllItems();
+        }
+
+        return count;
+    }
 }

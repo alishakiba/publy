@@ -63,13 +63,13 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
     @Override
     protected void writePublicationList(List<Section> sections, BufferedWriter out) throws IOException {
         itemWriter = new HTMLBibItemWriter(out, settings);
+        count = getInitialCount(sections);
 
         copyAuxiliaryFiles();
-        initializeCount(sections);
         writePreamble(out, sections);
 
         for (Section s : sections) {
-            writeSection(s, sections, new ArrayList<Section>(), out);
+            writeSection(s, sections, new ArrayList<>(), out);
         }
 
         writePostamble(sections, out);
@@ -149,20 +149,6 @@ public class HTMLPublicationListWriter extends PublicationListWriter {
         } else {
             // Copy the footer from the footer file
             copyFooter(settings.getFileSettings().getFooter(), out);
-        }
-    }
-
-    private void initializeCount(List<Section> sections) {
-        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL) {
-            if (settings.getGeneralSettings().isReverseNumbering()) {
-                count = 0;
-
-                for (Section s : sections) {
-                    count += s.countAllItems();
-                }
-            } else {
-                count = 1;
-            }
         }
     }
 

@@ -43,19 +43,7 @@ public class BibtexPublicationListWriter extends PublicationListWriter {
     @Override
     protected void writePublicationList(List<Section> sections, BufferedWriter out) throws IOException {
         itemWriter = new BibtexBibItemWriter(out, settings);
-
-        // Initialize the count
-        if (settings.getGeneralSettings().getNumbering() == GeneralSettings.Numbering.GLOBAL) {
-            if (settings.getGeneralSettings().isReverseNumbering()) {
-                count = 0;
-
-                for (Section s : sections) {
-                    count += s.countAllItems();
-                }
-            } else {
-                count = 1;
-            }
-        }
+        count = getInitialCount(sections);
 
         // Write the body
         for (Section s : sections) {
